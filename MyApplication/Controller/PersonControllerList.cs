@@ -2,6 +2,7 @@
 using FrontEnd.FilterSource;
 using MyApplication.Model;
 using Backend.Events;
+using MyApplication.View;
 
 namespace MyApplication.Controller
 {
@@ -51,6 +52,8 @@ namespace MyApplication.Controller
 
         protected override void Open(Person? model)
         {
+            var win = new EmployeeForm();
+            win.ShowDialog();
         }
 
         protected override void OpenNew(Person? model)

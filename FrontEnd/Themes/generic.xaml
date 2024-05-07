@@ -15,8 +15,8 @@
                             <RowDefinition Height="{TemplateBinding MenuRow}"/>
                             <RowDefinition Height="{TemplateBinding HeaderRow}"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="{TemplateBinding RecordTrackerRow}"/>
                             <RowDefinition Height="5"/>
+                            <RowDefinition Height="{TemplateBinding RecordTrackerRow}"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="{TemplateBinding RecordStatusColumn}"/>
@@ -26,7 +26,7 @@
                         <ContentPresenter Grid.Row="1" Grid.ColumnSpan="2" Content="{TemplateBinding Header}"/>
                         <ContentPresenter Grid.Row="2" Grid.Column="1" Content="{TemplateBinding Content}"/>
                         <formComp:RecordStatus Grid.Row="2" IsDirty="{TemplateBinding IsDirty}"/>
-                        <ProgressBar Grid.Row="3" IsIndeterminate="{TemplateBinding IsLoading}"/>
+                        <ProgressBar Grid.Row="3" Grid.ColumnSpan="2" IsIndeterminate="{TemplateBinding IsLoading}"/>
                         <formComp:RecordTracker Grid.Row="4" Grid.ColumnSpan="2" Controller="{TemplateBinding Controller}"/>
                     </Grid>
                 </ControlTemplate>

@@ -9,34 +9,22 @@
         xmlns:controller="clr-namespace:MyApplication.Controller"
         WindowStartupLocation="CenterScreen"
         Title="Employee Form" 
-        
-        Height="450" Width="500">
+        ResizeMode="NoResize"
+        Width="470"
+        Height="280"
+        >
 
+    <Window.DataContext>
+        <controller:PersonController/>
+    </Window.DataContext>
+    
     <fr:Form Controller="{Binding}">
-        <fr:Form.Header>
-            <TextBox/>
-        </fr:Form.Header>
         <fr:Form.Content>
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30" fr:Definition.ColumnDefinitions="80,150,30,150">
                 <Label Content="First Name"/>
-                <TextBox Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
+                <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
                 <Label Grid.Row="1" Content="Last Name"/>
-                <TextBox Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
+                <fr:Text Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
                 <Label Grid.Row="2" Content="DOB"/>
                 <DatePicker DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
                 <Label Content="Gender" Grid.Row="3"/>
@@ -49,5 +37,4 @@
             </Grid>
         </fr:Form.Content>
     </fr:Form>
-
 </Window>
