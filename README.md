@@ -2,4 +2,5 @@
 
 ## Description
 
-A brief description of what this project does and why it exists.
+This is a library that helps building Business-oriented applications by using 
+C# and Windows Presentation Forms (WPF).
