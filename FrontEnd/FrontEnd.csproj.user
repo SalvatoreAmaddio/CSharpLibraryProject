@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Forms\Controls\Combo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Forms\Controls\Text.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Forms\Controls\Combo.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Forms\Controls\Lista.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Forms\Controls\Text.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\generic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\styles.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

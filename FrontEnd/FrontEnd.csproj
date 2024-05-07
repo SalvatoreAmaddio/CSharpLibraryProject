@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\clear_filter.png" />
+    <None Remove="images\close.png" />
+    <None Remove="images\delete.png" />
+    <None Remove="images\filter.png" />
+    <None Remove="images\folder.png" />
+    <None Remove="images\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+	<PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+	<PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+	<PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\clear_filter.png" />
+    <Resource Include="images\delete.png" />
+    <Resource Include="images\filter.png" />
+    <Resource Include="images\folder.png" />
+    <Resource Include="images\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\close.png" />
+  </ItemGroup>
+
+</Project>
