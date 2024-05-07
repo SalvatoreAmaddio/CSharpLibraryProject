@@ -1,7 +1,8 @@
 # C# Library
-
-![Logo](https://salvatoreamaddio.co.uk/img/csharp.png)
-![Logo](https://salvatoreamaddio.co.uk/img/sql.png)
+<p float="left">
+  <img src="https://salvatoreamaddio.co.uk/img/csharp.png" width="200" />
+  <img src="https://salvatoreamaddio.co.uk/img/sql.png" width="200" />
+</p>
 
 ## Description
 
