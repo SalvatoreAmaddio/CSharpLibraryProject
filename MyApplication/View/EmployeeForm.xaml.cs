@@ -19,14 +19,8 @@ namespace MyApplication.View
 
     public partial class EmployeeForm : Window
     {
-        public EmployeeForm()
-        {
-            InitializeComponent();
-        }
+        public EmployeeForm() => InitializeComponent();
 
-        public EmployeeForm(Person person) : base()
-        {
-            ((PersonController)DataContext).GoAt(person)
-        }
+        public EmployeeForm(Person person) : this() => ((PersonController)DataContext).GoAt(person);
     }
 }

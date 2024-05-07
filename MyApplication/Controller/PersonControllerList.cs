@@ -56,8 +56,6 @@ namespace MyApplication.Controller
             win.ShowDialog();
         }
 
-        protected override void OpenNew(Person? model)
-        {
-        }
+        protected override void OpenNew(Person? model) => Open(new());
     }
 }
