@@ -13,7 +13,7 @@
     <Window.DataContext>
         <controller:PersonControllerList/>
     </Window.DataContext>
-    
+
     <fr:FormList Controller="{Binding}" HeaderRow="100">
         <fr:FormList.Header>
             <StackPanel Margin="10,0,10,0" VerticalAlignment="Center">
@@ -54,46 +54,8 @@
                             </fr:Form.Content>
                         </fr:FormRow>
                     </DataTemplate>
-                </fr:Lista.ItemTemplate>                
+                </fr:Lista.ItemTemplate>
             </fr:Lista>
         </fr:FormList.List>
     </fr:FormList>
-    
-    <!--<fr:Form Controller="{Binding}">
-        <fr:Form.Header>
-            <TextBox/>
-        </fr:Form.Header>
-        <fr:Form.Content>
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="First Name"/>
-                <TextBox Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
-                <Label Grid.Row="1" Content="Last Name"/>
-                <TextBox Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
-                <Label Grid.Row="2" Content="DOB"/>
-                <DatePicker DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
-                <Label Content="Gender" Grid.Row="3"/>
-                <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
-                <Label Content="Department" Grid.Row="4"/>
-                <fr:Combo ItemsSource="{Binding Departments.Source}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
-                <Label Content="Job Title" Grid.Row="5"/>
-                <fr:Combo ItemsSource="{Binding Titles.Source}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
-                <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
-            </Grid>
-        </fr:Form.Content>
-    </fr:Form>-->
 </Window>
