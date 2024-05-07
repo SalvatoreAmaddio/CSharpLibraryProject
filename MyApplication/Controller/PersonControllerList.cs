@@ -52,7 +52,7 @@ namespace MyApplication.Controller
 
         protected override void Open(Person? model)
         {
-            var win = new EmployeeForm();
+            var win = new EmployeeForm(model);
             win.ShowDialog();
         }
 

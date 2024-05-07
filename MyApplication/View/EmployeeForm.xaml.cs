@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyApplication.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +12,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MyApplication.Model;
 
 namespace MyApplication.View
 {
-    /// <summary>
-    /// Interaction logic for EmployeeForm.xaml
-    /// </summary>
+
     public partial class EmployeeForm : Window
     {
         public EmployeeForm()
         {
             InitializeComponent();
+        }
+
+        public EmployeeForm(Person person) : base()
+        {
+            ((PersonController)DataContext).GoAt(person)
         }
     }
 }
