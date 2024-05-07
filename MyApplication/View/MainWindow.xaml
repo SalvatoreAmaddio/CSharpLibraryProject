@@ -7,7 +7,8 @@
         xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
         xmlns:controller="clr-namespace:MyApplication.Controller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        WindowState="Maximized"
+        Title="MainWindow">
 
     <Window.DataContext>
         <controller:PersonControllerList/>
