@@ -1,6 +1,6 @@
 # C# Library
 <p float="left">
-  <img src="https://salvatoreamaddio.co.uk/img/csharp.png" width="200" />
+  <img src="https://salvatoreamaddio.co.uk/img/csharp.png" width="200" height="200"/>
   <img src="https://salvatoreamaddio.co.uk/img/sql.png" width="190" height="190" />
 </p>
 
