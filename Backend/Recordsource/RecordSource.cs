@@ -26,8 +26,15 @@ namespace Backend.Recordsource
         /// </summary>
         public event FilterEventHandler? RunFilter;
 
+        /// <summary>
+        /// Parameterless Constructor to instantiate a RecordSource object.
+        /// </summary>
         public RecordSource() { }
 
+        /// <summary>
+        /// It instantiates a RecordSource object filled with the given IEnumerable&lt;<see cref="ISQLModel"/>&gt;.
+        /// </summary>
+        /// <param name="source">An IEnumerable&lt;<see cref="ISQLModel"/>&gt;</param>
         public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
 
         /// <summary>
