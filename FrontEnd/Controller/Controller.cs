@@ -112,11 +112,7 @@ namespace FrontEnd.Controller
             QueryBuiler = new(DefaultSearchQry);
         }
 
-        public override void GoNew()
-        {
-            //base.GoNew();
-            OpenNew();
-        }
+        public override void GoNew() => OpenNew();
         abstract public void Filter(OnSelectedEventArgs e);
 
         /// <summary>

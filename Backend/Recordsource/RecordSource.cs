@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using Backend.Controller;
+using Backend.Database;
 using Backend.Model;
 using MvvmHelpers;
 using System;
@@ -19,7 +20,7 @@ namespace Backend.Recordsource
     {
         INavigator? navigator;
         private List<IChildSource> Children { get; } = [];
-
+        public IAbstractSQLModelController? Controller { get; set; }
         public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
         public RecordSource() { }
 
@@ -70,6 +71,7 @@ namespace Backend.Recordsource
             {
                 case CRUD.INSERT:
                     Add(model);
+                    Controller?.GoLast();
                     break;
                 //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
                 //    int index = IndexOf(model);
@@ -78,7 +80,7 @@ namespace Backend.Recordsource
                 case CRUD.DELETE:
                     Remove(model);
                     break;
-            }
+            }            
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);

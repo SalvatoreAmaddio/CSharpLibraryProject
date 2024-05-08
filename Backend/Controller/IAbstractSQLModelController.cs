@@ -118,6 +118,6 @@ namespace Backend.Controller
         /// Gets a string representing the Record position to be displayed
         /// </summary>
         public string Records { get; }
-    }
 
+    }
 }

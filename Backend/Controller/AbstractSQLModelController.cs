@@ -1,13 +1,7 @@
 ﻿using Backend.Database;
-using Backend.Events;
 using Backend.Exceptions;
 using Backend.Model;
 using Backend.Recordsource;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Backend.Controller
 {
@@ -28,6 +22,7 @@ namespace Backend.Controller
             Db = DatabaseManager.Do[DatabaseIndex];
             if (Db.Records == null) throw new Exception($"{Db} has no records");
             Source = new(Db.Records);
+            Source.Controller = this;
             Db.Records.AddChild(Source);
             GoFirst();
         }
