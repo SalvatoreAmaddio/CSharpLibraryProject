@@ -31,6 +31,8 @@ namespace Backend.Recordsource
             if (IsEmpty) Index = -1;
         }
 
+        public Navigator(IEnumerable<ISQLModel> source, int index) : this(source) => Index = index;
+
         /// <summary>
         /// Gets the record in the array at the current position within the array.
         /// </summary>

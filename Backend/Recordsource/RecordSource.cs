@@ -1,13 +1,14 @@
 ﻿using Backend.Controller;
 using Backend.Database;
 using Backend.Events;
+using Backend.Exceptions;
 using Backend.Model;
 using MvvmHelpers;
 
 namespace Backend.Recordsource
 {
     /// <summary>
-    /// This class creates an ObservableRangeCollection that deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
+    /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
     public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
@@ -45,13 +46,10 @@ namespace Backend.Recordsource
         {
             if (navigator != null) 
             {
-                int index = navigator.Index;
-                navigator = new Navigator(this)
-                {
-                    Index = index
-                };
+                navigator = new Navigator(this, navigator.Index);
                 return navigator!;
             }
+
             navigator = new Navigator(this);
             return navigator!;
         }
@@ -76,7 +74,7 @@ namespace Backend.Recordsource
         /// <returns>A string.</returns>
         public string RecordPositionDisplayer()
         {
-            if (navigator == null) return "NO SOURCE";
+            if (navigator == null) throw new NoNavigatorException();
             return true switch
             {
                 true when navigator.NoRecords => "NO RECORDS",
@@ -106,7 +104,7 @@ namespace Backend.Recordsource
                 case CRUD.DELETE:
                     bool removed = Remove(model);
                     if (!removed) break;
-                    if (navigator == null) throw new Exception("NO SOURCE");
+                    if (navigator == null) throw new NoNavigatorException();
                     if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
                     else Controller?.GoPrevious();
                     break;
