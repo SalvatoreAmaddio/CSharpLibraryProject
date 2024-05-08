@@ -163,7 +163,10 @@ namespace FrontEnd.Controller
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);
             QueryBuiler = new(DefaultSearchQry);
+            Source.RunFilter += OnSourceRunFilter;
         }
+
+        protected void OnSourceRunFilter(object? sender, EventArgs e) => Filter();
 
         public override void GoNew() => OpenNew();
         abstract public void Filter();

@@ -1,5 +1,6 @@
 ﻿using Backend.Controller;
 using Backend.Database;
+using Backend.Events;
 using Backend.Model;
 using MvvmHelpers;
 
@@ -11,11 +12,23 @@ namespace Backend.Recordsource
     /// </summary>
     public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
-        INavigator? navigator;
+        private INavigator? navigator;
         private List<IChildSource> Children { get; } = [];
+        
+        /// <summary>
+        /// The Controller to which this RecordSource is associated to.
+        /// </summary>
         public IAbstractSQLModelController? Controller { get; set; }
-        public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
+
+        /// <summary>
+        /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="RecordSource"/>.
+        /// If any filter operations has been implemented in the Controller, The RecordSource can trigger them.
+        /// </summary>
+        public event FilterEventHandler? RunFilter;
+
         public RecordSource() { }
+
+        public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
 
         /// <summary>
         /// Override the default <c>GetEnumerator()</c> method to replace it with a <see cref="INavigator"></see> object./>
@@ -78,7 +91,7 @@ namespace Backend.Recordsource
                     else Controller?.GoPrevious();
                     break;
             }
-            //run filter
+            RunFilter?.Invoke(this, new());
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);

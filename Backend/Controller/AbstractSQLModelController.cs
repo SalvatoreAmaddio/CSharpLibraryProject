@@ -22,6 +22,7 @@ namespace Backend.Controller
             GoFirst();
         }
 
+
         public virtual bool AllowNewRecord { get; set; }
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
