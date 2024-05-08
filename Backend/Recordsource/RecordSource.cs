@@ -79,6 +79,7 @@ namespace Backend.Recordsource
                 //    break;
                 case CRUD.DELETE:
                     Remove(model);
+                    if (navigator == null) throw new Exception("NO SOURCE");
                     if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
                     else Controller?.GoPrevious();
                     break;
