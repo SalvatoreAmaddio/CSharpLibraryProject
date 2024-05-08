@@ -24,7 +24,7 @@ namespace Backend.Model
         public string DeleteQry { get; set; } = string.Empty;
         public string RecordCountQry { get; set; } = string.Empty;
 
-        public AbstractModel() 
+        public AbstractModel()
         {
             _ = new QueryBuilder(this);
         }
