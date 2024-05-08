@@ -4,7 +4,7 @@ namespace Backend.Recordsource
 {
     /// <summary>
     /// This interface extends the IEnumerator&lt;ISQLModel&gt; 
-    /// and it extends the functionalities of a normal IEnumerator.
+    /// and adds extra functionalities.
     /// For instance, this enumerator can move up and down the IEnumerable.
     /// This interface is meant for dealing with IEnumerable&lt;ISQLModel&gt; only.
     /// </summary>
