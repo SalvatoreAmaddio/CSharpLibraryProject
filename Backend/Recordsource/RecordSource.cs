@@ -70,6 +70,21 @@ namespace Backend.Recordsource
         public static async Task<RecordSource> CreateFromAsyncList(IAsyncEnumerable<ISQLModel> source) =>
         new RecordSource(await source.ToListAsync());
 
+        /// <summary>
+        /// Return a the position of the records within the RecordSource.
+        /// </summary>
+        /// <returns>A string.</returns>
+        public string RecordPositionDisplayer()
+        {
+            if (navigator == null) return "NO SOURCE";
+            return true switch
+            {
+                true when navigator.NoRecords => "NO RECORDS",
+                true when navigator.IsNewRecord => "New Record",
+                _ => $"Record {navigator?.RecNum} of {navigator?.RecordCount}",
+            };
+        }
+
         public void AddChild(IChildSource child) => Children.Add(child);   
 
         public void NotifyChildren(CRUD crud, ISQLModel model)
@@ -86,10 +101,8 @@ namespace Backend.Recordsource
                     Add(model);
                     Controller?.GoLast();
                     break;
-                //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
-                //    int index = IndexOf(model);
-                //    if (index >= 0) this[index] = model;
-                //    break;
+              //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
+                //  break;
                 case CRUD.DELETE:
                     bool removed = Remove(model);
                     if (!removed) break;
@@ -102,20 +115,5 @@ namespace Backend.Recordsource
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);
-
-        /// <summary>
-        /// Return a the position of the records within the RecordSource.
-        /// </summary>
-        /// <returns>A string.</returns>
-        public string RecordPositionDisplayer() 
-        {
-            if (navigator == null) return "NO SOURCE";
-            return true switch
-            {
-                true when navigator.NoRecords => "NO RECORDS",
-                true when navigator.IsNewRecord => "New Record",
-                _ => $"Record {navigator?.RecNum} of {navigator?.RecordCount}",
-            };
-        }
     }
 }
