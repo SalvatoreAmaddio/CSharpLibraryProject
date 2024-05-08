@@ -54,7 +54,16 @@ namespace FrontEnd.Controller
         public event BeforeUpdateEventHandler? BeforeUpdate;
 
         public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
-        public override ISQLModel? CurrentModel { get => _currentModel; set => UpdateProperty(ref value, ref _currentModel); }
+        public override ISQLModel? CurrentModel 
+        { 
+            get => _currentModel;
+            set
+            {
+                UpdateProperty(ref value, ref _currentModel);
+                RaisePropertyChanged(nameof(CurrentRecord));
+            }
+        }
+
         public override bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
         public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
         public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
