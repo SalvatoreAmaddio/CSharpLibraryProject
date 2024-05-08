@@ -1,8 +1,17 @@
 ﻿
+using Backend.Model;
+
 namespace FrontEnd.Events
 {
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
     public delegate void BeforeUpdateEventHandler(object? sender, BeforeUpdateArgs e);
+    public delegate void OnSelected(object? sender, OnSelectedEventArgs e);
+
+    public class OnSelectedEventArgs(bool selected, ISQLModel? record) : EventArgs
+    {
+        public bool IsSelected { get; } = selected;
+        public ISQLModel? Record { get; } = record;
+    }
 
     public abstract class UpdateArgs(string propertyName) : EventArgs
     {

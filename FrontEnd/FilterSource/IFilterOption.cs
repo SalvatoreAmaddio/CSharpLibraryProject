@@ -1,18 +1,12 @@
 ﻿using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Controller;
+using FrontEnd.Events;
 using System.ComponentModel;
 using System.Text;
 
 namespace FrontEnd.FilterSource
 {
-    public delegate void OnSelected(object? sender, OnSelectedEventArgs e);
-
-    public class OnSelectedEventArgs(bool selected, ISQLModel? record) : EventArgs 
-    {
-        public bool IsSelected { get; } = selected;
-        public ISQLModel? Record { get; } = record;
-    }
     public interface IFilterOption : INotifyPropertyChanged
     {
         public bool IsSelected { get; set; }

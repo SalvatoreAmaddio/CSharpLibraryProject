@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using FrontEnd.Events;
 using FrontEnd.FilterSource;
 using FrontEnd.Utils;
 using System.Windows;
