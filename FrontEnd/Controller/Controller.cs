@@ -18,7 +18,7 @@ namespace FrontEnd.Controller
         public bool IsLoading { get; set; }
 
     }
-    
+
     public interface IAbstractFormController<M> : IAbstractController where M : ISQLModel, new()
     {
         /// <summary>
@@ -28,26 +28,6 @@ namespace FrontEnd.Controller
         public M? CurrentRecord { get; set; }
         public ICommand UpdateCMD { get; set; }
         public ICommand DeleteCMD { get; set; }
-    }
-
-    public interface IAbstractFormListController<M> : IAbstractFormController<M> where M : ISQLModel, new()
-    {
-        public ICommand OpenCMD { get; set; }
-        public ICommand OpenNewCMD { get; set; }
-        public string Search { get; set; }
-    }
-    
-    public interface IListController 
-    {
-        public void Filter();
-
-        /// <summary>
-        /// Gets and Sets the default Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
-        /// <para/>
-        /// Your statement must have a WHERE clause.
-        /// </summary>
-        public string DefaultSearchQry { get; set; }
-
     }
 
     public abstract class AbstractController<M> : AbstractSQLModelController, IAbstractFormController<M> where M : AbstractModel, new()
@@ -137,6 +117,26 @@ namespace FrontEnd.Controller
             Db.Records?.NotifyChildren(crud, Db.Model);
             GoAt(CurrentModel);
         }
+    }
+
+    public interface IAbstractFormListController<M> : IAbstractFormController<M> where M : ISQLModel, new()
+    {
+        public ICommand OpenCMD { get; set; }
+        public ICommand OpenNewCMD { get; set; }
+        public string Search { get; set; }
+    }
+
+    public interface IListController
+    {
+        public void Filter();
+
+        /// <summary>
+        /// Gets and Sets the default Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
+        /// <para/>
+        /// Your statement must have a WHERE clause.
+        /// </summary>
+        public string DefaultSearchQry { get; set; }
+
     }
 
     public abstract class AbstractListController<M> : AbstractController<M>, IListController, IAbstractFormListController<M> where M : AbstractModel, new()
