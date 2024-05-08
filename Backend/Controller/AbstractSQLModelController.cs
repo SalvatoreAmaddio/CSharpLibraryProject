@@ -87,10 +87,7 @@ namespace Backend.Controller
             if (CurrentModel == null) throw new NoModelException();
             Db.Model = CurrentModel;
             Db.Crud(CRUD.DELETE, sql, parameters);
-            Db?.Records?.Remove(Db.Model);
             Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
-            if (Navigator.BOF && !Navigator.NoRecords) GoFirst();
-            else GoPrevious();
         }
 
         public void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)

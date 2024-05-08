@@ -79,6 +79,8 @@ namespace Backend.Recordsource
                 //    break;
                 case CRUD.DELETE:
                     Remove(model);
+                    if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
+                    else Controller?.GoPrevious();
                     break;
             }            
         }
