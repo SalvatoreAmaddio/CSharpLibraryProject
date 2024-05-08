@@ -15,7 +15,7 @@ namespace FrontEnd.Forms
 
         }
 
-       private void OnDataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+       private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             IAbstractController controller = (IAbstractController)e.NewValue;
             Binding CommandParameterBinding = new()

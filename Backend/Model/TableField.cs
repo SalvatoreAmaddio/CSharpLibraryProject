@@ -5,7 +5,7 @@ namespace Backend.Model
     /// <summary>
     /// FieldType Enum
     /// </summary>
-    public enum FieldType 
+    public enum FieldType
     { 
         PK = 0,
         Field = 1,
@@ -17,7 +17,7 @@ namespace Backend.Model
     /// <para/>
     /// See also <seealso cref="TableField"/>.
     /// </summary>
-    public interface ITableField 
+    public interface ITableField
     {
         public FieldType FieldType { get; }
         /// <summary>
@@ -68,9 +68,9 @@ namespace Backend.Model
 
     /// <summary>
     /// This class is meant for Reflection Purpose. It encapsulates an <see cref="AbstractField"/>, a <see cref="PropertyInfo"/> and an <see cref="ISQLModel"/>.
-    /// Thanks to this class, <see cref="AbstractModel"/> can produce IEnumerables that are used by a <see cref="QueryBuilder"/> to produce default queries.
+    /// Thanks to this class, <see cref="AbstractSQLModel"/> can produce IEnumerables that are used by a <see cref="QueryBuilder"/> to produce default queries.
     /// <para/>
-    /// see also: <seealso cref="AbstractModel.GetTableFields"/>, <seealso cref="AbstractModel.GetTableFieldsAs{F}"/>, <seealso cref="AbstractModel.GetTableFKs"/> and <seealso cref="AbstractModel.GetTablePK()"/>.
+    /// see also: <seealso cref="AbstractSQLModel.GetTableFields"/>, <seealso cref="AbstractSQLModel.GetTableFieldsAs{F}"/>, <seealso cref="AbstractSQLModel.GetTableFKs"/> and <seealso cref="AbstractSQLModel.GetTablePK()"/>.
     /// </summary>
     public class TableField(AbstractField field, PropertyInfo property, ISQLModel model) : ITableField
     {

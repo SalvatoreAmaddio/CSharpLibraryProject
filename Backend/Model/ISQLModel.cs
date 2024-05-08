@@ -5,9 +5,9 @@ namespace Backend.Model
 {
     /// <summary>
     /// This interface defines a set of methods and properties that allow a
-    /// <see cref="AbstractDatabase"/> object to talk to a <see cref="AbstractModel"/> object
+    /// <see cref="AbstractDatabase"/> object to talk to a <see cref="AbstractSQLModel"/> object
     /// </summary>
-    public interface ISQLModel : IModel
+    public interface ISQLModel 
     {
         /// <summary>
         /// This method allows the creation of an object by reading the DataReader.
@@ -25,7 +25,7 @@ namespace Backend.Model
         /// </example>
         /// </summary>
         /// <param name="reader">A DbDataReader object</param>
-        /// <returns>a new instance that implements <see cref="ISQLModel"/> or extends <see cref="AbstractModel"/></returns>
+        /// <returns>a new instance that implements <see cref="ISQLModel"/> or extends <see cref="AbstractSQLModel"/></returns>
         public ISQLModel Read(DbDataReader reader);
 
         /// <summary>

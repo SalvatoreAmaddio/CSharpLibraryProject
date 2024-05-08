@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Backend.Model
+﻿namespace Backend.Model
 {
     /// <summary>
-    /// This attribute is used to associate a class extending <see cref="AbstractModel"/> to a Table's Name in your Database.
+    /// This attribute is used to associate a class extending <see cref="AbstractSQLModel"/> to a Table's Name in your Database.
     /// This is pivotal for <see cref="QueryBuilder"/> to produce default queries.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
@@ -31,7 +24,7 @@ namespace Backend.Model
     }
 
     /// <summary>
-    /// This attribute is used to associate a <see cref="AbstractModel"/>'s property to a Field in your table to a Table in your Database.
+    /// This attribute is used to associate a <see cref="AbstractSQLModel"/>'s property to a Field in your table to a Table in your Database.
     /// This is pivotal for <see cref="QueryBuilder"/> to produce default queries.
     /// </summary>
     public class Field : AbstractField
@@ -39,7 +32,7 @@ namespace Backend.Model
     }
 
     /// <summary>
-    /// This attribute is used to associate one <see cref="AbstractModel"/>'s property to the Primary Key in your table to a Table in your Database.
+    /// This attribute is used to associate one <see cref="AbstractSQLModel"/>'s property to the Primary Key in your table to a Table in your Database.
     /// This is pivotal for <see cref="QueryBuilder"/> to produce default queries.
     /// <para/>
     /// N.B: Only one property can have this attribute.
@@ -49,7 +42,7 @@ namespace Backend.Model
     }
 
     /// <summary>
-    /// This attribute is used to associate a <see cref="AbstractModel"/>'s property to a Foreign Key in your table to a Table in your Database.
+    /// This attribute is used to associate a <see cref="AbstractSQLModel"/>'s property to a Foreign Key in your table to a Table in your Database.
     /// This is pivotal for <see cref="QueryBuilder"/> to produce default queries.
     /// </summary>
     public class FK : AbstractField

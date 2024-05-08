@@ -1,12 +1,6 @@
 ﻿using Backend.Database;
-using Backend.Events;
 using Backend.Model;
 using Backend.Recordsource;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Backend.Controller
 {
@@ -21,7 +15,7 @@ namespace Backend.Controller
         /// <summary>
         /// The current selected record.
         /// </summary>
-        /// <value>An object that implements <see cref="ISQLModel"/> or extends <see cref="AbstractModel"/>, which represents the current selected record</value>
+        /// <value>An object that implements <see cref="ISQLModel"/> or extends <see cref="AbstractSQLModel"/>, which represents the current selected record</value>
         public ISQLModel? CurrentModel { get; set; }
 
         /// <summary>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Backend.Database
+﻿namespace Backend.Database
 {
     /// <summary>
     /// This class defines the properties that incapsulate information for parameters to be used in queries by the <see cref="AbstractDatabase"/> class.

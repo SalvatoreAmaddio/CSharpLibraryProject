@@ -1,11 +1,7 @@
 ﻿using Backend.Database;
 using Backend.Model;
-using System;
-using System.Collections.Generic;
+using FrontEnd.Model;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyApplication.Model
 {

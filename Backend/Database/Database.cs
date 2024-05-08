@@ -1,16 +1,7 @@
 ﻿using Backend.Model;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.Entity;
 using System.Data.SQLite;
 using Backend.Recordsource;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
 using Backend.Exceptions;
 
 namespace Backend.Database
@@ -36,7 +27,7 @@ namespace Backend.Database
         /// Gets or Sets the <see cref="ISQLModel"/> the database must refer to.
         /// Set this property to take advantage of auto-generated queries built by <see cref="QueryBuilder"/>.
         /// </summary>
-        /// <value>An object implementing <see cref="ISQLModel"/> or extending <see cref="AbstractModel"/>.</value>
+        /// <value>An object implementing <see cref="ISQLModel"/> or extending <see cref="AbstractSQLModel"/>.</value>
         public ISQLModel Model { get; set; }
 
         /// <summary>

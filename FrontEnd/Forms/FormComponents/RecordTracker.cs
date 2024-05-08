@@ -1,11 +1,7 @@
-﻿using Backend.Controller;
-using FrontEnd.Forms;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace FrontEnd.Forms.FormComponents
 {

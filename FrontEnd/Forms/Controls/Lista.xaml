@@ -67,7 +67,7 @@
             <Setter Property="Margin" Value="0"/>
             <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Contained"/>
             <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
-            <EventSetter Event="GotFocus" Handler="ListViewItem_GotFocus"/>
+            <EventSetter Event="GotFocus" Handler="OnListViewItemGotFocus"/>
         </Style>
     </ListView.Resources>
 </ListView>

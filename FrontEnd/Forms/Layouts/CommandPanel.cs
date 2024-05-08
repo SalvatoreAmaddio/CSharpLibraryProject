@@ -1,6 +1,4 @@
-﻿using Backend.Controller;
-using Backend.Model;
-using System;
+﻿using Backend.Model;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;

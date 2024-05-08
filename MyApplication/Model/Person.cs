@@ -1,7 +1,5 @@
-﻿using Backend.Database;
-using Backend.Model;
-using Backend.Utils;
-using System.Data;
+﻿using Backend.Model;
+using FrontEnd.Model;
 using System.Data.Common;
 
 namespace MyApplication.Model

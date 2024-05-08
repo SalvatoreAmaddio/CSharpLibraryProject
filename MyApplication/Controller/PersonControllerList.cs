@@ -1,9 +1,8 @@
 ﻿using FrontEnd.Controller;
 using FrontEnd.FilterSource;
 using MyApplication.Model;
-using Backend.Events;
 using MyApplication.View;
-
+using FrontEnd.Events;
 namespace MyApplication.Controller
 {
     public class PersonControllerList : AbstractListController<Person>

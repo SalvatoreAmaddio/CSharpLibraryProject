@@ -1,8 +1,4 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows;
-using Backend.Controller;
-using FrontEnd.Forms;
+﻿using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
 

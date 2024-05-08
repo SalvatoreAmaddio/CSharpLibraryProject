@@ -5,18 +5,13 @@ using Backend.Recordsource;
 
 namespace Backend.Controller
 {
-    public abstract class AbstractSQLModelController : AbstractNotifier, IAbstractSQLModelController
+    public abstract class AbstractSQLModelController : IAbstractSQLModelController
     {
         public IAbstractDatabase Db { get; protected set; } = null!;
-        protected ISQLModel? _currentModel;
-        private string _records = string.Empty;
-        private bool _allowNewRecord = true;
+
         public abstract int DatabaseIndex { get; }
-        public bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
         public RecordSource Source { get; protected set; } = null!;
         protected INavigator Navigator => Source.Navigate();
-        public virtual ISQLModel? CurrentModel { get => _currentModel; set => UpdateProperty(ref value, ref _currentModel); }
-        public string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
         public AbstractSQLModelController()
         {
             Db = DatabaseManager.Do[DatabaseIndex];
@@ -26,6 +21,10 @@ namespace Backend.Controller
             Db.Records.AddChild(Source);
             GoFirst();
         }
+
+        public virtual bool AllowNewRecord { get; set; }
+        public virtual ISQLModel? CurrentModel { get; set; }
+        public virtual string Records { get; protected set; } = string.Empty;
 
         public void GoNext()
         {
@@ -90,14 +89,12 @@ namespace Backend.Controller
             Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
         }
 
-        public void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
+        public virtual void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (CurrentModel == null) throw new NoModelException();
-            if (!CurrentModel.IsDirty) return;
             Db.Model = CurrentModel;
             CRUD crud = (!Db.Model.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             Db.Crud(crud, sql, parameters);
-            Db.Model.IsDirty = false;
             Db.Records?.NotifyChildren(crud, Db.Model);
             GoAt(CurrentModel);
         }

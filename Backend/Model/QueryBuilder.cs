@@ -3,7 +3,7 @@
 namespace Backend.Model
 {
     /// <summary>
-    /// This class build default queries for <see cref="AbstractModel"/> objects.
+    /// This class build default queries for <see cref="AbstractSQLModel"/> objects.
     /// </summary>
     public class QueryBuilder
     {

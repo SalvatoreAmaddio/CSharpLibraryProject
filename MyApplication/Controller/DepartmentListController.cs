@@ -1,5 +1,4 @@
 ﻿using FrontEnd.Controller;
-using FrontEnd.FilterSource;
 using MyApplication.Model;
 
 namespace MyApplication.Controller
@@ -10,7 +9,7 @@ namespace MyApplication.Controller
 
         public override int DatabaseIndex => 2;
 
-        public override void Filter(OnSelectedEventArgs e)
+        public override void Filter()
         {
         }
 

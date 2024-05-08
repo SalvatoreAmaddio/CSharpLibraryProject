@@ -1,30 +1,17 @@
-﻿using Backend.Database;
-using Backend.Events;
-using Backend.Model;
+﻿using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Controller;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FrontEnd.FilterSource
 {
     public delegate void OnSelected(object? sender, OnSelectedEventArgs e);
 
-    public class OnSelectedEventArgs : EventArgs 
+    public class OnSelectedEventArgs(bool selected, ISQLModel? record) : EventArgs 
     {
-        public bool IsSelected { get; } 
-        public ISQLModel? Record { get; } 
-        
-        public OnSelectedEventArgs(bool selected, ISQLModel? record) 
-        { 
-            IsSelected = selected;
-            Record = record;
-        }
+        public bool IsSelected { get; } = selected;
+        public ISQLModel? Record { get; } = record;
     }
     public interface IFilterOption : INotifyPropertyChanged
     {
