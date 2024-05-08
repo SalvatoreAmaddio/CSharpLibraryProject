@@ -50,7 +50,7 @@ namespace FrontEnd.Forms
             foreach(var item in ItemsSource) 
                 item.Unset();
 
-            ((IListController)Controller).Filter(new(false, null));
+            ((IListController)Controller).Filter();
             IsOpen = false;
             ResetDropDownButtonAppereance();
         }
@@ -92,8 +92,7 @@ namespace FrontEnd.Forms
             if (DropDownButton == null) throw new Exception("DropDownButton is null");
             DropDownButton.Content = ClearFilter;
             ToolTip = "Clear Filter";
-            ((IListController)Controller).Filter(e);
-
+            ((IListController)Controller).Filter();
             if (!ItemsSource.Any(s=>s.IsSelected)) ResetDropDownButtonAppereance();
         }
         #endregion

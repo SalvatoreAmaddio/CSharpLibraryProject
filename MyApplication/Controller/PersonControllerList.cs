@@ -41,7 +41,7 @@ namespace MyApplication.Controller
 
         public override int DatabaseIndex => 0;
 
-        public override async void Filter(OnSelectedEventArgs e)
+        public override async void Filter()
         {
             QueryBuiler.Clear();
             QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));

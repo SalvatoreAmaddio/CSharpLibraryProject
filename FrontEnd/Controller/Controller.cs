@@ -33,7 +33,7 @@ namespace FrontEnd.Controller
     
     public interface IListController 
     {
-        public void Filter(OnSelectedEventArgs e);
+        public void Filter();
 
         /// <summary>
         /// Gets and Sets the default Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
@@ -113,7 +113,7 @@ namespace FrontEnd.Controller
         }
 
         public override void GoNew() => OpenNew();
-        abstract public void Filter(OnSelectedEventArgs e);
+        abstract public void Filter();
 
         /// <summary>
         /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>

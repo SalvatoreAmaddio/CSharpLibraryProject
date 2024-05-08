@@ -78,12 +78,14 @@ namespace Backend.Recordsource
                 //    if (index >= 0) this[index] = model;
                 //    break;
                 case CRUD.DELETE:
-                    Remove(model);
+                    bool removed = Remove(model);
+                    if (!removed) break;
                     if (navigator == null) throw new Exception("NO SOURCE");
                     if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
                     else Controller?.GoPrevious();
                     break;
-            }            
+            }
+            //run filter
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);
