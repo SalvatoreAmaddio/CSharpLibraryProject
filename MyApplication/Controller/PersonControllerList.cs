@@ -55,7 +55,5 @@ namespace MyApplication.Controller
             var win = new EmployeeForm(model);
             win.ShowDialog();
         }
-
-        protected override void OpenNew(Person? model) => Open(new());
     }
 }

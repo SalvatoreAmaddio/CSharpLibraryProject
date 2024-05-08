@@ -100,7 +100,6 @@ namespace Backend.Recordsource
 
         public bool MoveAt(ISQLModel record)
         {
-            if (record.IsNewRecord()) return MoveNew();
             for (int i = 0; i < RecordCount; i++)
             {
                 if (_records[i].Equals(record))

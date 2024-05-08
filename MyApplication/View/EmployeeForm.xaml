@@ -26,7 +26,7 @@
                 <Label Grid.Row="1" Content="Last Name"/>
                 <fr:Text Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
                 <Label Grid.Row="2" Content="DOB"/>
-                <DatePicker DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
+                <fr:DateField DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
                 <Label Content="Gender" Grid.Row="3"/>
                 <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
                 <Label Content="Department" Grid.Row="4"/>

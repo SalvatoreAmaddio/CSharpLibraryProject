@@ -18,8 +18,5 @@ namespace MyApplication.Controller
         {
         }
 
-        protected override void OpenNew(Department? model)
-        {
-        }
     }
 }

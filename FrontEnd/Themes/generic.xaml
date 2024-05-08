@@ -191,9 +191,9 @@
                         <Grid.Resources>
                             <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" x:Key="DefColor"/>
                         </Grid.Resources>
-                        <Label Content="{TemplateBinding Text}"/>
+                        <Label x:Name="PART_label" Content="{TemplateBinding Text}"/>
                         <Button x:Name="PART_dropdown_button" VerticalContentAlignment="Top" HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Padding="0" VerticalAlignment="Bottom" Margin="0,0,1.5,4" Height="10" ToolTip="{TemplateBinding ToolTip}"/>
-                        <Popup x:Name="PART_popup" IsOpen="{TemplateBinding IsOpen}" Placement="Bottom" PopupAnimation="Fade" AllowsTransparency="True">
+                        <Popup x:Name="PART_popup" IsOpen="{TemplateBinding IsOpen}" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_label}" PopupAnimation="Fade" AllowsTransparency="True" StaysOpen="False">
                             <Border BorderBrush="Black" BorderThickness=".5" Padding="1" Background="White">
                                 <Grid Background="White">
                                 <Grid.RowDefinitions>

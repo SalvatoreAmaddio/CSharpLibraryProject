@@ -43,7 +43,7 @@
                                 <Grid fr:Definition.RowDefinitions="30" fr:Definition.ColumnDefinitions="150,150,100,70,100,100,50,50,50">
                                     <fr:Text Text="{Binding FirstName}"/>
                                     <fr:Text Grid.Column="1" Text="{Binding LastName}"/>
-                                    <DatePicker Grid.Column="2" SelectedDate="{Binding DOB}" DisplayDate="{Binding DOB}"/>
+                                    <fr:DateField Grid.Column="2" SelectedDate="{Binding DOB}" DisplayDate="{Binding DOB}"/>
                                     <fr:Combo Grid.Column="3" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Genders.Source}" SelectedItem="{Binding Gender}"/>
                                     <fr:Combo Grid.Column="4" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Titles.Source}" SelectedItem="{Binding JobTitle}"/>
                                     <fr:Combo Grid.Column="5" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Departments.Source}" SelectedItem="{Binding Department}"/>

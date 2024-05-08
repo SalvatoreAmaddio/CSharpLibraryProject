@@ -5,12 +5,18 @@
     <Compile Update="Forms\Controls\Combo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\DateField.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\Text.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Forms\Controls\Combo.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Forms\Controls\DateField.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Forms\Controls\Lista.xaml">

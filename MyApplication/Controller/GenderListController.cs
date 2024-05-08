@@ -17,8 +17,5 @@ namespace MyApplication.Controller
         {
         }
 
-        protected override void OpenNew(Gender? model)
-        {
-        }
     }
 }
