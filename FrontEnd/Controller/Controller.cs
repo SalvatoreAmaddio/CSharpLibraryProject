@@ -2,7 +2,6 @@
 using Backend.Database;
 using Backend.Model;
 using Backend.Recordsource;
-using FrontEnd.FilterSource;
 using System.Windows;
 using System.Windows.Input;
 
