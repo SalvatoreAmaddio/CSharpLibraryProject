@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -55,45 +56,42 @@ namespace FrontEnd.Reports
 
         private void PrintFixDocs()
         {
-            PrintDialog printDialog = new();
-
-            if (printDialog.ShowDialog() == true)
+            LocalPrintServer printServer = new();
+            PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
+            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
+            PrintDialog printDialog = new()
             {
-                // Create a document
-                FixedDocument fixedDoc = new();
-                ReportPage first_page = ItemsSource.First();
-                fixedDoc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
+                PrintQueue = pdfPrinter
+            };
 
-                // Assume you have a list of Grids
-                foreach (ReportPage page in ItemsSource)
+
+            FixedDocument doc = new();
+            ReportPage first_page = ItemsSource.First();
+            doc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
+
+            foreach (ReportPage page in ItemsSource)
+            {
+                PageContent pageContent = new();
+                FixedPage fixedPage = new ()
                 {
-                    // Create page content
-                    PageContent pageContent = new();
-                    FixedPage fixedPage = new ()
-                    {
-                        Width = page.PageWidth,
-                        Height = page.PageHeight
-                    };
+                    Width = page.PageWidth,
+                    Height = page.PageHeight
+                };
 
-                    // Assume grids are prepared with right dimensions (e.g., A4 size)
-                    page.Measure(new Size(fixedPage.Width, fixedPage.Height));
-                    page.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
-                    page.UpdateLayout();
+                page.Measure(new Size(fixedPage.Width, fixedPage.Height));
+                page.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
+                page.UpdateLayout();
 
-                    // Add the grid to the FixedPage
-                    FixedPage.SetLeft(page, 0);
-                    FixedPage.SetTop(page, 0);
-                    fixedPage.Children.Add(page.Copy());
+                FixedPage.SetLeft(page, 0);
+                FixedPage.SetTop(page, 0);
+                fixedPage.Children.Add(page.Copy());
 
-                    // Add the FixedPage to the PageContent
-                    ((IAddChild)pageContent).AddChild(fixedPage);
+                ((IAddChild)pageContent).AddChild(fixedPage);
 
-                    // Add the PageContent to the FixedDocument
-                    fixedDoc.Pages.Add(pageContent);
-                }
-
-                printDialog.PrintDocument(fixedDoc.DocumentPaginator, "Printing");
+                doc.Pages.Add(pageContent);                
             }
+            
+            printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
         }
 
     }
