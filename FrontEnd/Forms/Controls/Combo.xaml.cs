@@ -6,17 +6,12 @@ namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class extends <see cref="ComboBox"/> and adds some extra functionalities for dealing with the SelectedItem property.
-    /// Furthermore, the ItemsSource for this object is meant to be a <see cref="RecordSource"/> object.
+    /// Furthermore, its ItemsSource is meant to be a <see cref="RecordSource"/> object.
     /// </summary>
     public partial class Combo : ComboBox
     {
         public Combo() => InitializeComponent();
 
-
-        /// <summary>
-        /// Gets the ItemsSource as a RecordSource.
-        /// </summary>
-        /// <returns>A RecordSource</returns>
         private RecordSource GetSource() => (RecordSource)ItemsSource;
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -26,6 +21,9 @@ namespace FrontEnd.Forms
         }
 
         #region Placeholder
+        /// <summary>
+        /// Gets and sets the Placeholder
+        /// </summary>
         public string Placeholder
         {
             get => (string)GetValue(PlaceholderProperty);
