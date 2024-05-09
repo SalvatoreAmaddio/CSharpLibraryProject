@@ -28,9 +28,13 @@ namespace FrontEnd.Reports
         public ReportPage Copy() 
         {
             ReportPage page = new();
+            page.FooterRow = this.FooterRow;
+            page.HeaderRow = this.HeaderRow;
             page.Header = this.Header;
-//            page.Main = this.Main;
+            page.Main = this.Main;
             page.Footer = this.Footer;
+            page.Padding = this.Padding;
+            page.PageNumber = this.PageNumber;
             return page;
         }
         public override void OnApplyTemplate()
@@ -145,7 +149,7 @@ namespace FrontEnd.Reports
             set => SetValue(PageNumberProperty, value); 
         }
         #endregion
-        public void AdjustPageSize()
+        private void AdjustPageSize()
         {
             var dpiInfo = VisualTreeHelper.GetDpi(this); // Get DPI information
 

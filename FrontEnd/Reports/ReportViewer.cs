@@ -104,7 +104,7 @@ namespace FrontEnd.Reports
                     // Add the grid to the FixedPage
                     FixedPage.SetLeft(page, 0);
                     FixedPage.SetTop(page, 0);
-                    fixedPage.Children.Add(page);
+                    fixedPage.Children.Add(page.Copy());
 
                     // Add the FixedPage to the PageContent
                     ((IAddChild)pageContent).AddChild(fixedPage);

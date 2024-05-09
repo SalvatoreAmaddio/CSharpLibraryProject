@@ -14,6 +14,5 @@ namespace FrontEnd.Reports
         public int PageNumber { get; set; }
 
         public bool ContentOverflown { get; }
-        public void AdjustPageSize();
     }
 }
