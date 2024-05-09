@@ -53,14 +53,6 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        //PrintGrids_Click();
-        //PrintDialog printDialog = new PrintDialog();
-        //if (printDialog.ShowDialog() == true)
-        //{
-        //    // This assumes you have a Grid named 'myGrid' you want to print
-        //    printDialog.PrintVisual(Page, "Printing Grid");
-        //}
-
         private void PrintFixDocs()
         {
             PrintDialog printDialog = new();
