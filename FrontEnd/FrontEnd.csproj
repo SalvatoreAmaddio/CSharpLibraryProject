@@ -42,4 +42,8 @@
     <Resource Include="images\close.png" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;C:\Users\salva\source\repos\PrinterPortManager\x64\Release\PrinterPortManager.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
 </Project>
