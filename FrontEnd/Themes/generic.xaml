@@ -265,7 +265,7 @@
                         </ToolBarTray>
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                             <Border x:Name="Border" HorizontalAlignment="Center" Margin="0,0,0,10" BorderThickness="0" BorderBrush="Black" ScrollViewer.CanContentScroll="True">
-                                <report:ListPage ItemsSource="{TemplateBinding ItemsSource}"/>
+                                <report:ListPage ItemsSource="{TemplateBinding ItemsSource}" SelectedItem="{TemplateBinding SelectedPage}"/>
                             </Border>
                         </ScrollViewer>
 

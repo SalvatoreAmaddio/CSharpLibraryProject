@@ -24,6 +24,16 @@ namespace FrontEnd.Reports
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         }
 
+        #region SelectedPage
+        public static readonly DependencyProperty SelectedPageProperty =
+         DependencyProperty.Register(nameof(SelectedPage), typeof(ReportPage), typeof(ReportViewer), new PropertyMetadata());
+        public ReportPage SelectedPage
+        {
+            get => (ReportPage)GetValue(SelectedPageProperty);
+            set => SetValue(SelectedPageProperty, value);
+        }
+        #endregion
+
         #region ItemsSource
         public static readonly DependencyProperty ItemsSourceProperty =
          DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(ReportViewer), new PropertyMetadata());
@@ -33,6 +43,14 @@ namespace FrontEnd.Reports
             set => SetValue(ItemsSourceProperty, value);
         }
         #endregion
+
+        //PrintGrids_Click();
+        //PrintDialog printDialog = new PrintDialog();
+        //if (printDialog.ShowDialog() == true)
+        //{
+        //    // This assumes you have a Grid named 'myGrid' you want to print
+        //    printDialog.PrintVisual(Page, "Printing Grid");
+        //}
 
         private void PrintGrids_Click()
         {

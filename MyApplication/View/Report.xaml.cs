@@ -17,18 +17,7 @@ namespace MyApplication.View
             reports.Add(new MyPage());
             reports.Add(new MyPage());
             viewer.ItemsSource = reports;
+            viewer.SelectedPage = reports.First();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //PrintGrids_Click();
-            //PrintDialog printDialog = new PrintDialog();
-            //if (printDialog.ShowDialog() == true)
-            //{
-            //    // This assumes you have a Grid named 'myGrid' you want to print
-            //    printDialog.PrintVisual(Page, "Printing Grid");
-            //}
-        }
-
     }
 }
