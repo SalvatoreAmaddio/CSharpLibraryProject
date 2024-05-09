@@ -6,6 +6,9 @@ using System.Windows.Input;
 
 namespace FrontEnd.Forms
 {
+    /// <summary>
+    /// This class instantiate a CommandPanel object which contains a <see cref="SaveButton"/> and a <see cref="DeleteButton"/>
+    /// </summary>
     public class CommandPanel : Control
     {
         [Bindable(true)]
@@ -43,9 +46,6 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty CommandParameterProperty =
         DependencyProperty.Register(nameof(CommandParameter), typeof(ISQLModel), typeof(CommandPanel), new PropertyMetadata());
 
-        static CommandPanel()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CommandPanel), new FrameworkPropertyMetadata(typeof(CommandPanel)));
-        }
+        static CommandPanel() => DefaultStyleKeyProperty.OverrideMetadata(typeof(CommandPanel), new FrameworkPropertyMetadata(typeof(CommandPanel)));
     }
 }

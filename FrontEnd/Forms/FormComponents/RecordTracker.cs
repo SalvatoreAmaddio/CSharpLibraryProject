@@ -6,7 +6,8 @@ using System.Windows.Input;
 namespace FrontEnd.Forms.FormComponents
 {
     /// <summary>
-    /// This class represent a RecordTracker object. A RecordTracker object tells on which record the user is within the RecordSource object.
+    /// This class represents a RecordTracker object. A RecordTracker object tells on which record the user is within the RecordSource object.
+    /// This control is used within a <see cref="AbstractForm"/> object.
     /// </summary>
     public class RecordTracker : AbstractControl
     {

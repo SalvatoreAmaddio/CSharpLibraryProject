@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace FrontEnd.Notifier
 {
     /// <summary>
-    /// This interface extends <see cref="INotifyPropertyChanged"/> and adds extra functionalities.
+    /// This interface extends <see cref="INotifyPropertyChanged"/> and adds extra functionalities for UI purposes.
     /// </summary>
     public interface INotifier : INotifyPropertyChanged
     {
@@ -39,12 +39,12 @@ namespace FrontEnd.Notifier
         public void RaisePropertyChanged(string propName);
 
         /// <summary>
-        /// This event is triggered once a property, whose Set Accessor uses <see cref="UpdateProperty{T}(ref T?, ref T?, string)"/>, has been updated.
+        /// Occurs when a property, whose Set Accessor uses <see cref="UpdateProperty{T}(ref T?, ref T?, string)"/>, has been updated.
         /// </summary>
         public event AfterUpdateEventHandler? AfterUpdate;
 
         /// <summary>
-        /// This event is triggered before a property, whose Set Accessor uses <see cref="UpdateProperty{T}(ref T?, ref T?, string)"/>, has been updated.
+        /// Occurs before a property, whose Set Accessor uses <see cref="UpdateProperty{T}(ref T?, ref T?, string)"/>, has been updated.
         /// </summary>
         public event BeforeUpdateEventHandler? BeforeUpdate;
 

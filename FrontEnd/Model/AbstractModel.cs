@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace FrontEnd.Model
 {
+    /// <summary>
+    /// This class extends the <see cref="AbstractSQLModel"/> and adds extra functionalities for UI purposes
+    /// </summary>
     public abstract class AbstractModel : AbstractSQLModel, INotifier
     {
         bool _isDirty = false;

@@ -6,6 +6,7 @@ namespace FrontEnd.Forms.FormComponents
 {
     /// <summary>
     /// This class represent a RecordStatus object. This object is used to tell if the current record is being changed or not.
+    /// This control is used within a <see cref="AbstractForm"/> object.
     /// </summary>
     public class RecordStatus : AbstractControl
     {
@@ -35,6 +36,7 @@ namespace FrontEnd.Forms.FormComponents
 
     /// <summary>
     /// This class converts the boolean value of the <see cref="IsDirty"/> property into a string format.
+    /// This class is used in the generic.xaml in the Themes folder.
     /// </summary>
     public class IsDirtyConverter : IValueConverter
     {
