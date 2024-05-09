@@ -7,7 +7,10 @@ using System.Windows.Data;
 namespace FrontEnd.Forms
 {
     /// <summary>
-    /// Interaction logic for Text.xaml
+    /// This class extends a <see cref="TextBox"/> and adds extra functionalities.
+    /// Such as a Placeholder property.
+    /// <para/>
+    /// It also overrides the TextProperty whose Binding is set to <see cref="UpdateSourceTrigger.PropertyChanged"/>.
     /// </summary>
     public partial class Text : TextBox
     {
@@ -76,6 +79,9 @@ namespace FrontEnd.Forms
         private void ClearButton_Click(object sender, RoutedEventArgs e) => Text = string.Empty;
 
         #region Placeholder
+        /// <summary>
+        /// Gets and Sets the Placeholder to be displayed when the TextBox is empty.
+        /// </summary>
         public string Placeholder
         {
             get => (string)GetValue(PlaceholderProperty);
@@ -110,6 +116,9 @@ namespace FrontEnd.Forms
 
     }
 
+    /// <summary>
+    /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object
+    /// </summary>
     public class TextToVisibility : IValueConverter
     {
         string? txt;
@@ -125,24 +134,6 @@ namespace FrontEnd.Forms
         {
             Visibility visibility = (Visibility)value;
             return (visibility == Visibility.Visible) ? "" : txt;
-        }
-    }
-
-    public class TextToVisibilityInvert : IValueConverter
-    {
-        string? txt;
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            txt = value.ToString();
-            if (txt == null) return Visibility.Hidden;
-
-            return (txt.Length > 0) ?  Visibility.Visible : Visibility.Hidden;
-        }
-
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            Visibility visibility = (Visibility)value;
-            return (visibility == Visibility.Visible) ? txt : "";
         }
     }
 

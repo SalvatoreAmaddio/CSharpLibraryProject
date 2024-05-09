@@ -9,6 +9,8 @@ namespace FrontEnd.FilterSource
 {
     /// <summary>
     /// This interface extends <see cref="INotifyPropertyChanged"/> and defines the properties and methods to be implemented by the <see cref="FilterOption"/> class.
+    /// <para/>
+    /// This interface works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
     /// </summary>
     public interface IFilterOption : INotifyPropertyChanged
     {
@@ -40,6 +42,8 @@ namespace FrontEnd.FilterSource
 
     /// <summary>
     /// Concrete impementation of the <see cref="IFilterOption"/>
+    /// <para/>
+    /// This class works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
     /// </summary>
     public class FilterOption : IFilterOption
     {
@@ -77,6 +81,8 @@ namespace FrontEnd.FilterSource
 
     /// <summary>
     /// A List for dealing with <see cref="IFilterOption"/> objcets.
+    /// <para/>
+    /// This class works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
