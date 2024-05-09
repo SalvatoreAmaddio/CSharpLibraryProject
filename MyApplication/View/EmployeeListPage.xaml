@@ -1,0 +1,60 @@
+﻿<Page x:Class="MyApplication.View.EmployeeListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MyApplication.View"
+      mc:Ignorable="d" 
+      xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
+      xmlns:controller="clr-namespace:MyApplication.Controller"
+      Title="EmployeeListPage">
+    
+    <Page.DataContext>
+        <controller:PersonControllerList/>
+    </Page.DataContext>
+
+    <fr:FormList Controller="{Binding}" HeaderRow="100">
+        <fr:FormList.Header>
+            <StackPanel Margin="10,0,10,0" VerticalAlignment="Center">
+                <fr:Text Placeholder="Search by name..."  Text="{Binding Search}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </fr:FormList.Header>
+        <fr:FormList.List>
+            <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
+                <fr:Lista.Header>
+                    <Grid fr:Definition.ColumnDefinitions="24,150,150,100,70,100,100,50,50,50">
+                        <Grid.Resources>
+                            <Style TargetType="Label" BasedOn="{StaticResource ColumnStyle}"/>
+                        </Grid.Resources>
+                        <Label Content="First Name" Grid.Column="1"/>
+                        <Label Content="Last Name" Grid.Column="2"/>
+                        <Label Content="DOB" Grid.Column="3"/>
+                        <fr:FilterOption Grid.Column="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
+                        <fr:FilterOption Grid.Column="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
+                        <fr:FilterOption Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
+                        <Label Content="COMMANDS" Grid.Column="7" Grid.ColumnSpan="3"/>
+                    </Grid>
+                </fr:Lista.Header>
+                <fr:Lista.ItemTemplate>
+                    <DataTemplate>
+                        <fr:FormRow IsDirty="{Binding IsDirty}">
+                            <fr:Form.Content>
+                                <Grid fr:Definition.RowDefinitions="30" fr:Definition.ColumnDefinitions="150,150,100,70,100,100,50,50,50">
+                                    <fr:Text Text="{Binding FirstName}"/>
+                                    <fr:Text Grid.Column="1" Text="{Binding LastName}"/>
+                                    <fr:DateField Grid.Column="2" SelectedDate="{Binding DOB}" DisplayDate="{Binding DOB}"/>
+                                    <fr:Combo Grid.Column="3" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Genders.Source}" SelectedItem="{Binding Gender}"/>
+                                    <fr:Combo Grid.Column="4" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Titles.Source}" SelectedItem="{Binding JobTitle}"/>
+                                    <fr:Combo Grid.Column="5" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Departments.Source}" SelectedItem="{Binding Department}"/>
+                                    <fr:SaveButton Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
+                                    <fr:DeleteButton Grid.Column="7" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
+                                    <fr:OpenButton Grid.Column="8" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
+                                </Grid>
+                            </fr:Form.Content>
+                        </fr:FormRow>
+                    </DataTemplate>
+                </fr:Lista.ItemTemplate>
+            </fr:Lista>
+        </fr:FormList.List>
+    </fr:FormList>
+</Page>
