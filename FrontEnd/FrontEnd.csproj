@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -6,16 +6,6 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="images\clear_filter.png" />
-    <None Remove="images\close.png" />
-    <None Remove="images\delete.png" />
-    <None Remove="images\filter.png" />
-    <None Remove="images\folder.png" />
-    <None Remove="images\pdf.png" />
-    <None Remove="images\save.png" />
-  </ItemGroup>
 
   <ItemGroup>
 	<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
@@ -36,11 +26,9 @@
     <Resource Include="images\folder.png" />
     <Resource Include="images\pdf.png" />
     <Resource Include="images\save.png" />
+	<Resource Include="images\close.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="images\close.png" />
-  </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(ProjectDir)Reports\PrinterPortManager.dll&quot; &quot;$(TargetDir)&quot;" />
