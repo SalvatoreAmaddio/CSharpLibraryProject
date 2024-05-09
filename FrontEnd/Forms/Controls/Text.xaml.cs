@@ -37,35 +37,32 @@ namespace FrontEnd.Forms
         {
             InitializeComponent();
             
-            Binding binding = new()
+            Binding PlaceholderVisibilityBinding = new(nameof(Text))
             {
                 Source = this,
-                Path = new PropertyPath(nameof(Text)),
                 Converter = new TextToVisibility()
             };
 
-            SetBinding(PlaceholderVisibilityProperty, binding);
+            SetBinding(PlaceholderVisibilityProperty, PlaceholderVisibilityBinding);
 
-            MultiBinding multiBinding = new()
+            MultiBinding ClearButtonVisibilityMultiBinding = new()
             {
                 Converter = new MultiBindingConverter()
             };
 
-            Binding binding2 = new()
+            Binding TextPropertyBinding = new(nameof(Text))
             {
                 Source = this,
-                Path = new PropertyPath(nameof(Text)),
             };
 
-            Binding binding3 = new()
+            Binding IsKeyboardFocusWithinBinding = new(nameof(IsKeyboardFocusWithin))
             {
                 Source = this,
-                Path = new PropertyPath(nameof(IsKeyboardFocusWithin)),
             };
 
-            multiBinding.Bindings.Add(binding2);
-            multiBinding.Bindings.Add(binding3);
-            SetBinding(ClearButtonVisibilityProperty, multiBinding);
+            ClearButtonVisibilityMultiBinding.Bindings.Add(TextPropertyBinding);
+            ClearButtonVisibilityMultiBinding.Bindings.Add(IsKeyboardFocusWithinBinding);
+            SetBinding(ClearButtonVisibilityProperty, ClearButtonVisibilityMultiBinding);
         }
 
         public override void OnApplyTemplate()
@@ -114,47 +111,47 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(ClearButtonVisibility), typeof(Visibility), typeof(Text), new PropertyMetadata(Visibility.Visible));
         #endregion
 
-    }
-
-    /// <summary>
-    /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object.
-    /// </summary>
-    public class TextToVisibility : IValueConverter
-    {
-        string? txt;
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        /// <summary>
+        /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object.
+        /// It is used in the Converter for Binding of the <see cref="PlaceholderVisibilityProperty"/>
+        /// </summary>
+        internal class TextToVisibility : IValueConverter
         {
-            txt = value.ToString();
-            if (txt == null) return Visibility.Visible;
-            
-            return (txt.Length > 0) ? Visibility.Hidden : Visibility.Visible;
+            string? txt;
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                txt = value.ToString();
+                if (txt == null) return Visibility.Visible;
+
+                return (txt.Length > 0) ? Visibility.Hidden : Visibility.Visible;
+            }
+
+            public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                Visibility visibility = (Visibility)value;
+                return (visibility == Visibility.Visible) ? "" : txt;
+            }
         }
 
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        internal class MultiBindingConverter : IMultiValueConverter
         {
-            Visibility visibility = (Visibility)value;
-            return (visibility == Visibility.Visible) ? "" : txt;
-        }
-    }
+            private string? txt;
+            private bool focus;
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+            {
+                txt = values[0].ToString();
+                focus = System.Convert.ToBoolean(values[1].ToString());
+                if (txt == null) return Visibility.Hidden;
+                return (txt.Length > 0 && focus) ? Visibility.Visible : Visibility.Hidden;
+            }
 
-    public class MultiBindingConverter : IMultiValueConverter
-    {
-        string? txt;
-        bool focus;
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            txt = values[0].ToString();
-            focus = System.Convert.ToBoolean(values[1].ToString());
-            if (txt == null) return Visibility.Hidden;
-            return (txt.Length > 0 && focus) ? Visibility.Visible : Visibility.Hidden;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            List<object> list = [];
-            Visibility visibility = (Visibility)value;
-            list.Add((visibility == Visibility.Visible) ? txt : "");
-            return [.. list];
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            {
+                List<object> list = [];
+                Visibility visibility = (Visibility)value;
+                list.Add((visibility == Visibility.Visible) ? txt : "");
+                return [.. list];
+            }
         }
     }
 }
