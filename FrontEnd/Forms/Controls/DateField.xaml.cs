@@ -3,7 +3,7 @@
 namespace FrontEnd.Forms
 {
     /// <summary>
-    /// Interaction logic for DateField.xaml
+    /// Extends the <see cref="DatePicker"/> class to provide a slightly different UI Design.
     /// </summary>
     public partial class DateField : DatePicker
     {

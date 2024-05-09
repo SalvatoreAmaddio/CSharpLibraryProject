@@ -6,36 +6,37 @@ using System.Windows.Data;
 
 namespace FrontEnd.Forms
 {
+    /// <summary>
+    /// Abstract class that defines a set of common properties and methods for custom buttons which are binds to the Commands defined in the <see cref="AbstractController{M}"/>.
+    /// </summary>
     public abstract class AbstractButton : Button 
     {
         protected abstract string CommandName { get; }
-        public AbstractButton() 
-        {
-            DataContextChanged += OnDataContextChanged;
-
-        }
+        public AbstractButton() => DataContextChanged += OnDataContextChanged;
 
        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             IAbstractController controller = (IAbstractController)e.NewValue;
-            Binding CommandParameterBinding = new()
+            Binding CommandParameterBinding = new("CurrentRecord")
             {
                 Source = controller,
-                Path = new("CurrentRecord")
             };
 
             SetBinding(CommandParameterProperty, CommandParameterBinding);
 
-            Binding CommandBinding = new()
+            Binding CommandBinding = new(CommandName)
             {
                 Source = controller,
-                Path = new(CommandName)
             };
 
             SetBinding(CommandProperty, CommandBinding);
 
         }
     }
+
+    /// <summary>
+    /// Instantiate SaveButton and binds it to the UpdateCMD Command defined in the <see cref="AbstractController{M}"/>
+    /// </summary>
     public class SaveButton : AbstractButton
     {
         protected override string CommandName => "UpdateCMD";
@@ -50,6 +51,9 @@ namespace FrontEnd.Forms
 
     }
 
+    /// <summary>
+    /// Instantiate DeleteButton and binds it to the DeleteCMD Command defined in the <see cref="AbstractControl"/>
+    /// </summary>
     public class DeleteButton : AbstractButton
     {
         protected override string CommandName => "DeleteCMD";
@@ -63,6 +67,9 @@ namespace FrontEnd.Forms
         }
     }
 
+    /// <summary>
+    /// Instantiate OpenButton and binds it to the OpenCMD Command defined in the <see cref="AbstractListController{M}"/>
+    /// </summary>
     public class OpenButton : AbstractButton
     {
         protected override string CommandName => "OpenCMD";

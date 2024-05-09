@@ -10,10 +10,7 @@ namespace FrontEnd.Forms.FormComponents
     /// </summary>
     public class RecordTracker : AbstractControl
     {
-        static RecordTracker()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
-        }
+        static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
         public RecordTracker() => OnClickCommand = new RecordTrackerClickCommand(OnClicked);
 
@@ -53,22 +50,20 @@ namespace FrontEnd.Forms.FormComponents
         protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e)
         {
             DataContext = e.NewValue;
-            Binding binding = new()
+            Binding RecordDisplayerBinding = new("Records")
             {
                 Source = DataContext,
-                Path = new PropertyPath("Records"),
             };
 
-            SetBinding(RecordsProperty, binding);
+            SetBinding(RecordsProperty, RecordDisplayerBinding);
 
-            Binding binding2 = new()
+            Binding AllowNewRecordBinding = new("AllowNewRecord")
             {
                 Source = DataContext,
-                Path = new PropertyPath("AllowNewRecord"),
                 Converter = new AllowNewRecordConverter()
             };
 
-            SetBinding(GoNewVisibilityProperty, binding2);
+            SetBinding(GoNewVisibilityProperty, AllowNewRecordBinding);
         }
 
         private void OnClicked(int movement)
@@ -100,41 +95,43 @@ namespace FrontEnd.Forms.FormComponents
                     break;
             }
         }
-    }
-    public class RecordTrackerClickCommand(Action<int> _execute) : ICommand
-    {
-        public event EventHandler? CanExecuteChanged;
-        private readonly Action<int> _execute = _execute;
 
-        public bool CanExecute(object? parameter)
+        internal class RecordTrackerClickCommand(Action<int> _execute) : ICommand
         {
-            return true;
-        }
+            public event EventHandler? CanExecuteChanged;
+            private readonly Action<int> _execute = _execute;
 
-        public void Execute(object? parameter)
-        {
-            if (parameter == null) throw new Exception("Parameter was null");
-            string? str = parameter.ToString();
-            if (string.IsNullOrEmpty(str)) throw new Exception("Parameter was null");
-            _execute(int.Parse(str));
-        }
-    }
-    public class AllowNewRecordConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool boolValue)
+            public bool CanExecute(object? parameter)
             {
-                return boolValue ? Visibility.Visible : Visibility.Hidden;
+                return true;
             }
-            return Visibility.Visible;
+
+            public void Execute(object? parameter)
+            {
+                if (parameter == null) throw new Exception("Parameter was null");
+                string? str = parameter.ToString();
+                if (string.IsNullOrEmpty(str)) throw new Exception("Parameter was null");
+                _execute(int.Parse(str));
+            }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        internal class AllowNewRecordConverter : IValueConverter
         {
-            if (value is Visibility visibility)
-                return visibility.Equals(Visibility.Visible) ? true : false;
-            return ">";
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is bool boolValue)
+                {
+                    return boolValue ? Visibility.Visible : Visibility.Hidden;
+                }
+                return Visibility.Visible;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is Visibility visibility)
+                    return visibility.Equals(Visibility.Visible) ? true : false;
+                return ">";
+            }
         }
     }
 }

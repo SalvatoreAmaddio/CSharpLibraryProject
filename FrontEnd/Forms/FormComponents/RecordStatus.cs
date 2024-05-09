@@ -9,10 +9,7 @@ namespace FrontEnd.Forms.FormComponents
     /// </summary>
     public class RecordStatus : AbstractControl
     {
-        static RecordStatus()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordStatus), new FrameworkPropertyMetadata(typeof(RecordStatus)));
-        }
+        static RecordStatus() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordStatus), new FrameworkPropertyMetadata(typeof(RecordStatus)));
 
         /// <summary>
         /// This property tells if the Current Record is being changed or not.
