@@ -13,6 +13,7 @@ namespace FrontEnd.Reports
         public ReportPage()
         {
             AdjustPageSize();
+            Background = Brushes.White;
             LayoutUpdated += ReportPage_LayoutUpdated;
         }
 

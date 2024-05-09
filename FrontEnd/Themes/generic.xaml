@@ -227,7 +227,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type report:ReportPage}">
-                        <Grid x:Name="Page" Background="White" Width="{TemplateBinding PageWidth}" Height="{TemplateBinding PageHeight}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}">
+                        <Grid x:Name="Page" Background="{TemplateBinding Background}" Width="{TemplateBinding PageWidth}" Height="{TemplateBinding PageHeight}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="{TemplateBinding HeaderRow}"/>
                                 <RowDefinition Height="*"/>
@@ -238,6 +239,7 @@
                             <ContentPresenter Grid.Row="1" Content="{TemplateBinding Main}"/>
                             <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}"/>
                         </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

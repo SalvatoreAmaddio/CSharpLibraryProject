@@ -23,7 +23,7 @@ namespace FrontEnd.Reports
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         
-        public ReportViewer() => PrintCommand = new CMD(PrintGrids_Click);
+        public ReportViewer() => PrintCommand = new CMD(PrintFixDocs);
 
         #region FileName
         public static readonly DependencyProperty FileNameProperty =
@@ -73,8 +73,7 @@ namespace FrontEnd.Reports
         //    printDialog.PrintVisual(Page, "Printing Grid");
         //}
 
-
-        private void PrintGrids_Click()
+        private void PrintFixDocs()
         {
             PrintDialog printDialog = new();
 
@@ -117,37 +116,5 @@ namespace FrontEnd.Reports
             }
         }
 
-        //private void PrintFlowDocument_Click()
-        //{
-        //    PrintDialog printDialog = new PrintDialog();
-        //    if (printDialog.ShowDialog() == true)
-        //    {
-        //        // Create the FlowDocument
-        //        FlowDocument flowDoc = new FlowDocument();
-        //        flowDoc.PagePadding = new Thickness(0); // Adjust padding as needed
-        //        flowDoc.ColumnGap = 0;
-        //        flowDoc.ColumnWidth = printDialog.PrintableAreaWidth; // Set the column width to the page width
-        //        Pages myContentList = [];
-        //        myContentList.Add(Page);
-        //        Border.Child = null;
-        //        // Assume you have a list of content (e.g., Grids) to add
-        //        foreach (UIElement element in myContentList)
-        //        {
-        //            // Wrap each element in a BlockUIContainer to include it in the FlowDocument
-        //            BlockUIContainer container = new(element);
-
-        //            // Measure and arrange the element (important if coming from another context)
-        //            element.Measure(new Size(printDialog.PrintableAreaWidth, double.PositiveInfinity));
-        //            element.Arrange(new Rect(0, 0, element.DesiredSize.Width, element.DesiredSize.Height));
-
-        //            flowDoc.Blocks.Add(container);
-        //        }
-
-        //        // Create a DocumentPaginator wrapper for the FlowDocument
-        //        IDocumentPaginatorSource idpSource = flowDoc;
-        //        printDialog.PrintDocument(idpSource.DocumentPaginator, "Printing Flow Document");
-        //    }
-        //}
-
     }
-    }
+}

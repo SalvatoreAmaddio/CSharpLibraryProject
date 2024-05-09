@@ -6,10 +6,11 @@
              xmlns:local="clr-namespace:MyApplication.View.ReportPages"
              xmlns:r="clr-namespace:FrontEnd.Reports;assembly=FrontEnd"
              x:Name="Page" HeaderRow="40"
+             Padding="10"
              mc:Ignorable="d">
 
     <r:ReportPage.Header>
-        <Border Padding="5">
+        <Border>
             <Label Content="Header"/>
         </Border>
     </r:ReportPage.Header>
