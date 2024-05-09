@@ -14,6 +14,7 @@ namespace MyApplication.Controller
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
         public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Person)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        public override int DatabaseIndex => 0;
 
         public PersonControllerList()
         {
@@ -37,8 +38,6 @@ namespace MyApplication.Controller
             Source.ReplaceRange(results);
             GoFirst();
         }
-
-        public override int DatabaseIndex => 0;
 
         public override async void Filter()
         {

@@ -7,18 +7,45 @@ using System.Text;
 
 namespace FrontEnd.FilterSource
 {
+    /// <summary>
+    /// This interface extends <see cref="INotifyPropertyChanged"/> and defines the properties and methods to be implemented by the <see cref="FilterOption"/> class.
+    /// </summary>
     public interface IFilterOption : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets and sets a boolean indicating if an option has been selected.
+        /// </summary>
         public bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets the ISQLModel that can be selected as option.
+        /// </summary>
         public ISQLModel Record { get; }
+
+        /// <summary>
+        /// Gets the value of the <see cref="Record"/> property to be displayed.
+        /// </summary>
         public object? Value { get; }        
-        public event OnSelected? OnSelected;
-        public void Unset();
+        
+        /// <summary>
+        /// Event that triggers when an option is selected or deselected.
+        /// </summary>
+        public event SelectionChangedEventHandler? OnSelectionChanged;
+        
+        /// <summary>
+        /// Deselects an option bypassing the <see cref="OnSelectionChanged"/> event.
+        /// </summary>
+        public void Deselect();
     }
 
+    /// <summary>
+    /// Concrete impementation of the <see cref="IFilterOption"/>
+    /// </summary>
     public class FilterOption : IFilterOption
     {
         private bool _isSelected = false;
+        public object? Value { get; }
+        public ISQLModel Record { get; }
         public bool IsSelected
         {
             get => _isSelected;
@@ -26,18 +53,12 @@ namespace FrontEnd.FilterSource
             {
                 _isSelected = value;
                 PropertyChanged?.Invoke(this, new(nameof(IsSelected)));
-                OnSelected?.Invoke(this, new OnSelectedEventArgs(value, Record));
+                OnSelectionChanged?.Invoke(this, new EventArgs());
             }
         }
 
-        public void Unset() 
-        {
-            _isSelected = false;
-            PropertyChanged?.Invoke(this, new(nameof(IsSelected)));
-        }
-
-        public object? Value { get; }
-        public ISQLModel Record { get; }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event SelectionChangedEventHandler? OnSelectionChanged;
 
         public FilterOption(ISQLModel record, string displayProperty) 
         {
@@ -46,13 +67,26 @@ namespace FrontEnd.FilterSource
             Value = Field.GetValue();
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event OnSelected? OnSelected;
+        public void Deselect()
+        {
+            _isSelected = false;
+            PropertyChanged?.Invoke(this, new(nameof(IsSelected)));
+        }
 
     }
 
+    /// <summary>
+    /// A List for dealing with <see cref="IFilterOption"/> objcets.
+    /// </summary>
+    /// <param name="source">A RecordSource object</param>
+    /// <param name="displayProperty">The Record's property to display in the option list.</param>
     public class SourceOption(RecordSource source, string displayProperty) : List<IFilterOption>(source.Select(s => new FilterOption(s, displayProperty)))
     {
+        /// <summary>
+        /// It loops through the List and builds the SQL logic to filter the Select the statement.
+        /// </summary>
+        /// <param name="filterQueryBuilder"></param>
+        /// <returns>A string</returns>
         public string Conditions(FilterQueryBuilder filterQueryBuilder) 
         {
             StringBuilder sb = new();

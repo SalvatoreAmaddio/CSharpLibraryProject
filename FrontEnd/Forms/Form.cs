@@ -8,10 +8,11 @@ namespace FrontEnd.Forms
     /// <summary>
     /// Abstract class representing a Form Object.
     /// </summary>
-    public abstract class AbstractForm : AbstractControl
+    public abstract class AbstractForm() : AbstractControl
     {
-        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e) => OnControllerSet((IAbstractController)e.NewValue);
-
+        /// <summary>
+        /// Gets and Sets the <see cref="ProgressBar.IsIndeterminate"/> property.
+        /// </summary>
         #region IsLoading
         public bool IsLoading
         {
@@ -24,6 +25,9 @@ namespace FrontEnd.Forms
         #endregion
 
         #region Header
+        /// <summary>
+        /// Gets and Sets the Form Header.
+        /// </summary>
         public UIElement Header
         {
             get => (UIElement)GetValue(HeaderProperty);
@@ -34,6 +38,23 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(Header), typeof(UIElement), typeof(AbstractForm), new PropertyMetadata(OnElementChanged));
         #endregion
 
+        #region Menu
+        /// <summary>
+        /// Gets and sets a <see cref="System.Windows.Controls.Menu"/> object.
+        /// </summary>
+        public Menu Menu
+        {
+            get => (Menu)GetValue(MenuProperty);
+            set => SetValue(MenuProperty, value);
+        }
+
+        public static readonly DependencyProperty MenuProperty =
+            DependencyProperty.Register(nameof(Menu), typeof(Menu), typeof(AbstractForm), new PropertyMetadata(OnElementChanged));
+        #endregion
+
+        /// <summary>
+        /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="Menu"/> property.
+        /// </summary>
         #region MenuRow
         public GridLength MenuRow
         {
@@ -45,6 +66,9 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(MenuRow), typeof(GridLength), typeof(AbstractForm), new PropertyMetadata(new GridLength(0), null));
         #endregion
 
+        /// <summary>
+        /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="Header"/> property.
+        /// </summary>
         #region HeaderRow
         public GridLength HeaderRow
         {
@@ -56,6 +80,9 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(HeaderRow), typeof(GridLength), typeof(AbstractForm), new PropertyMetadata(new GridLength(0), null));
         #endregion
 
+        /// <summary>
+        /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="FormComponents.RecordTracker"/> object.
+        /// </summary>
         #region RecordTrackerRow
         public GridLength RecordTrackerRow
         {
@@ -67,20 +94,8 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(RecordTrackerRow), typeof(GridLength), typeof(AbstractForm), new PropertyMetadata(new GridLength(30), null));
         #endregion
 
-        #region Menu
-        public Menu Menu
-        {
-            get => (Menu)GetValue(MenuProperty);
-            set => SetValue(MenuProperty, value);
-        }
-
-        public static readonly DependencyProperty MenuProperty =
-            DependencyProperty.Register(nameof(Menu), typeof(Menu), typeof(AbstractForm), new PropertyMetadata(OnElementChanged));
-        #endregion
-
-        public AbstractForm() 
-        {
-        }
+        static AbstractForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(AbstractForm), new FrameworkPropertyMetadata(typeof(AbstractForm)));
+        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e) => OnControllerSet((IAbstractController)e.NewValue);
 
         protected static void OnElementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -102,7 +117,11 @@ namespace FrontEnd.Forms
             else return height;
         }
 
-        public virtual void OnControllerSet(IAbstractController controller) 
+        /// <summary>
+        /// Custom logic that triggers when the <see cref="Controller"/> property has changed. This method gets called by the <see cref="OnControllerChanged(DependencyPropertyChangedEventArgs)"/> event.
+        /// </summary>
+        /// <param name="controller"></param>
+        public virtual void OnControllerSet(IAbstractController controller)
         {
             Binding binding = new()
             {
@@ -113,19 +132,19 @@ namespace FrontEnd.Forms
             SetBinding(IsLoadingProperty, binding);
         }
 
-        static AbstractForm()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AbstractForm), new FrameworkPropertyMetadata(typeof(AbstractForm)));
-        }
-
     }
 
     /// <summary>
-    /// This class initiates a Form object meant to deal with <see cref="Lista"/> objects.
+    /// This class initiates a Form object meant to deal with a <see cref="Lista"/> object.
+    /// <para/>
+    /// A Form List object comes with a <see cref="FormComponents.RecordTracker"/>
     /// </summary>
     public class FormList : AbstractForm
     {
 
+        /// <summary>
+        /// Gets and Sets the <see cref="Lista"/> object to display.
+        /// </summary>
         #region List
         public Lista List
         {
@@ -137,19 +156,22 @@ namespace FrontEnd.Forms
         DependencyProperty.Register(nameof(List), typeof(Lista), typeof(FormList), new());
         #endregion
 
-        static FormList()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(FormList), new FrameworkPropertyMetadata(typeof(FormList)));
-        }
+        static FormList() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormList), new FrameworkPropertyMetadata(typeof(FormList)));
 
     }
 
     /// <summary>
     /// This class initiates a Form object.
+    /// <para/>
+    /// A Form List object comes with a <see cref="FormComponents.RecordTracker"/> and a <see cref="FormComponents.RecordStatus"/> object.
     /// </summary>
     public class Form : AbstractForm
     {
+
         #region RecordStatusRow
+        /// <summary>
+        /// Gets and Sets a <see cref="GridLength"/> object which regulates the width of a <see cref="FormComponents.RecordStatus"/> object.
+        /// </summary>
         public GridLength RecordStatusColumn
         {
             get => (GridLength)GetValue(RecordStatusColumnProperty);
@@ -161,6 +183,9 @@ namespace FrontEnd.Forms
         #endregion
 
         #region Content
+        /// <summary>
+        /// Gets and Sets the main Content that the Form displays.
+        /// </summary>
         public FrameworkElement Content
         {
             get => (FrameworkElement)GetValue(ContentProperty);
@@ -172,6 +197,9 @@ namespace FrontEnd.Forms
         #endregion
 
         #region IsDirty
+        /// <summary>
+        /// Gets and Sets a Flag that indicates if the current Record is being changed.
+        /// </summary>
         public bool IsDirty
         {
             get => (bool)GetValue(IsDirtyProperty);
@@ -182,10 +210,7 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(Form), new PropertyMetadata());
         #endregion
 
-        static Form()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
-        }
+        static Form() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
 
         public override void OnControllerSet(IAbstractController controller)
         {
@@ -201,16 +226,15 @@ namespace FrontEnd.Forms
 
     }
 
+    /// <summary>
+    /// This class instantiate a FormRow object which is used by a <see cref="Lista"/>'s <see cref="DataTemplate"/>.
+    /// <para/>
+    /// The <see cref="FormComponents.RecordTracker"/> object is disabled by default and should stay so.
+    /// </summary>
     public class FormRow : Form 
     {
-        static FormRow()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
-        }
+        static FormRow() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
 
-        public FormRow() 
-        {
-            RecordTrackerRow = new(0);
-        }
+        public FormRow() => RecordTrackerRow = new(0);
     }
 }

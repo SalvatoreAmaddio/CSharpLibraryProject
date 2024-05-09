@@ -1,5 +1,4 @@
 ﻿using FrontEnd.Controller;
-using FrontEnd.Events;
 using FrontEnd.FilterSource;
 using FrontEnd.Utils;
 using System.Windows;
@@ -7,6 +6,23 @@ using System.Windows.Controls;
 
 namespace FrontEnd.Forms
 {
+    /// <summary>
+    /// Custom control that sets a List of options that can be used in a <see cref="Lista"/>'s header.
+    /// <para/>
+    /// For Example:
+    /// <code>
+    /// &lt;fr:Lista.Header>
+    ///     ...
+    ///     &lt;fr:FilterOption Grid.Column="4" DataContext= "{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller= "{Binding}" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
+    ///     
+    ///     &lt;fr:FilterOption Grid.Column= "5" DataContext= "{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller= "{Binding}" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
+    ///     
+    ///     &lt;fr:FilterOption Grid.Column= "6" DataContext= "{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller= "{Binding}" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
+    ///     ...
+    ///&lt;/fr:Lista.Header>
+    /// </code>
+    /// This class works in conjunction with <seealso cref="IFilterOption"/>, <seealso cref="FilterOption"/>
+    /// </summary>
     public class FilterOption : AbstractControl
     {
         private Button? DropDownButton;
@@ -19,10 +35,7 @@ namespace FrontEnd.Forms
             Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/clear_filter.png")
         };
 
-        static FilterOption()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(FilterOption), new FrameworkPropertyMetadata(typeof(FilterOption)));
-        }
+        static FilterOption() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FilterOption), new FrameworkPropertyMetadata(typeof(FilterOption)));
 
         private void ResetDropDownButtonAppereance()
         {
@@ -46,7 +59,7 @@ namespace FrontEnd.Forms
         private void OnClearButtonClicked(object sender, RoutedEventArgs e)
         {
             foreach(var item in ItemsSource) 
-                item.Unset();
+                item.Deselect();
 
             ((IListController)Controller).Filter();
             IsOpen = false;
@@ -59,6 +72,9 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty IsOpenProperty =
             DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(FilterOption), new PropertyMetadata(false));
 
+        /// <summary>
+        /// Gets and Sets a boolean indicating if the Popup is open or not/>
+        /// </summary>
         public bool IsOpen
         {
             get => (bool)GetValue(IsOpenProperty);
@@ -70,6 +86,11 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable<IFilterOption>), typeof(FilterOption), new PropertyMetadata(ItemSourceChanged));
 
+        /// <summary>
+        /// Gets and sets the List of options.
+        /// <para/>
+        /// see also <seealso cref="IFilterOption"/>, <seealso cref="FilterOption"/>, and <seealso cref="SourceOption"/>.
+        /// </summary>
         public IEnumerable<IFilterOption> ItemsSource
         {
             get => (IEnumerable<IFilterOption>)GetValue(ItemsSourceProperty); 
@@ -77,15 +98,15 @@ namespace FrontEnd.Forms
         }
 
         private static void ItemSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((FilterOption)d).BindEvents(e.NewValue);
-        
-        private void BindEvents(object new_source) 
+
+        private void BindEvents(object new_source)
         {
             IEnumerable<IFilterOption> source = (IEnumerable<IFilterOption>)new_source;
-            foreach (IFilterOption item in source)
-                item.OnSelected += Item_OnSelected;
+            foreach (IFilterOption option in source)
+                option.OnSelectionChanged += OnOptionSelected;
         }
 
-        private void Item_OnSelected(object? sender, OnSelectedEventArgs e) 
+        private void OnOptionSelected(object? sender, EventArgs e)
         {
             if (DropDownButton == null) throw new Exception("DropDownButton is null");
             DropDownButton.Content = ClearFilter;
@@ -99,6 +120,9 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register(nameof(Text), typeof(string), typeof(FilterOption), new PropertyMetadata(string.Empty));
 
+        /// <summary>
+        /// Gets and Sets the string value to be displayed. This would usually be the <see cref="IFilterOption.Value"/> property.
+        /// </summary>
         public string Text
         {
             get => (string)GetValue(TextProperty);
