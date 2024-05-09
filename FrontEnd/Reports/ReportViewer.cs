@@ -1,5 +1,6 @@
 ﻿using FrontEnd.Controller;
 using System.Printing;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -68,12 +69,20 @@ namespace FrontEnd.Reports
         }
         #endregion
 
+        [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern uint CreateDeletePort(int action, string portName, IntPtr printerObject);
         private void PrintFixDocs()
         {
             IsLoading = true;
             LocalPrintServer printServer = new();
             PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
             PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
+
+            string portName = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Invoice.pdf"; ; // Example port name
+            IntPtr printerObject = IntPtr.Zero; // Handle
+
+            // Example action (0 for add, 1 for delete)
+            uint result = CreateDeletePort(0, portName, printerObject);
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
@@ -107,6 +116,7 @@ namespace FrontEnd.Reports
             }
             
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
+            result = CreateDeletePort(1, portName, printerObject);
             IsLoading = false;
         }
 
