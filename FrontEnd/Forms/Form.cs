@@ -10,10 +10,10 @@ namespace FrontEnd.Forms
     /// </summary>
     public abstract class AbstractForm() : AbstractControl
     {
+        #region IsLoading
         /// <summary>
         /// Gets and Sets the <see cref="ProgressBar.IsIndeterminate"/> property.
         /// </summary>
-        #region IsLoading
         public bool IsLoading
         {
             get => (bool)GetValue(IsLoadingProperty);
@@ -52,10 +52,10 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(Menu), typeof(Menu), typeof(AbstractForm), new PropertyMetadata(OnElementChanged));
         #endregion
 
+        #region MenuRow
         /// <summary>
         /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="Menu"/> property.
         /// </summary>
-        #region MenuRow
         public GridLength MenuRow
         {
             get => (GridLength)GetValue(MenuRowProperty);
@@ -66,10 +66,10 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(MenuRow), typeof(GridLength), typeof(AbstractForm), new PropertyMetadata(new GridLength(0), null));
         #endregion
 
+        #region HeaderRow
         /// <summary>
         /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="Header"/> property.
         /// </summary>
-        #region HeaderRow
         public GridLength HeaderRow
         {
             get => (GridLength)GetValue(HeaderRowProperty);
@@ -80,10 +80,10 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(HeaderRow), typeof(GridLength), typeof(AbstractForm), new PropertyMetadata(new GridLength(0), null));
         #endregion
 
+        #region RecordTrackerRow
         /// <summary>
         /// Gets and Sets a <see cref="GridLength"/> object which regulates the height of the <see cref="FormComponents.RecordTracker"/> object.
         /// </summary>
-        #region RecordTrackerRow
         public GridLength RecordTrackerRow
         {
             get => (GridLength)GetValue(RecordTrackerRowProperty);

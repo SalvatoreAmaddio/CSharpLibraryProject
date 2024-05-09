@@ -21,7 +21,11 @@
             </TabItem>
 
             <TabItem Header="Report Viewer">
-                
+                <Frame>
+                    <Frame.Content>
+                        <local:Report/>
+                    </Frame.Content>
+                </Frame>
             </TabItem>
         </TabControl>
     </Grid>
