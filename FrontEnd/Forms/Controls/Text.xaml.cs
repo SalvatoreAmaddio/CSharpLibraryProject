@@ -72,11 +72,11 @@ namespace FrontEnd.Forms
         {
             base.OnApplyTemplate();
             ClearButton = (Button)GetTemplateChild("PART_clear_button");
-            ClearButton.Click += ClearButton_Click;
+            ClearButton.Click += OnClearButtonClicked;
             ClearButton.Content = ClearImg;
         }
 
-        private void ClearButton_Click(object sender, RoutedEventArgs e) => Text = string.Empty;
+        private void OnClearButtonClicked(object sender, RoutedEventArgs e) => Text = string.Empty;
 
         #region Placeholder
         /// <summary>
@@ -117,7 +117,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object
+    /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object.
     /// </summary>
     public class TextToVisibility : IValueConverter
     {
