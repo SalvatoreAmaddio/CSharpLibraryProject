@@ -82,7 +82,8 @@ namespace FrontEnd.Reports
             IntPtr printerObject = IntPtr.Zero; // Handle
 
             // Example action (0 for add, 1 for delete)
-            uint result = CreateDeletePort(0, portName, printerObject);
+            //            uint result = CreateDeletePort(0, portName, printerObject);
+            MicrosoftPDFManager.SetPort();
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
@@ -116,7 +117,7 @@ namespace FrontEnd.Reports
             }
             
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
-            result = CreateDeletePort(1, portName, printerObject);
+            //result = CreateDeletePort(1, portName, printerObject);
             IsLoading = false;
         }
 
