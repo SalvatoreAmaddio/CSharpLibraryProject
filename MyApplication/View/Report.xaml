@@ -24,20 +24,28 @@
             </ToolBar>
         </ToolBarTray>
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <report:ReportPage>
-                <report:ReportPage.Header>
-                    <Label Content="Header"/>
-                </report:ReportPage.Header>
-                <report:ReportPage.Main>
-                    <Grid>
-                        
-                    </Grid>
-                </report:ReportPage.Main>
-                <report:ReportPage.Footer>
-                    <Label Content="Footer"/>
-                </report:ReportPage.Footer>
-            </report:ReportPage>
+        <ScrollViewer x:Name="Scroller" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Border x:Name="Border" HorizontalAlignment="Center" Margin="30,10,30,10" BorderThickness="1" BorderBrush="Black" ScrollViewer.CanContentScroll="True">
+                    
+                <report:ReportPage x:Name="Page" HeaderRow="40">
+                    <report:ReportPage.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Padding="5">
+                            <Label Content="Header"/>
+                        </Border>
+                    </report:ReportPage.Header>
+                    <report:ReportPage.Main>
+                        <Grid>
+
+                        </Grid>
+                    </report:ReportPage.Main>
+                    <report:ReportPage.Footer>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Label Content="Footer"/>
+                        </Border>
+                    </report:ReportPage.Footer>
+                </report:ReportPage>
+            
+            </Border>
         </ScrollViewer>
         <StackPanel Grid.Row="2" Background="Red">
             <Label Content="Pages"/>

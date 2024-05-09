@@ -1,6 +1,7 @@
 ﻿using FrontEnd.Forms;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace FrontEnd.Reports
@@ -8,19 +9,49 @@ namespace FrontEnd.Reports
     public class ReportPage : Control, IReportPage
     {
         static ReportPage() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportPage), new FrameworkPropertyMetadata(typeof(ReportPage)));
-
+        private Grid? grid;
         public ReportPage()
         {
             AdjustPageSize();
+            LayoutUpdated += ReportPage_LayoutUpdated;
         }
+
+        private void ReportPage_LayoutUpdated(object? sender, EventArgs e)
+        {
+            HeaderHeight = grid?.RowDefinitions[0]?.ActualHeight;
+            MainHeight = grid?.RowDefinitions[1]?.ActualHeight;
+            FooterHeight = grid?.RowDefinitions[2]?.ActualHeight;
+            Total = HeaderHeight + MainHeight + FooterHeight;
+            ContentOverflown = Total > PageHeight;
+        }
+
+        public ReportPage Copy() 
+        {
+            ReportPage page = new();
+            page.Header = this.Header;
+//            page.Main = this.Main;
+            page.Footer = this.Footer;
+            return page;
+        }
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            grid = (Grid?)GetTemplateChild("Page");
+        }
+        
+        private double? Total { get; set; }
+        private double? MainHeight { get; set; }
+        private double? HeaderHeight { get; set; }
+        private double? FooterHeight { get; set; }
+        public bool ContentOverflown { get; private set; }
 
         #region PageWidth
         public static readonly DependencyProperty PageWidthProperty =
          DependencyProperty.Register(nameof(PageWidth), typeof(double), typeof(ReportPage), new PropertyMetadata());
         public double PageWidth 
         { 
-            get => (double)GetValue(PageWidthProperty); 
-            set => SetValue(PageWidthProperty, value); 
+            get => (double)GetValue(PageWidthProperty);
+            set => SetValue(PageWidthProperty, value);
         }
         #endregion
 
@@ -106,7 +137,7 @@ namespace FrontEnd.Reports
 
         #region PageNumber
         public static readonly DependencyProperty PageNumberProperty =
-         DependencyProperty.Register(nameof(PageHeight), typeof(int), typeof(ReportPage), new PropertyMetadata());
+         DependencyProperty.Register(nameof(PageNumber), typeof(int), typeof(ReportPage), new PropertyMetadata());
 
         public int PageNumber 
         { 
