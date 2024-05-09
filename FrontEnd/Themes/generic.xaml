@@ -269,7 +269,7 @@
                                 </ToolBar.Background>
                                 <report:PDFButton Width="30" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding PrintCommand}"/>
                                 <Separator Width="20" Background="Transparent"/>
-                                <fr:Text Placeholder="File name..." Text="{TemplateBinding FileName}" Width="200" VerticalAlignment="Center"/>
+                                <fr:Text x:Name="text_fileName" Placeholder="File name..." Text="{TemplateBinding FileName}" Width="200" VerticalAlignment="Center"/>
                             </ToolBar>
                         </ToolBarTray>
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

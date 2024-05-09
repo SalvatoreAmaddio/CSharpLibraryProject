@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using FrontEnd.Forms;
 using System.Printing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -11,9 +12,18 @@ namespace FrontEnd.Reports
 {
     public class ReportViewer : Control
     {
+        private Text? Text;
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         
         public ReportViewer() => PrintCommand = new CMD(PrintFixDocs);
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            Text = (Text?)GetTemplateChild("text_fileName");
+        }
+
+
 
         #region IsLoading
         /// <summary>
@@ -78,11 +88,7 @@ namespace FrontEnd.Reports
             PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
             PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
 
-            string portName = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Invoice.pdf"; ; // Example port name
-            IntPtr printerObject = IntPtr.Zero; // Handle
-
-            // Example action (0 for add, 1 for delete)
-            //            uint result = CreateDeletePort(0, portName, printerObject);
+            MicrosoftPDFManager.FileName = Text.Text;
             MicrosoftPDFManager.SetPort();
             PrintDialog printDialog = new()
             {
