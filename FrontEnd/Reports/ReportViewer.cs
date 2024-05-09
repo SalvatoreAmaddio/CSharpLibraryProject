@@ -1,7 +1,9 @@
-﻿using System;
+﻿using FrontEnd.Controller;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,10 +21,19 @@ namespace FrontEnd.Reports
 {
     public class ReportViewer : Control
     {
-        static ReportViewer()
+        static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
+        
+        public ReportViewer() => PrintCommand = new CMD(PrintGrids_Click);
+
+        #region FileName
+        public static readonly DependencyProperty FileNameProperty =
+         DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new PropertyMetadata());
+        public string FileName
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
+            get => (string)GetValue(FileNameProperty);
+            set => SetValue(FileNameProperty, value);
         }
+        #endregion
 
         #region SelectedPage
         public static readonly DependencyProperty SelectedPageProperty =
@@ -36,11 +47,21 @@ namespace FrontEnd.Reports
 
         #region ItemsSource
         public static readonly DependencyProperty ItemsSourceProperty =
-         DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(ReportViewer), new PropertyMetadata());
-        public IEnumerable ItemsSource
+         DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable<ReportPage>), typeof(ReportViewer), new PropertyMetadata());
+        public IEnumerable<ReportPage> ItemsSource
         {
-            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            get => (IEnumerable<ReportPage>)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
+        }
+        #endregion
+
+        #region PrintCommand
+        public static readonly DependencyProperty PrintCommandProperty =
+         DependencyProperty.Register(nameof(PrintCommand), typeof(ICommand), typeof(ReportViewer), new PropertyMetadata());
+        public ICommand PrintCommand
+        {
+            get => (ICommand)GetValue(PrintCommandProperty);
+            set => SetValue(PrintCommandProperty, value);
         }
         #endregion
 
@@ -52,26 +73,28 @@ namespace FrontEnd.Reports
         //    printDialog.PrintVisual(Page, "Printing Grid");
         //}
 
+
         private void PrintGrids_Click()
         {
-            PrintDialog printDialog = new PrintDialog();
+            PrintDialog printDialog = new();
+
             if (printDialog.ShowDialog() == true)
             {
                 // Create a document
-                FixedDocument fixedDoc = new FixedDocument();
-//                fixedDoc.DocumentPaginator.PageSize = new Size(Page.PageWidth, Page.PageWidth);
+                FixedDocument fixedDoc = new();
+                ReportPage first_page = ItemsSource.First();
+                fixedDoc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
 
                 // Assume you have a list of Grids
-                List<IReportPage> myGrids = [];
- //               myGrids.Add(Page);
-//                Border.Child = null;
-                foreach (ReportPage page in myGrids)
+                foreach (ReportPage page in ItemsSource)
                 {
                     // Create page content
-                    var pageContent = new PageContent();
-                    var fixedPage = new FixedPage();
-                    fixedPage.Width = page.PageWidth;
-                    fixedPage.Height = page.PageHeight;
+                    PageContent pageContent = new();
+                    FixedPage fixedPage = new ()
+                    {
+                        Width = page.PageWidth,
+                        Height = page.PageHeight
+                    };
 
                     // Assume grids are prepared with right dimensions (e.g., A4 size)
                     page.Measure(new Size(fixedPage.Width, fixedPage.Height));
@@ -90,7 +113,7 @@ namespace FrontEnd.Reports
                     fixedDoc.Pages.Add(pageContent);
                 }
 
-                printDialog.PrintDocument(fixedDoc.DocumentPaginator, "Multi-Grid Document");
+                printDialog.PrintDocument(fixedDoc.DocumentPaginator, "Printing");
             }
         }
 

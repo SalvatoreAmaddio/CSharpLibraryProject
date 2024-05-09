@@ -13,6 +13,7 @@
     <None Remove="images\delete.png" />
     <None Remove="images\filter.png" />
     <None Remove="images\folder.png" />
+    <None Remove="images\pdf.png" />
     <None Remove="images\save.png" />
   </ItemGroup>
 
@@ -33,6 +34,7 @@
     <Resource Include="images\delete.png" />
     <Resource Include="images\filter.png" />
     <Resource Include="images\folder.png" />
+    <Resource Include="images\pdf.png" />
     <Resource Include="images\save.png" />
   </ItemGroup>
 
