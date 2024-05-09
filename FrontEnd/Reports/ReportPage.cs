@@ -142,12 +142,12 @@ namespace FrontEnd.Reports
 
         #region PageNumber
         public static readonly DependencyProperty PageNumberProperty =
-         DependencyProperty.Register(nameof(PageNumber), typeof(int), typeof(ReportPage), new PropertyMetadata());
+         DependencyProperty.Register(nameof(PageNumber), typeof(int), typeof(ReportPage), new PropertyMetadata(1));
 
         public int PageNumber 
         { 
-            get => (int) GetValue(PageNumberProperty); 
-            set => SetValue(PageNumberProperty, value); 
+            get => (int) GetValue(PageNumberProperty);
+            set => SetValue(PageNumberProperty, value);
         }
         #endregion
         private void AdjustPageSize()

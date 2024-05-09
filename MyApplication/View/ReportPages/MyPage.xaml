@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MyApplication.View.ReportPages"
              xmlns:r="clr-namespace:FrontEnd.Reports;assembly=FrontEnd"
              x:Name="Page" HeaderRow="40"
+             PageNumber="1"
              Padding="10"
              mc:Ignorable="d">
 
@@ -21,7 +22,7 @@
     </r:ReportPage.Main>
     <r:ReportPage.Footer>
         <Border>
-            <Label Content="Footer"/>
+            <Label Content="{Binding ElementName=Page, Path=PageNumber}"/>
         </Border>
     </r:ReportPage.Footer>
 
