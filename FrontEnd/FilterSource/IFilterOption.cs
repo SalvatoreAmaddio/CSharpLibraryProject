@@ -56,14 +56,15 @@ namespace FrontEnd.FilterSource
         public string Conditions(FilterQueryBuilder filterQueryBuilder) 
         {
             StringBuilder sb = new();
+            int i = 0;
 
             foreach(var item in this) 
             {
                 if (item.IsSelected) 
                 {
                     string? fieldName = item?.Record?.GetTablePK()?.Name;
-                    sb.Append($"{fieldName} = @{fieldName} OR ");
-                    filterQueryBuilder.AddParameter($"{fieldName}", item?.Record?.GetTablePK()?.GetValue());
+                    sb.Append($"{fieldName} = @{fieldName}{++i} OR ");
+                    filterQueryBuilder.AddParameter($"{fieldName}{i}", item?.Record?.GetTablePK()?.GetValue());
                 }
             }
             
