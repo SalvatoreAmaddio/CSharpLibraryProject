@@ -23,7 +23,7 @@
             <TabItem Header="Report Viewer">
                 <Frame>
                     <Frame.Content>
-                        <local:ReportViewer/>
+                        <local:Report/>
                     </Frame.Content>
                 </Frame>
             </TabItem>

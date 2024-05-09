@@ -22,6 +22,9 @@
     <Compile Update="View\Report.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\ReportPages\MyPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\EmployeeForm.xaml">
@@ -37,6 +40,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Report.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ReportPages\MyPage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

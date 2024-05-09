@@ -11,6 +11,9 @@
     <Compile Update="Forms\Controls\Text.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Reports\ListPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Forms\Controls\Combo.xaml">
@@ -23,6 +26,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Forms\Controls\Text.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reports\ListPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\generic.xaml">
