@@ -82,9 +82,9 @@ namespace Backend.Model
         /// <para/>
         /// For instance, if some fields are supposed not to be null, or greater than a given number, or must have a specific value/format, you can implement your logic here.
         /// <para/>
-        /// If you do not need any logic, just return True.
+        /// If you do not need any logic, just return true.
         /// </summary>
-        /// <returns>True if all conditions are met; False if one ore more condition are not met.</returns>
+        /// <returns>true if all conditions are met; False if one ore more condition are not met.</returns>
         public bool AllowUpdate();
 
         /// <summary>

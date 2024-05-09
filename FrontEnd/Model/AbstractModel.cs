@@ -30,6 +30,7 @@ namespace FrontEnd.Model
 
         public void UpdateProperty<T>(ref T value, ref T _backProp, [CallerMemberName] string propName = "")
         {
+            if (!AllowUpdate()) return;
             BeforeUpdateArgs args = new(value, _backProp, propName);
             BeforeUpdate?.Invoke(this, args);
             if (args.Cancel) return;

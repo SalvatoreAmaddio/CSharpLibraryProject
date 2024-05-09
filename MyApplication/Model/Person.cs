@@ -45,14 +45,9 @@ namespace MyApplication.Model
             _jobTitle = new(reader.GetInt64(6));
         }
 
-        public Person() 
-        {
-        }
+        public Person() { }
 
-        public override bool AllowUpdate()
-        {
-            return true;
-        }
+        public override bool AllowUpdate() => true;
 
         public override ISQLModel Read(DbDataReader reader) => new Person(reader);
 
