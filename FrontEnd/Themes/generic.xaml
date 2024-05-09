@@ -223,6 +223,7 @@
         </Setter>
     </Style>
 
+    <!--ReportPage-->
     <Style TargetType="{x:Type report:ReportPage}">
         <Setter Property="Template">
             <Setter.Value>
@@ -245,6 +246,7 @@
         </Setter>
     </Style>
 
+    <!--ReportViewer-->
     <Style TargetType="{x:Type report:ReportViewer}">
         <Setter Property="Template">
             <Setter.Value>
@@ -253,6 +255,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
@@ -274,8 +277,8 @@
                                 <report:ListPage ItemsSource="{TemplateBinding ItemsSource}" SelectedItem="{TemplateBinding SelectedPage}"/>
                             </Border>
                         </ScrollViewer>
-
-                        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Stretch">
+                        <ProgressBar IsIndeterminate="{TemplateBinding IsLoading}" Grid.Row="2"/>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Stretch">
                             <StackPanel.Background>
                                 <SolidColorBrush Color="{x:Static SystemColors.MenuColor}"/>
                             </StackPanel.Background>

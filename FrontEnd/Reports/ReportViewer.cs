@@ -14,6 +14,20 @@ namespace FrontEnd.Reports
         
         public ReportViewer() => PrintCommand = new CMD(PrintFixDocs);
 
+        #region IsLoading
+        /// <summary>
+        /// Gets and Sets the <see cref="ProgressBar.IsIndeterminate"/> property.
+        /// </summary>
+        public bool IsLoading
+        {
+            get => (bool)GetValue(IsLoadingProperty);
+            set => SetValue(IsLoadingProperty, value);
+        }
+
+        public static readonly DependencyProperty IsLoadingProperty =
+            DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(ReportViewer), new PropertyMetadata(false));
+        #endregion
+
         #region FileName
         public static readonly DependencyProperty FileNameProperty =
          DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new PropertyMetadata());
@@ -56,6 +70,7 @@ namespace FrontEnd.Reports
 
         private void PrintFixDocs()
         {
+            IsLoading = true;
             LocalPrintServer printServer = new();
             PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
             PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
@@ -92,6 +107,7 @@ namespace FrontEnd.Reports
             }
             
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
+            IsLoading = false;
         }
 
     }
