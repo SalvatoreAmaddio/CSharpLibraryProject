@@ -11,6 +11,7 @@ namespace FrontEnd.Reports
         public double PageWidth { get; set; }
         public double PageHeight { get; set; }
 
+        public int PageNumber { get; set; }
         public void AdjustPageSize();
     }
 }

@@ -9,7 +9,7 @@ namespace FrontEnd.Reports
     {
         static ReportPage() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportPage), new FrameworkPropertyMetadata(typeof(ReportPage)));
 
-        public ReportPage() 
+        public ReportPage()
         {
             AdjustPageSize();
         }
@@ -104,6 +104,16 @@ namespace FrontEnd.Reports
             DependencyProperty.Register(nameof(FooterRow), typeof(GridLength), typeof(ReportPage), new PropertyMetadata(new GridLength(30), null));
         #endregion
 
+        #region PageNumber
+        public static readonly DependencyProperty PageNumberProperty =
+         DependencyProperty.Register(nameof(PageHeight), typeof(int), typeof(ReportPage), new PropertyMetadata());
+
+        public int PageNumber 
+        { 
+            get => (int) GetValue(PageNumberProperty); 
+            set => SetValue(PageNumberProperty, value); 
+        }
+        #endregion
         public void AdjustPageSize()
         {
             var dpiInfo = VisualTreeHelper.GetDpi(this); // Get DPI information

@@ -9,9 +9,9 @@ namespace MyApplication.View
     /// <summary>
     /// Interaction logic for Report.xaml
     /// </summary>
-    public partial class Report : Page
+    public partial class ReportViewer : Page
     {
-        public Report()
+        public ReportViewer()
         {
             InitializeComponent();
         }
@@ -24,20 +24,6 @@ namespace MyApplication.View
                 // This assumes you have a Grid named 'myGrid' you want to print
 //                printDialog.PrintVisual(Page, "Printing Grid");
             }
-        }
-
-        public void AdjustPageSize() 
-        {
-            var dpiInfo = VisualTreeHelper.GetDpi(this); // Get DPI information
-
-            double dpiX = dpiInfo.DpiScaleX;
-            double dpiY = dpiInfo.DpiScaleY;
-
-            double width = (210 / 25.4) * 96 * dpiX;  // Convert mm to inches, then to device-independent pixels
-            double height = (297 / 25.4) * 96 * dpiY; // Convert mm to inches, then to device-independent pixels
-
-            //Page.Width = width;
-            //Page.Height = height;
         }
 
         private void PrintGrids_Click(object sender, RoutedEventArgs e)
