@@ -81,7 +81,7 @@ namespace FrontEnd.Reports
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint CreateDeletePort(int action, string portName, IntPtr printerObject);
-        private void PrintFixDocs()
+        private async Task PrintFixDocs()
         {
             IsLoading = true;
             LocalPrintServer printServer = new();
@@ -89,6 +89,7 @@ namespace FrontEnd.Reports
             PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
 
             MicrosoftPDFManager.FileName = Text.Text;
+            Task<bool> t1 = MicrosoftPDFManager.DealWithPort("0");
             MicrosoftPDFManager.SetPort();
             PrintDialog printDialog = new()
             {
@@ -123,7 +124,9 @@ namespace FrontEnd.Reports
             }
             
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
-            //result = CreateDeletePort(1, portName, printerObject);
+
+            await t1;
+            await MicrosoftPDFManager.DealWithPort("1");
             IsLoading = false;
         }
 

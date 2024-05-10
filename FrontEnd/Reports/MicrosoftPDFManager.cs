@@ -1,4 +1,5 @@
-﻿using System.Management;
+﻿using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 
 namespace FrontEnd.Reports
@@ -14,12 +15,15 @@ namespace FrontEnd.Reports
         //<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
         public static string FileName { get; set; } = string.Empty;
         private static string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{FileName}.pdf";
+
+        private static Process? process;
         private static readonly string originalPort = "PORTPROMPT:";
         private static readonly string printerName = "Microsoft Print To PDF";
+        private static readonly string c_App = "\\PDFDriverHelper.exe";
         private static ManagementScope? scope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern uint CreateDeletePort(PortAction action, string portName);
+        public static extern uint CreateDeletePort(int action, string portName);
 
         private static ConnectionOptions Options() => new()
         {
@@ -41,19 +45,48 @@ namespace FrontEnd.Reports
             return oObjectSearcher.Get();
         }
 
+        public static Task<bool> DealWithPort(string action)
+        {
+            ProcessStartInfo StartInfo = new()
+            {
+                FileName = "C:\\Users\\salva\\source\\repos\\CSharpLibraryProject\\MyApplication\\bin\\Debug\\net8.0-windows\\PrinterPortManager.exe",
+                UseShellExecute = true,
+                CreateNoWindow = false,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+            StartInfo.ArgumentList.Add(FilePath);
+            StartInfo.ArgumentList.Add(action);
+            process = new()
+            {
+                StartInfo = StartInfo
+            };
+            process.Start();
+            return Task.FromResult(process.HasExited);
+        }
+
+        public static void ResetPort() 
+        {
+            var collection = Collection();
+
+            foreach (ManagementObject oItem in collection)
+            {
+                oItem.Properties["PortName"].Value = originalPort;
+                oItem.Put();
+            }
+            process?.Kill();
+        }
+
         public static void SetPort()
         {
-            var result = CreateDeletePort(PortAction.ADD, FilePath);
-            if (result != 0) throw new Exception();
-            
             Connect();
             var collection = Collection();
-            
-            foreach (ManagementObject oItem in collection) 
+
+            foreach (ManagementObject oItem in collection)
             {
                 oItem.Properties["PortName"].Value = FilePath;
                 oItem.Put();
             }
+            process?.Kill();
         }
     }
 }
