@@ -19,7 +19,7 @@ namespace FrontEnd.Reports
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
 
-        public ReportViewer() 
+        public ReportViewer()
         {
             PrintCommand = new CMD(PrintFixDocs);
             Binding binding = new("PDFPrinterManager.NewPortName")
