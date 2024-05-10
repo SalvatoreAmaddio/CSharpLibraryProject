@@ -23,8 +23,6 @@ namespace FrontEnd.Reports
             Text = (Text?)GetTemplateChild("text_fileName");
         }
 
-
-
         #region IsLoading
         /// <summary>
         /// Gets and Sets the <see cref="ProgressBar.IsIndeterminate"/> property.
@@ -78,19 +76,16 @@ namespace FrontEnd.Reports
             set => SetValue(PrintCommandProperty, value);
         }
         #endregion
-
-        [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern uint CreateDeletePort(int action, string portName, IntPtr printerObject);
-        private async Task PrintFixDocs()
+        private void PrintFixDocs()
         {
             IsLoading = true;
+            MicrosoftPDFManager.FileName = FileName;
             LocalPrintServer printServer = new();
             PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
             PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
 
-            MicrosoftPDFManager.FileName = Text.Text;
-            Task<bool> t1 = MicrosoftPDFManager.DealWithPort("0");
-            MicrosoftPDFManager.SetPort();
+            MicrosoftPDFManager.RunPortManagerAsync(PortAction.ADD);
+            MicrosoftPDFManager.SetDefaultPort();
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
@@ -125,8 +120,8 @@ namespace FrontEnd.Reports
             
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
 
-            await t1;
-            await MicrosoftPDFManager.DealWithPort("1");
+            //await t1;
+            MicrosoftPDFManager.RunPortManagerAsync(PortAction.REMOVE);
             IsLoading = false;
         }
 

@@ -3,6 +3,19 @@ using Backend.Model;
 
 namespace FrontEnd.Controller
 {
+    public class CMDAsync(Func<Task> execute) : ICommand
+    {
+        public event EventHandler? CanExecuteChanged;
+        private readonly Func<Task> _execute = execute;
+
+        public bool CanExecute(object? parameter)
+        {
+            return true;
+        }
+
+        public async void Execute(object? parameter) => await _execute();
+    }
+
     public class CMD(Action execute) : ICommand
     {
         public event EventHandler? CanExecuteChanged;

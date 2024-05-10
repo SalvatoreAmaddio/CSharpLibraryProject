@@ -45,7 +45,7 @@ namespace FrontEnd.Reports
             return oObjectSearcher.Get();
         }
 
-        public static Task<bool> DealWithPort(string action)
+        public static Task<bool> RunPortManagerAsync(PortAction action)
         {
             ProcessStartInfo StartInfo = new()
             {
@@ -55,7 +55,8 @@ namespace FrontEnd.Reports
                 WindowStyle = ProcessWindowStyle.Hidden
             };
             StartInfo.ArgumentList.Add(FilePath);
-            StartInfo.ArgumentList.Add(action);
+          
+            StartInfo.ArgumentList.Add(((int)action).ToString());
             process = new()
             {
                 StartInfo = StartInfo
@@ -64,19 +65,7 @@ namespace FrontEnd.Reports
             return Task.FromResult(process.HasExited);
         }
 
-        public static void ResetPort() 
-        {
-            var collection = Collection();
-
-            foreach (ManagementObject oItem in collection)
-            {
-                oItem.Properties["PortName"].Value = originalPort;
-                oItem.Put();
-            }
-            process?.Kill();
-        }
-
-        public static void SetPort()
+        public static void SetDefaultPort()
         {
             Connect();
             var collection = Collection();
