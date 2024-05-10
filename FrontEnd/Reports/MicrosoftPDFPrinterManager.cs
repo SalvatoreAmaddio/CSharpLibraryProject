@@ -46,7 +46,7 @@ namespace FrontEnd.Reports
             return oObjectSearcher.Get();
         }
 
-        public async Task RunPortManagerAsync(PortAction action)
+        public async Task<int> RunPortManagerAsync(PortAction action)
         {
             ProcessStartInfo StartInfo = new()
             {
@@ -64,18 +64,20 @@ namespace FrontEnd.Reports
             };
             process.Start();
             await process.WaitForExitAsync();
+            return process.ExitCode;
         }
 
-        public async Task ResetPort()
+        public async Task<int> ResetPort()
         {
             SetDefaultPort(true);
-            await RunPortManagerAsync(PortAction.REMOVE);
+            return await RunPortManagerAsync(PortAction.REMOVE);
         }
 
-        public async Task SetPort()
+        public async Task<int> SetPort()
         {
-            await RunPortManagerAsync(PortAction.ADD);
+            int result = await RunPortManagerAsync(PortAction.ADD);
             SetDefaultPort();
+            return result;
         }
 
         private void SetDefaultPort(bool useOriginal = false)

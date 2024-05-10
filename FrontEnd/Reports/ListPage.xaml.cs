@@ -24,5 +24,7 @@ namespace FrontEnd.Reports
         {
             InitializeComponent();
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => ScrollIntoView(SelectedItem);
     }
 }

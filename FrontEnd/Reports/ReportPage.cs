@@ -24,7 +24,7 @@ namespace FrontEnd.Reports
             ContentOverflown = Total > PageHeight;
         }
 
-        public ReportPage Copy() 
+        public ReportPage Copy()
         {
             ReportPage page = new();
             page.FooterRow = this.FooterRow;
@@ -36,6 +36,7 @@ namespace FrontEnd.Reports
             page.PageNumber = this.PageNumber;
             return page;
         }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -158,5 +159,6 @@ namespace FrontEnd.Reports
             PageWidth = (210 / 25.4) * 96 * dpiX;  // Convert mm to inches, then to device-independent pixels
             PageHeight = (297 / 25.4) * 96 * dpiY; // Convert mm to inches, then to device-independent pixels
         }
+
     }
 }

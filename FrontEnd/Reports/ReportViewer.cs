@@ -1,5 +1,6 @@
 ﻿using FrontEnd.Controller;
 using FrontEnd.Forms;
+using System.Collections;
 using System.Printing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -14,6 +15,7 @@ namespace FrontEnd.Reports
     public class ReportViewer : Control
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
+
         public ReportViewer() 
         {
             PrintCommand = new CMD(PrintFixDocs);
@@ -23,8 +25,21 @@ namespace FrontEnd.Reports
             };
             SetBinding(FileNameProperty, binding);
         }
- 
         public MicrosoftPDFPrinterManager PDFPrinterManager { get; } = new();
+
+        #region OpenFile
+        /// <summary>
+        /// Sets this property to true to open the file after the printing process has completed.
+        /// </summary>
+        public bool OpenFile
+        {
+            get => (bool)GetValue(OpenFileProperty);
+            set => SetValue(OpenFileProperty, value);
+        }
+
+        public static readonly DependencyProperty OpenFileProperty =
+            DependencyProperty.Register(nameof(OpenFile), typeof(bool), typeof(ReportViewer), new PropertyMetadata(false));
+        #endregion
 
         #region IsLoading
         /// <summary>
@@ -42,7 +57,7 @@ namespace FrontEnd.Reports
 
         #region FileName
         public static readonly DependencyProperty FileNameProperty =
-         DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new FrameworkPropertyMetadata("Report",FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+         DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new FrameworkPropertyMetadata(string.Empty,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public string FileName
         {
             get => (string)GetValue(FileNameProperty);
@@ -53,6 +68,7 @@ namespace FrontEnd.Reports
         #region SelectedPage
         public static readonly DependencyProperty SelectedPageProperty =
          DependencyProperty.Register(nameof(SelectedPage), typeof(ReportPage), typeof(ReportViewer), new PropertyMetadata());
+
         public ReportPage SelectedPage
         {
             get => (ReportPage)GetValue(SelectedPageProperty);
@@ -63,6 +79,7 @@ namespace FrontEnd.Reports
         #region ItemsSource
         public static readonly DependencyProperty ItemsSourceProperty =
          DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable<ReportPage>), typeof(ReportViewer), new PropertyMetadata());
+
         public IEnumerable<ReportPage> ItemsSource
         {
             get => (IEnumerable<ReportPage>)GetValue(ItemsSourceProperty);
@@ -79,7 +96,7 @@ namespace FrontEnd.Reports
             set => SetValue(PrintCommandProperty, value);
         }
         #endregion
-        
+
         private Task PrintAsync(PrintQueue pdfPrinter) 
         {
             PrintDialog printDialog = new()
@@ -87,9 +104,8 @@ namespace FrontEnd.Reports
                 PrintQueue = pdfPrinter
             };
 
-
-            FixedDocument doc = new();
             ReportPage first_page = ItemsSource.First();
+            FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
 
             foreach (ReportPage page in ItemsSource)
@@ -117,21 +133,41 @@ namespace FrontEnd.Reports
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
             return Task.CompletedTask;
         }
-
+        private static Task PrintingCompleted(PrintQueue printQueue) 
+        {
+            while (printQueue.NumberOfJobs > 0)
+                printQueue.Refresh();                
+            return Task.CompletedTask;
+        }
         private async void PrintFixDocs()
         {
-            IsLoading = true;
+            if (string.IsNullOrEmpty(FileName)) 
+            {
+                MessageBox.Show("Please, specify a file name","Something is missing");
+                return;
+            }
 
+            IsLoading = true;
+            await Task.Delay(1000);
             LocalPrintServer printServer = new();
             PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
-            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");           
-            
-            await Task.Run(PDFPrinterManager.SetPort);
-            await Task.Run(()=>PrintAsync(pdfPrinter));
-            await Task.Run(PDFPrinterManager.ResetPort);
+            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF"));
 
+            if (pdfPrinter == null) 
+            {
+                MessageBox.Show("I could not find a PDF Printer in your computer", "Something is missing");
+                return;
+            }
+
+            await Task.Run(PDFPrinterManager.SetPort);
+            await PrintAsync(pdfPrinter);
+            await PrintingCompleted(pdfPrinter);
+            await Task.Run(PDFPrinterManager.ResetPort);
+            if (OpenFile)
+                await Task.Run(PDFPrinterManager.OpenFile);
+            
+            await Task.Delay(1000);
             IsLoading = false;
-            PDFPrinterManager.OpenFile();
         }
 
     }

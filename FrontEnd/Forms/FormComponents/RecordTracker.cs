@@ -13,7 +13,7 @@ namespace FrontEnd.Forms.FormComponents
     {
         static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
-        public RecordTracker() => OnClickCommand = new RecordTrackerClickCommand(OnClicked);
+        public RecordTracker() => OnClickCommand = new TrackerClickCommand(OnClicked);
 
         #region OnClickCommand
         public ICommand OnClickCommand
@@ -67,7 +67,7 @@ namespace FrontEnd.Forms.FormComponents
             SetBinding(GoNewVisibilityProperty, AllowNewRecordBinding);
         }
 
-        private void OnClicked(int movement)
+        protected virtual void OnClicked(int movement)
         {
             switch (movement)
             {
@@ -97,7 +97,7 @@ namespace FrontEnd.Forms.FormComponents
             }
         }
 
-        internal class RecordTrackerClickCommand(Action<int> _execute) : ICommand
+        internal class TrackerClickCommand(Action<int> _execute) : ICommand
         {
             public event EventHandler? CanExecuteChanged;
             private readonly Action<int> _execute = _execute;
