@@ -19,7 +19,7 @@ namespace FrontEnd.Reports
         private static ManagementScope? scope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern uint CreateDeletePort(PortAction action, string portName, IntPtr printerObject);
+        public static extern uint CreateDeletePort(PortAction action, string portName);
 
         private static ConnectionOptions Options() => new()
         {
@@ -43,8 +43,7 @@ namespace FrontEnd.Reports
 
         public static void SetPort()
         {
-            IntPtr printerObject = IntPtr.Zero; // Handle
-            var result = CreateDeletePort(PortAction.ADD, FilePath, printerObject);
+            var result = CreateDeletePort(PortAction.ADD, FilePath);
             if (result != 0) throw new Exception();
             
             Connect();
