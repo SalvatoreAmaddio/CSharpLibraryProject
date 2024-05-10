@@ -9,15 +9,20 @@ namespace FrontEnd.Reports
     /// </summary>
     public class ReportPage : Control, IReportPage
     {
-        static ReportPage() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportPage), new FrameworkPropertyMetadata(typeof(ReportPage)));
-
         private Grid? grid;
+        private double? Total { get; set; }
+        private double? MainHeight { get; set; }
+        private double? HeaderHeight { get; set; }
+        private double? FooterHeight { get; set; }
+        public bool ContentOverflown { get; private set; }
+
         public ReportPage()
         {
             AdjustPageSize();
             Background = Brushes.White;
             LayoutUpdated += OnLayoutUpdated;
         }
+        static ReportPage() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportPage), new FrameworkPropertyMetadata(typeof(ReportPage)));
 
         private void OnLayoutUpdated(object? sender, EventArgs e)
         {
@@ -64,12 +69,6 @@ namespace FrontEnd.Reports
             grid = (Grid?)GetTemplateChild("Page");
         }
         
-        private double? Total { get; set; }
-        private double? MainHeight { get; set; }
-        private double? HeaderHeight { get; set; }
-        private double? FooterHeight { get; set; }
-        public bool ContentOverflown { get; private set; }
-
         #region PageWidth
         public static readonly DependencyProperty PageWidthProperty =
          DependencyProperty.Register(nameof(PageWidth), typeof(double), typeof(ReportPage), new PropertyMetadata());
