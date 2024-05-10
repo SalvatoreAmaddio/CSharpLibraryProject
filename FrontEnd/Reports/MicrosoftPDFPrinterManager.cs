@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Management;
 using System.Runtime.InteropServices;
 
@@ -17,9 +18,9 @@ namespace FrontEnd.Reports
     /// <c>IMPORTANT:</c>
     /// <para/>
     /// SET THIS TO FALSE IN THE APP MANIFEST. YOU CAN ADD THE MANIFEST BY CLICKING ON ADD NEW FILE
-    /// <c>&lt;requestedExecutionLevel  level="requireAdministrator" uiAccess="false"/></c>
+    /// <c>&lt;requestedExecutionLevel level="requireAdministrator" uiAccess="false"/></c>
     /// </summary>
-    //<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+    //<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
     public class MicrosoftPDFPrinterManager
     {
         public string NewPortName { get; } = string.Empty;
@@ -31,7 +32,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Gets the path to the PDFDriverHelper.exe.
         /// </summary>
-        private string cppApp => "\\PDFDriverHelper.exe";
+        private string cppApp => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PDFDriverHelper.exe");
         private ManagementScope? managementScope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -74,7 +75,8 @@ namespace FrontEnd.Reports
         {
             ProcessStartInfo StartInfo = new()
             {
-                FileName = "C:\\Users\\salva\\source\\repos\\CSharpLibraryProject\\MyApplication\\bin\\Debug\\net8.0-windows\\PrinterPortManager.exe",
+                //FileName = "C:\\Users\\salva\\source\\repos\\CSharpLibraryProject\\MyApplication\\bin\\Debug\\net8.0-windows\\PrinterPortManager.exe",
+                FileName = cppApp,
                 UseShellExecute = true,
                 CreateNoWindow = false,
                 WindowStyle = ProcessWindowStyle.Hidden

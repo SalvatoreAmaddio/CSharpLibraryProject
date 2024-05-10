@@ -25,7 +25,8 @@ namespace FrontEnd.Reports
             PrintCommand = new CMD(PrintFixDocs);
             Binding binding = new("PDFPrinterManager.NewPortName")
             {
-                Source = this
+                Source = this,
+                Mode = BindingMode.OneWay,
             };
             SetBinding(FileNameProperty, binding);
         }
