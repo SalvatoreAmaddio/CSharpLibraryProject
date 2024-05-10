@@ -22,7 +22,7 @@ namespace FrontEnd.Reports
         public ReportViewer() 
         {
             PrintCommand = new CMD(PrintFixDocs);
-            Binding binding = new("PDFPrinterManager.FileName")
+            Binding binding = new("PDFPrinterManager.NewPortName")
             {
                 Source = this
             };
