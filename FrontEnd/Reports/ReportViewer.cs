@@ -25,12 +25,11 @@ namespace FrontEnd.Reports
             PrintCommand = new CMD(PrintFixDocs);
             Binding binding = new("PDFPrinterManager.NewPortName")
             {
-                Source = this,
-                Mode = BindingMode.OneWay,
+                Source = this
             };
             SetBinding(FileNameProperty, binding);
         }
-        
+
         /// <summary>
         /// A PDFPrinterManager that manages the PDF Printer's port.
         /// </summary>
@@ -196,14 +195,16 @@ namespace FrontEnd.Reports
                 return;
             }
 
-            await Task.Run(PDFPrinterManager.SetPort);
+            PDFPrinterManager.SetPort();
             await Dispatcher.BeginInvoke(async () => 
             {
                 ItemsSource = ConvertToReportPages(await PrintAsync(pdfPrinter));
             });
 
             await PrintingCompleted(pdfPrinter);
-            await Task.Run(PDFPrinterManager.ResetPort);
+
+            PDFPrinterManager.ResetPort();
+
             if (OpenFile)
                 await Task.Run(()=>Open(PDFPrinterManager.FilePath));
             

@@ -38,7 +38,7 @@
 
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(ProjectDir)Reports\PrinterPortManager.exe&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="copy /Y &quot;$(ProjectDir)Reports\PrinterPortManager.dll&quot; &quot;$(TargetDir)&quot;" />
   </Target>
 
 </Project>

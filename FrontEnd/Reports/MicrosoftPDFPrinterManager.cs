@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Management;
+﻿using System.Management;
 using System.Runtime.InteropServices;
 
 namespace FrontEnd.Reports
@@ -12,7 +10,7 @@ namespace FrontEnd.Reports
     }
 
     /// <summary>
-    /// This class interacts with PDFDriverHelper.exe which add and removes PDF Printer's ports.
+    /// This class interacts with PDFDriverHelper.dll which add and removes PDF Printer's ports.
     /// Then, the <see cref="ManagementScope"/> set the Port as a Default Port that the Printer will use while printing.
     /// <para/>
     /// <c>IMPORTANT:</c>
@@ -23,16 +21,11 @@ namespace FrontEnd.Reports
     //<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
     public class MicrosoftPDFPrinterManager
     {
-        public string NewPortName { get; } = string.Empty;
+        public string NewPortName { get; set; } = string.Empty;
         public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
-
-        /// <summary>
-        /// Gets the path to the PDFDriverHelper.exe.
-        /// </summary>
-        private string cppApp => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PDFDriverHelper.exe");
         private ManagementScope? managementScope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -67,52 +60,21 @@ namespace FrontEnd.Reports
         }
 
         /// <summary>
-        /// Executes PrinterPortManager.exe.
+        /// Sets the Default Port to PORTPROMPT: and deletes the newly created Port
         /// </summary>
-        /// <param name="action">A <see cref="PortAction"/> enum</param>
-        /// <returns>A Task which returns an integer telling the result of PrinterPortManager.exe. If -1, something went wrong.</returns>
-        private async Task<int> ExecutePrinterPortManagerAsync(PortAction action)
-        {
-            ProcessStartInfo StartInfo = new()
-            {
-                //FileName = "C:\\Users\\salva\\source\\repos\\CSharpLibraryProject\\MyApplication\\bin\\Debug\\net8.0-windows\\PrinterPortManager.exe",
-                FileName = cppApp,
-                UseShellExecute = true,
-                CreateNoWindow = false,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-
-            StartInfo.ArgumentList.Add(FilePath);
-            StartInfo.ArgumentList.Add(((int)action).ToString());
-
-            Process process = new()
-            {
-                StartInfo = StartInfo
-            };
-            process.Start();
-            await process.WaitForExitAsync();
-            return process.ExitCode;
-        }
-
-        /// <summary>
-        /// Sets the Default Port to PORTPROMPT: and executes PrinterPortManager.exe which deletes the Newly created Port
-        /// </summary>
-        /// <returns>A Task which returns an integer telling the result of PrinterPortManager.exe. If -1, something went wrong.</returns>
-        public async Task<int> ResetPort()
+        public void ResetPort()
         {
             SetDefaultPort(true);
-            return await ExecutePrinterPortManagerAsync(PortAction.REMOVE);
+            CreateDeletePort((int)PortAction.REMOVE, FilePath);
         }
 
         /// <summary>
-        /// Executes PrinterPortManager.exe which create a New Port, then the <see cref="ManagementObject"/> sets it as a Default Port.
+        /// Creates a New Port, then the <see cref="ManagementObject"/> sets it as a Default Port.
         /// </summary>
-        /// <returns>A Task which returns an integer telling the result of PrinterPortManager.exe. If -1, something went wrong.</returns>
-        public async Task<int> SetPort()
+        public void SetPort()
         {
-            int result = await ExecutePrinterPortManagerAsync(PortAction.ADD);
+            CreateDeletePort((int)PortAction.ADD,FilePath);
             SetDefaultPort();
-            return result;
         }
 
 
