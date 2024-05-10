@@ -3,12 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace FrontEnd.Reports
 {
-    public enum PortAction
-    { 
-        ADD = 0,
-        REMOVE = 1,
-    }
-
     /// <summary>
     /// This class interacts with PDFDriverHelper.dll which add and removes PDF Printer's ports.
     /// Then, the <see cref="ManagementScope"/> set the Port as a Default Port that the Printer will use while printing.
@@ -21,6 +15,12 @@ namespace FrontEnd.Reports
     //<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
     public class MicrosoftPDFPrinterManager
     {
+        internal enum PortAction
+        {
+            ADD = 0,
+            REMOVE = 1,
+        }
+
         public string NewPortName { get; set; } = string.Empty;
         public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
