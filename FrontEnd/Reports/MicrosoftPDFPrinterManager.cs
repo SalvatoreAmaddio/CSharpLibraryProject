@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace FrontEnd.Reports
 {
@@ -9,43 +10,43 @@ namespace FrontEnd.Reports
         ADD = 0,
         REMOVE = 1,
     }
-    public static class MicrosoftPDFManager
+    public class MicrosoftPDFPrinterManager
     {
         //SET THIS TO FALSE IN THE APP MANIFEST. YOU CAN ADD THE MANIFEST BY CLICKING ON ADD NEW FILE
         //<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
-        public static string FileName { get; set; } = string.Empty;
-        private static string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{FileName}.pdf";
+        public string FileName { get; set; } = string.Empty;
+        private string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{FileName}.pdf";
 
-        private static Process? process;
-        private static readonly string originalPort = "PORTPROMPT:";
-        private static readonly string printerName = "Microsoft Print To PDF";
-        private static readonly string c_App = "\\PDFDriverHelper.exe";
-        private static ManagementScope? scope;
+        private Process? process;
+        private readonly string originalPort = "PORTPROMPT:";
+        private readonly string printerName = "Microsoft Print To PDF";
+        private readonly string c_App = "\\PDFDriverHelper.exe";
+        private ManagementScope? scope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint CreateDeletePort(int action, string portName);
 
-        private static ConnectionOptions Options() => new()
+        private ConnectionOptions Options() => new()
         {
             Impersonation = ImpersonationLevel.Impersonate,
             Authentication = AuthenticationLevel.PacketPrivacy,
             EnablePrivileges = true
         };
 
-        private static void Connect()
+        private void Connect()
         {
             scope = new ManagementScope(ManagementPath.DefaultPath, Options());
             scope.Connect();
         }
 
-        private static ManagementObjectCollection Collection()
+        private ManagementObjectCollection Collection()
         {
             SelectQuery oSelectQuery = new SelectQuery(@"SELECT * FROM Win32_Printer WHERE Name = '" + printerName.Replace("\\", "\\\\") + "'");
             ManagementObjectSearcher oObjectSearcher = new(scope, @oSelectQuery);
             return oObjectSearcher.Get();
         }
 
-        public static Task<bool> RunPortManagerAsync(PortAction action)
+        public async Task RunPortManagerAsync(PortAction action)
         {
             ProcessStartInfo StartInfo = new()
             {
@@ -62,20 +63,43 @@ namespace FrontEnd.Reports
                 StartInfo = StartInfo
             };
             process.Start();
-            return Task.FromResult(process.HasExited);
+            await process.WaitForExitAsync();
         }
 
-        public static void SetDefaultPort()
+        public async Task ResetPort()
+        {
+            SetDefaultPort(true);
+            await RunPortManagerAsync(PortAction.REMOVE);
+        }
+
+        public async Task SetPort()
+        {
+            await RunPortManagerAsync(PortAction.ADD);
+            SetDefaultPort();
+        }
+
+        private void SetDefaultPort(bool useOriginal = false)
         {
             Connect();
             var collection = Collection();
 
             foreach (ManagementObject oItem in collection)
             {
-                oItem.Properties["PortName"].Value = FilePath;
+                oItem.Properties["PortName"].Value = (useOriginal) ? originalPort : FilePath;
                 oItem.Put();
             }
-            process?.Kill();
+        }
+
+        public void OpenFile()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(FilePath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Printing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -12,16 +13,18 @@ namespace FrontEnd.Reports
 {
     public class ReportViewer : Control
     {
-        private Text? Text;
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
-        
-        public ReportViewer() => PrintCommand = new CMD(PrintFixDocs);
-
-        public override void OnApplyTemplate()
+        public ReportViewer() 
         {
-            base.OnApplyTemplate();
-            Text = (Text?)GetTemplateChild("text_fileName");
+            PrintCommand = new CMD(PrintFixDocs);
+            Binding binding = new("PDFPrinterManager.FileName")
+            {
+                Source = this
+            };
+            SetBinding(FileNameProperty, binding);
         }
+ 
+        public MicrosoftPDFPrinterManager PDFPrinterManager { get; } = new();
 
         #region IsLoading
         /// <summary>
@@ -39,7 +42,7 @@ namespace FrontEnd.Reports
 
         #region FileName
         public static readonly DependencyProperty FileNameProperty =
-         DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new PropertyMetadata());
+         DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new FrameworkPropertyMetadata("Report",FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public string FileName
         {
             get => (string)GetValue(FileNameProperty);
@@ -76,16 +79,9 @@ namespace FrontEnd.Reports
             set => SetValue(PrintCommandProperty, value);
         }
         #endregion
-        private void PrintFixDocs()
+        
+        private Task PrintAsync(PrintQueue pdfPrinter) 
         {
-            IsLoading = true;
-            MicrosoftPDFManager.FileName = FileName;
-            LocalPrintServer printServer = new();
-            PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
-            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");
-
-            MicrosoftPDFManager.RunPortManagerAsync(PortAction.ADD);
-            MicrosoftPDFManager.SetDefaultPort();
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
@@ -99,7 +95,7 @@ namespace FrontEnd.Reports
             foreach (ReportPage page in ItemsSource)
             {
                 PageContent pageContent = new();
-                FixedPage fixedPage = new ()
+                FixedPage fixedPage = new()
                 {
                     Width = page.PageWidth,
                     Height = page.PageHeight
@@ -115,14 +111,27 @@ namespace FrontEnd.Reports
 
                 ((IAddChild)pageContent).AddChild(fixedPage);
 
-                doc.Pages.Add(pageContent);                
+                doc.Pages.Add(pageContent);
             }
-            
-            printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
 
-            //await t1;
-            MicrosoftPDFManager.RunPortManagerAsync(PortAction.REMOVE);
+            printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
+            return Task.CompletedTask;
+        }
+
+        private async void PrintFixDocs()
+        {
+            IsLoading = true;
+
+            LocalPrintServer printServer = new();
+            PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
+            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF")) ?? throw new Exception("No PDF Printer was found.");           
+            
+            await Task.Run(PDFPrinterManager.SetPort);
+            await Task.Run(()=>PrintAsync(pdfPrinter));
+            await Task.Run(PDFPrinterManager.ResetPort);
+
             IsLoading = false;
+            PDFPrinterManager.OpenFile();
         }
 
     }
