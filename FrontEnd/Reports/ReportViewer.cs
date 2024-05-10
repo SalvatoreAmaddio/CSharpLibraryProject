@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using System.Collections;
 using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
@@ -94,7 +95,7 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        private Task PrintAsync(PrintQueue pdfPrinter) 
+        private Task<IEnumerable<FixedPage>> PrintAsync(PrintQueue pdfPrinter) 
         {
             PrintDialog printDialog = new()
             {
@@ -104,10 +105,9 @@ namespace FrontEnd.Reports
             ReportPage first_page = ItemsSource.First();
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
-
+           
             foreach (ReportPage page in ItemsSource)
             {
-                PageContent pageContent = new();
                 FixedPage fixedPage = new()
                 {
                     Width = page.PageWidth,
@@ -120,15 +120,18 @@ namespace FrontEnd.Reports
 
                 FixedPage.SetLeft(page, 0);
                 FixedPage.SetTop(page, 0);
+
                 fixedPage.Children.Add(page.Copy());
 
+                PageContent pageContent = new();
                 ((IAddChild)pageContent).AddChild(fixedPage);
 
                 doc.Pages.Add(pageContent);
             }
 
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
-            return Task.CompletedTask;
+
+            return Task.FromResult(doc.Pages.Select(s => s.Child));
         }
         private static Task PrintingCompleted(PrintQueue printQueue) 
         {
@@ -157,7 +160,11 @@ namespace FrontEnd.Reports
             }
 
             await Task.Run(PDFPrinterManager.SetPort);
-            await PrintAsync(pdfPrinter);
+            await Dispatcher.BeginInvoke(async () => 
+            {
+                ItemsSource = ConvertToReportPages(await PrintAsync(pdfPrinter));
+            });
+
             await PrintingCompleted(pdfPrinter);
             await Task.Run(PDFPrinterManager.ResetPort);
             if (OpenFile)
@@ -165,6 +172,23 @@ namespace FrontEnd.Reports
             
             await Task.Delay(1000);
             IsLoading = false;
+        }
+
+        /// <summary>
+        /// It extracts and disconnects the <see cref="ReportPage"/> from its <see cref="FixedPage"/>.
+        /// </summary>
+        /// <param name="fixedPages"></param>
+        /// <returns>A list of orphan ReportPages</returns>
+        private static List<ReportPage> ConvertToReportPages(IEnumerable<FixedPage> fixedPages)
+        {
+            List<ReportPage> pages = [];
+            foreach(FixedPage fixedPage in fixedPages) 
+            {
+                ReportPage reportPage = (ReportPage)fixedPage.Children[0];
+                fixedPage.Children.Clear(); //disconnect from FixedPage
+                pages.Add(reportPage);
+            }
+            return pages;
         }
 
     }

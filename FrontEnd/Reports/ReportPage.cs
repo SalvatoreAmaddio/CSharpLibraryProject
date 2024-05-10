@@ -24,7 +24,27 @@ namespace FrontEnd.Reports
             ContentOverflown = Total > PageHeight;
         }
 
-        public ReportPage Copy() => new();
+        public void CopyFrom(ReportPage page)
+        {
+            PageNumber = page.PageNumber;
+            HeaderRow = page.HeaderRow;
+            FooterRow = page.FooterRow;
+            Header = page.Header;
+            Main = page.Main;
+            Footer = page.Footer;
+        }
+
+        public ReportPage Copy() 
+        {
+            ReportPage page = new();
+            page.PageNumber = PageNumber;
+            page.HeaderRow = HeaderRow;
+            page.FooterRow = FooterRow;
+            page.Header = Header;
+            page.Main = Main;
+            page.Footer = Footer;
+            return page;
+        }
 
         public override void OnApplyTemplate()
         {

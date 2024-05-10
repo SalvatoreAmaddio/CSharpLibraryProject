@@ -17,12 +17,12 @@
     </r:ReportPage.Header>
     <r:ReportPage.Main>
         <Grid>
-
+            <Label Content="Ciao Salvo"/>
         </Grid>
     </r:ReportPage.Main>
     <r:ReportPage.Footer>
         <Border>
-            <Label Content="{Binding ElementName=Page, Path=PageNumber}"/>
+            <Label Content="Page 1"/>
         </Border>
     </r:ReportPage.Footer>
 
