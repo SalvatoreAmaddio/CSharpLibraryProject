@@ -27,7 +27,11 @@ namespace FrontEnd.Reports
 
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
-        private readonly string cppApp = "\\PDFDriverHelper.exe";
+
+        /// <summary>
+        /// Gets the path to the PDFDriverHelper.exe.
+        /// </summary>
+        private string cppApp => "\\PDFDriverHelper.exe";
         private ManagementScope? managementScope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
