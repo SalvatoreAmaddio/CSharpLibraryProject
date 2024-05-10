@@ -15,11 +15,11 @@
             <Label Content="Header"/>
         </Border>
     </r:ReportPage.Header>
-    <r:ReportPage.Main>
+    <r:ReportPage.Body>
         <Grid>
             <Label Content="Ciao Salvo"/>
         </Grid>
-    </r:ReportPage.Main>
+    </r:ReportPage.Body>
     <r:ReportPage.Footer>
         <Border>
             <Label Content="Page 1"/>

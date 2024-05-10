@@ -135,11 +135,11 @@ namespace FrontEnd.Reports
         /// </summary>
         public UIElement Body
         {
-            get => (UIElement)GetValue(MainProperty);
-            set => SetValue(MainProperty, value);
+            get => (UIElement)GetValue(BodyProperty);
+            set => SetValue(BodyProperty, value);
         }
 
-        public static readonly DependencyProperty MainProperty =
+        public static readonly DependencyProperty BodyProperty =
             DependencyProperty.Register(nameof(Body), typeof(UIElement), typeof(ReportPage), new PropertyMetadata());
         #endregion
 

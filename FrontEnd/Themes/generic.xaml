@@ -237,7 +237,7 @@
                             </Grid.RowDefinitions>
 
                             <ContentPresenter Content="{TemplateBinding Header}"/>
-                            <ContentPresenter Grid.Row="1" Content="{TemplateBinding Main}"/>
+                            <ContentPresenter Grid.Row="1" Content="{TemplateBinding Body}"/>
                             <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}"/>
                         </Grid>
                     </Border>
