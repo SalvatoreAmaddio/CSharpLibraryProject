@@ -12,10 +12,10 @@ namespace FrontEnd.Reports
         {
             AdjustPageSize();
             Background = Brushes.White;
-            LayoutUpdated += ReportPage_LayoutUpdated;
+            LayoutUpdated += OnLayoutUpdated;
         }
 
-        private void ReportPage_LayoutUpdated(object? sender, EventArgs e)
+        private void OnLayoutUpdated(object? sender, EventArgs e)
         {
             HeaderHeight = grid?.RowDefinitions[0]?.ActualHeight;
             MainHeight = grid?.RowDefinitions[1]?.ActualHeight;
@@ -24,18 +24,7 @@ namespace FrontEnd.Reports
             ContentOverflown = Total > PageHeight;
         }
 
-        public ReportPage Copy()
-        {
-            ReportPage page = new();
-            page.FooterRow = this.FooterRow;
-            page.HeaderRow = this.HeaderRow;
-            page.Header = this.Header;
-            page.Main = this.Main;
-            page.Footer = this.Footer;
-            page.Padding = this.Padding;
-            page.PageNumber = this.PageNumber;
-            return page;
-        }
+        public ReportPage Copy() => new();
 
         public override void OnApplyTemplate()
         {
