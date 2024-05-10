@@ -24,31 +24,30 @@ namespace FrontEnd.Reports
     public class MicrosoftPDFPrinterManager
     {
         public string NewPortName { get; } = string.Empty;
-        private string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
+        public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
         private readonly string c_App = "\\PDFDriverHelper.exe";
-        private ManagementScope? scope;
+        private ManagementScope? managementScope;
 
         [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint CreateDeletePort(int action, string portName);
 
-        private static ConnectionOptions Options() => new()
-        {
-            Impersonation = ImpersonationLevel.Impersonate,
-            Authentication = AuthenticationLevel.PacketPrivacy,
-            EnablePrivileges = true
-        };
-
         /// <summary>
-        /// Connects to the <see cref="ManagementScope"/>. 
-        /// This method is called by <see cref="SetDefaultPort(bool)"/> before it attempts to set the Printer's Port.
+        /// Initiates the <see cref="ManagementScope"/>'s connection. 
+        /// This method is called by <see cref="GetPrinter"/>.
         /// </summary>
         private void Connect()
         {
-            scope = new ManagementScope(ManagementPath.DefaultPath, Options());
-            scope.Connect();
+            managementScope = new ManagementScope(ManagementPath.DefaultPath, new()
+            {
+                Impersonation = ImpersonationLevel.Impersonate,
+                Authentication = AuthenticationLevel.PacketPrivacy,
+                EnablePrivileges = true
+            });
+
+            managementScope.Connect();
         }
 
         /// <summary>
@@ -57,8 +56,9 @@ namespace FrontEnd.Reports
         /// <returns>A ManagementObject</returns>
         private ManagementObject? GetPrinter()
         {
+            Connect();
             SelectQuery oSelectQuery = new(@"SELECT * FROM Win32_Printer WHERE Name = '" + printerName.Replace("\\", "\\\\") + "'");
-            ManagementObjectSearcher oObjectSearcher = new(scope, @oSelectQuery);
+            ManagementObjectSearcher oObjectSearcher = new(managementScope, @oSelectQuery);
             return oObjectSearcher.Get().Cast<ManagementObject>().FirstOrDefault();
         }
 
@@ -67,7 +67,7 @@ namespace FrontEnd.Reports
         /// </summary>
         /// <param name="action">A <see cref="PortAction"/> enum</param>
         /// <returns>A Task which returns an integer telling the result of PrinterPortManager.exe. If -1, something went wrong.</returns>
-        private async Task<int> RunPortManagerAsync(PortAction action)
+        private async Task<int> ExecutePrinterPortManagerAsync(PortAction action)
         {
             ProcessStartInfo StartInfo = new()
             {
@@ -76,9 +76,10 @@ namespace FrontEnd.Reports
                 CreateNoWindow = false,
                 WindowStyle = ProcessWindowStyle.Hidden
             };
+
             StartInfo.ArgumentList.Add(FilePath);
-          
             StartInfo.ArgumentList.Add(((int)action).ToString());
+
             Process process = new()
             {
                 StartInfo = StartInfo
@@ -95,7 +96,7 @@ namespace FrontEnd.Reports
         public async Task<int> ResetPort()
         {
             SetDefaultPort(true);
-            return await RunPortManagerAsync(PortAction.REMOVE);
+            return await ExecutePrinterPortManagerAsync(PortAction.REMOVE);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace FrontEnd.Reports
         /// <returns>A Task which returns an integer telling the result of PrinterPortManager.exe. If -1, something went wrong.</returns>
         public async Task<int> SetPort()
         {
-            int result = await RunPortManagerAsync(PortAction.ADD);
+            int result = await ExecutePrinterPortManagerAsync(PortAction.ADD);
             SetDefaultPort();
             return result;
         }
@@ -117,22 +118,9 @@ namespace FrontEnd.Reports
         /// <exception cref="Exception">Throw an exception if the Printer was not found.</exception>
         private void SetDefaultPort(bool useOriginal = false)
         {
-            Connect();
             ManagementObject? printer = GetPrinter() ?? throw new Exception("Printer not found!");
             printer.Properties["PortName"].Value = (useOriginal) ? originalPort : FilePath;
             printer.Put();
-        }
-        
-        public void OpenFile()
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(FilePath) { UseShellExecute = true });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
-            }
         }
     }
 }

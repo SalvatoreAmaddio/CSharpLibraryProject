@@ -1,5 +1,6 @@
 ﻿using FrontEnd.Controller;
 using System.Collections;
+using System.Diagnostics;
 using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
@@ -203,10 +204,26 @@ namespace FrontEnd.Reports
             await PrintingCompleted(pdfPrinter);
             await Task.Run(PDFPrinterManager.ResetPort);
             if (OpenFile)
-                await Task.Run(PDFPrinterManager.OpenFile);
+                await Task.Run(()=>Open(PDFPrinterManager.FilePath));
             
             await Task.Delay(1000);
             IsLoading = false;
+        }
+        
+        /// <summary>
+        /// Open the file after it has been printed.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        public static void Open(string filePath)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
+            }
         }
 
         /// <summary>
