@@ -1,8 +1,5 @@
 ﻿using FrontEnd.Controller;
-using FrontEnd.Forms;
-using System.Collections;
 using System.Printing;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
