@@ -10,14 +10,21 @@ namespace FrontEnd.Reports
         ADD = 0,
         REMOVE = 1,
     }
+
+    /// <summary>
+    /// This class interacts with PDFDriverHelper.exe to add and removes PDF Printer's ports.
+    /// <para/>
+    /// <c>IMPORTANT:</c>
+    /// <para/>
+    /// SET THIS TO FALSE IN THE APP MANIFEST. YOU CAN ADD THE MANIFEST BY CLICKING ON ADD NEW FILE
+    /// <c>&lt;requestedExecutionLevel  level="requireAdministrator" uiAccess="false"/></c>
+    /// </summary>
+    //<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
     public class MicrosoftPDFPrinterManager
     {
-        //SET THIS TO FALSE IN THE APP MANIFEST. YOU CAN ADD THE MANIFEST BY CLICKING ON ADD NEW FILE
-        //<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
-        public string FileName { get; set; } = string.Empty;
-        private string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{FileName}.pdf";
+        public string NewPortName { get; } = string.Empty;
+        private string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
-        private Process? process;
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
         private readonly string c_App = "\\PDFDriverHelper.exe";
@@ -58,7 +65,7 @@ namespace FrontEnd.Reports
             StartInfo.ArgumentList.Add(FilePath);
           
             StartInfo.ArgumentList.Add(((int)action).ToString());
-            process = new()
+            Process process = new()
             {
                 StartInfo = StartInfo
             };
@@ -91,7 +98,7 @@ namespace FrontEnd.Reports
                 oItem.Put();
             }
         }
-
+        
         public void OpenFile()
         {
             try
