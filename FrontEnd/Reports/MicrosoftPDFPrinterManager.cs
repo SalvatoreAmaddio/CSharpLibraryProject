@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace FrontEnd.Reports
 {
