@@ -20,7 +20,6 @@ namespace FrontEnd.Reports
             ADD = 0,
             REMOVE = 1,
         }
-
         public string NewPortName { get; set; } = string.Empty;
         public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
