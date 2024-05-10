@@ -4,9 +4,13 @@ using System.Windows.Media;
 
 namespace FrontEnd.Reports
 {
+    /// <summary>
+    /// It instantiates a ReportPage object which can be viewed by the <see cref="ReportViewer"/>
+    /// </summary>
     public class ReportPage : Control, IReportPage
     {
         static ReportPage() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportPage), new FrameworkPropertyMetadata(typeof(ReportPage)));
+
         private Grid? grid;
         public ReportPage()
         {
@@ -24,16 +28,24 @@ namespace FrontEnd.Reports
             ContentOverflown = Total > PageHeight;
         }
 
+        /// <summary>
+        /// Copy the content from another ReportPage.
+        /// </summary>
+        /// <param name="page">Another Report Page</param>
         public void CopyFrom(ReportPage page)
         {
             PageNumber = page.PageNumber;
             HeaderRow = page.HeaderRow;
             FooterRow = page.FooterRow;
             Header = page.Header;
-            Main = page.Main;
+            Body = page.Body;
             Footer = page.Footer;
         }
 
+        /// <summary>
+        /// Creates a new ReportPage with the same content as this one.
+        /// </summary>
+        /// <returns>A new ReportPage</returns>
         public ReportPage Copy() 
         {
             ReportPage page = new();
@@ -41,7 +53,7 @@ namespace FrontEnd.Reports
             page.HeaderRow = HeaderRow;
             page.FooterRow = FooterRow;
             page.Header = Header;
-            page.Main = Main;
+            page.Body = Body;
             page.Footer = Footer;
             return page;
         }
@@ -61,26 +73,37 @@ namespace FrontEnd.Reports
         #region PageWidth
         public static readonly DependencyProperty PageWidthProperty =
          DependencyProperty.Register(nameof(PageWidth), typeof(double), typeof(ReportPage), new PropertyMetadata());
+
+        /// <summary>
+        /// Gets the Width of the Page Report. 
+        /// This property is set in the Constructor where the <see cref="AdjustPageSize"/>
+        /// ensures the Width is set to represents an A4's width.
+        /// </summary>
         public double PageWidth 
         { 
             get => (double)GetValue(PageWidthProperty);
-            set => SetValue(PageWidthProperty, value);
+            private set => SetValue(PageWidthProperty, value);
         }
         #endregion
 
         #region PageHeight
         public static readonly DependencyProperty PageHeightProperty =
          DependencyProperty.Register(nameof(PageHeight), typeof(double), typeof(ReportPage), new PropertyMetadata());
+        /// <summary>
+        /// Gets the Height of the Page Report. 
+        /// This property is set in the Constructor where the <see cref="AdjustPageSize"/>
+        /// ensures the Height is set to represents an A4's height.
+        /// </summary>
         public double PageHeight 
         { 
             get => (double)GetValue(PageHeightProperty); 
-            set => SetValue(PageHeightProperty, value); 
+            private set => SetValue(PageHeightProperty, value); 
         }
         #endregion
 
         #region Header
         /// <summary>
-        /// Gets and Sets the Form Header.
+        /// Gets and Sets the Page Header.
         /// </summary>
         public UIElement Header
         {
@@ -94,7 +117,7 @@ namespace FrontEnd.Reports
 
         #region Footer
         /// <summary>
-        /// Gets and Sets the Form Header.
+        /// Gets and Sets the Page's Footer.
         /// </summary>
         public UIElement Footer
         {
@@ -106,18 +129,18 @@ namespace FrontEnd.Reports
             DependencyProperty.Register(nameof(Footer), typeof(UIElement), typeof(ReportPage), new PropertyMetadata());
         #endregion
 
-        #region Main
+        #region Body
         /// <summary>
-        /// Gets and Sets the Form Header.
+        /// Gets and Sets the Page's body.
         /// </summary>
-        public UIElement Main
+        public UIElement Body
         {
             get => (UIElement)GetValue(MainProperty);
             set => SetValue(MainProperty, value);
         }
 
         public static readonly DependencyProperty MainProperty =
-            DependencyProperty.Register(nameof(Main), typeof(UIElement), typeof(ReportPage), new PropertyMetadata());
+            DependencyProperty.Register(nameof(Body), typeof(UIElement), typeof(ReportPage), new PropertyMetadata());
         #endregion
 
         #region HeaderRow
@@ -152,15 +175,22 @@ namespace FrontEnd.Reports
         public static readonly DependencyProperty PageNumberProperty =
          DependencyProperty.Register(nameof(PageNumber), typeof(int), typeof(ReportPage), new PropertyMetadata(1));
 
+        /// <summary>
+        /// Gets and Sets the Page's Number.
+        /// </summary>
         public int PageNumber 
         { 
             get => (int) GetValue(PageNumberProperty);
             set => SetValue(PageNumberProperty, value);
         }
         #endregion
+        
+        /// <summary>
+        /// Ensure the Page' sizes are set to A4 based on screen's DIP
+        /// </summary>
         private void AdjustPageSize()
         {
-            var dpiInfo = VisualTreeHelper.GetDpi(this); // Get DPI information
+            DpiScale dpiInfo = VisualTreeHelper.GetDpi(this);
 
             double dpiX = dpiInfo.DpiScaleX;
             double dpiY = dpiInfo.DpiScaleY;

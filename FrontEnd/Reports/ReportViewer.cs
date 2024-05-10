@@ -10,6 +10,11 @@ using System.Windows.Markup;
 
 namespace FrontEnd.Reports
 {
+    /// <summary>
+    /// This class instantiate a control that allow the view and printing of Reports.
+    /// <para/>
+    /// see also: <seealso cref="ReportPage"/>, <seealso cref="ListPage"/>
+    /// </summary>
     public class ReportViewer : Control
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
@@ -23,6 +28,10 @@ namespace FrontEnd.Reports
             };
             SetBinding(FileNameProperty, binding);
         }
+        
+        /// <summary>
+        /// A PDFPrinterManager that manages the PDF Printer's port.
+        /// </summary>
         public MicrosoftPDFPrinterManager PDFPrinterManager { get; } = new();
 
         #region OpenFile
@@ -56,6 +65,9 @@ namespace FrontEnd.Reports
         #region FileName
         public static readonly DependencyProperty FileNameProperty =
          DependencyProperty.Register(nameof(FileName), typeof(string), typeof(ReportViewer), new FrameworkPropertyMetadata(string.Empty,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        /// <summary>
+        /// Gets and sets the name of the file to be printed.
+        /// </summary>
         public string FileName
         {
             get => (string)GetValue(FileNameProperty);
@@ -66,7 +78,9 @@ namespace FrontEnd.Reports
         #region SelectedPage
         public static readonly DependencyProperty SelectedPageProperty =
          DependencyProperty.Register(nameof(SelectedPage), typeof(ReportPage), typeof(ReportViewer), new PropertyMetadata());
-
+        /// <summary>
+        /// The currently selected page of the Report.
+        /// </summary>
         public ReportPage SelectedPage
         {
             get => (ReportPage)GetValue(SelectedPageProperty);
@@ -77,7 +91,9 @@ namespace FrontEnd.Reports
         #region ItemsSource
         public static readonly DependencyProperty ItemsSourceProperty =
          DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable<ReportPage>), typeof(ReportViewer), new PropertyMetadata());
-
+        /// <summary>
+        /// An <see cref="IEnumerable"/> containing one or more <see cref="ReportPage"/>(s).
+        /// </summary>
         public IEnumerable<ReportPage> ItemsSource
         {
             get => (IEnumerable<ReportPage>)GetValue(ItemsSourceProperty);
@@ -88,6 +104,9 @@ namespace FrontEnd.Reports
         #region PrintCommand
         public static readonly DependencyProperty PrintCommandProperty =
          DependencyProperty.Register(nameof(PrintCommand), typeof(ICommand), typeof(ReportViewer), new PropertyMetadata());
+        /// <summary>
+        /// Command that calls the <see cref="PrintFixDocs"/> methodd to print the Document.
+        /// </summary>
         public ICommand PrintCommand
         {
             get => (ICommand)GetValue(PrintCommandProperty);
@@ -95,6 +114,11 @@ namespace FrontEnd.Reports
         }
         #endregion
 
+        /// <summary>
+        /// The actual method that send the PDF document to the Printer.
+        /// </summary>
+        /// <param name="pdfPrinter"></param>
+        /// <returns>A Task</returns>
         private Task<IEnumerable<FixedPage>> PrintAsync(PrintQueue pdfPrinter) 
         {
             PrintDialog printDialog = new()
@@ -133,12 +157,22 @@ namespace FrontEnd.Reports
 
             return Task.FromResult(doc.Pages.Select(s => s.Child));
         }
+        
+        /// <summary>
+        /// It checks if the Printing process has terminated before changing the Printer's port.
+        /// </summary>
+        /// <param name="printQueue"></param>
+        /// <returns>A Task</returns>
         private static Task PrintingCompleted(PrintQueue printQueue) 
         {
             while (printQueue.NumberOfJobs > 0)
                 printQueue.Refresh();                
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Starts the printing process.
+        /// </summary>
         private async void PrintFixDocs()
         {
             if (string.IsNullOrEmpty(FileName)) 
@@ -149,9 +183,10 @@ namespace FrontEnd.Reports
 
             IsLoading = true;
             await Task.Delay(1000);
-            LocalPrintServer printServer = new();
-            PrintQueueCollection printQueues = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections });
-            PrintQueue? pdfPrinter = printQueues.FirstOrDefault(pq => pq.Name.Contains("PDF"));
+            PrintQueue? pdfPrinter = 
+                 new LocalPrintServer()
+                .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
+                .FirstOrDefault(pq => pq.Name.Contains("PDF"));
 
             if (pdfPrinter == null) 
             {
@@ -190,6 +225,5 @@ namespace FrontEnd.Reports
             }
             return pages;
         }
-
     }
 }

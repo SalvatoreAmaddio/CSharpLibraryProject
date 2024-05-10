@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FrontEnd.Reports
+﻿namespace FrontEnd.Reports
 {
+    /// <summary>
+    /// This interface defines a set of Properties that a <see cref="ReportPage"/> must implement.
+    /// </summary>
     public interface IReportPage
     {
-        public double PageWidth { get; set; }
-        public double PageHeight { get; set; }
+        public double PageWidth { get;  }
+        public double PageHeight { get; }
 
         public int PageNumber { get; set; }
 
