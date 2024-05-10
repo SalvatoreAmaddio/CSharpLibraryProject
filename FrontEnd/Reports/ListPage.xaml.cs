@@ -3,15 +3,13 @@
 namespace FrontEnd.Reports
 {
     /// <summary>
-    /// Interaction logic for ListPage.xaml
+    /// This class extends <see cref="ListBox"/> and it is meant to deal with <see cref="ReportPage"/> objects.
+    /// It is used in <see cref="ReportViewer"/> to display Pages.
     /// </summary>
     public partial class ListPage : ListBox
     {
-        public ListPage()
-        {
-            InitializeComponent();
-        }
+        public ListPage() => InitializeComponent();
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => ScrollIntoView(SelectedItem);
+        private void OnPageSelected(object sender, SelectionChangedEventArgs e) => ScrollIntoView(SelectedItem);
     }
 }
