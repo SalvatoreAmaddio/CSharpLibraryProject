@@ -9,7 +9,6 @@
         xmlns:controller="clr-namespace:MyApplication.Controller"
         WindowStartupLocation="CenterScreen"
         Title="Employee Form" 
-        ResizeMode="NoResize"
         WindowState="Maximized"
         >
 
@@ -19,7 +18,7 @@
     
     <fr:Form Controller="{Binding}">
         <fr:Form.Content>
-            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
+            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
                 <Label Content="First Name"/>
                 <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
                 <Label Grid.Row="1" Content="Last Name"/>
@@ -36,24 +35,35 @@
                 <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
                 <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
 
-                <fr:FormList Grid.Row="7" Grid.ColumnSpan="2" Controller="{Binding}" DataContext="{Binding Payslips}">
+                <Border Grid.Row="7" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Stretch" DataContext="{Binding Payslips}" CornerRadius="5">
+                    <fr:FormList Controller="{Binding}">
                     <fr:FormList.Header>
                         <Label Content="SubForm"/>
                     </fr:FormList.Header>
                     <fr:FormList.List>
-                        <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
+                            <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
                             <fr:Lista.Header>
                                 <Grid fr:Definition.ColumnDefinitions="24,100,100">
                                     <Grid.Resources>
                                         <Style TargetType="Label" BasedOn="{StaticResource ColumnStyle}"/>
                                     </Grid.Resources>
-                                    <Label Content="DOP"/>
-                                    <Label Content="SALARY"/>
+                                    <Label Content="DOP" Grid.Column="1"/>
+                                    <Label Content="SALARY" Grid.Column="2"/>
                                 </Grid>
-                            </fr:Lista.Header>                            
+                            </fr:Lista.Header>
+                            <fr:Lista.ItemTemplate>
+                                <DataTemplate>
+                                        <fr:FormRow>
+                                            <fr:FormRow.Content>
+                                                <Label Content="{Binding DOP}"/>
+                                            </fr:FormRow.Content>
+                                        </fr:FormRow>
+                                </DataTemplate>
+                            </fr:Lista.ItemTemplate>
                         </fr:Lista>
                     </fr:FormList.List>
                 </fr:FormList>
+                </Border>
             </Grid>
         </fr:Form.Content>
     </fr:Form>
