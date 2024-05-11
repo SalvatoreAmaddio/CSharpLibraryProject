@@ -19,7 +19,7 @@
     
     <fr:Form Controller="{Binding}">
         <fr:Form.Content>
-            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,30" fr:Definition.ColumnDefinitions="80,150,30,150">
+            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
                 <Label Content="First Name"/>
                 <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
                 <Label Grid.Row="1" Content="Last Name"/>
@@ -35,6 +35,25 @@
                 <Label Content="Email" Grid.Row="6"/>
                 <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
                 <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
+
+                <fr:FormList Grid.Row="7" Grid.ColumnSpan="2" Controller="{Binding}" DataContext="{Binding Payslips}">
+                    <fr:FormList.Header>
+                        <Label Content="SubForm"/>
+                    </fr:FormList.Header>
+                    <fr:FormList.List>
+                        <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
+                            <fr:Lista.Header>
+                                <Grid fr:Definition.ColumnDefinitions="24,100,100">
+                                    <Grid.Resources>
+                                        <Style TargetType="Label" BasedOn="{StaticResource ColumnStyle}"/>
+                                    </Grid.Resources>
+                                    <Label Content="DOP"/>
+                                    <Label Content="SALARY"/>
+                                </Grid>
+                            </fr:Lista.Header>                            
+                        </fr:Lista>
+                    </fr:FormList.List>
+                </fr:FormList>
             </Grid>
         </fr:Form.Content>
     </fr:Form>

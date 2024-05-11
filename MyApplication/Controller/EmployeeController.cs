@@ -8,6 +8,8 @@ namespace MyApplication.Controller
         public GenderListController Genders { get; } = new();
         public DepartmentListController Departments { get; } = new();
         public JobTitleListController Titles { get; } = new();
+        public PayslipListController Payslips { get; private set; } = new();
+
         public override int DatabaseIndex => 0;
     }
 }

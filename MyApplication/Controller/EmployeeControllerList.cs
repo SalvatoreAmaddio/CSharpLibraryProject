@@ -10,8 +10,6 @@ namespace MyApplication.Controller
         public GenderListController Genders { get; private set; } = new();
         public DepartmentListController Departments { get; private set; } = new();
         public JobTitleListController Titles { get; private set; } = new();
-
-        public PayslipListController Payslips { get; private set; } = new();
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
