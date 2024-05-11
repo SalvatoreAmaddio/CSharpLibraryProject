@@ -12,6 +12,9 @@
     <StartupObject>MyApplication.App</StartupObject>
     <ApplicationIcon>logo.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
+    <Title>MyApplication</Title>
+    <Authors>Salvatore Amaddio</Authors>
+    <Copyright>Salvatore Amaddio</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
