@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using FrontEnd.Events;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ namespace FrontEnd.Forms.FormComponents
     /// </summary>
     public class RecordTracker : AbstractControl
     {
+
         static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
         public RecordTracker() => OnClickCommand = new TrackerClickCommand(OnClicked);
@@ -48,21 +50,21 @@ namespace FrontEnd.Forms.FormComponents
             DependencyProperty.Register(nameof(GoNewVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata());
         #endregion
 
-        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e)
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
         {
-            DataContext = e.NewValue;
-            Binding RecordDisplayerBinding = new("Records")
-            {
-                Source = DataContext,
-            };
+              DataContext = e.NewValue;
+              Binding RecordDisplayerBinding = new("Records")
+              {
+                    Source = DataContext,
+              };
 
-            SetBinding(RecordsProperty, RecordDisplayerBinding);
+              SetBinding(RecordsProperty, RecordDisplayerBinding);
 
-            Binding AllowNewRecordBinding = new("AllowNewRecord")
-            {
-                Source = DataContext,
-                Converter = new AllowNewRecordConverter()
-            };
+              Binding AllowNewRecordBinding = new("AllowNewRecord")
+              {
+                    Source = DataContext,
+                    Converter = new AllowNewRecordConverter()
+              };
 
             SetBinding(GoNewVisibilityProperty, AllowNewRecordBinding);
         }

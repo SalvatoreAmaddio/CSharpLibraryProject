@@ -129,7 +129,5 @@ namespace FrontEnd.Forms
             set => SetValue(TextProperty, value);
         }
         #endregion
-
-        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e) { }
     }
 }

@@ -25,13 +25,8 @@ namespace FrontEnd.Forms.FormComponents
         /// <summary>
         /// DepedencyProperty for binding the <see cref="IsDirty"/> property.
         /// </summary>
-        public static readonly DependencyProperty IsDirtyProperty =
-            DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(RecordStatus), new PropertyMetadata(false, null));
-
-        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        public static readonly DependencyProperty IsDirtyProperty = DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(RecordStatus), new PropertyMetadata(false, null));
+        
     }
 
     /// <summary>

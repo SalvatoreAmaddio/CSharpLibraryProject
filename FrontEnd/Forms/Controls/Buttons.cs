@@ -12,7 +12,7 @@ namespace FrontEnd.Forms
     public abstract class AbstractButton : Button 
     {
         protected abstract string CommandName { get; }
-        public AbstractButton() => DataContextChanged += OnDataContextChanged;
+       // public AbstractButton() => DataContextChanged += OnDataContextChanged;
 
        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -52,7 +52,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// Instantiate DeleteButton and binds it to the DeleteCMD Command defined in the <see cref="AbstractControl"/>
+    /// Instantiate DeleteButton and binds it to the DeleteCMD Command defined in the <see cref="AbstractContentControl"/>
     /// </summary>
     public class DeleteButton : AbstractButton
     {

@@ -1,4 +1,6 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Model;
+using FrontEnd.Controller;
+using FrontEnd.Events;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,7 +10,7 @@ namespace FrontEnd.Forms
     /// <summary>
     /// Abstract class representing a Form Object.
     /// </summary>
-    public abstract class AbstractForm() : AbstractControl
+    public abstract class AbstractForm() : AbstractContentControl
     {
         #region IsLoading
         /// <summary>
@@ -95,8 +97,6 @@ namespace FrontEnd.Forms
         #endregion
 
         static AbstractForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(AbstractForm), new FrameworkPropertyMetadata(typeof(AbstractForm)));
-        protected override void OnControllerChanged(DependencyPropertyChangedEventArgs e) => OnControllerSet((IAbstractController)e.NewValue);
-
         protected static void OnElementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             AbstractForm control = (AbstractForm)d;
@@ -117,21 +117,20 @@ namespace FrontEnd.Forms
             else return height;
         }
 
-        /// <summary>
-        /// Custom logic that triggers when the <see cref="Controller"/> property has changed. This method gets called by the <see cref="OnControllerChanged(DependencyPropertyChangedEventArgs)"/> event.
-        /// </summary>
-        /// <param name="controller"></param>
-        public virtual void OnControllerSet(IAbstractController controller)
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
         {
-            Binding binding = new()
+            Binding isLoadingBinding = new(nameof(IsLoading))
             {
-                Source = controller,
-                Path = new PropertyPath(nameof(IsLoading)),
+                Source = e.NewValue,
             };
+            SetBinding(IsLoadingProperty, isLoadingBinding);
 
-            SetBinding(IsLoadingProperty, binding);
+            Binding controllerBinding = new(nameof(Controller))
+            {
+                Source = this,
+            };
+            SetBinding(DataContextProperty, controllerBinding);
         }
-
     }
 
     /// <summary>
@@ -141,23 +140,13 @@ namespace FrontEnd.Forms
     /// </summary>
     public class FormList : AbstractForm
     {
-
-        /// <summary>
-        /// Gets and Sets the <see cref="Lista"/> object to display.
-        /// </summary>
-        #region List
-        public Lista List
-        {
-            get => (Lista)GetValue(ListProperty);
-            set => SetValue(ListProperty, value);
-        }
-
-        public static readonly DependencyProperty ListProperty =
-        DependencyProperty.Register(nameof(List), typeof(Lista), typeof(FormList), new());
-        #endregion
-
         static FormList() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormList), new FrameworkPropertyMetadata(typeof(FormList)));
 
+        protected override void OnContentChanged(object oldContent, object newContent)
+        {
+            if (newContent is not Lista) throw new Exception();
+            base.OnContentChanged(oldContent, newContent);
+        }
     }
 
     /// <summary>
@@ -182,20 +171,6 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(RecordStatusColumn), typeof(GridLength), typeof(Form), new PropertyMetadata(new GridLength(23), null));
         #endregion
 
-        #region Content
-        /// <summary>
-        /// Gets and Sets the main Content that the Form displays.
-        /// </summary>
-        public FrameworkElement Content
-        {
-            get => (FrameworkElement)GetValue(ContentProperty);
-            set => SetValue(ContentProperty, value);
-        }
-
-        public static readonly DependencyProperty ContentProperty =
-            DependencyProperty.Register(nameof(Content), typeof(FrameworkElement), typeof(Form), new PropertyMetadata());
-        #endregion
-
         #region IsDirty
         /// <summary>
         /// Gets and Sets a Flag that indicates if the current Record is being changed.
@@ -212,18 +187,17 @@ namespace FrontEnd.Forms
 
         static Form() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
 
-        public override void OnControllerSet(IAbstractController controller)
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
         {
-            base.OnControllerSet(controller);
+            base.OnControllerChanged(sender, e);
             Binding binding = new()
             {
-                Source = controller,
+                Source = e.NewValue,
                 Path = new PropertyPath("CurrentModel.IsDirty"),
             };
 
             SetBinding(IsDirtyProperty, binding);
         }
-
     }
 
     /// <summary>
@@ -236,5 +210,22 @@ namespace FrontEnd.Forms
         static FormRow() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
 
         public FormRow() => RecordTrackerRow = new(0);
+    }
+
+    public class SubForm : AbstractForm 
+    {
+        static SubForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SubForm), new FrameworkPropertyMetadata(typeof(SubForm)));
+
+        #region ParentRecord
+        public ISQLModel ParentRecord
+        {
+            get => (ISQLModel)GetValue(ParentRecordProperty);
+            set => SetValue(ParentRecordProperty, value);
+        }
+
+        public static readonly DependencyProperty ParentRecordProperty =
+            DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata());
+        #endregion
+
     }
 }

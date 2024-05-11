@@ -15,27 +15,29 @@
     <Window.DataContext>
         <controller:EmployeeController/>
     </Window.DataContext>
-    
-    <fr:Form Controller="{Binding}">
-        <fr:Form.Content>
-            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
-                <Label Content="First Name"/>
-                <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
-                <Label Grid.Row="1" Content="Last Name"/>
-                <fr:Text Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
-                <Label Grid.Row="2" Content="DOB"/>
-                <fr:DateField DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
-                <Label Content="Gender" Grid.Row="3"/>
-                <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
-                <Label Content="Department" Grid.Row="4"/>
-                <fr:Combo ItemsSource="{Binding Departments.Source}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
-                <Label Content="Job Title" Grid.Row="5"/>
-                <fr:Combo ItemsSource="{Binding Titles.Source}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
-                <Label Content="Email" Grid.Row="6"/>
-                <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
-                <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
 
-                <Border Grid.Row="7" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Stretch" DataContext="{Binding Payslips}" CornerRadius="5">
+    <fr:Form Controller="{Binding}">
+        <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
+            <Label Content="First Name"/>
+            <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
+            <Label Grid.Row="1" Content="Last Name"/>
+            <fr:Text Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
+            <Label Grid.Row="2" Content="DOB"/>
+            <fr:DateField DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
+            <Label Content="Gender" Grid.Row="3"/>
+            <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
+            <Label Content="Department" Grid.Row="4"/>
+            <fr:Combo ItemsSource="{Binding Departments.Source}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+            <Label Content="Job Title" Grid.Row="5"/>
+            <fr:Combo ItemsSource="{Binding Titles.Source}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
+            <Label Content="Email" Grid.Row="6"/>
+            <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
+            <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
+
+            <fr:SubForm Grid.Row="7" Grid.ColumnSpan="4" Controller="{Binding Payslips}" ParentRecord="{Binding CurrentRecord}">
+
+            </fr:SubForm>
+            <!--<Border Grid.Row="7" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Stretch" DataContext="{Binding Payslips}" CornerRadius="5">
                     <fr:FormList Controller="{Binding}">
                     <fr:FormList.Header>
                         <Label Content="SubForm"/>
@@ -63,8 +65,7 @@
                         </fr:Lista>
                     </fr:FormList.List>
                 </fr:FormList>
-                </Border>
-            </Grid>
-        </fr:Form.Content>
+                </Border>-->
+        </Grid>
     </fr:Form>
 </Window>

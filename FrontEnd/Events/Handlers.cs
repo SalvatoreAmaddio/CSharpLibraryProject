@@ -1,11 +1,23 @@
-﻿
-using Backend.Model;
+﻿using FrontEnd.Controller;
 
 namespace FrontEnd.Events
 {
+    public delegate void ControllerChangedEventHandler(object? sender, ControllerChangedArgs e);
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
     public delegate void BeforeUpdateEventHandler(object? sender, BeforeUpdateArgs e);
     public delegate void SelectionChangedEventHandler(object? sender, EventArgs e);
+
+    public class ControllerChangedArgs : EventArgs 
+    { 
+        public IAbstractController? oldValue { get; }
+        public IAbstractController? NewValue { get; }
+
+        public ControllerChangedArgs(object? oldValue, object? newValue)
+        {
+            this.oldValue = (IAbstractController?)oldValue;
+            this.NewValue = (IAbstractController?)newValue;
+        }
+    }
 
     public abstract class UpdateArgs(string propertyName) : EventArgs
     {

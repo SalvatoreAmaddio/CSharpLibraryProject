@@ -11,8 +11,6 @@
         Title="Welcome" Height="450" Width="450">
 
     <ctr:LoadingMask Loaded="LoadingMask_Loaded">
-        <ctr:LoadingMask.Content>
-            <Label/>
-        </ctr:LoadingMask.Content>
+        <Label/>
     </ctr:LoadingMask>
 </Window>
