@@ -171,6 +171,16 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(RecordStatusColumn), typeof(GridLength), typeof(Form), new PropertyMetadata(new GridLength(23), null));
         #endregion
 
+        static Form() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
+    }
+
+    /// <summary>
+    /// This class instantiate a FormRow object which is used by a <see cref="Lista"/>'s <see cref="DataTemplate"/>.
+    /// <para/>
+    /// The <see cref="FormComponents.RecordTracker"/> object is disabled by default and should stay so.
+    /// </summary>
+    public class FormRow : Form 
+    {
         #region IsDirty
         /// <summary>
         /// Gets and Sets a Flag that indicates if the current Record is being changed.
@@ -182,31 +192,9 @@ namespace FrontEnd.Forms
         }
 
         public static readonly DependencyProperty IsDirtyProperty =
-            DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(Form), new PropertyMetadata());
+            DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(FormRow), new PropertyMetadata());
         #endregion
 
-        static Form() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
-
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
-        {
-            base.OnControllerChanged(sender, e);
-            Binding binding = new()
-            {
-                Source = e.NewValue,
-                Path = new PropertyPath("CurrentModel.IsDirty"),
-            };
-
-            SetBinding(IsDirtyProperty, binding);
-        }
-    }
-
-    /// <summary>
-    /// This class instantiate a FormRow object which is used by a <see cref="Lista"/>'s <see cref="DataTemplate"/>.
-    /// <para/>
-    /// The <see cref="FormComponents.RecordTracker"/> object is disabled by default and should stay so.
-    /// </summary>
-    public class FormRow : Form 
-    {
         static FormRow() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
 
         public FormRow() => RecordTrackerRow = new(0);

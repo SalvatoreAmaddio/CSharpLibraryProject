@@ -31,7 +31,7 @@
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        <formComp:RecordStatus Grid.Row="2" IsDirty="{TemplateBinding IsDirty}"/>
+                        <formComp:RecordStatus Grid.Row="2" Controller="{TemplateBinding Controller}"/>
                         <ProgressBar Grid.Row="3" Grid.ColumnSpan="2" IsIndeterminate="{TemplateBinding IsLoading}"/>
                         <formComp:RecordTracker Grid.Row="4" Grid.ColumnSpan="2" Controller="{TemplateBinding Controller}"/>
                     </Grid>

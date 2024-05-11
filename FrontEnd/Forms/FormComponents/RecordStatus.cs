@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
+using FrontEnd.Events;
 
 namespace FrontEnd.Forms.FormComponents
 {
@@ -26,7 +27,9 @@ namespace FrontEnd.Forms.FormComponents
         /// DepedencyProperty for binding the <see cref="IsDirty"/> property.
         /// </summary>
         public static readonly DependencyProperty IsDirtyProperty = DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(RecordStatus), new PropertyMetadata(false, null));
-        
+
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e) =>
+        SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
     }
 
     /// <summary>
