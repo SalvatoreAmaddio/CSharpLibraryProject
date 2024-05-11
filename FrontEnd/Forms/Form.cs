@@ -212,7 +212,7 @@ namespace FrontEnd.Forms
         public FormRow() => RecordTrackerRow = new(0);
     }
 
-    public class SubForm : AbstractForm 
+    public class SubForm : AbstractForm
     {
         static SubForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SubForm), new FrameworkPropertyMetadata(typeof(SubForm)));
 

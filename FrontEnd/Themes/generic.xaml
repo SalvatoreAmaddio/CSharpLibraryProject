@@ -47,23 +47,18 @@
                 <ControlTemplate TargetType="{x:Type local:FormRow}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="{TemplateBinding MenuRow}"/>
-                            <RowDefinition Height="{TemplateBinding HeaderRow}"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="{TemplateBinding RecordStatusColumn}" MaxWidth="23"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter Grid.Row="0" Grid.ColumnSpan="2" Content="{TemplateBinding Menu}"/>
-                        <ContentPresenter Grid.Row="1" Grid.ColumnSpan="2" Content="{TemplateBinding Header}"/>
-
-                        <ContentPresenter Grid.Row="2" Grid.Column="1" Content="{TemplateBinding Content}"
+                        <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         
-                        <formComp:RecordStatus Grid.Row="2" IsDirty="{TemplateBinding IsDirty}" VerticalAlignment="Top" VerticalContentAlignment="Top" Height="30"/>
+                        <formComp:RecordStatus IsDirty="{TemplateBinding IsDirty}" VerticalAlignment="Top" VerticalContentAlignment="Top" Height="30"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

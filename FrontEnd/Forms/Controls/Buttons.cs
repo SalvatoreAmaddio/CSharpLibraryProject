@@ -12,10 +12,12 @@ namespace FrontEnd.Forms
     public abstract class AbstractButton : Button 
     {
         protected abstract string CommandName { get; }
-       // public AbstractButton() => DataContextChanged += OnDataContextChanged;
+        public AbstractButton() => DataContextChanged += OnDataContextChanged;
 
        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            var x = e.OldValue;
+            if (e.NewValue is not IAbstractController) return;
             IAbstractController controller = (IAbstractController)e.NewValue;
             Binding CommandParameterBinding = new("CurrentRecord")
             {

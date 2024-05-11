@@ -66,8 +66,7 @@ namespace FrontEnd.Forms
             set => SetValue(ControllerProperty, value);
         }
 
-        public static readonly DependencyProperty ControllerProperty =
-            DependencyProperty.Register(nameof(Controller), typeof(IAbstractController), typeof(AbstractContentControl), new PropertyMetadata(OnControllerChanged));
+        public static readonly DependencyProperty ControllerProperty = DependencyProperty.Register(nameof(Controller), typeof(IAbstractController), typeof(AbstractContentControl), new PropertyMetadata(OnControllerChanged));
         
         private static void OnControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 
         {

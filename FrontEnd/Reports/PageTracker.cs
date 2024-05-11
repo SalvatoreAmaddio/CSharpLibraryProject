@@ -1,6 +1,5 @@
 ﻿using FrontEnd.Forms.FormComponents;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace FrontEnd.Reports
 {
