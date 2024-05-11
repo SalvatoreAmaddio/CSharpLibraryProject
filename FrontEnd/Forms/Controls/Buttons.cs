@@ -15,10 +15,9 @@ namespace FrontEnd.Forms
         public AbstractButton() => DataContextChanged += OnDataContextChanged;
 
        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var x = e.OldValue;
-            if (e.NewValue is not IAbstractController) return;
-            IAbstractController controller = (IAbstractController)e.NewValue;
+       {
+            if (e.NewValue is not IAbstractController controller) return;
+
             Binding CommandParameterBinding = new("CurrentRecord")
             {
                 Source = controller,
@@ -32,7 +31,6 @@ namespace FrontEnd.Forms
             };
 
             SetBinding(CommandProperty, CommandBinding);
-
         }
     }
 
