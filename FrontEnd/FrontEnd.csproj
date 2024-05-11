@@ -5,7 +5,24 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Authors>Salvatore Amaddio</Authors>
+    <Company>Salvatore Amaddio</Company>
+    <Copyright></Copyright>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="logo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
 	<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
@@ -29,5 +46,9 @@
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)PrinterPortManager.dll&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;" />
+  </Target>
 
 </Project>
