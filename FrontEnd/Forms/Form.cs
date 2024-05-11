@@ -117,19 +117,16 @@ namespace FrontEnd.Forms
             else return height;
         }
 
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
+        protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            Binding isLoadingBinding = new(nameof(IsLoading))
+            if (e.NewValue is IAbstractController) 
             {
-                Source = e.NewValue,
-            };
-            SetBinding(IsLoadingProperty, isLoadingBinding);
-
-            Binding controllerBinding = new(nameof(Controller))
-            {
-                Source = this,
-            };
-            SetBinding(DataContextProperty, controllerBinding);
+                Binding isLoadingBinding = new(nameof(IsLoading))
+                {
+                    Source = e.NewValue,
+                };
+                SetBinding(IsLoadingProperty, isLoadingBinding);
+            }
         }
     }
 
@@ -146,11 +143,6 @@ namespace FrontEnd.Forms
         {
             if (newContent is not Lista) throw new Exception();
             base.OnContentChanged(oldContent, newContent);
-        }
-
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
-        {
-            base.OnControllerChanged(sender, e);
         }
     }
 
@@ -217,43 +209,13 @@ namespace FrontEnd.Forms
 
         public static readonly DependencyProperty ParentRecordProperty =
             DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata());
-
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
-        {
-            
-        }
         #endregion
 
 
     }
 
-    public class FormPresenter : ContentPresenter, IControllable
+    public class FormPresenter : ContentPresenter
     {
-        public static readonly DependencyProperty ControllerProperty = DependencyProperty.Register(nameof(Controller), typeof(IAbstractController), typeof(FormPresenter), new PropertyMetadata(OnControllerChanged));
-        public IAbstractController Controller
-        {
-            get => (IAbstractController)GetValue(ControllerProperty);
-            set => SetValue(ControllerProperty, value);
-        }
-
-        public bool IsListController { get => Controller is IListController; }
-
-        private static void OnControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FormPresenter control = (FormPresenter)d;
-            control.OnControllerChanged(control, new(e.OldValue, e.NewValue));
-        }
-
-
-        public event ControllerChangedEventHandler? ControllerChanged;
-
-        public FormPresenter() => ControllerChanged += OnControllerChanged;
-
-        protected virtual void OnControllerChanged(object? sender, ControllerChangedArgs e) 
-        {
-            AbstractForm form = (AbstractForm)Content;     
-        }
-
 
     }
 }

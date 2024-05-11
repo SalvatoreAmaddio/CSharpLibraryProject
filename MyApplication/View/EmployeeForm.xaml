@@ -32,6 +32,10 @@
             <Label Content="Email" Grid.Row="6"/>
             <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
             <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
+
+            <fr:SubForm x:Name="sub" Grid.Row="7" Grid.ColumnSpan="4" DataContext="{Binding Payslips}">
+                <Label Content="{Binding ElementName=sub, Path=DataContext}"/>
+            </fr:SubForm>
         </Grid>
     </fr:Form>
 </Window>
