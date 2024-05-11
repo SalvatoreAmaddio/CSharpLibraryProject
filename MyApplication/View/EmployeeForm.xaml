@@ -10,12 +10,11 @@
         WindowStartupLocation="CenterScreen"
         Title="Employee Form" 
         ResizeMode="NoResize"
-        Width="470"
-        Height="310"
+        WindowState="Maximized"
         >
 
     <Window.DataContext>
-        <controller:PersonController/>
+        <controller:EmployeeController/>
     </Window.DataContext>
     
     <fr:Form Controller="{Binding}">

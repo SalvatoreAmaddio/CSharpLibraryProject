@@ -10,7 +10,7 @@
       Title="EmployeeListPage">
     
     <Page.DataContext>
-        <controller:PersonControllerList/>
+        <controller:EmployeeControllerList/>
     </Page.DataContext>
 
     <fr:FormList Controller="{Binding}" HeaderRow="100">
