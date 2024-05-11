@@ -15,6 +15,7 @@
     <Title>MyApplication</Title>
     <Authors>Salvatore Amaddio</Authors>
     <Copyright>Salvatore Amaddio</Copyright>
+	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
