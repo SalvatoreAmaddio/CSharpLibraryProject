@@ -1,4 +1,6 @@
-﻿using Backend.Recordsource;
+﻿using Backend.Controller;
+using Backend.Model;
+using Backend.Recordsource;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,11 +15,17 @@ namespace FrontEnd.Forms
         public Combo() => InitializeComponent();
 
         private RecordSource GetSource() => (RecordSource)ItemsSource;
-        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+        protected override async void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
             var item = GetSource().FirstOrDefault(s => s.Equals(SelectedItem));
-            Dispatcher.BeginInvoke(() => Text = item?.ToString());
+            await DoMe(item);
+        }
+
+        public Task DoMe(object? item) 
+        {
+            Text = item?.ToString();
+            return Task.CompletedTask;
         }
 
         #region Placeholder
@@ -33,7 +41,6 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty PlaceholderProperty =
             DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(Combo), new PropertyMetadata(string.Empty));
         #endregion
-
 
     }
 }

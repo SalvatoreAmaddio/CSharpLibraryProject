@@ -5,16 +5,22 @@ using System.Windows.Controls;
 
 namespace FrontEnd.Forms
 {
-
     public interface IControllable 
     {
+        /// <summary>
+        /// Gets and Sets the <see cref="IAbstractController"/> associated with this control.
+        /// </summary>
         public IAbstractController Controller
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Tells if the <see cref="Controller"> is a List Controller class. 
+        /// </summary>
         public bool IsListController { get; }
+
         public event ControllerChangedEventHandler? ControllerChanged;
     }
 
@@ -51,15 +57,7 @@ namespace FrontEnd.Forms
     public abstract class AbstractContentControl : ContentControl, IControllable
     {
         public event ControllerChangedEventHandler? ControllerChanged;
-
-        /// <summary>
-        /// Tells if the <see cref="Controller"> is a List Controller class. 
-        /// </summary>
         public bool IsListController { get => Controller is IListController; }
-
-        /// <summary>
-        /// Gets and Sets the <see cref="IAbstractController"/> associated with this control.
-        /// </summary>
         public IAbstractController Controller
         {
             get => (IAbstractController)GetValue(ControllerProperty);
@@ -67,7 +65,7 @@ namespace FrontEnd.Forms
         }
 
         public static readonly DependencyProperty ControllerProperty = DependencyProperty.Register(nameof(Controller), typeof(IAbstractController), typeof(AbstractContentControl), new PropertyMetadata(OnControllerChanged));
-        
+
         private static void OnControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 
         {
             AbstractContentControl control = (AbstractContentControl)d;

@@ -71,6 +71,7 @@ namespace FrontEnd.Forms.FormComponents
 
         protected virtual void OnClicked(int movement)
         {
+            if (Controller == null) return;
             switch (movement)
             {
                 case 1:

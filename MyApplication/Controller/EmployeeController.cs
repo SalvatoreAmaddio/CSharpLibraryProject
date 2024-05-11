@@ -9,7 +9,6 @@ namespace MyApplication.Controller
         public DepartmentListController Departments { get; } = new();
         public JobTitleListController Titles { get; } = new();
         public PayslipListController Payslips { get; } = new();
-
         public override int DatabaseIndex => 0;
     }
 }

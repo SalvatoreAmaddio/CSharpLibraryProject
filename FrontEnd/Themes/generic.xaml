@@ -103,8 +103,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SubForm}">
                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-                        <ContentPresenter Content="{TemplateBinding Content}"
+                        <fr:FormPresenter
+                                          Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Controller="{TemplateBinding Controller}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>

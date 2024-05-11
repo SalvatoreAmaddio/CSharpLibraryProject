@@ -147,6 +147,11 @@ namespace FrontEnd.Forms
             if (newContent is not Lista) throw new Exception();
             base.OnContentChanged(oldContent, newContent);
         }
+
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
+        {
+            base.OnControllerChanged(sender, e);
+        }
     }
 
     /// <summary>
@@ -199,7 +204,6 @@ namespace FrontEnd.Forms
 
         public FormRow() => RecordTrackerRow = new(0);
     }
-
     public class SubForm : AbstractForm
     {
         static SubForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SubForm), new FrameworkPropertyMetadata(typeof(SubForm)));
@@ -213,7 +217,43 @@ namespace FrontEnd.Forms
 
         public static readonly DependencyProperty ParentRecordProperty =
             DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata());
+
+        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
+        {
+            
+        }
         #endregion
+
+
+    }
+
+    public class FormPresenter : ContentPresenter, IControllable
+    {
+        public static readonly DependencyProperty ControllerProperty = DependencyProperty.Register(nameof(Controller), typeof(IAbstractController), typeof(FormPresenter), new PropertyMetadata(OnControllerChanged));
+        public IAbstractController Controller
+        {
+            get => (IAbstractController)GetValue(ControllerProperty);
+            set => SetValue(ControllerProperty, value);
+        }
+
+        public bool IsListController { get => Controller is IListController; }
+
+        private static void OnControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FormPresenter control = (FormPresenter)d;
+            control.OnControllerChanged(control, new(e.OldValue, e.NewValue));
+        }
+
+
+        public event ControllerChangedEventHandler? ControllerChanged;
+
+        public FormPresenter() => ControllerChanged += OnControllerChanged;
+
+        protected virtual void OnControllerChanged(object? sender, ControllerChangedArgs e) 
+        {
+            AbstractForm form = (AbstractForm)Content;     
+        }
+
 
     }
 }
