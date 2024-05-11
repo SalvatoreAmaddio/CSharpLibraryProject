@@ -11,7 +11,7 @@
         Title="Employee Form" 
         ResizeMode="NoResize"
         Width="470"
-        Height="280"
+        Height="310"
         >
 
     <Window.DataContext>
@@ -20,7 +20,7 @@
     
     <fr:Form Controller="{Binding}">
         <fr:Form.Content>
-            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30" fr:Definition.ColumnDefinitions="80,150,30,150">
+            <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,30" fr:Definition.ColumnDefinitions="80,150,30,150">
                 <Label Content="First Name"/>
                 <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
                 <Label Grid.Row="1" Content="Last Name"/>
@@ -33,6 +33,8 @@
                 <fr:Combo ItemsSource="{Binding Departments.Source}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
                 <Label Content="Job Title" Grid.Row="5"/>
                 <fr:Combo ItemsSource="{Binding Titles.Source}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
+                <Label Content="Email" Grid.Row="6"/>
+                <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
                 <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
             </Grid>
         </fr:Form.Content>

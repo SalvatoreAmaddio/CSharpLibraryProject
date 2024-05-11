@@ -21,6 +21,6 @@ namespace MyApplication.View
     {
         public EmployeeForm() => InitializeComponent();
 
-        public EmployeeForm(Person? person) : this() => ((PersonController)DataContext).GoAt(person);
+        public EmployeeForm(Employee? person) : this() => ((PersonController)DataContext).GoAt(person);
     }
 }

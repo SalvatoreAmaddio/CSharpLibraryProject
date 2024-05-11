@@ -5,7 +5,7 @@ using MyApplication.View;
 using FrontEnd.Events;
 namespace MyApplication.Controller
 {
-    public class PersonControllerList : AbstractListController<Person>
+    public class PersonControllerList : AbstractListController<Employee>
     {
         public GenderListController Genders { get; private set; } = new();
         public DepartmentListController Departments { get; private set; } = new();
@@ -13,7 +13,7 @@ namespace MyApplication.Controller
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
-        public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Person)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
         public override int DatabaseIndex => 0;
 
         public PersonControllerList()
@@ -48,7 +48,7 @@ namespace MyApplication.Controller
             await SearchRecordAsync();
         }
 
-        protected override void Open(Person? model)
+        protected override void Open(Employee? model)
         {
             var win = new EmployeeForm(model);
             win.ShowDialog();

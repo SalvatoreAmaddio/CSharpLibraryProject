@@ -8,7 +8,7 @@ namespace MyApplication
     {
         public App() 
         {
-            DatabaseManager.Do.Add(new SQLiteDatabase(new Person()));
+            DatabaseManager.Do.Add(new SQLiteDatabase(new Employee()));
             DatabaseManager.Do.Add(new SQLiteDatabase(new Gender()));
             DatabaseManager.Do.Add(new SQLiteDatabase(new Department()));
             DatabaseManager.Do.Add(new SQLiteDatabase(new JobTitle()));
