@@ -1,4 +1,5 @@
-﻿using FrontEnd.Events;
+﻿using FrontEnd.Controller;
+using FrontEnd.Events;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -50,27 +51,29 @@ namespace FrontEnd.Forms.FormComponents
             DependencyProperty.Register(nameof(GoNewVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata());
         #endregion
 
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e)
+
+        protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-              DataContext = e.NewValue;
-              Binding RecordDisplayerBinding = new("Records")
-              {
-                    Source = DataContext,
-              };
+            if (e.NewValue is not IAbstractController) throw new Exception("DataContext should be a Controller");
+            Binding RecordDisplayerBinding = new("Records")
+            {
+                Source = e.NewValue,
+            };
+            SetBinding(RecordsProperty, RecordDisplayerBinding);
 
-              SetBinding(RecordsProperty, RecordDisplayerBinding);
-
-              Binding AllowNewRecordBinding = new("AllowNewRecord")
-              {
-                    Source = DataContext,
-                    Converter = new AllowNewRecordConverter()
-              };
+            Binding AllowNewRecordBinding = new("AllowNewRecord")
+            {
+                Source = e.NewValue,
+                Converter = new AllowNewRecordConverter()
+            };
 
             SetBinding(GoNewVisibilityProperty, AllowNewRecordBinding);
         }
 
         protected virtual void OnClicked(int movement)
         {
+            IAbstractController? Controller = DataContext as IAbstractController;
+
             if (Controller == null) return;
             switch (movement)
             {
@@ -85,7 +88,7 @@ namespace FrontEnd.Forms.FormComponents
                     {
                         if (Controller.AllowNewRecord) 
                         {
-                            if (IsListController) break;
+                            if (Controller is IListController) break;
                             else Controller.GoNew();
                         }
                     } 

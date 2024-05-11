@@ -31,9 +31,9 @@
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        <formComp:RecordStatus Grid.Row="2" Controller="{TemplateBinding Controller}"/>
+                        <formComp:RecordStatus Grid.Row="2" DataContext="{TemplateBinding DataContext}"/>
                         <ProgressBar Grid.Row="3" Grid.ColumnSpan="2" IsIndeterminate="{TemplateBinding IsLoading}"/>
-                        <formComp:RecordTracker Grid.Row="4" Grid.ColumnSpan="2" Controller="{TemplateBinding Controller}"/>
+                        <formComp:RecordTracker Grid.Row="4" Grid.ColumnSpan="2" DataContext="{TemplateBinding DataContext}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -70,28 +70,30 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FormList}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="{TemplateBinding MenuRow}"/>
-                            <RowDefinition Height="{TemplateBinding HeaderRow}"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="5"/>
-                            <RowDefinition Height="{TemplateBinding RecordTrackerRow}"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter Grid.Row="0" Content="{TemplateBinding Menu}"/>
-                        <ContentPresenter Grid.Row="1" Content="{TemplateBinding Header}"/>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="{TemplateBinding MenuRow}"/>
+                                <RowDefinition Height="{TemplateBinding HeaderRow}"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="{TemplateBinding RecordTrackerRow}"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Row="0" Content="{TemplateBinding Menu}"/>
+                            <ContentPresenter Grid.Row="1" Content="{TemplateBinding Header}"/>
 
-                        <ContentPresenter x:Name="Lista" Grid.Row="2" Content="{TemplateBinding Content}"
+                            <ContentPresenter x:Name="Lista" Grid.Row="2" Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        
-                        <ProgressBar Grid.Row="3" IsIndeterminate="{TemplateBinding IsLoading}"/>
-                        <formComp:RecordTracker Grid.Row="4" Controller="{TemplateBinding Controller}"/>
-                    </Grid>
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"/>
+
+                            <ProgressBar Grid.Row="3" IsIndeterminate="{TemplateBinding IsLoading}"/>
+                            <formComp:RecordTracker Grid.Row="4" DataContext="{TemplateBinding DataContext}"/>
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

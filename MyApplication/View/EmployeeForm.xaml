@@ -15,7 +15,7 @@
         <controller:EmployeeController/>
     </Window.DataContext>
 
-    <fr:Form Controller="{Binding}">
+    <fr:Form>
         <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">
             <Label Content="First Name"/>
             <fr:Text Text="{Binding CurrentRecord.FirstName}" Grid.Row="0" Grid.Column="1"/>
@@ -33,8 +33,24 @@
             <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
             <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
 
-            <fr:SubForm x:Name="sub" Grid.Row="7" Grid.ColumnSpan="4" DataContext="{Binding Payslips}">
-                <Label Content="{Binding ElementName=sub, Path=DataContext}"/>
+            <fr:SubForm x:Name="sub" Grid.Row="7" Grid.ColumnSpan="4" ParentRecord="{Binding CurrentRecord}" DataContext="{Binding Payslips}">
+                <fr:FormList HorizontalAlignment="Stretch">
+                    <fr:FormList.Header>
+                        <Label Content="Subform"/>
+                    </fr:FormList.Header>
+                    <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
+                        <fr:Lista.ItemTemplate>
+                            <DataTemplate>
+                                <fr:FormRow>
+                                    <Grid fr:Definition.ColumnDefinitions="100,100">
+                                        <Label Content="{Binding DOP}"/>
+                                        <Label Content="{Binding Salary}" Grid.Column="1"/>
+                                    </Grid>
+                                </fr:FormRow>
+                            </DataTemplate>
+                        </fr:Lista.ItemTemplate>                        
+                    </fr:Lista>
+                </fr:FormList>
             </fr:SubForm>
         </Grid>
     </fr:Form>

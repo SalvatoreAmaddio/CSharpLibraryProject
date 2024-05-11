@@ -13,7 +13,7 @@
         <controller:EmployeeControllerList/>
     </Page.DataContext>
 
-    <fr:FormList Controller="{Binding}" HeaderRow="100">
+    <fr:FormList HeaderRow="100">
         <fr:FormList.Header>
             <StackPanel Margin="10,0,10,0" VerticalAlignment="Center">
                 <fr:Text Placeholder="Search by name..."  Text="{Binding Search}" VerticalAlignment="Center"/>
@@ -28,9 +28,9 @@
                     <Label Content="First Name" Grid.Column="1"/>
                     <Label Content="Last Name" Grid.Column="2"/>
                     <Label Content="DOB" Grid.Column="3"/>
-                    <fr:FilterOption Grid.Column="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
-                    <fr:FilterOption Grid.Column="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
-                    <fr:FilterOption Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" Controller="{Binding}" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
+                    <fr:FilterOption Grid.Column="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
+                    <fr:FilterOption Grid.Column="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
+                    <fr:FilterOption Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
                     <Label Content="COMMANDS" Grid.Column="7" Grid.ColumnSpan="3"/>
                 </Grid>
             </fr:Lista.Header>

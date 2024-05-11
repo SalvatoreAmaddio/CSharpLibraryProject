@@ -2,6 +2,7 @@
 using System.Windows.Data;
 using System.Globalization;
 using FrontEnd.Events;
+using FrontEnd.Controller;
 
 namespace FrontEnd.Forms.FormComponents
 {
@@ -28,8 +29,12 @@ namespace FrontEnd.Forms.FormComponents
         /// </summary>
         public static readonly DependencyProperty IsDirtyProperty = DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(RecordStatus), new PropertyMetadata(false, null));
 
-        protected override void OnControllerChanged(object? sender, ControllerChangedArgs e) =>
-        SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
+        protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is IAbstractController)
+                SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
+        }
+
     }
 
     /// <summary>
