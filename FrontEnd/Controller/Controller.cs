@@ -137,8 +137,7 @@ namespace FrontEnd.Controller
         public ICommand OpenCMD { get; set; }
         public ICommand OpenNewCMD { get; set; }
         public abstract string SearchQry { get; set; }
-        protected abstract void Open(M? model);
-        protected void OpenNew() => Open(new());
+        public bool OpenWindowOnNew { get; set; } = true;
 
         protected readonly List<QueryParameter> SearchParameters = [];
         public AbstractFormListController() : base()
@@ -148,11 +147,35 @@ namespace FrontEnd.Controller
             QueryBuiler = new(SearchQry);
             Source.RunFilter += OnSourceRunFilter;
         }
+        public abstract Task SearchRecordAsync();
+        public abstract void OnOptionFilter();
 
-        protected void OnSourceRunFilter(object? sender, EventArgs e) => OnOptionFilter();
+        /// <summary>
+        /// Override this method to open a new window to view the selected record. <para/>
+        /// For Example:
+        /// <code>
+        ///  var win = new EmployeeForm(model);
+        ///  win.Show();
+        /// </code>
+        /// </summary>
+        /// <param name="model">An <see cref="AbstractModel"/> object which is the record to visualise in the new Window</param>
+        protected abstract void Open(M? model);
 
-        public override void GoNew() => OpenNew();
-        abstract public void OnOptionFilter();
+        /// <summary>
+        /// Calls the <see cref="Open(M?)"/> by passing a new instance of <see cref="AbstractModel"/>.
+        /// </summary>
+        protected void OpenNew() => Open(new());
+        private void OnSourceRunFilter(object? sender, EventArgs e) => OnOptionFilter();
+        public override void GoNew() 
+        {
+            if (OpenWindowOnNew)
+                OpenNew();
+            else 
+            {
+                base.GoNew();
+                Source.Add(CurrentRecord);
+            }
+        }
 
         /// <summary>
         /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
@@ -161,7 +184,5 @@ namespace FrontEnd.Controller
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
         public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
-
-        public abstract Task SearchRecordAsync();
     }
 }

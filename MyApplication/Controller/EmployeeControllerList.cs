@@ -15,13 +15,13 @@ namespace MyApplication.Controller
         public SourceOption DepartmentOptions { get; private set; }
         public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
         public override int DatabaseIndex => 0;
-
         public EmployeeControllerList()
         {
             TitleOptions = new(Titles.Source, "Title");
             GenderOptions = new(Genders.Source, "GenderName");
             DepartmentOptions = new(Departments.Source, "DepartmentName");
             AfterUpdate += OnAfterUpdate;
+            OpenWindowOnNew = false;
         }
 
         private async void OnAfterUpdate(object? sender, AfterUpdateArgs e)

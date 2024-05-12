@@ -12,7 +12,6 @@ namespace FrontEnd.Forms.FormComponents
     /// </summary>
     public class RecordTracker : AbstractControl
     {
-
         static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
         public RecordTracker() => OnClickCommand = new TrackerClickCommand(OnClicked);
@@ -50,30 +49,23 @@ namespace FrontEnd.Forms.FormComponents
             DependencyProperty.Register(nameof(GoNewVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata());
         #endregion
 
-
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is not IAbstractFormController) throw new Exception("DataContext should be a Controller");
-            Binding RecordDisplayerBinding = new("Records")
-            {
-                Source = e.NewValue,
-            };
-            SetBinding(RecordsProperty, RecordDisplayerBinding);
+            if (e.NewValue is not IAbstractFormController) throw new Exception("DataContext should be an instance of IAbstractFormController.");
 
-            Binding AllowNewRecordBinding = new("AllowNewRecord")
+            SetBinding(RecordsProperty, new Binding("Records") { Source = e.NewValue });
+
+            SetBinding(GoNewVisibilityProperty, new Binding("AllowNewRecord") 
             {
                 Source = e.NewValue,
                 Converter = new AllowNewRecordConverter()
-            };
-
-            SetBinding(GoNewVisibilityProperty, AllowNewRecordBinding);
+            });
         }
 
         protected virtual void OnClicked(int movement)
         {
-            IAbstractFormController? Controller = DataContext as IAbstractFormController;
+            if (DataContext is not IAbstractFormController Controller) return;
 
-            if (Controller == null) return;
             switch (movement)
             {
                 case 1:
