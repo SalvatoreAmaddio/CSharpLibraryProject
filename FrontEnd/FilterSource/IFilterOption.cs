@@ -4,13 +4,14 @@ using FrontEnd.Controller;
 using FrontEnd.Events;
 using System.ComponentModel;
 using System.Text;
+using FrontEnd.Forms;
 
 namespace FrontEnd.FilterSource
 {
     /// <summary>
     /// This interface extends <see cref="INotifyPropertyChanged"/> and defines the properties and methods to be implemented by the <see cref="FilterOption"/> class.
     /// <para/>
-    /// This interface works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
+    /// This interface works in conjunction with the <see cref="FilterOption"/> GUI Control.
     /// </summary>
     public interface IFilterOption : INotifyPropertyChanged
     {
@@ -43,7 +44,7 @@ namespace FrontEnd.FilterSource
     /// <summary>
     /// Concrete impementation of the <see cref="IFilterOption"/>
     /// <para/>
-    /// This class works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
+    /// This class works in conjunction with the <see cref="FilterOption"/> GUI Control.
     /// </summary>
     public class FilterOption : IFilterOption
     {

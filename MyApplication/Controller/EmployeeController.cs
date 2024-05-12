@@ -3,7 +3,7 @@ using MyApplication.Model;
 
 namespace MyApplication.Controller
 {
-    public class EmployeeController : AbstractController<Employee>
+    public class EmployeeController : AbstractFormController<Employee>
     {
         public GenderListController Genders { get; } = new();
         public DepartmentListController Departments { get; } = new();

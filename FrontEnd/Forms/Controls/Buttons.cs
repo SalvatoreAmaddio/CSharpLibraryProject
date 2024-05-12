@@ -7,7 +7,7 @@ using System.Windows.Data;
 namespace FrontEnd.Forms
 {
     /// <summary>
-    /// Abstract class that defines a set of common properties and methods for custom buttons which are binds to the Commands defined in the <see cref="AbstractController{M}"/>.
+    /// Abstract class that defines a set of common properties and methods for custom buttons which are binds to the Commands defined in the <see cref="AbstractFormController{M}"/>.
     /// </summary>
     public abstract class AbstractButton : Button 
     {
@@ -35,7 +35,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// Instantiate SaveButton and binds it to the UpdateCMD Command defined in the <see cref="AbstractController{M}"/>
+    /// Instantiate SaveButton and binds it to the UpdateCMD Command defined in the <see cref="AbstractFormController{M}"/>
     /// </summary>
     public class SaveButton : AbstractButton
     {
@@ -68,7 +68,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// Instantiate OpenButton and binds it to the OpenCMD Command defined in the <see cref="AbstractListController{M}"/>
+    /// Instantiate OpenButton and binds it to the OpenCMD Command defined in the <see cref="AbstractFormListController{M}"/>
     /// </summary>
     public class OpenButton : AbstractButton
     {

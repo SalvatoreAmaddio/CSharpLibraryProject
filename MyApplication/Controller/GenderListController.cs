@@ -3,7 +3,7 @@ using MyApplication.Model;
 
 namespace MyApplication.Controller
 {
-    public class GenderListController : AbstractListController<Gender>
+    public class GenderListController : AbstractFormListController<Gender>
     {
         public override string SearchQry { get; set; } = string.Empty;
         public override int DatabaseIndex => 1;

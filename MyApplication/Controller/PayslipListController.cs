@@ -3,7 +3,7 @@ using MyApplication.Model;
 
 namespace MyApplication.Controller
 {
-    public class PayslipListController : AbstractListController<Payslip>
+    public class PayslipListController : AbstractFormListController<Payslip>
     {
         public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Payslip)} WHERE EmployeeID = @employeeID;";
 

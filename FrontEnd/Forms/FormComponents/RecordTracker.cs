@@ -87,7 +87,7 @@ namespace FrontEnd.Forms.FormComponents
                     {
                         if (Controller.AllowNewRecord) 
                         {
-                            if (Controller is IListController) break;
+                            if (Controller is IAbstractListController) break;
                             else Controller.GoNew();
                         }
                     } 

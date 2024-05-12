@@ -73,8 +73,68 @@ namespace FrontEnd.Controller
         /// </summary>
         public bool IsLoading { get; set; }
     }
+    
+    /// <summary>
+    /// A non generic version of <see cref="IAbstractFormListController{M}"/> which is used by Form UI Components to manage filtering operations.
+    /// <para/>
+    /// see also <seealso cref="RecordTracker"/>, <seealso cref="FilterOption"/>
+    /// </summary>
+    public interface IAbstractListController : IAbstractController
+    {
+        /// <summary>
+        /// Override this method to implement your filter logic. 
+        /// For Example:
+        /// <code>
+        /// //overide SearchQry Property.
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        /// ...
+        /// public override async Task SearchRecordAsync() 
+        /// {
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
+        ///     Source.ReplaceRange(results);
+        ///     GoFirst();
+        /// }
+        /// </code>
+        /// </summary>
+        /// <returns>A Taks</returns>
+        public Task SearchRecordAsync();
 
-    public interface IAbstractFormController<M> : IAbstractController where M : ISQLModel, new()
+        /// <summary>
+        /// This method is called by the <see cref="Forms.FilterOption"/> object when an option is selected or unselected.
+        /// It instructs the Controller to filter its RecordSource.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public override async void OnOptionFilter()
+        /// {
+        ///     QueryBuiler.Clear();
+        ///     QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));
+        ///     ... // Other conditions if needed
+        ///     await SearchRecordAsync();
+        /// }
+        /// </code>
+        /// </summary>
+        public void OnOptionFilter();
+
+        /// <summary>
+        /// Gets and Sets the Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
+        /// <para/>
+        /// Your statement must have a WHERE clause.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM Payslip WHERE EmployeeID = @ID;";
+        /// //OR
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM Employee WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        /// </code>
+        /// </summary>
+        public string SearchQry { get; set; }
+
+    }
+
+    public interface IAbstractFormController<M> : IAbstractController where M : AbstractModel, new()
     {
         /// <summary>
         /// A more concrete version of <see cref="IAbstractSQLModelController.CurrentModel"/>
@@ -85,7 +145,7 @@ namespace FrontEnd.Controller
         public ICommand DeleteCMD { get; set; }
     }
 
-    public abstract class AbstractController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
+    public abstract class AbstractFormController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
     {
         string _search = string.Empty;
         bool _isloading = false;
@@ -130,7 +190,7 @@ namespace FrontEnd.Controller
         public ICommand UpdateCMD { get; set; }
         public ICommand DeleteCMD { get; set; }
 
-        public AbstractController() : base()
+        public AbstractFormController() : base()
         {
             UpdateCMD = new CMD<M>(Update);
             DeleteCMD = new CMD<M>(Delete);
@@ -196,7 +256,7 @@ namespace FrontEnd.Controller
         }
     }
 
-    public interface IAbstractFormListController<M> : IAbstractFormController<M> where M : ISQLModel, new()
+    public interface IAbstractFormListController<M> : IAbstractFormController<M>, IAbstractListController where M : AbstractModel, new()
     {
         /// <summary>
         /// Gets and Sets the command to execute to open a Record.
@@ -214,67 +274,7 @@ namespace FrontEnd.Controller
         public string Search { get; set; }
     }
 
-    /// <summary>
-    /// A non generic version of <see cref="IAbstractFormListController{M}"/> which is used by Form UI Components to manage filtering operations.
-    /// <para/>
-    /// see also <seealso cref="RecordTracker"/>, <seealso cref="FilterOption"/>
-    /// </summary>
-    public interface IListController
-    {
-        /// <summary>
-        /// Override this method to implement your filter logic. 
-        /// For Example:
-        /// <code>
-        /// //overide SearchQry Property.
-        /// public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
-        /// ...
-        /// public override async Task SearchRecordAsync() 
-        /// {
-        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-        ///     var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-        ///     Source.ReplaceRange(results);
-        ///     GoFirst();
-        /// }
-        /// </code>
-        /// </summary>
-        /// <returns>A Taks</returns>
-        public Task SearchRecordAsync();
-
-        /// <summary>
-        /// This method is called by the <see cref="Forms.FilterOption"/> object when an option is selected or unselected.
-        /// It instructs the Controller to filter its RecordSource.
-        /// <para/>
-        /// For Example:
-        /// <code>
-        /// public override async void OnOptionFilter()
-        /// {
-        ///     QueryBuiler.Clear();
-        ///     QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));
-        ///     ... // Other conditions if needed
-        ///     await SearchRecordAsync();
-        /// }
-        /// </code>
-        /// </summary>
-        public void OnOptionFilter();
-
-        /// <summary>
-        /// Gets and Sets the Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
-        /// <para/>
-        /// Your statement must have a WHERE clause.
-        /// <para/>
-        /// For Example:
-        /// <code>
-        /// public override string SearchQry { get; set; } = $"SELECT * FROM Payslip WHERE EmployeeID = @ID;";
-        /// //OR
-        /// public override string SearchQry { get; set; } = $"SELECT * FROM Employee WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
-        /// </code>
-        /// </summary>
-        public string SearchQry { get; set; }
-
-    }
-
-    public abstract class AbstractListController<M> : AbstractController<M>, IListController, IAbstractFormListController<M> where M : AbstractModel, new()
+    public abstract class AbstractFormListController<M> : AbstractFormController<M>, IAbstractFormListController<M> where M : AbstractModel, new()
     {
         protected FilterQueryBuilder QueryBuiler;
         public ICommand OpenCMD { get; set; }
@@ -284,7 +284,7 @@ namespace FrontEnd.Controller
         protected void OpenNew() => Open(new());
 
         protected readonly List<QueryParameter> SearchParameters = [];
-        public AbstractListController() : base()
+        public AbstractFormListController() : base()
         {
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);

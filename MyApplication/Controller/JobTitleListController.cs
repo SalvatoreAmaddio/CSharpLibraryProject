@@ -3,7 +3,7 @@ using MyApplication.Model;
 
 namespace MyApplication.Controller
 {
-    public class JobTitleListController : AbstractListController<JobTitle>
+    public class JobTitleListController : AbstractFormListController<JobTitle>
     {
         public override string SearchQry { get; set; } = string.Empty;
 

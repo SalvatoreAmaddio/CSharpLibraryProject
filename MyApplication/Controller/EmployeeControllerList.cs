@@ -5,7 +5,7 @@ using MyApplication.View;
 using FrontEnd.Events;
 namespace MyApplication.Controller
 {
-    public class EmployeeControllerList : AbstractListController<Employee>
+    public class EmployeeControllerList : AbstractFormListController<Employee>
     {
         public GenderListController Genders { get; private set; } = new();
         public DepartmentListController Departments { get; private set; } = new();
