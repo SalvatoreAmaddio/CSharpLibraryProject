@@ -79,10 +79,13 @@ namespace FrontEnd.Forms.FormComponents
                     {
                         if (Controller.AllowNewRecord) 
                         {
-                            if (Controller is IAbstractFormListController) break;
+                            if (Controller is IAbstractFormListController listController)
+                            {
+                                if (listController.OpenWindowOnNew) break;
+                            }
                             else Controller.GoNew();
                         }
-                    } 
+                    }
                     else Controller.GoNext();
                     break;
                 case 4:

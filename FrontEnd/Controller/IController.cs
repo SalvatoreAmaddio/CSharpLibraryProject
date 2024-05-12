@@ -132,6 +132,11 @@ namespace FrontEnd.Controller
         /// </summary>
         public string SearchQry { get; set; }
 
+        /// <summary>
+        /// Tells if the Controller shall open a Window or add a new row to the <see cref="Lista"/> to add a New Record.
+        /// </summary>
+        public bool OpenWindowOnNew { get; set; }
+
     }
 
     /// <summary>
@@ -169,5 +174,6 @@ namespace FrontEnd.Controller
         /// Gets and Sets the string parameter used in a search textbox to filter the RecordSource.
         /// </summary>
         public string Search { get; set; }
+
     }
 }
