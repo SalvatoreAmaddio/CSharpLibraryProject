@@ -209,7 +209,7 @@ namespace FrontEnd.Forms
 
         public SubForm() => ParentRecordChangedEvent += OnParentRecordChanged;
 
-        private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => NotifyAbstractForm(e.NewValue);
+        private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => NotifyAbstractForm(e.OldValue, e.NewValue);
 
         protected override void OnContentChanged(object oldContent, object newContent)
         {
@@ -218,14 +218,20 @@ namespace FrontEnd.Forms
             if (abstractForm == null) throw new Exception("A SubForm can only contain an AbstractForm object.");
             abstractForm.DataContextChanged += OnAbstractFormDataContextChanged;
         }
-        private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => NotifyAbstractForm(ParentRecord);
+        private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => NotifyAbstractForm(null, ParentRecord);
         private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
 
-        private void NotifyAbstractForm(AbstractModel? parentRecord) 
+        private void NotifyAbstractForm(AbstractModel? oldRecord, AbstractModel? parentRecord) 
         {
             GetController()?.SetParentRecord(parentRecord);
+            if (oldRecord != null)
+                oldRecord.OnDirtyChanged -= OnParentRecordDirtyChanged;
+            if (parentRecord!=null)
+                parentRecord.OnDirtyChanged += OnParentRecordDirtyChanged;
             IsEnabled = (parentRecord == null) ? false : !parentRecord.IsNewRecord();
         }
+
+        private void OnParentRecordDirtyChanged(object? sender, OnDirtyChangedEventArgs e) => IsEnabled = !e.Model.IsNewRecord();
 
         #region ParentRecord
         /// <summary>
@@ -237,8 +243,8 @@ namespace FrontEnd.Forms
             set => SetValue(ParentRecordProperty, value);
         }
 
-        public static readonly DependencyProperty ParentRecordProperty = DependencyProperty.Register(nameof(ParentRecord), typeof(AbstractModel), typeof(SubForm), new PropertyMetadata(Changed));
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
+        public static readonly DependencyProperty ParentRecordProperty = DependencyProperty.Register(nameof(ParentRecord), typeof(AbstractModel), typeof(SubForm), new PropertyMetadata(OnParentRecordPropertyChanged));
+        private static void OnParentRecordPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
         #endregion
 
     }

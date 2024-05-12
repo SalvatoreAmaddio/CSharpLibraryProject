@@ -11,6 +11,7 @@ namespace FrontEnd.Model
     /// </summary>
     public abstract class AbstractModel : AbstractSQLModel, INotifier
     {
+        public event OnDirtyChangedEventHandler? OnDirtyChanged;
         bool _isDirty = false;
         public bool IsDirty
         {
@@ -19,7 +20,8 @@ namespace FrontEnd.Model
             {
                 _isDirty = value;
                 RaisePropertyChanged(nameof(IsDirty));
-                //OnDirtyChanged
+                if (!value)
+                    OnDirtyChanged?.Invoke(this, new(this));
             }
         }
 

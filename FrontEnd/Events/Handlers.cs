@@ -7,7 +7,7 @@ namespace FrontEnd.Events
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
     public delegate void BeforeUpdateEventHandler(object? sender, BeforeUpdateArgs e);
     public delegate void SelectionChangedEventHandler(object? sender, EventArgs e);
-    public delegate void OnDirtyChangedEventHandler(object? sender, EventArgs e);
+    public delegate void OnDirtyChangedEventHandler(object? sender, OnDirtyChangedEventArgs e);
 
     public class OnDirtyChangedEventArgs(AbstractModel Model) : EventArgs
     {
