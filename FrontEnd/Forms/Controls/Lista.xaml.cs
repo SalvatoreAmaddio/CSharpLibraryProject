@@ -42,7 +42,7 @@ namespace FrontEnd.Forms
             try 
             {
                 AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
-                if (lastSelectedObject != null && lastSelectedObject.IsNewRecord()) return;
+                //if (lastSelectedObject != null && lastSelectedObject.IsNewRecord()) return;
                 Controller?.GoAt(lastSelectedObject);
             }
             catch (Exception) { }

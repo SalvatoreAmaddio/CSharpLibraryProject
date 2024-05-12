@@ -34,21 +34,21 @@ namespace Backend.Controller
             Records = Source.RecordPositionDisplayer();
         }
 
-        public void GoPrevious()
+        public virtual void GoPrevious()
         {
             Navigator.MovePrevious();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
-        public void GoLast()
+        public virtual void GoLast()
         {
             Navigator.MoveLast();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
-        public void GoFirst()
+        public virtual void GoFirst()
         {
             Navigator.MoveFirst();
             CurrentModel = Navigator.Current;
@@ -70,7 +70,7 @@ namespace Backend.Controller
             Records = Source.RecordPositionDisplayer();
         }
 
-        public void GoAt(ISQLModel? record)
+        public virtual void GoAt(ISQLModel? record)
         {
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord()) GoNew();

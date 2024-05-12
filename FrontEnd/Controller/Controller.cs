@@ -178,6 +178,38 @@ namespace FrontEnd.Controller
             }
         }
 
+        private void CleanSource()
+        {
+            var roRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
+
+            foreach (var item in roRemove)
+                Source.Remove(item);
+        }
+        public override void GoPrevious()
+        {
+            CleanSource();            
+            base.GoPrevious();
+        }
+
+        public override void GoAt(ISQLModel? record)
+        {
+            if (record == null) CurrentModel = null;
+            else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
+            else if (record.IsNewRecord() && !OpenWindowOnNew) 
+            {
+                Navigator.MoveNew();
+                Navigator.Index--;
+            }
+            else
+            {
+                CleanSource();
+                Navigator.MoveAt(record);
+                CurrentModel = Navigator.Current;
+                Records = Source.RecordPositionDisplayer();
+            }
+        }
+
+
         /// <summary>
         /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
         /// </summary>
