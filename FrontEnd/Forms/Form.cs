@@ -197,6 +197,9 @@ namespace FrontEnd.Forms
         public FormRow() => RecordTrackerRow = new(0);
     }
     
+    /// <summary>
+    /// This class instantiate a SubForm which can contain another <see cref="AbstractForm"/> in a <see cref="Form"/>.
+    /// </summary>
     public class SubForm : ContentControl
     {
         private AbstractForm? abstractForm;
@@ -218,6 +221,9 @@ namespace FrontEnd.Forms
         private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
 
         #region ParentRecord
+        /// <summary>
+        /// Gets and Sets the <see cref="Form"/>'s <see cref="IAbstractController"/> CurrentRecord property which filter the records of the this SubForm.
+        /// </summary>
         public ISQLModel ParentRecord
         {
             get => (ISQLModel)GetValue(ParentRecordProperty);
