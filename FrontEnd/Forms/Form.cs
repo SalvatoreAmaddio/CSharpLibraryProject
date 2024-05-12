@@ -196,6 +196,7 @@ namespace FrontEnd.Forms
 
         public FormRow() => RecordTrackerRow = new(0);
     }
+    
     public class SubForm : ContentControl
     {
         private AbstractForm? abstractForm;
@@ -206,7 +207,6 @@ namespace FrontEnd.Forms
         public SubForm() => ParentRecordChangedEvent += OnParentRecordChanged;
 
         private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => GetController()?.OnSubFormFilter(e.NewValue);
-
         protected override void OnContentChanged(object oldContent, object newContent)
         {
             base.OnContentChanged(oldContent, newContent);
@@ -214,9 +214,7 @@ namespace FrontEnd.Forms
             if (abstractForm == null) throw new Exception("A SubForm can only contain an AbstractForm object.");
             abstractForm.DataContextChanged += OnAbstractFormDataContextChanged;
         }
-
         private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => GetController()?.OnSubFormFilter(ParentRecord);
-
         private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
 
         #region ParentRecord
