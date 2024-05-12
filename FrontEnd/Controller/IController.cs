@@ -3,6 +3,8 @@ using FrontEnd.Events;
 using FrontEnd.Model;
 using FrontEnd.Notifier;
 using System.Windows.Input;
+using FrontEnd.Forms.FormComponents;
+using FrontEnd.Forms;
 
 namespace FrontEnd.Controller
 {
