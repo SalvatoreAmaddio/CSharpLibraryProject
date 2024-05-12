@@ -185,10 +185,23 @@ namespace FrontEnd.Controller
             foreach (var item in roRemove)
                 Source.Remove(item);
         }
+
         public override void GoPrevious()
         {
             CleanSource();            
             base.GoPrevious();
+        }
+
+        public override void GoLast()
+        {
+            CleanSource();
+            base.GoLast();
+        }
+
+        public override void GoFirst()
+        {
+            CleanSource();
+            base.GoFirst();
         }
 
         public override void GoAt(ISQLModel? record)
@@ -217,5 +230,6 @@ namespace FrontEnd.Controller
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
         public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+
     }
 }
