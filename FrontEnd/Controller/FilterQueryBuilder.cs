@@ -8,7 +8,7 @@ namespace FrontEnd.Controller
     /// <c>IMPORTANT:</c>
     /// This class is not designed to handle Aggregation Queries.
     /// </summary>
-    /// <param name="defaultQuery">The Default Query Structure; This will tipically be the <see cref="AbstractListController{M}.DefaultSearchQry"/> property.</param>
+    /// <param name="defaultQuery">The Default Query Structure; This will tipically be the <see cref="AbstractListController{M}.SearchQry"/> property.</param>
     public class FilterQueryBuilder(string defaultQuery)
     {
         private readonly string _defaultQuery = defaultQuery;

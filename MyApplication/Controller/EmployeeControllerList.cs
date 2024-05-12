@@ -13,7 +13,7 @@ namespace MyApplication.Controller
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
-        public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
         public override int DatabaseIndex => 0;
 
         public EmployeeControllerList()
@@ -30,14 +30,13 @@ namespace MyApplication.Controller
             await SearchRecordAsync();
         }
 
-        protected async Task SearchRecordAsync()
+        public override async Task SearchRecordAsync()
         {
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
             Source.ReplaceRange(results);
             GoFirst();
-
         }
 
         public override async void OnOptionFilter()

@@ -5,17 +5,23 @@ namespace MyApplication.Controller
 {
     public class JobTitleListController : AbstractListController<JobTitle>
     {
-        public override string DefaultSearchQry { get; set; } = string.Empty;
+        public override string SearchQry { get; set; } = string.Empty;
 
         public override int DatabaseIndex => 3;
 
+        public override Task SearchRecordAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnOptionFilter()
         {
+            throw new NotImplementedException();
         }
 
         protected override void Open(JobTitle? model)
         {
+            throw new NotImplementedException();
         }
-
     }
 }

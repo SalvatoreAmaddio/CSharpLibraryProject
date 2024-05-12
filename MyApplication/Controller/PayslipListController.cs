@@ -5,7 +5,7 @@ namespace MyApplication.Controller
 {
     public class PayslipListController : AbstractListController<Payslip>
     {
-        public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Payslip)} WHERE EmployeeID = @employeeID;";
+        public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Payslip)} WHERE EmployeeID = @employeeID;";
 
         public override int DatabaseIndex => 4;
 
@@ -35,10 +35,17 @@ namespace MyApplication.Controller
 
         public override void OnOptionFilter()
         {
+            throw new NotImplementedException();
         }
 
         protected override void Open(Payslip? model)
         {
+            throw new NotImplementedException();
+        }
+
+        public override Task SearchRecordAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using FrontEnd.Forms;
+using FrontEnd.Forms.FormComponents;
 
 namespace FrontEnd.Controller
 {
@@ -196,21 +198,79 @@ namespace FrontEnd.Controller
 
     public interface IAbstractFormListController<M> : IAbstractFormController<M> where M : ISQLModel, new()
     {
+        /// <summary>
+        /// Gets and Sets the command to execute to open a Record.
+        /// </summary>
         public ICommand OpenCMD { get; set; }
+
+        /// <summary>
+        /// Gets and Sets the command to execute to open a New Record.
+        /// </summary>
         public ICommand OpenNewCMD { get; set; }
+
+        /// <summary>
+        /// Gets and Sets the string parameter used in a search textbox to filter the RecordSource.
+        /// </summary>
         public string Search { get; set; }
     }
 
+    /// <summary>
+    /// A non generic version of <see cref="IAbstractFormListController{M}"/> which is used by Form UI Components to manage filtering operations.
+    /// <para/>
+    /// see also <seealso cref="RecordTracker"/>, <seealso cref="FilterOption"/>
+    /// </summary>
     public interface IListController
     {
+        /// <summary>
+        /// Override this method to implement your filter logic. 
+        /// For Example:
+        /// <code>
+        /// //overide SearchQry Property.
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        /// ...
+        /// public override async Task SearchRecordAsync() 
+        /// {
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
+        ///     Source.ReplaceRange(results);
+        ///     GoFirst();
+        /// }
+        /// </code>
+        /// </summary>
+        /// <returns>A Taks</returns>
+        public Task SearchRecordAsync();
+
+        /// <summary>
+        /// This method is called by the <see cref="Forms.FilterOption"/> object when an option is selected or unselected.
+        /// It instructs the Controller to filter its RecordSource.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public override async void OnOptionFilter()
+        /// {
+        ///     QueryBuiler.Clear();
+        ///     QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));
+        ///     ... // Other conditions if needed
+        ///     await SearchRecordAsync();
+        /// }
+        /// </code>
+        /// </summary>
         public void OnOptionFilter();
 
         /// <summary>
-        /// Gets and Sets the default Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
+        /// Gets and Sets the Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
         /// <para/>
         /// Your statement must have a WHERE clause.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM Payslip WHERE EmployeeID = @ID;";
+        /// //OR
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM Employee WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        /// </code>
         /// </summary>
-        public string DefaultSearchQry { get; set; }
+        public string SearchQry { get; set; }
 
     }
 
@@ -219,7 +279,7 @@ namespace FrontEnd.Controller
         protected FilterQueryBuilder QueryBuiler;
         public ICommand OpenCMD { get; set; }
         public ICommand OpenNewCMD { get; set; }
-        public abstract string DefaultSearchQry { get; set; }
+        public abstract string SearchQry { get; set; }
         protected abstract void Open(M? model);
         protected void OpenNew() => Open(new());
 
@@ -228,7 +288,7 @@ namespace FrontEnd.Controller
         {
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);
-            QueryBuiler = new(DefaultSearchQry);
+            QueryBuiler = new(SearchQry);
             Source.RunFilter += OnSourceRunFilter;
         }
 
@@ -244,5 +304,7 @@ namespace FrontEnd.Controller
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
         public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+
+        public abstract Task SearchRecordAsync();
     }
 }
