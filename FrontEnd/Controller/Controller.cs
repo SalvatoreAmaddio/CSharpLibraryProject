@@ -107,12 +107,12 @@ namespace FrontEnd.Controller
         {
             if (CurrentRecord == null) throw new NoModelException();
             if (!CurrentRecord.IsDirty) return;
+            CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             Db.Model = CurrentRecord;
-            CRUD crud = (!Db.Model.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             Db.Crud(crud, sql, parameters);
             CurrentRecord.IsDirty = false;
             Db.Records?.NotifyChildren(crud, Db.Model);
-            GoAt(CurrentModel);
+            GoAt(CurrentRecord);
         }
 
         public void SetParentRecord(AbstractModel? parentRecord)
@@ -173,6 +173,7 @@ namespace FrontEnd.Controller
             else 
             {
                 base.GoNew();
+                if (CurrentRecord == null) throw new Exception("Cannot add a null");
                 Source.Add(CurrentRecord);
             }
         }
