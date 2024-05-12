@@ -180,6 +180,7 @@ namespace FrontEnd.Controller
 
         private void CleanSource()
         {
+            if (OpenWindowOnNew) return;
             var roRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
 
             foreach (var item in roRemove)
