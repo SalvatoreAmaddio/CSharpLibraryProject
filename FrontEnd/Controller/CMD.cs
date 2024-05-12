@@ -28,10 +28,15 @@ namespace FrontEnd.Controller
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     /// <param name="execute">An <see cref="Action{T}"/></param>
-    public class CMD<M>(Action<M?> execute) : ICommand where M : AbstractModel, new()
+    public class CMD<M> : ICommand where M : AbstractModel, new()
     {
         public event EventHandler? CanExecuteChanged;
-        private readonly Action<M?> _execute = execute;
+        private readonly Action<M?>? _action;
+        private readonly Func<M?, bool>? _fun;
+
+        public CMD(Action<M?> execute) => _action = execute;    
+
+        public CMD(Func<M?, bool> fun) => _fun = fun;
 
         public bool CanExecute(object? parameter)
         {
@@ -40,7 +45,10 @@ namespace FrontEnd.Controller
 
         public void Execute(object? parameter)
         {
-            _execute((M?)parameter);
+            if (_action != null)
+                _action((M?)parameter);
+            if (_fun != null)
+                _fun((M?)parameter);
         }
     }
 }

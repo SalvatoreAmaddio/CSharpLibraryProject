@@ -87,8 +87,9 @@ namespace Backend.Controller
         /// </item>
         /// </list>
         /// </summary>
+        /// <returns>true if the record was successfully altered.</returns>
         /// <exception cref="NoModelException">Thrown if the <see cref="Model"/> is null.</exception>
-        public void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null);
+        public bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null);
 
         /// <summary>
         /// It deletes the <see cref="CurrentModel"/> from the database.

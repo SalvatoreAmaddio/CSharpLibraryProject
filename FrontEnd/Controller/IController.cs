@@ -72,6 +72,8 @@ namespace FrontEnd.Controller
         /// Gets and Sets a boolean indicating if the Form's ProgressBar is running/> 
         /// </summary>
         public bool IsLoading { get; set; }
+
+        public bool PerformUpdate();
     }
 
     /// <summary>

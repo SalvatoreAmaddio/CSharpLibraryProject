@@ -90,14 +90,16 @@ namespace Backend.Controller
             Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
         }
 
-        public virtual void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
+        public virtual bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (CurrentModel == null) throw new NoModelException();
+            if (!CurrentModel.AllowUpdate()) return false;
             Db.Model = CurrentModel;
             CRUD crud = (!Db.Model.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             Db.Crud(crud, sql, parameters);
             Db.Records?.NotifyChildren(crud, Db.Model);
             GoAt(CurrentModel);
+            return true;
         }
     }
 }

@@ -67,12 +67,16 @@ namespace FrontEnd.Controller
             DeleteCMD = new CMD<M>(Delete);
         }
 
-        protected virtual void Update(M? model)
+        public bool PerformUpdate() => Update(CurrentRecord);
+
+        protected virtual bool Update(M? model)
         {
-            if (model == null) return;
+            if (model == null) return false;
             CurrentRecord = model;
             AlterRecord();
+            return true;
         }
+
         protected virtual void Delete(M? model)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this record?", "Confirm", MessageBoxButton.YesNo);
@@ -104,16 +108,18 @@ namespace FrontEnd.Controller
             AfterUpdate?.Invoke(this, args);
         }
 
-        public override void AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
+        public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (CurrentRecord == null) throw new NoModelException();
-            if (!CurrentRecord.IsDirty) return;
+            if (!CurrentRecord.IsDirty) return false;
             CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
+            if (!CurrentRecord.AllowUpdate()) return false;
             Db.Model = CurrentRecord;
             Db.Crud(crud, sql, parameters);
             CurrentRecord.IsDirty = false;
             Db.Records?.NotifyChildren(crud, Db.Model);
             GoAt(CurrentRecord);
+            return true;
         }
 
         public void SetParentRecord(AbstractModel? parentRecord)

@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using FrontEnd.Model;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -62,9 +63,24 @@ namespace FrontEnd.Forms.FormComponents
             });
         }
 
+        private static MessageBoxResult Ask() 
+        { 
+            return MessageBox.Show("Do you want to save the record before moving?", "Confirm", MessageBoxButton.YesNo);
+        }
+
         protected virtual void OnClicked(int movement)
         {
             if (DataContext is not IAbstractFormController Controller) return;
+
+            AbstractModel? record = (AbstractModel?)Controller.CurrentModel;
+
+            if (record != null && record.IsNewRecord() && record.IsDirty) 
+            {
+                if (Ask() == MessageBoxResult.No)
+                    record.IsDirty = false;
+                else
+                    if (!Controller.PerformUpdate()) return;
+            }
 
             switch (movement)
             {
@@ -80,9 +96,8 @@ namespace FrontEnd.Forms.FormComponents
                         if (Controller.AllowNewRecord) 
                         {
                             if (Controller is IAbstractFormListController listController)
-                            {
                                 if (listController.OpenWindowOnNew) break;
-                            }
+
                             Controller.GoNew();
                         }
                     }
