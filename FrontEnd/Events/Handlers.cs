@@ -1,5 +1,4 @@
 ﻿using Backend.Model;
-using FrontEnd.Controller;
 
 namespace FrontEnd.Events
 {
