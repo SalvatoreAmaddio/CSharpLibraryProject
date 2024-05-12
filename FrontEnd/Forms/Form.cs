@@ -219,7 +219,7 @@ namespace FrontEnd.Forms
             abstractForm.DataContextChanged += OnAbstractFormDataContextChanged;
         }
         private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => NotifyAbstractForm(null, ParentRecord);
-        private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
+        private ISubFormController? GetController() => (ISubFormController?)abstractForm?.DataContext;
 
         private void NotifyAbstractForm(AbstractModel? oldRecord, AbstractModel? parentRecord) 
         {

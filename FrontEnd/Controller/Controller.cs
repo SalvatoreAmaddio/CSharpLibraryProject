@@ -13,13 +13,63 @@ using System.Windows.Input;
 
 namespace FrontEnd.Controller
 {
-    public interface IAbstractController : IAbstractSQLModelController, INotifier
+    public interface ISubFormController 
     {
+        /// <summary>
+        /// Holds a reference to the SubForm's ParentRecord property. This property is set by the <see cref="SetParentRecord(AbstractModel?)"/>  called within the SubForm object.
+        /// </summary>
+        public AbstractModel? ParentRecord { get; }
+
+        /// <summary>
+        /// This method is called by the SubForm to notify its controller that the ParentController has moved to another Record.
+        /// </summary>
+        /// <param name="ParentRecord"></param>
         public void SetParentRecord(AbstractModel? ParentRecord);
+
+        /// <summary>
+        /// Occurs when the SubForm is going to add a new Record.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public YourSubFormController() => NewRecordEvent += OnNewRecordEvent;
+        /// ...
+        /// private void OnNewRecordEvent(object? sender, EventArgs e) 
+        /// {
+        ///      Employee? employee = (Employee?)ParentRecord;
+        ///      if (employee!=null) 
+        ///      {
+        ///           CurrentRecord.Employee = new(employee.EmployeeID);
+        ///           CurrentRecord.IsDirty = false;
+        ///      }
+        /// }
+        /// </code>
+        /// </summary>
         public event NewRecordEventHandler? NewRecordEvent;
-        public bool IsLoading { get; set; }
+
+        /// <summary>
+        /// Override this method to implement a custom logic to filter a SubForm object.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// ...
+        /// string sql = $"SELECT * FROM YourTable WHERE YourForeignKey = @foreignKey;";
+        /// List&lt;QueryParameter> queryParameters = [];
+        /// queryParameters.Add(new ("employeeID", ParentRecord?.GetTablePK()?.GetValue()));
+        /// var results = await CreateFromAsyncList(sql, queryParameters);
+        /// Source.ReplaceRange(results);
+        /// GoFirst();
+        /// ...
+        /// </code>
+        /// </summary>
         public void OnSubFormFilter();
 
+    }
+    public interface IAbstractController : IAbstractSQLModelController, INotifier
+    {
+        /// <summary>
+        /// Gets and Sets a boolean indicating if the Form's ProgressBar is running/> 
+        /// </summary>
+        public bool IsLoading { get; set; }
     }
 
     public interface IAbstractFormController<M> : IAbstractController where M : ISQLModel, new()
@@ -33,7 +83,7 @@ namespace FrontEnd.Controller
         public ICommand DeleteCMD { get; set; }
     }
 
-    public abstract class AbstractController<M> : AbstractSQLModelController, IAbstractFormController<M> where M : AbstractModel, new()
+    public abstract class AbstractController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
     {
         string _search = string.Empty;
         bool _isloading = false;
@@ -41,24 +91,20 @@ namespace FrontEnd.Controller
         private bool _allowNewRecord = true;
         protected ISQLModel? _currentModel;
         private string _records = string.Empty;
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                _isDirty = value;
-                RaisePropertyChanged(nameof(IsDirty));
-            }
-        }
-
+        public AbstractModel? ParentRecord { get; private set; }
         public event PropertyChangedEventHandler? PropertyChanged;
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
-
-        public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
-        protected AbstractModel? _parentRecord { get; private set; }
+        public bool IsDirty 
+        { 
+            get => _isDirty; 
+            set 
+            { 
+                _isDirty = value; 
+                RaisePropertyChanged(nameof(IsDirty)); 
+            } 
+        }
         public override ISQLModel? CurrentModel 
         { 
             get => _currentModel;
@@ -68,16 +114,19 @@ namespace FrontEnd.Controller
                 RaisePropertyChanged(nameof(CurrentRecord));
             }
         }
-        public override bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
-        public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
-        public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
-        public ICommand UpdateCMD { get; set; }
-        public ICommand DeleteCMD { get; set; }
+
         public M? CurrentRecord
         {
             get => (M?)CurrentModel;
             set => CurrentModel = value;
         }
+
+        public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
+        public override bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
+        public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
+        public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
+        public ICommand UpdateCMD { get; set; }
+        public ICommand DeleteCMD { get; set; }
 
         public AbstractController() : base()
         {
@@ -135,7 +184,7 @@ namespace FrontEnd.Controller
 
         public void SetParentRecord(AbstractModel? parentRecord)
         {
-            _parentRecord = parentRecord;
+            ParentRecord = parentRecord;
             OnSubFormFilter();
         }
 

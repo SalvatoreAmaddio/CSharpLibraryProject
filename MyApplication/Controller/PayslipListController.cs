@@ -1,5 +1,4 @@
-﻿using Backend.Model;
-using FrontEnd.Controller;
+﻿using FrontEnd.Controller;
 using MyApplication.Model;
 
 namespace MyApplication.Controller
@@ -17,7 +16,7 @@ namespace MyApplication.Controller
 
         private void OnNewRecordEvent(object? sender, EventArgs e)
         {
-            Employee? employee = (Employee?)_parentRecord;
+            Employee? employee = (Employee?)ParentRecord;
             if (employee!=null && CurrentRecord!=null) 
             {
                 CurrentRecord.Employee = new(employee.EmployeeID);
@@ -28,7 +27,7 @@ namespace MyApplication.Controller
         public override async void OnSubFormFilter()
         {
             QueryBuiler.Clear();
-            QueryBuiler.AddParameter("employeeID", _parentRecord?.GetTablePK()?.GetValue());
+            QueryBuiler.AddParameter("employeeID", ParentRecord?.GetTablePK()?.GetValue());
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
             Source.ReplaceRange(results);
             GoFirst();
