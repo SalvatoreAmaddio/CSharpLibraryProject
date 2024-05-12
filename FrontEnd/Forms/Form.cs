@@ -224,11 +224,8 @@ namespace FrontEnd.Forms
             set => SetValue(ParentRecordProperty, value);
         }
 
-        public static readonly DependencyProperty ParentRecordProperty =
-            DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata(Changed));
-
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
-        ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
+        public static readonly DependencyProperty ParentRecordProperty = DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata(Changed));
+        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
         #endregion
 
     }
