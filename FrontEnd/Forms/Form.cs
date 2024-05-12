@@ -196,7 +196,7 @@ namespace FrontEnd.Forms
 
         public FormRow() => RecordTrackerRow = new(0);
     }
-    public class SubForm : AbstractForm
+    public class SubForm : ContentControl
     {
         static SubForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SubForm), new FrameworkPropertyMetadata(typeof(SubForm)));
 
@@ -208,14 +208,14 @@ namespace FrontEnd.Forms
         }
 
         public static readonly DependencyProperty ParentRecordProperty =
-            DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata());
+            DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata(Changed));
+
+        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var x = e.NewValue;
+        }
         #endregion
 
-
     }
 
-    public class FormPresenter : ContentPresenter
-    {
-
-    }
 }

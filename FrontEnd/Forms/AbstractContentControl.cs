@@ -19,10 +19,7 @@ namespace FrontEnd.Forms
     {
         static AbstractContentControl() => DefaultStyleKeyProperty.OverrideMetadata(typeof(AbstractContentControl), new FrameworkPropertyMetadata(typeof(AbstractContentControl)));
 
-        public AbstractContentControl() 
-        {
-            DataContextChanged += OnDataContextChanged;
-        }
+        public AbstractContentControl() => DataContextChanged += OnDataContextChanged;
 
         protected virtual void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
