@@ -27,7 +27,7 @@ namespace Backend.Controller
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
 
-        public void GoNext()
+        public virtual void GoNext()
         {
             Navigator.MoveNext();
             CurrentModel = Navigator.Current;

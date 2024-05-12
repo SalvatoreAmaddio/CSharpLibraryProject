@@ -81,6 +81,11 @@ namespace FrontEnd.Controller
             DeleteRecord();
         }
 
+        public override void GoNext()
+        {
+            base.GoNext();
+        }
+
         public override void GoNew()
         {
             if (!AllowNewRecord) return;
@@ -89,6 +94,7 @@ namespace FrontEnd.Controller
             NewRecordEvent?.Invoke(this, EventArgs.Empty);
             Records = Source.RecordPositionDisplayer();
         }
+
 
         public void RaisePropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
@@ -172,6 +178,7 @@ namespace FrontEnd.Controller
                 OpenNew();
             else 
             {
+                if (CurrentRecord!=null && CurrentRecord.IsNewRecord()) return;
                 base.GoNew();
                 if (CurrentRecord == null) throw new Exception("Cannot add a null");
                 Source.Add(CurrentRecord);
@@ -181,7 +188,7 @@ namespace FrontEnd.Controller
         private void CleanSource()
         {
             if (OpenWindowOnNew) return;
-            var roRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
+            List<AbstractModel> roRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
 
             foreach (var item in roRemove)
                 Source.Remove(item);

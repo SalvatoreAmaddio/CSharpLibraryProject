@@ -83,7 +83,7 @@ namespace FrontEnd.Forms.FormComponents
                             {
                                 if (listController.OpenWindowOnNew) break;
                             }
-                            else Controller.GoNew();
+                            Controller.GoNew();
                         }
                     }
                     else Controller.GoNext();
