@@ -81,11 +81,6 @@ namespace FrontEnd.Controller
             DeleteRecord();
         }
 
-        public override void GoNext()
-        {
-            base.GoNext();
-        }
-
         public override void GoNew()
         {
             if (!AllowNewRecord) return;
