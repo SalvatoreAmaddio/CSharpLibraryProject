@@ -4,7 +4,6 @@ using Backend.Exceptions;
 using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Events;
-using FrontEnd.Forms;
 using FrontEnd.Model;
 using FrontEnd.Notifier;
 using System.ComponentModel;
@@ -16,8 +15,11 @@ namespace FrontEnd.Controller
 {
     public interface IAbstractController : IAbstractSQLModelController, INotifier
     {
+        public void SetParentRecord(ISQLModel? ParentRecord);
+        public event NewRecordEventHandler? NewRecordEvent;
         public bool IsLoading { get; set; }
-        public void OnSubFormFilter(ISQLModel? parentRecord);
+        public void OnSubFormFilter();
+
     }
 
     public interface IAbstractFormController<M> : IAbstractController where M : ISQLModel, new()
@@ -53,8 +55,10 @@ namespace FrontEnd.Controller
         public event PropertyChangedEventHandler? PropertyChanged;
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
+        public event NewRecordEventHandler? NewRecordEvent;
 
         public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
+        protected ISQLModel? _parentRecord { get; private set; }
         public override ISQLModel? CurrentModel 
         { 
             get => _currentModel;
@@ -74,6 +78,7 @@ namespace FrontEnd.Controller
             get => (M?)CurrentModel;
             set => CurrentModel = value;
         }
+
         public AbstractController() : base()
         {
             UpdateCMD = new CMD<M>(Update);
@@ -99,6 +104,7 @@ namespace FrontEnd.Controller
             if (!AllowNewRecord) return;
             Navigator.MoveNew();
             CurrentRecord = new M();
+            NewRecordEvent?.Invoke(this, EventArgs.Empty);
             Records = Source.RecordPositionDisplayer();
         }
 
@@ -127,7 +133,13 @@ namespace FrontEnd.Controller
             GoAt(CurrentModel);
         }
 
-        public virtual void OnSubFormFilter(ISQLModel? parentRecord)
+        public void SetParentRecord(ISQLModel? parentRecord)
+        {
+            _parentRecord = parentRecord;
+            OnSubFormFilter();
+        }
+
+        public virtual void OnSubFormFilter()
         {
             throw new NotImplementedException();
         }

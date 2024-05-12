@@ -2,11 +2,12 @@
 
 namespace FrontEnd.Events
 {
+    public delegate void NewRecordEventHandler(object? sender, EventArgs e);
     public delegate void ParentRecordChangedEventHandler(object? sender, ParentRecordChangedArgs e);
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
     public delegate void BeforeUpdateEventHandler(object? sender, BeforeUpdateArgs e);
     public delegate void SelectionChangedEventHandler(object? sender, EventArgs e);
-
+    
     public class ParentRecordChangedArgs(object? oldValue, object? newValue) : EventArgs 
     {
         public ISQLModel? OldValue { get; } = (ISQLModel?)oldValue;

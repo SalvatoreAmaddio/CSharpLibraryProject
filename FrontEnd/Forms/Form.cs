@@ -209,7 +209,8 @@ namespace FrontEnd.Forms
 
         public SubForm() => ParentRecordChangedEvent += OnParentRecordChanged;
 
-        private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => GetController()?.OnSubFormFilter(e.NewValue);
+        private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => NotifyAbstractForm(e.NewValue);
+
         protected override void OnContentChanged(object oldContent, object newContent)
         {
             base.OnContentChanged(oldContent, newContent);
@@ -217,8 +218,14 @@ namespace FrontEnd.Forms
             if (abstractForm == null) throw new Exception("A SubForm can only contain an AbstractForm object.");
             abstractForm.DataContextChanged += OnAbstractFormDataContextChanged;
         }
-        private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => GetController()?.OnSubFormFilter(ParentRecord);
+        private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => NotifyAbstractForm(ParentRecord);
         private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
+
+        private void NotifyAbstractForm(ISQLModel? parentRecord) 
+        {
+            GetController()?.SetParentRecord(parentRecord);
+            IsEnabled = (parentRecord == null) ? false : !parentRecord.IsNewRecord();
+        }
 
         #region ParentRecord
         /// <summary>
