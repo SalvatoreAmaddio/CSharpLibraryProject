@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
-using FrontEnd.Events;
 using FrontEnd.Controller;
 
 namespace FrontEnd.Forms.FormComponents

@@ -1,4 +1,4 @@
-﻿using Backend.Model;
+﻿using FrontEnd.Model;
 
 namespace FrontEnd.Events
 {
@@ -7,11 +7,17 @@ namespace FrontEnd.Events
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
     public delegate void BeforeUpdateEventHandler(object? sender, BeforeUpdateArgs e);
     public delegate void SelectionChangedEventHandler(object? sender, EventArgs e);
-    
+    public delegate void OnDirtyChangedEventHandler(object? sender, EventArgs e);
+
+    public class OnDirtyChangedEventArgs(AbstractModel Model) : EventArgs
+    {
+        public AbstractModel Model { get; } = Model;
+    }
+
     public class ParentRecordChangedArgs(object? oldValue, object? newValue) : EventArgs 
     {
-        public ISQLModel? OldValue { get; } = (ISQLModel?)oldValue;
-        public ISQLModel? NewValue { get; } = (ISQLModel?)newValue;
+        public AbstractModel? OldValue { get; } = (AbstractModel?)oldValue;
+        public AbstractModel? NewValue { get; } = (AbstractModel?)newValue;
     }
 
     public abstract class UpdateArgs(string propertyName) : EventArgs

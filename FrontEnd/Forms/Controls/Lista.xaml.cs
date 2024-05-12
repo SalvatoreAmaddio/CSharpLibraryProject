@@ -1,16 +1,18 @@
-﻿using Backend.Controller;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using FrontEnd.Controller;
+using FrontEnd.Model;
 using Backend.Model;
+using Backend.Recordsource;
 
 namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
     /// Such as column's header, see the <see cref="Header"/> property.
-    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractSQLModelController"/>.
+    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractController"/>.
     /// <para/>
-    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="Backend.Recordsource.RecordSource"/>
+    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="RecordSource"/>
     /// </summary>
     public partial class Lista : ListView
     {
@@ -28,18 +30,18 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata());
         #endregion
 
-        private IAbstractSQLModelController? Controller { get; set; }
+        private IAbstractController? Controller { get; set; }
 
         public Lista() => InitializeComponent();
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            Controller = (IAbstractSQLModelController)DataContext;
+            Controller = (IAbstractController)DataContext;
             base.OnSelectionChanged(e);
             int lastIndex  = e.AddedItems.Count - 1;
             try 
             {
-                ISQLModel? lastSelectedObject = (ISQLModel?)e.AddedItems[lastIndex];
+                AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
                 Controller?.GoAt(lastSelectedObject);
             }
             catch (Exception) { }

@@ -1,4 +1,5 @@
-﻿
+﻿using Backend.Model;
+
 namespace Backend.Events
 {
     /// <summary>
@@ -6,7 +7,7 @@ namespace Backend.Events
     /// <para/>
     /// If any filter operations has been implemented in the Controller, The RecordSource can trigger them.
     /// <para/>
-    /// This delegate is called on the <see cref="Recordsource.IChildSource.Update(Database.CRUD, Model.ISQLModel)"/>
+    /// This delegate is called on the <see cref="Recordsource.IChildSource.Update(Database.CRUD, ISQLModel)"/>
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

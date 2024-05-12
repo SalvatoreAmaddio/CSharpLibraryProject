@@ -1,6 +1,6 @@
-﻿using Backend.Model;
-using FrontEnd.Controller;
+﻿using FrontEnd.Controller;
 using FrontEnd.Events;
+using FrontEnd.Model;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -221,7 +221,7 @@ namespace FrontEnd.Forms
         private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => NotifyAbstractForm(ParentRecord);
         private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
 
-        private void NotifyAbstractForm(ISQLModel? parentRecord) 
+        private void NotifyAbstractForm(AbstractModel? parentRecord) 
         {
             GetController()?.SetParentRecord(parentRecord);
             IsEnabled = (parentRecord == null) ? false : !parentRecord.IsNewRecord();
@@ -231,13 +231,13 @@ namespace FrontEnd.Forms
         /// <summary>
         /// Gets and Sets the <see cref="Form"/>'s <see cref="IAbstractController"/> CurrentRecord property which filter the records of the this SubForm.
         /// </summary>
-        public ISQLModel ParentRecord
+        public AbstractModel ParentRecord
         {
-            get => (ISQLModel)GetValue(ParentRecordProperty);
+            get => (AbstractModel)GetValue(ParentRecordProperty);
             set => SetValue(ParentRecordProperty, value);
         }
 
-        public static readonly DependencyProperty ParentRecordProperty = DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata(Changed));
+        public static readonly DependencyProperty ParentRecordProperty = DependencyProperty.Register(nameof(ParentRecord), typeof(AbstractModel), typeof(SubForm), new PropertyMetadata(Changed));
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
         #endregion
 

@@ -1,21 +1,8 @@
-﻿using System.Windows.Input;
-using Backend.Model;
+﻿using FrontEnd.Model;
+using System.Windows.Input;
 
 namespace FrontEnd.Controller
 {
-    public class CMDAsync(Func<Task> execute) : ICommand
-    {
-        public event EventHandler? CanExecuteChanged;
-        private readonly Func<Task> _execute = execute;
-
-        public bool CanExecute(object? parameter)
-        {
-            return true;
-        }
-
-        public async void Execute(object? parameter) => await _execute();
-    }
-
     public class CMD(Action execute) : ICommand
     {
         public event EventHandler? CanExecuteChanged;
@@ -32,7 +19,7 @@ namespace FrontEnd.Controller
         }
     }
 
-    public class CMD<M>(Action<M?> execute) : ICommand where M : ISQLModel, new()
+    public class CMD<M>(Action<M?> execute) : ICommand where M : AbstractModel, new()
     {
         public event EventHandler? CanExecuteChanged;
         private readonly Action<M?> _execute = execute;

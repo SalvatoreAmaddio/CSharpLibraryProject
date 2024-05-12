@@ -19,6 +19,7 @@ namespace FrontEnd.Model
             {
                 _isDirty = value;
                 RaisePropertyChanged(nameof(IsDirty));
+                //OnDirtyChanged
             }
         }
 

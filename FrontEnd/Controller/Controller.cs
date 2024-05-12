@@ -15,7 +15,7 @@ namespace FrontEnd.Controller
 {
     public interface IAbstractController : IAbstractSQLModelController, INotifier
     {
-        public void SetParentRecord(ISQLModel? ParentRecord);
+        public void SetParentRecord(AbstractModel? ParentRecord);
         public event NewRecordEventHandler? NewRecordEvent;
         public bool IsLoading { get; set; }
         public void OnSubFormFilter();
@@ -58,7 +58,7 @@ namespace FrontEnd.Controller
         public event NewRecordEventHandler? NewRecordEvent;
 
         public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
-        protected ISQLModel? _parentRecord { get; private set; }
+        protected AbstractModel? _parentRecord { get; private set; }
         public override ISQLModel? CurrentModel 
         { 
             get => _currentModel;
@@ -133,7 +133,7 @@ namespace FrontEnd.Controller
             GoAt(CurrentModel);
         }
 
-        public void SetParentRecord(ISQLModel? parentRecord)
+        public void SetParentRecord(AbstractModel? parentRecord)
         {
             _parentRecord = parentRecord;
             OnSubFormFilter();

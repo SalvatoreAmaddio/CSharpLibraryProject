@@ -1,6 +1,4 @@
-﻿using Backend.Controller;
-using Backend.Model;
-using Backend.Recordsource;
+﻿using Backend.Recordsource;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,10 +17,10 @@ namespace FrontEnd.Forms
         {
             base.OnSelectionChanged(e);
             var item = GetSource().FirstOrDefault(s => s.Equals(SelectedItem));
-            await DoMe(item);
+            await FillText(item);
         }
 
-        public Task DoMe(object? item) 
+        private Task FillText(object? item) 
         {
             Text = item?.ToString();
             return Task.CompletedTask;

@@ -1,4 +1,4 @@
-﻿using Backend.Model;
+﻿using FrontEnd.Model;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,14 +37,14 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty DeleteCMDProperty =
         DependencyProperty.Register(nameof(DeleteCMD), typeof(ICommand), typeof(CommandPanel), new PropertyMetadata());
 
-        public ISQLModel CommandParameter
+        public AbstractModel CommandParameter
         {
-            get => (ISQLModel)GetValue(CommandParameterProperty);
+            get => (AbstractModel)GetValue(CommandParameterProperty);
             set => SetValue(CommandParameterProperty, value);
         }
 
         public static readonly DependencyProperty CommandParameterProperty =
-        DependencyProperty.Register(nameof(CommandParameter), typeof(ISQLModel), typeof(CommandPanel), new PropertyMetadata());
+        DependencyProperty.Register(nameof(CommandParameter), typeof(AbstractModel), typeof(CommandPanel), new PropertyMetadata());
 
         static CommandPanel() => DefaultStyleKeyProperty.OverrideMetadata(typeof(CommandPanel), new FrameworkPropertyMetadata(typeof(CommandPanel)));
     }
