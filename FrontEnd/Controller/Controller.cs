@@ -15,7 +15,10 @@ using FrontEnd.Forms.FormComponents;
 
 namespace FrontEnd.Controller
 {
-    public interface ISubFormController 
+    /// <summary>
+    /// This interface defines a set of methods and properties that Controllers dealing with SubForm objects must implements
+    /// </summary>
+    public interface ISubFormController
     {
         /// <summary>
         /// Holds a reference to the SubForm's ParentRecord property. This property is set by the <see cref="SetParentRecord(AbstractModel?)"/>  called within the SubForm object.
@@ -66,7 +69,11 @@ namespace FrontEnd.Controller
         public void OnSubFormFilter();
 
     }
-    public interface IAbstractController : IAbstractSQLModelController, INotifier
+    
+    /// <summary>
+    /// This interface extends <see cref="IAbstractSQLModelController"/> and adds properties for managing GUI functionalities.
+    /// </summary>
+    public interface IAbstractFormController : IAbstractSQLModelController, INotifier
     {
         /// <summary>
         /// Gets and Sets a boolean indicating if the Form's ProgressBar is running/> 
@@ -75,11 +82,11 @@ namespace FrontEnd.Controller
     }
     
     /// <summary>
-    /// A non generic version of <see cref="IAbstractFormListController{M}"/> which is used by Form UI Components to manage filtering operations.
+    /// This interface extends <see cref="IAbstractFormController"/> and adds a set of methods and properties used by Form UI Components to manage filtering operations.
     /// <para/>
     /// see also <seealso cref="RecordTracker"/>, <seealso cref="FilterOption"/>
     /// </summary>
-    public interface IAbstractListController : IAbstractController
+    public interface IAbstractFormListController : IAbstractFormController
     {
         /// <summary>
         /// Override this method to implement your filter logic. 
@@ -134,7 +141,11 @@ namespace FrontEnd.Controller
 
     }
 
-    public interface IAbstractFormController<M> : IAbstractController where M : AbstractModel, new()
+    /// <summary>
+    /// This Interface extends <see cref="IAbstractFormController"/> and adds a set of ICommand properties.
+    /// </summary>
+    /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
+    public interface IAbstractFormController<M> : IAbstractFormController where M : AbstractModel, new()
     {
         /// <summary>
         /// A more concrete version of <see cref="IAbstractSQLModelController.CurrentModel"/>
@@ -145,6 +156,10 @@ namespace FrontEnd.Controller
         public ICommand DeleteCMD { get; set; }
     }
 
+    /// <summary>
+    /// Actual implementation of <see cref="IAbstractFormController{M}"/>
+    /// </summary>
+    /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     public abstract class AbstractFormController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
     {
         string _search = string.Empty;
@@ -256,7 +271,11 @@ namespace FrontEnd.Controller
         }
     }
 
-    public interface IAbstractFormListController<M> : IAbstractFormController<M>, IAbstractListController where M : AbstractModel, new()
+    /// <summary>
+    /// This Interface extends <see cref="IAbstractFormController{M}"/> and <see cref="IAbstractFormListController"/> and adds a set of properties necessary to deal with <see cref="FormList"/> objects.
+    /// </summary>
+    /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
+    public interface IAbstractFormListController<M> : IAbstractFormController<M>, IAbstractFormListController where M : AbstractModel, new()
     {
         /// <summary>
         /// Gets and Sets the command to execute to open a Record.
@@ -274,6 +293,10 @@ namespace FrontEnd.Controller
         public string Search { get; set; }
     }
 
+    /// <summary>
+    /// This class extends <see cref="AbstractFormListController{M}"/> and implements <see cref="IAbstractFormListController{M}"/>
+    /// </summary>
+    /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     public abstract class AbstractFormListController<M> : AbstractFormController<M>, IAbstractFormListController<M> where M : AbstractModel, new()
     {
         protected FilterQueryBuilder QueryBuiler;

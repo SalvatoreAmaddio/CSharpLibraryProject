@@ -30,7 +30,7 @@ namespace FrontEnd.Forms.FormComponents
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is IAbstractController)
+            if (e.NewValue is IAbstractFormController)
                 SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
         }
 

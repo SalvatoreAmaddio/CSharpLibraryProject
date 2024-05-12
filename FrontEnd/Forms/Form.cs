@@ -119,7 +119,7 @@ namespace FrontEnd.Forms
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is IAbstractController) 
+            if (e.NewValue is IAbstractFormController) 
             {
                 Binding isLoadingBinding = new(nameof(IsLoading))
                 {
@@ -235,7 +235,7 @@ namespace FrontEnd.Forms
 
         #region ParentRecord
         /// <summary>
-        /// Gets and Sets the <see cref="Form"/>'s <see cref="IAbstractController"/> CurrentRecord property which filter the records of the this SubForm.
+        /// Gets and Sets the <see cref="Form"/>'s <see cref="IAbstractFormController"/> CurrentRecord property which filter the records of the this SubForm.
         /// </summary>
         public AbstractModel ParentRecord
         {

@@ -53,7 +53,7 @@ namespace FrontEnd.Forms.FormComponents
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is not IAbstractController) throw new Exception("DataContext should be a Controller");
+            if (e.NewValue is not IAbstractFormController) throw new Exception("DataContext should be a Controller");
             Binding RecordDisplayerBinding = new("Records")
             {
                 Source = e.NewValue,
@@ -71,7 +71,7 @@ namespace FrontEnd.Forms.FormComponents
 
         protected virtual void OnClicked(int movement)
         {
-            IAbstractController? Controller = DataContext as IAbstractController;
+            IAbstractFormController? Controller = DataContext as IAbstractFormController;
 
             if (Controller == null) return;
             switch (movement)
@@ -87,7 +87,7 @@ namespace FrontEnd.Forms.FormComponents
                     {
                         if (Controller.AllowNewRecord) 
                         {
-                            if (Controller is IAbstractListController) break;
+                            if (Controller is IAbstractFormListController) break;
                             else Controller.GoNew();
                         }
                     } 

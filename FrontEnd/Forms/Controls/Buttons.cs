@@ -16,7 +16,7 @@ namespace FrontEnd.Forms
 
        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
        {
-            if (e.NewValue is not IAbstractController controller) return;
+            if (e.NewValue is not IAbstractFormController controller) return;
 
             Binding CommandParameterBinding = new("CurrentRecord")
             {

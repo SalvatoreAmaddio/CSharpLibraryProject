@@ -10,7 +10,7 @@ namespace FrontEnd.Forms
     /// <summary>
     /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
     /// Such as column's header, see the <see cref="Header"/> property.
-    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractController"/>.
+    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
     /// <para/>
     /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="RecordSource"/>
     /// </summary>
@@ -30,13 +30,13 @@ namespace FrontEnd.Forms
             DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata());
         #endregion
 
-        private IAbstractController? Controller { get; set; }
+        private IAbstractFormController? Controller { get; set; }
 
         public Lista() => InitializeComponent();
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            Controller = (IAbstractController)DataContext;
+            Controller = (IAbstractFormController)DataContext;
             base.OnSelectionChanged(e);
             int lastIndex  = e.AddedItems.Count - 1;
             try 
