@@ -9,7 +9,7 @@ namespace MyApplication.Controller
 
         public override int DatabaseIndex => 3;
 
-        public override void Filter()
+        public override void OnOptionFilter()
         {
         }
 

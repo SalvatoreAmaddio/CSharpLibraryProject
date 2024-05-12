@@ -37,9 +37,10 @@ namespace MyApplication.Controller
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
             Source.ReplaceRange(results);
             GoFirst();
+
         }
 
-        public override async void Filter()
+        public override async void OnOptionFilter()
         {
             QueryBuiler.Clear();
             QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));

@@ -198,7 +198,26 @@ namespace FrontEnd.Forms
     }
     public class SubForm : ContentControl
     {
+        private AbstractForm? abstractForm;
+
+        private event ParentRecordChangedEventHandler? ParentRecordChangedEvent;
         static SubForm() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SubForm), new FrameworkPropertyMetadata(typeof(SubForm)));
+
+        public SubForm() => ParentRecordChangedEvent += OnParentRecordChanged;
+
+        private void OnParentRecordChanged(object? sender, ParentRecordChangedArgs e) => GetController()?.OnSubFormFilter(e.NewValue);
+
+        protected override void OnContentChanged(object oldContent, object newContent)
+        {
+            base.OnContentChanged(oldContent, newContent);
+            abstractForm = (AbstractForm?)newContent;
+            if (abstractForm == null) throw new Exception("A SubForm can only contain an AbstractForm object.");
+            abstractForm.DataContextChanged += OnAbstractFormDataContextChanged;
+        }
+
+        private void OnAbstractFormDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) => GetController()?.OnSubFormFilter(ParentRecord);
+
+        private IAbstractController? GetController() => (IAbstractController?)abstractForm?.DataContext;
 
         #region ParentRecord
         public ISQLModel ParentRecord
@@ -210,10 +229,8 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty ParentRecordProperty =
             DependencyProperty.Register(nameof(ParentRecord), typeof(ISQLModel), typeof(SubForm), new PropertyMetadata(Changed));
 
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var x = e.NewValue;
-        }
+        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
+        ((SubForm)d).OnParentRecordChanged(d,new(e.OldValue, e.NewValue));
         #endregion
 
     }

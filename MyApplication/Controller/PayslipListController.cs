@@ -1,4 +1,5 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Model;
+using FrontEnd.Controller;
 using MyApplication.Model;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,20 @@ namespace MyApplication.Controller
 {
     public class PayslipListController : AbstractListController<Payslip>
     {
-        public override string DefaultSearchQry { get; set; } = string.Empty;
+        public override string DefaultSearchQry { get; set; } = $"SELECT * FROM {nameof(Payslip)} WHERE EmployeeID = @employeeID;";
 
         public override int DatabaseIndex => 4;
 
-        public override void Filter()
+        public override async void OnSubFormFilter(ISQLModel? parentRecord)
+        {
+            QueryBuiler.Clear();
+            QueryBuiler.AddParameter("employeeID", parentRecord?.GetTablePK()?.GetValue());
+            var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
+            Source.ReplaceRange(results);
+            GoFirst();
+        }
+
+        public override void OnOptionFilter()
         {
         }
 

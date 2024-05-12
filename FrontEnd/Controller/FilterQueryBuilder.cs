@@ -42,10 +42,12 @@ namespace FrontEnd.Controller
         public void AddParameter(string placeholder, object? value) => _parameters.Add(new(placeholder, value));
 
         /// <summary>
-        /// Add a condition to the WHERE clause to the Default Query. <para/>
+        /// Add a condition to the WHERE clause to the Default Query.<para/>
+        /// If the <paramref name="condition"/> is null or empty, no condition is added and this method return false.
         /// </summary>
         /// <param name="condition"></param>
-        public void AddCondition(string condition)
+        /// <returns>true if the condition was added.</returns>
+        public bool AddCondition(string condition)
         {
             if (condition.Length > 0)
             {
@@ -53,7 +55,9 @@ namespace FrontEnd.Controller
                     _qry = _defaultQuery;
 
                 _qry += $" AND ({condition})";
+                return true;
             }
+            return false;
         }
     }
 }

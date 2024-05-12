@@ -4,6 +4,7 @@ using Backend.Exceptions;
 using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Events;
+using FrontEnd.Forms;
 using FrontEnd.Model;
 using FrontEnd.Notifier;
 using System.ComponentModel;
@@ -16,7 +17,7 @@ namespace FrontEnd.Controller
     public interface IAbstractController : IAbstractSQLModelController, INotifier
     {
         public bool IsLoading { get; set; }
-
+        public void OnSubFormFilter(ISQLModel? parentRecord);
     }
 
     public interface IAbstractFormController<M> : IAbstractController where M : ISQLModel, new()
@@ -63,7 +64,6 @@ namespace FrontEnd.Controller
                 RaisePropertyChanged(nameof(CurrentRecord));
             }
         }
-
         public override bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
         public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
         public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
@@ -126,6 +126,11 @@ namespace FrontEnd.Controller
             Db.Records?.NotifyChildren(crud, Db.Model);
             GoAt(CurrentModel);
         }
+
+        public virtual void OnSubFormFilter(ISQLModel? parentRecord)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IAbstractFormListController<M> : IAbstractFormController<M> where M : ISQLModel, new()
@@ -137,7 +142,7 @@ namespace FrontEnd.Controller
 
     public interface IListController
     {
-        public void Filter();
+        public void OnOptionFilter();
 
         /// <summary>
         /// Gets and Sets the default Search Query to be used. This property works in conjunction with a <see cref="FilterQueryBuilder"/> object.
@@ -166,10 +171,10 @@ namespace FrontEnd.Controller
             Source.RunFilter += OnSourceRunFilter;
         }
 
-        protected void OnSourceRunFilter(object? sender, EventArgs e) => Filter();
+        protected void OnSourceRunFilter(object? sender, EventArgs e) => OnOptionFilter();
 
         public override void GoNew() => OpenNew();
-        abstract public void Filter();
+        abstract public void OnOptionFilter();
 
         /// <summary>
         /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>

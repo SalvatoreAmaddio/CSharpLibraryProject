@@ -8,7 +8,6 @@ namespace Backend.Controller
     public abstract class AbstractSQLModelController : IAbstractSQLModelController
     {
         public IAbstractDatabase Db { get; protected set; } = null!;
-
         public abstract int DatabaseIndex { get; }
         public RecordSource Source { get; protected set; } = null!;
         protected INavigator Navigator => Source.Navigate();
@@ -16,12 +15,13 @@ namespace Backend.Controller
         {
             Db = DatabaseManager.Do[DatabaseIndex];
             if (Db.Records == null) throw new Exception($"{Db} has no records");
-            Source = new(Db.Records);
-            Source.Controller = this;
+            Source = new(Db.Records)
+            {
+                Controller = this
+            };
             Db.Records.AddChild(Source);
             GoFirst();
         }
-
 
         public virtual bool AllowNewRecord { get; set; }
         public virtual ISQLModel? CurrentModel { get; set; }

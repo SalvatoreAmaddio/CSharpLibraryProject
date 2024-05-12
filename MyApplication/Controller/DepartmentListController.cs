@@ -1,4 +1,5 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Model;
+using FrontEnd.Controller;
 using MyApplication.Model;
 
 namespace MyApplication.Controller
@@ -9,7 +10,7 @@ namespace MyApplication.Controller
 
         public override int DatabaseIndex => 2;
 
-        public override void Filter()
+        public override void OnOptionFilter()
         {
         }
 

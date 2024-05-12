@@ -8,7 +8,7 @@ namespace MyApplication.Controller
         public override string DefaultSearchQry { get; set; } = string.Empty;
         public override int DatabaseIndex => 1;
 
-        public override void Filter()
+        public override void OnOptionFilter()
         {
         }
 
