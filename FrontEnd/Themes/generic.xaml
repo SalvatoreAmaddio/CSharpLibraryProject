@@ -70,7 +70,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FormList}">
-                    <Border BorderBrush="Black" BorderThickness="1">
+                    <Border BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="{TemplateBinding MenuRow}"/>
@@ -104,12 +104,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SubForm}">
-                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="2">
                         <ContentPresenter
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

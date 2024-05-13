@@ -6,6 +6,19 @@ namespace FrontEnd.Utils
 {
     public class Helper
     {
+        public static T? FindAncestor<T>(DependencyObject? current) where T : DependencyObject
+        {
+            if (current == null) return null;
+            do
+            {
+                if (current is T)
+                    return (T)current;
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
         public static Window? GetActiveWindow()
         {
             foreach (Window window in Application.Current.Windows)

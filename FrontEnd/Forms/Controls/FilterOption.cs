@@ -3,6 +3,7 @@ using FrontEnd.FilterSource;
 using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FrontEnd.Forms
 {
@@ -36,6 +37,31 @@ namespace FrontEnd.Forms
         };
 
         static FilterOption() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FilterOption), new FrameworkPropertyMetadata(typeof(FilterOption)));
+
+        #region IsWithinList
+        /// <summary>
+        /// Sets a Relative Source Binding between the button's DataContext and the <see cref="Lista"/>'s DataContext.
+        /// </summary>
+        public bool IsWithinList
+        {
+            private get => (bool)GetValue(IsWithinListProperty);
+            set => SetValue(IsWithinListProperty, value);
+        }
+
+        public static readonly DependencyProperty IsWithinListProperty =
+            DependencyProperty.Register(nameof(IsWithinList), typeof(bool), typeof(FilterOption), new PropertyMetadata(false, OnIsWithinListPropertyChanged));
+
+        private static void OnIsWithinListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            bool isWithinList = (bool)e.NewValue;
+            if (isWithinList)
+                ((FilterOption)d).SetBinding(DataContextProperty, new Binding(nameof(DataContext))
+                {
+                    RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
+                });
+            else BindingOperations.ClearBinding(d, DataContextProperty);
+        }
+        #endregion
 
         private void ResetDropDownButtonAppereance()
         {

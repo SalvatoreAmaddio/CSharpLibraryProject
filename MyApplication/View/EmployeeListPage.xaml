@@ -28,9 +28,9 @@
                     <Label Content="First Name" Grid.Column="1"/>
                     <Label Content="Last Name" Grid.Column="2"/>
                     <Label Content="DOB" Grid.Column="3"/>
-                    <fr:FilterOption Grid.Column="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
-                    <fr:FilterOption Grid.Column="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
-                    <fr:FilterOption Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
+                    <fr:FilterOption Grid.Column="4" IsWithinList="True" ItemsSource="{Binding GenderOptions}" Text="Gender"/>
+                    <fr:FilterOption Grid.Column="5" IsWithinList="True" ItemsSource="{Binding TitleOptions}" Text="Job Title"/>
+                    <fr:FilterOption Grid.Column="6" IsWithinList="True" ItemsSource="{Binding DepartmentOptions}" Text="Department"/>
                     <Label Content="COMMANDS" Grid.Column="7" Grid.ColumnSpan="3"/>
                 </Grid>
             </fr:Lista.Header>
@@ -41,12 +41,12 @@
                             <fr:Text Text="{Binding FirstName}"/>
                             <fr:Text Grid.Column="1" Text="{Binding LastName}"/>
                             <fr:DateField Grid.Column="2" SelectedDate="{Binding DOB}" DisplayDate="{Binding DOB}"/>
-                            <fr:Combo Grid.Column="3" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Genders.Source}" SelectedItem="{Binding Gender}"/>
-                            <fr:Combo Grid.Column="4" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Titles.Source}" SelectedItem="{Binding JobTitle}"/>
-                            <fr:Combo Grid.Column="5" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext.Departments.Source}" SelectedItem="{Binding Department}"/>
-                            <fr:SaveButton Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
-                            <fr:DeleteButton Grid.Column="7" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
-                            <fr:OpenButton Grid.Column="8" DataContext="{Binding RelativeSource={RelativeSource AncestorType=fr:Lista}, Path=DataContext}"/>
+                            <fr:Combo Grid.Column="3" ControllerRecordSource="Genders.Source" SelectedItem="{Binding Gender}"/>
+                            <fr:Combo Grid.Column="4" ControllerRecordSource="Titles.Source" SelectedItem="{Binding JobTitle}"/>
+                            <fr:Combo Grid.Column="5" ControllerRecordSource="Departments.Source" SelectedItem="{Binding Department}"/>
+                            <fr:SaveButton Grid.Column="6" IsWithinList="True"/>
+                            <fr:DeleteButton Grid.Column="7" IsWithinList="True"/>
+                            <fr:OpenButton Grid.Column="8" IsWithinList="True"/>
                         </Grid>
                     </fr:FormRow>
                 </DataTemplate>

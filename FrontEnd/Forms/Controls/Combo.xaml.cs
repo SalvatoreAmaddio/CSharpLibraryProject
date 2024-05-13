@@ -1,6 +1,7 @@
 ﻿using Backend.Recordsource;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FrontEnd.Forms
 {
@@ -39,6 +40,30 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty PlaceholderProperty =
             DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(Combo), new PropertyMetadata(string.Empty));
         #endregion
+
+        #region ControllerSource
+        /// <summary>
+        /// Sets a Relative Source Binding between the combo's ItemSource and a <see cref="Lista"/>'s DataContext's IEnumerable Property.
+        /// </summary>
+        public string ControllerRecordSource
+        {
+            private get => (string)GetValue(ControllerRecordSourceProperty);
+            set => SetValue(ControllerRecordSourceProperty, value);
+        }
+
+        public static readonly DependencyProperty ControllerRecordSourceProperty = DependencyProperty.Register(nameof(ControllerRecordSource), typeof(string), typeof(Combo), new PropertyMetadata(string.Empty, OnIsWithinListPropertyChanged));
+        private static void OnIsWithinListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            bool isEmpty = string.IsNullOrEmpty(e.NewValue.ToString());
+            if (!isEmpty)
+                ((Combo)d).SetBinding(ItemsSourceProperty, new Binding($"{nameof(DataContext)}.{e.NewValue}")
+                {
+                    RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
+                });
+            else BindingOperations.ClearBinding(d, ItemsSourceProperty);
+        }
+        #endregion
+
 
     }
 }

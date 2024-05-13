@@ -3,9 +3,7 @@ using FrontEnd.Forms.FormComponents;
 using FrontEnd.Model;
 using FrontEnd.Utils;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace FrontEnd.Controller
 {
