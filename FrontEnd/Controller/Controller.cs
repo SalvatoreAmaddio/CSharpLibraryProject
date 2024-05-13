@@ -186,15 +186,17 @@ namespace FrontEnd.Controller
         private void OnSourceRunFilter(object? sender, EventArgs e) => OnOptionFilter();
         public override void GoNew() 
         {
-            if (OpenWindowOnNew)
-                OpenNew();
-            else 
+            if (OpenWindowOnNew) 
             {
-                Source.Add(new M());
-                Navigator.MoveLast();
-                CurrentModel = Navigator.Current;
-                Records = "New Record";
+                base.GoNew();
+                OpenNew();
+                return;
             }
+
+            Source.Add(new M());
+            Navigator.MoveLast();
+            CurrentModel = Navigator.Current;
+            Records = "New Record";
         }
 
         public void CleanSource()
@@ -228,10 +230,7 @@ namespace FrontEnd.Controller
         {
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
-            else if (record.IsNewRecord() && !OpenWindowOnNew) 
-            {
-                Navigator.MoveNew();
-            }
+            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.MoveNew();
             else
             {
                 CleanSource();
