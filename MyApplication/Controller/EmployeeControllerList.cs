@@ -50,7 +50,7 @@ namespace MyApplication.Controller
 
         protected override void Open(Employee? model)
         {
-            var win = new EmployeeForm(model);
+            EmployeeForm win = new(model);
             win.Show();
         }
     }
