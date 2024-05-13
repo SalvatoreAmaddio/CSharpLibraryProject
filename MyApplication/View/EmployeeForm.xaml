@@ -40,10 +40,7 @@
                     </fr:FormList.Header>
                     <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
                         <fr:Lista.Header>
-                            <Grid fr:Definition.ColumnDefinitions="24,100,100,50,50">
-                                <Grid.Resources>
-                                    <Style TargetType="Label" BasedOn="{StaticResource ColumnStyle}"/>
-                                </Grid.Resources>
+                            <Grid fr:Definition.ColumnDefinitions="100,100,50,50">
                                 <Label Content="Date" Grid.Column="1"/>
                                 <Label Content="Salary" Grid.Column="2"/>
                                 <Label Content="COMMANDS" Grid.Column="3" Grid.ColumnSpan="2"/>

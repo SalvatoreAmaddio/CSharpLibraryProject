@@ -21,10 +21,7 @@
         </fr:FormList.Header>
         <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
             <fr:Lista.Header>
-                <Grid fr:Definition.ColumnDefinitions="24,150,150,100,70,100,100,50,50,50">
-                    <Grid.Resources>
-                        <Style TargetType="Label" BasedOn="{StaticResource ColumnStyle}"/>
-                    </Grid.Resources>
+                <Grid fr:Definition.ColumnDefinitions="150,150,100,70,100,100,50,50,50">
                     <Label Content="First Name" Grid.Column="1"/>
                     <Label Content="Last Name" Grid.Column="2"/>
                     <Label Content="DOB" Grid.Column="3"/>

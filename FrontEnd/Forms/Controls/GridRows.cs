@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FrontEnd.Utils;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace FrontEnd.Forms
@@ -23,11 +24,18 @@ namespace FrontEnd.Forms
         public static void SetColumnDefinitions(DependencyObject obj, string value) => obj.SetValue(ColumnDefinitionsProperty, value);
 
         private static void OnDefinitionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            {
+        {
+                
                 if (d is Grid grid)
                 {
+                    grid.OnApplyTemplate();
                     bool isRow = e.Property.Name.Equals("Rows");
                     string? definitions = e.NewValue as string;
+
+                    if (grid.Name.Equals("listHeader") && !isRow) 
+                    {
+                        definitions = $"24,{definitions}";
+                    }
                     if (!string.IsNullOrEmpty(definitions))
                     {
                         if (isRow) grid.RowDefinitions.Clear();

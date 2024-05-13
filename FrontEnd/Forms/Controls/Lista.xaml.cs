@@ -27,8 +27,30 @@ namespace FrontEnd.Forms
         }
 
         public static readonly DependencyProperty HeaderProperty =
-            DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata());
+            DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata(OnHeaderPropertyChanged));
+
+        private static void OnHeaderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ResourceDictionary resourceDict = new ()
+            {
+                Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/styles.xaml")
+            };
+            Style? labelStyle = null;
+
+            if (resourceDict["ColumnStyle"] is Style columnStyle)
+                labelStyle = new Style(targetType: typeof(Label), basedOn: columnStyle);
+
+            Grid grid = (Grid)e.NewValue;
+            grid.Resources.MergedDictionaries.Add(resourceDict);
+            grid.Resources.Add(typeof(Label), CreateStyle(labelStyle));
+            grid.Name = "listHeader";
+        }
         #endregion
+        
+        private static Style CreateStyle(Style? basedOn) 
+        {
+            return new Style(targetType: typeof(Label), basedOn: basedOn);
+        }
 
         private IAbstractFormController? Controller { get; set; }
 
