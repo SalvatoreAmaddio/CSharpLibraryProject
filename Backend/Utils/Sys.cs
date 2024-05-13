@@ -25,7 +25,7 @@ namespace Backend.Utils
 
         public static void LoadEmbeddedDll(string dllName)
         {
-            string architecture = IntPtr.Size == 8 ? "64bit" : "x86";
+            string architecture = IntPtr.Size == 8 ? "bit64" : "x86";
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = $"Backend.Database.{architecture}.{dllName}";
 

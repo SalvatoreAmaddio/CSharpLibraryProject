@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Database\64bit\SQLite.Interop.dll" />
+    <EmbeddedResource Include="Database\bit64\SQLite.Interop.dll" />
   </ItemGroup>
 
   <ItemGroup>
