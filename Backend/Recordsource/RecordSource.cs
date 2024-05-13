@@ -7,16 +7,11 @@ using MvvmHelpers;
 
 namespace Backend.Recordsource
 {
-    public interface IRecordSource : IParentSource, IChildSource
-    { 
-    
-    }
-
     /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
-    public class RecordSource : ObservableRangeCollection<ISQLModel>, IRecordSource
+    public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
         protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];

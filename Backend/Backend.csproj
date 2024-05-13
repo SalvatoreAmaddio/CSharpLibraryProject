@@ -22,7 +22,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Database\SQLite.Interop.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Database\64bit\SQLite.Interop.dll" />
   </ItemGroup>
 
   <ItemGroup>
