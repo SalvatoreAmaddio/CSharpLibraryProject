@@ -96,8 +96,8 @@ namespace Backend.Recordsource
             switch (crud)
             {
                 case CRUD.INSERT:
-                    Add(model);
-                    Controller?.GoLast();
+//                    Add(model);
+//                    Controller?.GoLast();
                     break;
               //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
                 //  break;

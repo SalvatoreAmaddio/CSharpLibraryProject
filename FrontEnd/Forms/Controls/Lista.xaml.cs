@@ -52,13 +52,12 @@ namespace FrontEnd.Forms
             return new Style(targetType: typeof(Label), basedOn: basedOn);
         }
 
-        private IAbstractFormController? Controller { get; set; }
+        private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
         public Lista() => InitializeComponent();
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            Controller = (IAbstractFormController)DataContext;
             base.OnSelectionChanged(e);
             int lastIndex  = e.AddedItems.Count - 1;
             try 
@@ -69,6 +68,11 @@ namespace FrontEnd.Forms
             catch (Exception) { }
         }
 
-        private void OnListViewItemGotFocus(object sender, RoutedEventArgs e) => SelectedItem = ((ListViewItem)sender).DataContext;
+        private void OnListViewItemGotFocus(object sender, RoutedEventArgs e) 
+        {
+            Controller?.CleanSource();
+            AbstractModel? record = ((ListViewItem)sender).DataContext as AbstractModel;
+            Controller?.GoAt(record);
+        }
     }
 }

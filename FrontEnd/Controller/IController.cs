@@ -139,6 +139,8 @@ namespace FrontEnd.Controller
         /// </summary>
         public bool OpenWindowOnNew { get; set; }
 
+        public void CleanSource();
+
     }
 
     /// <summary>

@@ -189,7 +189,7 @@ namespace FrontEnd.Controller
             }
         }
 
-        private void CleanSource()
+        public void CleanSource()
         {
             if (OpenWindowOnNew) return;
             List<AbstractModel> toRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
