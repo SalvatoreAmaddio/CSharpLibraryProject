@@ -33,7 +33,7 @@
             </fr:Lista.Header>
             <fr:Lista.ItemTemplate>
                 <DataTemplate>
-                    <fr:FormRow IsDirty="{Binding IsDirty}">
+                    <fr:FormRow>
                         <Grid fr:Definition.RowDefinitions="30" fr:Definition.ColumnDefinitions="150,150,100,70,100,100,50,50,50">
                             <fr:Text Text="{Binding FirstName}"/>
                             <fr:Text Grid.Column="1" Text="{Binding LastName}"/>

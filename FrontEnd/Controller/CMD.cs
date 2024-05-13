@@ -1,8 +1,5 @@
 ﻿using Backend.Utils;
-using FrontEnd.Forms.FormComponents;
 using FrontEnd.Model;
-using FrontEnd.Utils;
-using System.Windows;
 using System.Windows.Input;
 
 namespace FrontEnd.Controller

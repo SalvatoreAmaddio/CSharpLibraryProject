@@ -31,10 +31,8 @@ namespace FrontEnd.Forms.FormComponents
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is IAbstractFormController)
-                SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
-            if (e.NewValue is AbstractModel)
-                SetBinding(IsDirtyProperty, new Binding("IsDirty") { Source = e.NewValue });
+            string path = (e.NewValue is IAbstractFormController) ? "CurrentModel.IsDirty" : nameof(IsDirty);
+            SetBinding(IsDirtyProperty, new Binding(path) { Source = e.NewValue });
         }
 
     }

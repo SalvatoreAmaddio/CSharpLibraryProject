@@ -58,7 +58,7 @@
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         
-                        <formComp:RecordStatus IsDirty="{TemplateBinding IsDirty}" VerticalAlignment="Top" VerticalContentAlignment="Top" Height="30"/>
+                        <formComp:RecordStatus VerticalAlignment="Top" VerticalContentAlignment="Top" Height="30"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

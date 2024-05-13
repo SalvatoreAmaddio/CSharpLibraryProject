@@ -178,20 +178,6 @@ namespace FrontEnd.Forms
     /// </summary>
     public class FormRow : Form 
     {
-        #region IsDirty
-        /// <summary>
-        /// Gets and Sets a Flag that indicates if the current Record is being changed.
-        /// </summary>
-        public bool IsDirty
-        {
-            get => (bool)GetValue(IsDirtyProperty);
-            set => SetValue(IsDirtyProperty, value);
-        }
-
-        public static readonly DependencyProperty IsDirtyProperty =
-            DependencyProperty.Register(nameof(IsDirty), typeof(bool), typeof(FormRow), new PropertyMetadata());
-        #endregion
-
         static FormRow() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
 
         public FormRow() => RecordTrackerRow = new(0);
