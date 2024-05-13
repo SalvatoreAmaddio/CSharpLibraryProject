@@ -192,9 +192,9 @@ namespace FrontEnd.Controller
         private void CleanSource()
         {
             if (OpenWindowOnNew) return;
-            List<AbstractModel> roRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
+            List<AbstractModel> toRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
 
-            foreach (var item in roRemove)
+            foreach (var item in toRemove)
                 Source.Remove(item);
         }
 
