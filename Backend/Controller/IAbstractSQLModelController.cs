@@ -114,6 +114,9 @@ namespace Backend.Controller
         /// </summary>
         public string Records { get; }
 
-        public bool VoidParentUpdate { get; set; }
+        /// <summary>
+        /// Indicates if the RecordSource should bypass its Child Source's update.
+        /// </summary>
+        public bool VoidParentUpdate { get; }
     }
 }

@@ -108,6 +108,7 @@ namespace Backend.Recordsource
                     if (navigator == null) throw new NoNavigatorException();
                     if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
                     else Controller?.GoPrevious();
+                    if (Controller!.VoidParentUpdate) return;
                     break;
             }
             RunFilter?.Invoke(this, new());
