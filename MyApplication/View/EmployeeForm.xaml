@@ -33,10 +33,10 @@
             <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
             <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>
 
-            <fr:SubForm x:Name="sub" Grid.Row="7" Grid.ColumnSpan="4" ParentRecord="{Binding CurrentRecord}">
+            <fr:SubForm x:Name="sub" Grid.Row="7" Grid.ColumnSpan="4" ParentRecord="{Binding CurrentRecord}" Margin="0,10,0,0">
                 <fr:FormList HorizontalAlignment="Stretch" DataContext="{Binding Payslips}" BorderThickness="0">
                     <fr:FormList.Header>
-                        <Label Content="Subform"/>
+                        <Label Content="Payslips"/>
                     </fr:FormList.Header>
                     <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
                         <fr:Lista.Header>
