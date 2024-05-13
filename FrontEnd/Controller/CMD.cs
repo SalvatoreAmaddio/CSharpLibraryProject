@@ -1,4 +1,5 @@
-﻿using FrontEnd.Model;
+﻿using Backend.Utils;
+using FrontEnd.Model;
 using System.Windows.Input;
 
 namespace FrontEnd.Controller
@@ -39,7 +40,7 @@ namespace FrontEnd.Controller
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return InternetConnection.Do.IsConnected();
         }
 
         public void Execute(object? parameter)

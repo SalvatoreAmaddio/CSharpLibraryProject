@@ -13,4 +13,16 @@ namespace Backend.Events
     /// <param name="e"></param>
     public delegate void FilterEventHandler(object? sender, EventArgs e);
 
+    public delegate void InternetConnectionStatusHandler(object? sender, InternetConnectionStatusArgs e);
+
+    public class InternetConnectionStatusArgs : EventArgs
+    { 
+        public bool IsConnected { get; set; }
+        public string Message => IsConnected ? "" : "No Connection";
+
+        public InternetConnectionStatusArgs(bool isConnected)
+        {
+            IsConnected = isConnected;
+        }
+    }
 }
