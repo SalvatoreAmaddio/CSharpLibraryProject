@@ -27,7 +27,7 @@ namespace Backend.Recordsource
         /// </summary>
         /// <param name="crud">A <see cref="CRUD"/> Enum</param>
         /// <param name="model">The Record that has changed.</param>
-        public void NotifyChildren(CRUD crud, ISQLModel model);
+        public void NotifyChildren(CRUD crud, ISQLModel model,bool skip= false);
     }
 
     /// <summary>
@@ -42,6 +42,6 @@ namespace Backend.Recordsource
         /// </summary>
         /// <param name="crud">A <see cref="CRUD"/> Enum</param>
         /// <param name="model">The Record that has changed.</param>
-        public void Update(CRUD crud, ISQLModel model);
+        public void Update(CRUD crud, ISQLModel model, bool skip = false);
     }
 }

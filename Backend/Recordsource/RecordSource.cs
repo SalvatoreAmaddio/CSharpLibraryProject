@@ -85,19 +85,20 @@ namespace Backend.Recordsource
 
         public void AddChild(IChildSource child) => Children.Add(child);   
 
-        public void NotifyChildren(CRUD crud, ISQLModel model)
+        public void NotifyChildren(CRUD crud, ISQLModel model, bool skip=false)
         {
             if (crud == CRUD.UPDATE) return;
-            foreach (var child in Children) child.Update(crud, model);
+            foreach (var child in Children) child.Update(crud, model, skip);
         }
 
-        public void Update(CRUD crud, ISQLModel model)
+        public void Update(CRUD crud, ISQLModel model, bool skip = false)
         {
             switch (crud)
             {
                 case CRUD.INSERT:
-//                    Add(model);
-//                    Controller?.GoLast();
+                    if (skip) break;
+                    Add(model);
+                    Controller?.GoLast();
                     break;
               //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
                 //  break;

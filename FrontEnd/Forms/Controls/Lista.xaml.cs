@@ -70,8 +70,9 @@ namespace FrontEnd.Forms
 
         private void OnListViewItemGotFocus(object sender, RoutedEventArgs e) 
         {
-            Controller?.CleanSource();
             AbstractModel? record = ((ListViewItem)sender).DataContext as AbstractModel;
+            if (!record.IsNewRecord()) 
+                Controller?.CleanSource();
             Controller?.GoAt(record);
         }
     }

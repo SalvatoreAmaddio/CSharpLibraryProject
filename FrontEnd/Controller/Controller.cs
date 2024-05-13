@@ -118,7 +118,7 @@ namespace FrontEnd.Controller
             Db.Crud(crud, sql, parameters);
             ((AbstractModel)CurrentModel).IsDirty = false;
             Db.Records?.NotifyChildren(crud, Db.Model);
-            GoAt(CurrentModel);
+            if (crud == CRUD.INSERT) GoLast();
             return true;
         }
 
@@ -229,6 +229,21 @@ namespace FrontEnd.Controller
                 Records = Source.RecordPositionDisplayer();
             }
         }
+
+        public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
+        {
+            if (CurrentModel == null) throw new NoModelException();
+            if (!((AbstractModel)CurrentModel).IsDirty) return false;
+            CRUD crud = (!CurrentModel.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
+            if (!CurrentModel.AllowUpdate()) return false;
+            Db.Model = CurrentModel;
+            Db.Crud(crud, sql, parameters);
+            ((AbstractModel)CurrentModel).IsDirty = false;
+            Db.Records?.NotifyChildren(crud, Db.Model, !OpenWindowOnNew);
+            if (crud == CRUD.INSERT) GoLast();
+            return true;
+        }
+
 
 
         /// <summary>
