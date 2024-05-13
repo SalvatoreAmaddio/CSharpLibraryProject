@@ -29,6 +29,7 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
+
         public bool IsDirty
         {
             get => _isDirty;
@@ -229,22 +230,6 @@ namespace FrontEnd.Controller
                 Records = Source.RecordPositionDisplayer();
             }
         }
-
-        public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
-        {
-            if (CurrentModel == null) throw new NoModelException();
-            if (!((AbstractModel)CurrentModel).IsDirty) return false;
-            CRUD crud = (!CurrentModel.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
-            if (!CurrentModel.AllowUpdate()) return false;
-            Db.Model = CurrentModel;
-            Db.Crud(crud, sql, parameters);
-            ((AbstractModel)CurrentModel).IsDirty = false;
-            Db.Records?.NotifyChildren(crud, Db.Model, !OpenWindowOnNew);
-            if (crud == CRUD.INSERT) GoLast();
-            return true;
-        }
-
-
 
         /// <summary>
         /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>

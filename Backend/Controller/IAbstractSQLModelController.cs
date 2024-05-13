@@ -114,5 +114,6 @@ namespace Backend.Controller
         /// </summary>
         public string Records { get; }
 
+        public bool VoidParentUpdate { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace Backend.Controller
         public virtual bool AllowNewRecord { get; set; }
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
+        public bool VoidParentUpdate { get; set; } = false;
 
         public virtual void GoNext()
         {
