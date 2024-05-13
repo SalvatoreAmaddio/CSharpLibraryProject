@@ -173,7 +173,7 @@ namespace FrontEnd.Controller
         /// Override this method to open a new window to view the selected record. <para/>
         /// For Example:
         /// <code>
-        ///  var win = new EmployeeForm(model);
+        ///  EmployeeForm win = new (model);
         ///  win.Show();
         /// </code>
         /// </summary>

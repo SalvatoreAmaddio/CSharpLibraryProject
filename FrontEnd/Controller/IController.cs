@@ -139,6 +139,9 @@ namespace FrontEnd.Controller
         /// </summary>
         public bool OpenWindowOnNew { get; set; }
 
+        /// <summary>
+        /// Removes empty new records from the Source.
+        /// </summary>
         public void CleanSource();
 
     }
@@ -154,7 +157,15 @@ namespace FrontEnd.Controller
         /// </summary>
         /// <value>The actual object that implements <see cref="IAbstractSQLModelController.CurrentModel"/></value>
         public M? CurrentRecord { get; set; }
+        
+        /// <summary>
+        /// Gets and Sets the Command to perform CRUD operations such as Insert or Update.
+        /// </summary>
         public ICommand UpdateCMD { get; set; }
+
+        /// <summary>
+        /// Gets and Sets the Command to perform Delete CRUD operation.
+        /// </summary>
         public ICommand DeleteCMD { get; set; }
     }
 
