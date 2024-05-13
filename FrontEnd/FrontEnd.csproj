@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\nowifi.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="logo.ico" />
   </ItemGroup>
 
@@ -42,6 +46,7 @@
     <Resource Include="images\delete.png" />
     <Resource Include="images\filter.png" />
     <Resource Include="images\folder.png" />
+    <Resource Include="images\nowifi.png" />
     <Resource Include="images\pdf.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />

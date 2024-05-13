@@ -1,4 +1,5 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Utils;
+using FrontEnd.Controller;
 using FrontEnd.Model;
 using System.Globalization;
 using System.Windows;
@@ -15,7 +16,16 @@ namespace FrontEnd.Forms.FormComponents
     {
         static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
-        public RecordTracker() => OnClickCommand = new TrackerClickCommand(OnClicked);
+        public RecordTracker() 
+        {
+            OnClickCommand = new TrackerClickCommand(OnClicked);
+            InternetConnection.Do.InternetStatusChanged += OnInternetStatusChanged;
+        }
+
+        private void OnInternetStatusChanged(object? sender, Backend.Events.InternetConnectionStatusArgs e)
+        {
+           NoInternetVisibility = (e.IsConnected) ? Visibility.Hidden : Visibility.Visible;
+        }
 
         #region OnClickCommand
         public ICommand OnClickCommand
@@ -48,6 +58,16 @@ namespace FrontEnd.Forms.FormComponents
 
         public static readonly DependencyProperty GoNewVisibilityProperty =
             DependencyProperty.Register(nameof(GoNewVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata());
+        #endregion
+
+        #region NoInternetVisibility
+        public Visibility NoInternetVisibility
+        {
+            get => (Visibility)GetValue(NoInternetVisibilityProperty);
+            set => SetValue(NoInternetVisibilityProperty, value);
+        }
+
+        public static readonly DependencyProperty NoInternetVisibilityProperty = DependencyProperty.Register(nameof(NoInternetVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata(Visibility.Hidden));
         #endregion
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

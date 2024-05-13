@@ -1,6 +1,11 @@
 ﻿using Backend.Utils;
+using FrontEnd.Forms.FormComponents;
 using FrontEnd.Model;
+using FrontEnd.Utils;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace FrontEnd.Controller
 {
@@ -49,6 +54,11 @@ namespace FrontEnd.Controller
                 _action((M?)parameter);
             if (_fun != null)
                 _fun((M?)parameter);
+
+            Window? win = Helper.GetActiveWindow();
+
+            RecordStatus? recordStatus = Helper.FindFirstChildOfType<RecordStatus>(win);
+
         }
     }
 }

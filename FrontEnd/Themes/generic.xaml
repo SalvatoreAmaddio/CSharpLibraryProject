@@ -144,26 +144,39 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type formComp:RecordTracker}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
-                        <StackPanel.Background>
+                    <Grid x:Name="bo">
+                        <Grid.Background>
                             <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" />
-                        </StackPanel.Background>
-                        <StackPanel.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="Width" Value="33"/>
-                                <Setter Property="Command" Value="{Binding OnClickCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="FontSize" Value="20"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <Button Content="🢐🢐" ToolTip="First Record" CommandParameter="1"/>
-                        <Button Content="🢐" ToolTip="Previous Record" CommandParameter="2"/>
-                        <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
-                        <Button Content="🢒" ToolTip="Next Record" CommandParameter="3"/>
-                        <Button Content="🢒🢒" ToolTip="Last Record" CommandParameter="4"/>
-                        <Separator Width="20" Background="Transparent"/>
-                        <Button Content="NEW" FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5"/>
-                    </StackPanel>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Width" Value="33"/>
+                                    <Setter Property="Command" Value="{Binding OnClickCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="FontSize" Value="20"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <Button Content="🢐🢐" ToolTip="First Record" CommandParameter="1"/>
+                            <Button Content="🢐" ToolTip="Previous Record" CommandParameter="2"/>
+                            <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
+                            <Button Content="🢒" ToolTip="Next Record" CommandParameter="3"/>
+                            <Button Content="🢒🢒" ToolTip="Last Record" CommandParameter="4"/>
+                            <Separator Width="20" Background="Transparent"/>
+                            <Button Content="NEW" FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Visibility="{TemplateBinding NoInternetVisibility}" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,5,0">
+                            <Image Source="/images/nowifi.png" Width="20" Margin="0,0,10,0"/>
+                            <Label Content="No Internet Connection!" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Red" FontWeight="Bold" Background="Transparent"/>
+                        </StackPanel>
+                        
+                        <Label Visibility="Collapsed" Grid.Column="1" Content="Record Updated" Margin="0,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Green" FontWeight="Bold" Background="Transparent"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -17,7 +17,7 @@ namespace Backend.Events
 
     public class InternetConnectionStatusArgs : EventArgs
     { 
-        public bool IsConnected { get; set; }
+        public bool IsConnected { get; }
         public string Message => IsConnected ? "" : "No Connection";
 
         public InternetConnectionStatusArgs(bool isConnected)
