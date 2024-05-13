@@ -179,12 +179,9 @@ namespace FrontEnd.Controller
                 OpenNew();
             else 
             {
-                if (CurrentRecord!=null && CurrentRecord.IsNewRecord()) return;
-
-                if (!AllowNewRecord) return;
-                CurrentRecord = new M();
-                Source.Add(CurrentRecord);
+                Source.Add(new M());
                 Navigator.MoveLast();
+                CurrentModel = Navigator.Current;
                 Records = "New Record";
             }
         }
