@@ -142,15 +142,14 @@ namespace FrontEnd.Controller
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     public abstract class AbstractFormListController<M> : AbstractFormController<M>, IAbstractFormListController<M> where M : AbstractModel, new()
     {
+        bool _openWindowOnNew = true;
         protected FilterQueryBuilder QueryBuiler;
         public ICommand OpenCMD { get; set; }
         public ICommand OpenNewCMD { get; set; }
         public abstract string SearchQry { get; set; }
-
-        bool _openWindowOnNew = true;
-        public bool OpenWindowOnNew 
-        { 
-            get => _openWindowOnNew; 
+        public bool OpenWindowOnNew
+        {
+            get => _openWindowOnNew;
             set 
             {
                 _openWindowOnNew = value;
@@ -185,7 +184,15 @@ namespace FrontEnd.Controller
         /// </summary>
         protected void OpenNew() => Open(new());
         private void OnSourceRunFilter(object? sender, EventArgs e) => OnOptionFilter();
-        public override void GoNew() 
+        public void CleanSource()
+        {
+            if (OpenWindowOnNew) return;
+            List<AbstractModel> toRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
+
+            foreach (var item in toRemove)
+                Source.Remove(item);
+        }
+        public override void GoNew()
         {
             if (OpenWindowOnNew) 
             {
@@ -200,28 +207,16 @@ namespace FrontEnd.Controller
             InvokeOnNewRecordEvent();
             Records = "New Record";
         }
-
-        public void CleanSource()
-        {
-            if (OpenWindowOnNew) return;
-            List<AbstractModel> toRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
-
-            foreach (var item in toRemove)
-                Source.Remove(item);
-        }
-
         public override void GoPrevious()
         {
             CleanSource();            
             base.GoPrevious();
         }
-
         public override void GoLast()
         {
             CleanSource();
             base.GoLast();
         }
-
         public override void GoFirst()
         {
             CleanSource();
