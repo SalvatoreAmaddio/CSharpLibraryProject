@@ -21,6 +21,7 @@ namespace MyApplication.Controller
             GenderOptions = new(Genders.Source, "GenderName");
             DepartmentOptions = new(Departments.Source, "DepartmentName");
             AfterUpdate += OnAfterUpdate;
+            OpenWindowOnNew = false;
         }
 
         private async void OnAfterUpdate(object? sender, AfterUpdateArgs e)
@@ -35,7 +36,7 @@ namespace MyApplication.Controller
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
             Source.ReplaceRange(results);
-            GoFirst();
+            //GoFirst();
         }
 
         public override async void OnOptionFilter()

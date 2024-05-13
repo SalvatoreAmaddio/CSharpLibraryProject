@@ -33,16 +33,16 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type local:Lista}">
                         <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Margin="0" Padding="0" SnapsToDevicePixels="true">
-                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <ContentPresenter Grid.Row="0" Content="{TemplateBinding Header}"/>
-                                    <ItemsPresenter Grid.Row="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                </Grid>
-                            </ScrollViewer>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <ContentPresenter Grid.Row="0" Content="{TemplateBinding Header}"/>
+                                <ScrollViewer Grid.Row="1" Focusable="false" Padding="{TemplateBinding Padding}">
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </ScrollViewer>
+                            </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="false">

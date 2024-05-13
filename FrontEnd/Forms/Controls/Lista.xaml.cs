@@ -64,7 +64,7 @@ namespace FrontEnd.Forms
             try 
             {
                 AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
-                Controller?.GoAt(lastSelectedObject);
+                ScrollIntoView(lastSelectedObject);
             }
             catch (Exception) { }
         }

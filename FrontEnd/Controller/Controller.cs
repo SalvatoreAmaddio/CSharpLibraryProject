@@ -110,15 +110,15 @@ namespace FrontEnd.Controller
 
         public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
-            if (CurrentRecord == null) throw new NoModelException();
-            if (!CurrentRecord.IsDirty) return false;
-            CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
-            if (!CurrentRecord.AllowUpdate()) return false;
-            Db.Model = CurrentRecord;
+            if (CurrentModel == null) throw new NoModelException();
+            if (!((AbstractModel)CurrentModel).IsDirty) return false;
+            CRUD crud = (!CurrentModel.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
+            if (!CurrentModel.AllowUpdate()) return false;
+            Db.Model = CurrentModel;
             Db.Crud(crud, sql, parameters);
-            CurrentRecord.IsDirty = false;
+            ((AbstractModel)CurrentModel).IsDirty = false;
             Db.Records?.NotifyChildren(crud, Db.Model);
-            GoAt(CurrentRecord);
+            GoAt(CurrentModel);
             return true;
         }
 
@@ -180,9 +180,12 @@ namespace FrontEnd.Controller
             else 
             {
                 if (CurrentRecord!=null && CurrentRecord.IsNewRecord()) return;
-                base.GoNew();
-                if (CurrentRecord == null) throw new Exception("Cannot add a null");
+
+                if (!AllowNewRecord) return;
+                CurrentRecord = new M();
                 Source.Add(CurrentRecord);
+                Navigator.MoveLast();
+                Records = "New Record";
             }
         }
 
@@ -220,7 +223,7 @@ namespace FrontEnd.Controller
             else if (record.IsNewRecord() && !OpenWindowOnNew) 
             {
                 Navigator.MoveNew();
-                Navigator.Index--;
+                var x = Navigator.Index;
             }
             else
             {
