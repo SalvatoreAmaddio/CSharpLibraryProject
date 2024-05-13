@@ -145,7 +145,17 @@ namespace FrontEnd.Controller
         public ICommand OpenCMD { get; set; }
         public ICommand OpenNewCMD { get; set; }
         public abstract string SearchQry { get; set; }
-        public bool OpenWindowOnNew { get; set; } = true;
+
+        bool _openWindowOnNew = true;
+        public bool OpenWindowOnNew 
+        { 
+            get => _openWindowOnNew; 
+            set 
+            {
+                _openWindowOnNew = value;
+                VoidParentUpdate = !value;
+            }
+        }
 
         protected readonly List<QueryParameter> SearchParameters = [];
         public AbstractFormListController() : base()

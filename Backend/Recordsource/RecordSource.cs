@@ -96,7 +96,7 @@ namespace Backend.Recordsource
             switch (crud)
             {
                 case CRUD.INSERT:
-                    if (Controller!.VoidParentUpdate) return;
+                    if (Controller!.VoidParentUpdate) break;
                     Add(model);
                     Controller?.GoLast();
                     break;
