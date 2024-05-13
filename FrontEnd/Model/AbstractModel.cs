@@ -6,10 +6,14 @@ using System.Runtime.CompilerServices;
 
 namespace FrontEnd.Model
 {
+    public interface IAbstractModel : ISQLModel
+    { 
+    
+    }
     /// <summary>
     /// This class extends the <see cref="AbstractSQLModel"/> and adds extra functionalities for UI purposes
     /// </summary>
-    public abstract class AbstractModel : AbstractSQLModel, INotifier
+    public abstract class AbstractModel : AbstractSQLModel, INotifier, IAbstractModel
     {
         public event OnDirtyChangedEventHandler? OnDirtyChanged;
         bool _isDirty = false;
