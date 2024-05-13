@@ -11,6 +11,12 @@ namespace MyApplication.View
         public LoadingForm()
         {
             InitializeComponent();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(((Exception)e.ExceptionObject).Message);
         }
 
         private async void LoadingMask_Loaded(object sender, RoutedEventArgs e)
