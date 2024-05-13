@@ -38,6 +38,8 @@ namespace MyApplication.Model
 
         public override bool AllowUpdate()
         {
+            if (Employee == null) return false;
+            if (Employee.IsNewRecord()) return false;
             return true;
         }
 

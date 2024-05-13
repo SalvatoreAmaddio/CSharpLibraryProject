@@ -36,7 +36,7 @@ namespace MyApplication.Controller
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
             Source.ReplaceRange(results);
-            //GoFirst();
+            GoFirst();
         }
 
         public override async void OnOptionFilter()

@@ -91,10 +91,11 @@ namespace FrontEnd.Controller
             if (!AllowNewRecord) return;
             Navigator.MoveNew();
             CurrentRecord = new M();
-            NewRecordEvent?.Invoke(this, EventArgs.Empty);
+            InvokeOnNewRecordEvent();
             Records = Source.RecordPositionDisplayer();
         }
 
+        protected void InvokeOnNewRecordEvent() => NewRecordEvent?.Invoke(this, EventArgs.Empty);
 
         public void RaisePropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
@@ -196,6 +197,7 @@ namespace FrontEnd.Controller
             Source.Add(new M());
             Navigator.MoveLast();
             CurrentModel = Navigator.Current;
+            InvokeOnNewRecordEvent();
             Records = "New Record";
         }
 
