@@ -12,10 +12,10 @@ namespace MyApplication.Model
     [Table(nameof(Payslip))]
     public class Payslip : AbstractModel
     {
-        long _payslipid;
-        Employee? _employee;
-        DateTime? _dop;
-        double _salary;
+        private long _payslipid;
+        private Employee? _employee;
+        private DateTime? _dop;
+        private double _salary;
 
         [PK]
         public long PayslipID { get => _payslipid; set => UpdateProperty(ref value, ref _payslipid); }

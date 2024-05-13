@@ -21,7 +21,6 @@ namespace MyApplication.Controller
             GenderOptions = new(Genders.Source, "GenderName");
             DepartmentOptions = new(Departments.Source, "DepartmentName");
             AfterUpdate += OnAfterUpdate;
-            OpenWindowOnNew = false;
         }
 
         private async void OnAfterUpdate(object? sender, AfterUpdateArgs e)

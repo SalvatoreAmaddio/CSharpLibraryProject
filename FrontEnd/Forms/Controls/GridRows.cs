@@ -1,5 +1,4 @@
-﻿using FrontEnd.Utils;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace FrontEnd.Forms

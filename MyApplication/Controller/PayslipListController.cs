@@ -12,6 +12,7 @@ namespace MyApplication.Controller
         public PayslipListController() 
         {
             NewRecordEvent += OnNewRecordEvent;
+            OpenWindowOnNew = false;
         }
 
         private void OnNewRecordEvent(object? sender, EventArgs e)
@@ -35,7 +36,7 @@ namespace MyApplication.Controller
 
         public override void OnOptionFilter()
         {
-            throw new NotImplementedException();
+
         }
 
         protected override void Open(Payslip? model)

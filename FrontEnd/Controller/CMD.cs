@@ -53,9 +53,8 @@ namespace FrontEnd.Controller
             if (_fun != null)
                 _fun((M?)parameter);
 
-            Window? win = Helper.GetActiveWindow();
-
-            RecordStatus? recordStatus = Helper.FindFirstChildOfType<RecordStatus>(win);
+//            Window? win = Helper.GetActiveWindow();
+//            RecordStatus? recordStatus = Helper.FindFirstChildOfType<RecordStatus>(win);
 
         }
     }

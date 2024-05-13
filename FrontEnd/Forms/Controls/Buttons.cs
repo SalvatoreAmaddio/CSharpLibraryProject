@@ -3,7 +3,6 @@ using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace FrontEnd.Forms
 {
@@ -17,7 +16,7 @@ namespace FrontEnd.Forms
 
         #region IsWithinList
         /// <summary>
-        /// Sets a Relative Source Binding between the button's DataContext and the <see cref="Lista"/>'s DataContext.
+        /// This property works as a short-hand to set a Relative Source Binding between the button's DataContext and the <see cref="Lista"/>'s DataContext.
         /// </summary>
         public bool IsWithinList
         {

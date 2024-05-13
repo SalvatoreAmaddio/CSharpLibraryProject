@@ -2,6 +2,7 @@
 using System.Windows.Data;
 using System.Globalization;
 using FrontEnd.Controller;
+using FrontEnd.Model;
 
 namespace FrontEnd.Forms.FormComponents
 {
@@ -32,6 +33,8 @@ namespace FrontEnd.Forms.FormComponents
         {
             if (e.NewValue is IAbstractFormController)
                 SetBinding(IsDirtyProperty, new Binding("CurrentModel.IsDirty") { Source = e.NewValue });
+            if (e.NewValue is AbstractModel)
+                SetBinding(IsDirtyProperty, new Binding("IsDirty") { Source = e.NewValue });
         }
 
     }

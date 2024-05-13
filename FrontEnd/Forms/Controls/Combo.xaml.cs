@@ -43,7 +43,7 @@ namespace FrontEnd.Forms
 
         #region ControllerSource
         /// <summary>
-        /// Sets a Relative Source Binding between the combo's ItemSource and a <see cref="Lista"/>'s DataContext's IEnumerable Property.
+        /// This property works as a short-hand to set a Relative Source Binding between the combo's ItemSource and a <see cref="Lista"/>'s DataContext's IEnumerable Property.
         /// </summary>
         public string ControllerRecordSource
         {
@@ -63,7 +63,6 @@ namespace FrontEnd.Forms
             else BindingOperations.ClearBinding(d, ItemsSourceProperty);
         }
         #endregion
-
 
     }
 }
