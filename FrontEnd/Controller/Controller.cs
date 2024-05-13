@@ -223,7 +223,6 @@ namespace FrontEnd.Controller
             else if (record.IsNewRecord() && !OpenWindowOnNew) 
             {
                 Navigator.MoveNew();
-                var x = Navigator.Index;
             }
             else
             {
