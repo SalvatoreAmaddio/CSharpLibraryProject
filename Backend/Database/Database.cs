@@ -49,7 +49,7 @@ namespace Backend.Database
         public string ConnectionString();
 
         /// <summary>
-        /// It creates the the object that handles the connection to the database.
+        /// It creates a DBConnection object that handles the connection to the database.
         /// <para/>
         /// For Example:
         /// <code>
@@ -57,7 +57,19 @@ namespace Backend.Database
         /// </code>
         /// see also the <seealso cref="ConnectionString"/>
         /// </summary>
-        /// <returns>An object extending <see cref="DbConnection"/></returns>
+        /// <returns>A <see cref="DbConnection"/> object</returns>
+        public Task<DbConnection> ConnectAsync();
+
+        /// <summary>
+        /// It creates a DBConnection object that handles the connection to the database.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        ///     return new SQLiteConnection(ConnectionString());
+        /// </code>
+        /// see also the <seealso cref="ConnectionString"/>
+        /// </summary>
+        /// <returns>A <see cref="DbConnection"/> object</returns>
         public DbConnection Connect();
 
         /// <summary>
@@ -155,6 +167,7 @@ namespace Backend.Database
         public RecordSource? Records { get; set; }
         public abstract string ConnectionString();
         public abstract DbConnection Connect();
+        public Task<DbConnection> ConnectAsync() => Task.FromResult(Connect());
         private void SetCommand(DbCommand cmd, string sql, List<QueryParameter>? parameters) 
         {
             if (Model == null) throw new NoModelException();
@@ -176,7 +189,7 @@ namespace Backend.Database
                 sql = Model.SelectQry;
 
             sql += ";";
-            using (var connection = Connect())
+            using (var connection = await ConnectAsync())
             {
                 await connection.OpenAsync();
                     using (var cmd = connection.CreateCommand())
@@ -350,6 +363,7 @@ namespace Backend.Database
         public override string DatabaseName { get; set; } = "Data/mydb.db";
         public override string ConnectionString() => $"Data Source={DatabaseName};Version={Version};"; 
         protected override string LastIDQry() => "SELECT last_insert_rowid()";
+
         public override DbConnection Connect() 
         {
             //If the software is published as SingleFile, the SQLite connection must be established through external Assembly.
