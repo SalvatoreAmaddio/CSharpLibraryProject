@@ -15,9 +15,13 @@ namespace FrontEnd.Forms.Controls
     {
         static LoadingMask() => DefaultStyleKeyProperty.OverrideMetadata(typeof(LoadingMask), new FrameworkPropertyMetadata(typeof(LoadingMask)));
 
+        /// <summary>
+        /// Sets the name of the Window to open once the loading process has completed. <para/>
+        /// <c>IMPORTANT:</c> the Window to open must be in a folder named 'View'.
+        /// </summary>
         public string MainWindow
         {
-            get => (string)GetValue(MainWindowProperty);
+            private get => (string)GetValue(MainWindowProperty);
             set => SetValue(MainWindowProperty, value);
         }
 
@@ -29,11 +33,11 @@ namespace FrontEnd.Forms.Controls
         {
             string? assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
             string? Namespace = Assembly.GetEntryAssembly()?.EntryPoint?.DeclaringType?.Namespace; 
-            Type? MainWindowType = Type.GetType($"{Namespace}.View.{MainWindow}, {assemblyName}") ?? throw new Exception("Could not find type");
+            Type? mainWinType = Type.GetType($"{Namespace}.View.{MainWindow}, {assemblyName}") ?? throw new Exception($"Could not find the Type of {MainWindow}");
             Window? window = Helper.GetActiveWindow();
             await Task.Run(DatabaseManager.Do.FetchData);
             window?.Hide();
-            var m = (Window?)Activator.CreateInstance(MainWindowType);
+            var m = (Window?)Activator.CreateInstance(mainWinType);
             m?.Show();
             window?.Close();
         }
