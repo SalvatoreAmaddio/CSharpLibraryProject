@@ -5,6 +5,10 @@ namespace Backend.Utils
 {
     public class Sys
     {
+        /// <summary>
+        /// Collection of Loaded Assemblies. See <see cref="LoadedAssembly"/>
+        /// </summary>
+        public static List<LoadedAssembly> LoadedDLL { get; } = [];
 
         /// <summary>
         /// Check if an object is a number.
@@ -23,41 +27,63 @@ namespace Backend.Utils
                    objType == typeof(sbyte) || objType == typeof(byte);
         }
 
+        /// <summary>
+        /// It loads a EmbeddedResource dll 
+        /// </summary>
+        /// <param name="dllName">The name of the dll</param>
+        /// <exception cref="Exception">Resource not found Exception</exception>
         public static void LoadEmbeddedDll(string dllName)
         {
             string architecture = IntPtr.Size == 8 ? "bit64" : "x86";
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"Backend.Database.{architecture}.{dllName}";
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            string resourceName = $"Backend.Database.{architecture}.{dllName}.dll";
 
-            using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
+            using (Stream? stream = executingAssembly.GetManifestResourceStream(resourceName))
             {
-                if (stream == null)
-                {
-                    throw new Exception($"Resource {resourceName} not found.");
-                }
+                if (stream == null) throw new Exception($"Resource {resourceName} not found.");
 
                 string tempFile = Path.Combine(Path.GetTempPath(), dllName);
-                using (FileStream fs = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new(tempFile, FileMode.Create, FileAccess.Write))
                 {
                     stream.CopyTo(fs);
                 }
 
-                LoadDll(tempFile);
+                if (!NativeLibrary.TryLoad(tempFile, out IntPtr handle)) throw new Exception($"Failed to load DLL: {tempFile}");
+
+                LoadedDLL.Add(new(tempFile, dllName, IntPtr.Size == 8 ? "x64" : "x86"));
             }
         }
 
-        private static void LoadDll(string dllPath)
-        {
-            IntPtr handle = LoadLibrary(dllPath);
-            if (handle == IntPtr.Zero)
-            {
-                int error = Marshal.GetLastWin32Error();
-                throw new Exception(error.ToString());
-            }
-        }
+    }
+    
+    /// <summary>
+    /// Represent an object holding a reference to an external Assembly.
+    /// </summary>
+    /// <param name="path">The path were the assembly is located.</param>
+    public class LoadedAssembly(string path, string name, string architecture)
+    {
+        /// <summary>
+        /// Gets the Loaded Assembly's Architecture.
+        /// </summary>
+        public string Architecture { get; } = architecture;
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr LoadLibrary(string lpFileName);
+        /// <summary>
+        /// Gets the name of the DLL.
+        /// </summary>
+        public string Name { get; } = name;
+
+        /// <summary>
+        /// Gets the path of the DLL.
+        /// </summary>
+        public string Path { get; } = path;
+
+        /// <summary>
+        /// Load the assembly,
+        /// </summary>
+        /// <returns>An Assembly</returns>
+        public Assembly Load() => Assembly.LoadFile(Path);
+
+        public override string? ToString() => $"{Name}.dll - Architecture: {Architecture}";
 
     }
 }

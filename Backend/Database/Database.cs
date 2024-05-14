@@ -3,6 +3,8 @@ using System.Data.Common;
 using System.Data.SQLite;
 using Backend.Recordsource;
 using Backend.Exceptions;
+using Backend.Utils;
+using System.Data;
 
 namespace Backend.Database
 {
@@ -347,6 +349,14 @@ namespace Backend.Database
         public override string DatabaseName { get; set; } = "Data/mydb.db";
         public override string ConnectionString() => $"Data Source={DatabaseName};Version={Version};"; 
         protected override string LastIDQry() => "SELECT last_insert_rowid()";
-        public override DbConnection Connect() => new SQLiteConnection(ConnectionString());
+        public override DbConnection Connect() 
+        {
+            LoadedAssembly? assembly = Sys.LoadedDLL.FirstOrDefault(s => s.Name.Equals("System.Data.SQLite"));
+            if (assembly == null) return new SQLiteConnection(ConnectionString());
+            IDbConnection? connection = (IDbConnection?)assembly.Load().CreateInstance("System.Data.SQLite.SQLiteConnection");
+            if (connection == null) throw new Exception("Failed to create a connection object from LoadedAssembly");
+            connection.ConnectionString = ConnectionString();
+            return (DbConnection)connection;
+        } 
     }
 }

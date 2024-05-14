@@ -10,7 +10,7 @@ namespace MyApplication
         public App() 
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Sys.LoadEmbeddedDll("SQLite.Interop.dll");
+            Sys.LoadEmbeddedDll("System.Data.SQLite");
             try 
             {
                 DatabaseManager.Do.Add(new SQLiteDatabase(new Employee()));
