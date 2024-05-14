@@ -10,7 +10,6 @@ namespace Backend.Database
     {
         private static readonly Lazy<DatabaseManager> lazyInstance = new(() => new DatabaseManager());
         private readonly List<IAbstractDatabase> Databases;
-        public List<RecordSource> Sources { get; }
         public static DatabaseManager Do => lazyInstance.Value;
 
         /// <summary>
@@ -18,11 +17,7 @@ namespace Backend.Database
         /// </summary>
         /// <value>An Integer.</value>
         public int Count => Databases.Count;   
-        private DatabaseManager()
-        {
-            Databases = [];
-            Sources = [];
-        }
+        private DatabaseManager() => Databases = [];
 
         /// <summary>
         /// It adds a database object.
@@ -46,6 +41,7 @@ namespace Backend.Database
         public async Task FetchData() 
         {
             List<Task<List<ISQLModel>>> tasks = [];
+
             foreach (IAbstractDatabase db in Databases)
             {
                 Task<List<ISQLModel>> task = db.RetrieveAsync().ToListAsync().AsTask();

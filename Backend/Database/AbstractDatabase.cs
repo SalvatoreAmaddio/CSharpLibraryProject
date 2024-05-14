@@ -8,7 +8,7 @@ namespace Backend.Database
     /// <summary>
     /// AbstractClass that defines the structure that any Database Class should use. This class implements <see cref="IAbstractDatabase"/>.
     /// </summary>
-    abstract public class AbstractDatabase(ISQLModel Model) : IAbstractDatabase
+    public abstract class AbstractDatabase(ISQLModel Model) : IAbstractDatabase
     {
         public virtual string Version { get; set; } = string.Empty;
         public virtual string DatabaseName { get; set; } = string.Empty;
@@ -41,7 +41,7 @@ namespace Backend.Database
             using (var connection = await ConnectAsync())
             {
                 await connection.OpenAsync();
-                using (var cmd = connection.CreateCommand())
+                using (DbCommand cmd = connection.CreateCommand())
                 {
                     SetCommand(cmd, sql, parameters);
                     using (var reader = await cmd.ExecuteReaderAsync())
