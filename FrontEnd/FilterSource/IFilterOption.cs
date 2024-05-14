@@ -5,6 +5,8 @@ using FrontEnd.Events;
 using System.ComponentModel;
 using System.Text;
 using FrontEnd.Forms;
+using Backend.Database;
+using Backend.Exceptions;
 
 namespace FrontEnd.FilterSource
 {
@@ -65,7 +67,7 @@ namespace FrontEnd.FilterSource
         public event PropertyChangedEventHandler? PropertyChanged;
         public event SelectionChangedEventHandler? OnSelectionChanged;
 
-        public FilterOption(ISQLModel record, string displayProperty) 
+        public FilterOption(ISQLModel record, string displayProperty)
         {
             Record = record;
             ITableField Field = Record.GetTableFields().First(s => s.Name.Equals(displayProperty));
@@ -78,6 +80,16 @@ namespace FrontEnd.FilterSource
             PropertyChanged?.Invoke(this, new(nameof(IsSelected)));
         }
 
+        public override bool Equals(object? obj)
+        {
+            return obj is FilterOption option &&
+                   EqualityComparer<ISQLModel>.Default.Equals(Record, option.Record);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Record);
+        }
     }
 
     /// <summary>
@@ -87,13 +99,18 @@ namespace FrontEnd.FilterSource
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
-    public class SourceOption(RecordSource source, string displayProperty) : List<IFilterOption>(source.Select(s => new FilterOption(s, displayProperty)))
+    public class SourceOption(RecordSource source, string displayProperty) : List<IFilterOption>(source.Select(s => new FilterOption(s, displayProperty))), IChildSource
     {
         /// <summary>
         /// It loops through the List and builds the SQL logic to filter the Select the statement.
         /// </summary>
         /// <param name="filterQueryBuilder"></param>
         /// <returns>A string</returns>
+
+        private readonly string _displayProperty = displayProperty;
+
+        public IParentSource? ParentSource { get; set; }
+
         public string Conditions(FilterQueryBuilder filterQueryBuilder) 
         {
             StringBuilder sb = new();
@@ -120,6 +137,19 @@ namespace FrontEnd.FilterSource
             }
 
             return sb.ToString();
+        }
+
+        public void Update(CRUD crud, ISQLModel model)
+        {
+            switch (crud)
+            {
+                case CRUD.INSERT:
+                    Add(new FilterOption(model, _displayProperty));
+                    break;
+                case CRUD.DELETE:
+                     Remove(new FilterOption(model, _displayProperty));
+                    break;
+            }
         }
     }
 }

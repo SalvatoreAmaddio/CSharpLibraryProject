@@ -38,6 +38,11 @@ namespace Backend.Recordsource
     public interface IChildSource 
     {
         /// <summary>
+        /// Gets and sets a reference to the ParentSource object.
+        /// </summary>
+        public IParentSource? ParentSource { get; set; }
+
+        /// <summary>
         /// Defines the logic for implementing record updates comunicated by the Parent Source. 
         /// </summary>
         /// <param name="crud">A <see cref="CRUD"/> Enum</param>

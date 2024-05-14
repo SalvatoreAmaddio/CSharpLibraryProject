@@ -15,7 +15,8 @@ namespace Backend.Recordsource
     {
         protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
-        
+        public IParentSource? ParentSource { get; set; }
+
         /// <summary>
         /// The Controller to which this RecordSource is associated to.
         /// </summary>
@@ -83,7 +84,11 @@ namespace Backend.Recordsource
             };
         }
 
-        public void AddChild(IChildSource child) => Children.Add(child);   
+        public void AddChild(IChildSource child) 
+        {
+            child.ParentSource = this;
+            Children.Add(child);
+        }    
 
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
