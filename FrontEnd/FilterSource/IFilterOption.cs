@@ -108,7 +108,7 @@ namespace FrontEnd.FilterSource
         /// <returns>A string</returns>
 
         private readonly string _displayProperty;
-        
+
         public IParentSource? ParentSource { get; set; }
 
         public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
