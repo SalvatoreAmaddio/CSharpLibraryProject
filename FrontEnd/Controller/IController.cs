@@ -73,6 +73,10 @@ namespace FrontEnd.Controller
         /// </summary>
         public bool IsLoading { get; set; }
 
+        /// <summary>
+        /// Perform an Insert/Update CRUD operation on the <see cref="IAbstractSQLModelController.CurrentModel"/> property.
+        /// </summary>
+        /// <returns>true if the operation was successful.</returns>
         public bool PerformUpdate();
     }
 

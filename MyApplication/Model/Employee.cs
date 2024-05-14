@@ -1,6 +1,7 @@
 ﻿using Backend.Model;
 using FrontEnd.Model;
 using System.Data.Common;
+using System.Windows;
 
 namespace MyApplication.Model
 {
@@ -53,7 +54,17 @@ namespace MyApplication.Model
 
         public Employee() { }
 
-        public override bool AllowUpdate() => true;
+        public override bool AllowUpdate() 
+        {
+            if (string.IsNullOrEmpty(FirstName)) return false;
+            if (string.IsNullOrEmpty(LastName)) return false;
+            if (Gender == null || Gender.IsNewRecord()) return false;
+            if (Department == null || Department.IsNewRecord()) return false;
+            if (JobTitle == null || JobTitle.IsNewRecord()) return false;
+
+            MessageBox.Show("Mandatory fields","Something is missing");
+            return true;
+        }
 
         public override ISQLModel Read(DbDataReader reader) => new Employee(reader);
 

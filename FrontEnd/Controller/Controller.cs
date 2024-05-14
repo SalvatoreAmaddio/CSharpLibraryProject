@@ -29,7 +29,6 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
-
         public bool IsDirty
         {
             get => _isDirty;
@@ -187,7 +186,7 @@ namespace FrontEnd.Controller
         public void CleanSource()
         {
             if (OpenWindowOnNew) return;
-            List<AbstractModel> toRemove = Source.Cast<AbstractModel>().Where(s => s.IsNewRecord() && !s.IsDirty).ToList();
+            List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList();
 
             foreach (var item in toRemove)
                 Source.Remove(item);

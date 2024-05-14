@@ -56,9 +56,15 @@ namespace FrontEnd.Forms
 
         public Lista() => InitializeComponent();
 
+        private object? OldSelection;
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
+            int lastRemovedIndex = e.RemovedItems.Count - 1;
+            if (lastRemovedIndex >= 0) 
+            {
+                OldSelection = e.RemovedItems[lastRemovedIndex];
+            }
             int lastIndex  = e.AddedItems.Count - 1;
             try 
             {
@@ -68,13 +74,34 @@ namespace FrontEnd.Forms
             catch (Exception) { }
         }
 
+        private void OnListViewItemLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
+           
+            if (record.IsNewRecord()) 
+            {
+                MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?","Wait",MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    bool? updateResult = Controller?.PerformUpdate();
+                    if (!updateResult!.Value) //if the update failed, move the focus to the ListViewItem.
+                    {
+                        ((ListViewItem)sender).Focus();
+                        ScrollIntoView(sender);
+                    }
+                }
+                else //rollback to the previous selecteditem.
+                {
+                    ISQLModel? oldModel = (ISQLModel?)OldSelection;
+                    Controller?.CleanSource();
+                    Controller?.GoAt(oldModel);
+                }
+            }
+        }
+
         private void OnListViewItemGotFocus(object sender, RoutedEventArgs e) 
         {
             if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
-
-            if (!record.IsNewRecord())
-                Controller?.CleanSource();
-
             Controller?.GoAt(record);
         }
     }
