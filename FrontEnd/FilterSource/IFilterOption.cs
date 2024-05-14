@@ -99,7 +99,7 @@ namespace FrontEnd.FilterSource
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
-    public class SourceOption(RecordSource source, string displayProperty) : List<IFilterOption>(source.Select(s => new FilterOption(s, displayProperty))), IChildSource
+    public class SourceOption : List<IFilterOption>, IChildSource
     {
         /// <summary>
         /// It loops through the List and builds the SQL logic to filter the Select the statement.
@@ -107,9 +107,15 @@ namespace FrontEnd.FilterSource
         /// <param name="filterQueryBuilder"></param>
         /// <returns>A string</returns>
 
-        private readonly string _displayProperty = displayProperty;
-
+        private readonly string _displayProperty;
+        
         public IParentSource? ParentSource { get; set; }
+
+        public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
+        {
+            _displayProperty = displayProperty;
+            source.ParentSource?.AddChild(this);
+        }
 
         public string Conditions(FilterQueryBuilder filterQueryBuilder) 
         {
