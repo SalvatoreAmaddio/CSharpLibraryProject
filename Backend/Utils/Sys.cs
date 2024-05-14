@@ -50,7 +50,9 @@ namespace Backend.Utils
 
                 if (!NativeLibrary.TryLoad(tempFile, out IntPtr handle)) throw new Exception($"Failed to load DLL: {tempFile}");
 
-                LoadedDLL.Add(new(tempFile, dllName, IntPtr.Size == 8 ? "x64" : "x86"));
+                LoadedAssembly assembly = new(tempFile, dllName, IntPtr.Size == 8 ? "x64" : "x86");
+                assembly.Load();
+                LoadedDLL.Add(assembly);
             }
         }
 
@@ -78,10 +80,15 @@ namespace Backend.Utils
         public string Path { get; } = path;
 
         /// <summary>
-        /// Load the assembly,
+        /// Gets the actual loaded Assembly
         /// </summary>
         /// <returns>An Assembly</returns>
-        public Assembly Load() => Assembly.LoadFile(Path);
+        public Assembly? Assembly { get; private set; } 
+
+        /// <summary>
+        /// Load the assembly.
+        /// </summary>
+        public void Load() => Assembly = Assembly.LoadFile(Path);
 
         public override string? ToString() => $"{Name}.dll - Architecture: {Architecture}";
 
