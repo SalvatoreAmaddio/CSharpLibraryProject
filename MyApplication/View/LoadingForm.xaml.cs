@@ -12,14 +12,5 @@ namespace MyApplication.View
         {
             InitializeComponent();
         }
-
-        private async void LoadingMask_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Task.Run(DatabaseManager.Do.FetchData);
-            Hide();
-            MainWindow mainWindow = new();
-            mainWindow.Show();
-            Close();
-        }
     }
 }

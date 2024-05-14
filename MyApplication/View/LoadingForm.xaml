@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Welcome" Height="450" Width="450">
 
-    <ctr:LoadingMask Loaded="LoadingMask_Loaded">
+    <ctr:LoadingMask MainWindow="MainWindow">
         <Label/>
     </ctr:LoadingMask>
 </Window>
