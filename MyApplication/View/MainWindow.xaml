@@ -20,13 +20,13 @@
                 </Frame>
             </TabItem>
 
-            <TabItem Header="Report Viewer">
+            <!--<TabItem Header="Report Viewer">
                 <Frame>
                     <Frame.Content>
                         <local:Report/>
                     </Frame.Content>
                 </Frame>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
 
