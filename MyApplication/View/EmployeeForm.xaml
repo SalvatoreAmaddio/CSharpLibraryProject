@@ -51,7 +51,7 @@
                                 <fr:FormRow>
                                     <Grid fr:Definition.ColumnDefinitions="100,100,50,50">
                                         <fr:DateField SelectedDate="{Binding DOP}"/>
-                                        <fr:Text Text="{Binding Salary}" Grid.Column="1"/>
+                                        <fr:Text Text="{Binding Salary,StringFormat=N2}" Grid.Column="1"/>
                                         <fr:SaveButton Height="30" Grid.Column="2" IsWithinList="True"/>
                                         <fr:DeleteButton Height="30" Grid.Column="3" IsWithinList="True"/>
                                     </Grid>
