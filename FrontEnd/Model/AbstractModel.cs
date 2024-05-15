@@ -22,6 +22,9 @@ namespace FrontEnd.Model
         /// </summary>
         public event OnDirtyChangedEventHandler? OnDirtyChanged;
 
+        /// <summary>
+        /// Sets the latest changed Property to their previous value.
+        /// </summary>
         public void Undo();
     }
 
@@ -70,6 +73,7 @@ namespace FrontEnd.Model
             foreach (var field in AllFields.Where(s=>s.Changed)) 
             {
                 field.Property.SetValue(this, field.Value);
+                field.Changed = false;
             }
 
             IsDirty = false;
