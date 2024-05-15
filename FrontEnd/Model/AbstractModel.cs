@@ -3,6 +3,7 @@ using FrontEnd.Events;
 using FrontEnd.Notifier;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace FrontEnd.Model
 {
@@ -44,7 +45,16 @@ namespace FrontEnd.Model
             RaisePropertyChanged(propName);
             AfterUpdate?.Invoke(this, args);
         }
-        
+
+        public override bool AllowUpdate()
+        {
+            bool result = base.AllowUpdate();
+
+            if (!result)
+                MessageBox.Show($"Please fill all mandatory fields:\n{GetEmptyMandatoryFields()}","Something is missing");
+
+            return result;
+        }
     }
 }
 

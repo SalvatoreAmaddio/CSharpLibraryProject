@@ -78,13 +78,12 @@ namespace Backend.Model
         public void SetParameters(List<QueryParameter>? parameters);
 
         /// <summary>
-        /// This method should implement some logic by which Update and Insert can fire if certain conditions are met.
-        /// <para/>
-        /// For instance, if some fields are supposed not to be null, or greater than a given number, or must have a specific value/format, you can implement your logic here.
-        /// <para/>
-        /// If you do not need any logic, just return true.
-        /// </summary>
-        /// <returns>true if all conditions are met; False if one ore more condition are not met.</returns>
+        ///By default, this method check for any Property marked as <see cref="Mandatory"/>. If any is found and is null, it will return false.
+        ///You can override this method to implement some additional logic by which Update and Insert can fire if certain conditions are met.
+        ///<para/>
+        ///For instance, if some fields are supposed to greater than a given number, or must have a specific value/format, you can implement your logic here.
+        ///</summary>
+        ///<returns>true if all conditions are met; False if one ore more condition are not met.</returns>
         public bool AllowUpdate();
 
         /// <summary>
@@ -126,5 +125,11 @@ namespace Backend.Model
         /// </summary>
         /// <value>A string representing the Insert Statement.</value>
         public string InsertQry { get; set; }
+
+        /// <summary>
+        /// Gets a list of Properties marked with the <see cref="Mandatory"/> attribute but they are null.
+        /// </summary>
+        /// <returns>A string</returns>
+        public string GetEmptyMandatoryFields();
     }
 }

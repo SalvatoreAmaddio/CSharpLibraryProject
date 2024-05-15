@@ -1,6 +1,7 @@
 ﻿using Backend.Database;
 using System.Data.Common;
 using System.Reflection;
+using System.Text;
 
 namespace Backend.Model
 {
@@ -38,6 +39,20 @@ namespace Backend.Model
             Table? tableAttr = GetType().GetCustomAttribute<Table>();
             return $"{tableAttr}";
         }
+
+        private IEnumerable<PropertyInfo> GetMandatoryFields() 
+        {
+            Type type = GetType();
+            PropertyInfo[] props = type.GetProperties();
+
+            foreach (PropertyInfo prop in props)
+            {
+                var field = prop.GetCustomAttribute<Mandatory>();
+                if (field != null)
+                    yield return prop;
+            }
+        }
+
         private IEnumerable<ITableField> GetTableFieldsAs<F>() where F : AbstractField
         {
             Type type = GetType();
@@ -81,7 +96,58 @@ namespace Backend.Model
             }
         }
 
-        public abstract bool AllowUpdate();
+        private readonly List<EmptyField> emptyFields = [];
 
+        public string GetEmptyMandatoryFields() 
+        {
+            StringBuilder sb = new();
+
+            foreach(EmptyField field in emptyFields) 
+            { 
+                sb.Append($"- {field.Name}\n");
+            }
+
+            return sb.ToString();
+        }
+
+        public virtual bool AllowUpdate()
+        {
+            emptyFields.Clear();
+
+            foreach(var field in GetMandatoryFields()) 
+            {
+                string name = field.Name;
+                object? value = field.GetValue(this);
+
+                if (value == null) 
+                {
+                    emptyFields.Add(new(name,value));
+                    continue;
+                }
+
+                if (field.PropertyType == typeof(string)) 
+                    if (string.IsNullOrEmpty(value.ToString())) 
+                    {
+                        emptyFields.Add(new(name, value));
+                        continue;
+                    }
+
+                if (field.PropertyType == typeof(ISQLModel))
+                    if (((ISQLModel)field).IsNewRecord()) 
+                    {
+                        emptyFields.Add(new(name, value));
+                        continue;
+                    }
+            }
+
+            return emptyFields.Count == 0;
+        }
+
+        internal class EmptyField(string name, object? value) 
+        {
+            public string Name { get; } = name;
+            public object? Value { get; } = value;
+            public override string? ToString() => Name;
+        }
     }
 }
