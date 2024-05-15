@@ -22,7 +22,7 @@
             <Label Grid.Row="1" Content="Last Name"/>
             <fr:Text Text="{Binding CurrentRecord.LastName}" Grid.Row="1" Grid.Column="1"/>
             <Label Grid.Row="2" Content="DOB"/>
-            <fr:DateField DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
+            <DatePicker DisplayDate="{Binding CurrentRecord.DOB}" SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
             <Label Content="Gender" Grid.Row="3"/>
             <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender}" Grid.Row="3" Grid.Column="1"/>
             <Label Content="Department" Grid.Row="4"/>
@@ -50,7 +50,7 @@
                             <DataTemplate>
                                 <fr:FormRow>
                                     <Grid fr:Definition.ColumnDefinitions="100,100,50,50">
-                                        <fr:DateField SelectedDate="{Binding DOP}"/>
+                                        <DatePicker SelectedDate="{Binding DOP}"/>
                                         <fr:Text Text="{Binding Salary,StringFormat=N2}" Grid.Column="1"/>
                                         <fr:SaveButton Height="30" Grid.Column="2" IsWithinList="True"/>
                                         <fr:DeleteButton Height="30" Grid.Column="3" IsWithinList="True"/>

@@ -4,6 +4,8 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/colors.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/TabStyle.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/DatePickerStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Label" x:Key="ColumnStyle">
@@ -20,9 +22,12 @@
     </Style>
 
     <Style TargetType="DatePicker">
+        <Setter Property="Template" Value="{StaticResource DatePickerTemplate}"/>
+        <Setter Property="CalendarStyle" Value="{StaticResource DatePickerCalendarStyle}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
     </Style>
-    
-   
+
+    <Style TargetType="TabItem" BasedOn="{StaticResource TabStyle}"/>
+
 </ResourceDictionary>

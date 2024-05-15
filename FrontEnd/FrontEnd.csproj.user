@@ -5,12 +5,6 @@
     <Compile Update="Forms\Controls\Combo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Forms\Controls\DateField.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Forms\Tab.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Forms\Controls\Text.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -22,9 +16,6 @@
     <Page Update="Forms\Controls\Combo.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Forms\Controls\DateField.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Forms\Controls\Text.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -32,6 +23,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DatePickerStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\FrontEndDictionary.xaml">

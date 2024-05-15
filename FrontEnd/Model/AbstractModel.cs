@@ -55,9 +55,9 @@ namespace FrontEnd.Model
 
         public void UpdateProperty<T>(ref T value, ref T _backProp, [CallerMemberName] string propName = "")
         {
-            SimpleTableField? field = AllFields.Find(s => s.Name.Equals(propName));
-            field.Value = _backProp;
-            field.Changed = true;
+            //SimpleTableField? field = AllFields.Find(s => s.Name.Equals(propName));
+            //field.Value = _backProp;
+            //field.Changed = true;
 
             BeforeUpdateArgs args = new(value, _backProp, propName);
             BeforeUpdate?.Invoke(this, args);

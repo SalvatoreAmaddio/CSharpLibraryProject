@@ -11,21 +11,21 @@
 
     <Grid Background="{StaticResource DefaultWhite}">
         <TabControl>
-            <fr:Tab Header="Employees">
+            <TabItem Header="Employees">
                 <Frame>
                     <Frame.Content>
                         <local:EmployeeListPage/>
                     </Frame.Content>
                 </Frame>
-            </fr:Tab>
+            </TabItem>
 
-            <fr:Tab Header="Report Viewer">
+            <TabItem Header="Report Viewer">
                 <Frame>
                     <Frame.Content>
                         <local:Report/>
                     </Frame.Content>
                 </Frame>
-            </fr:Tab>
+            </TabItem>
         </TabControl>
     </Grid>
 
