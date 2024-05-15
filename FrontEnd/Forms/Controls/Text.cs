@@ -151,7 +151,7 @@ namespace FrontEnd.Forms
 
             public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
             {
-                List<object> list = [];
+                List<object?> list = [];
                 Visibility visibility = (Visibility)value;
                 list.Add((visibility == Visibility.Visible) ? txt : "");
                 return [.. list];

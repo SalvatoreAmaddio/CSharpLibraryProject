@@ -30,7 +30,7 @@ namespace MyApplication.Controller
             QueryBuiler.Clear();
             QueryBuiler.AddParameter("employeeID", ParentRecord?.GetTablePK()?.GetValue());
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-            Source.ReplaceRange(results);
+            Source.ReplaceRecords(results);
             GoFirst();
         }
 

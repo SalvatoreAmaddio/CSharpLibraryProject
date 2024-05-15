@@ -22,7 +22,7 @@ namespace Backend.Controller
         /// A recordsource object that old the collection of records.
         /// </summary>
         /// <value>A RecordSource</value>
-        public RecordSource Source { get; }
+        public IRecordSource Source { get; }
 
         /// <summary>
         /// Gets and Sets whether or no a new Record can be added. Default value is True.

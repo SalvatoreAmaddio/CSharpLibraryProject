@@ -1,17 +1,23 @@
 ﻿using Backend.Controller;
 using Backend.Database;
-using Backend.Events;
 using Backend.Exceptions;
 using Backend.Model;
 using MvvmHelpers;
 
 namespace Backend.Recordsource
 {
+    public interface IRecordSource : IParentSource, IChildSource, ICollection<ISQLModel>
+    {
+        public string RecordPositionDisplayer();
+        public INavigator Navigate();
+
+    }
+
     /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
-    public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
+    public class RecordSource : ObservableRangeCollection<ISQLModel>, IRecordSource
     {
         protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
@@ -22,11 +28,6 @@ namespace Backend.Recordsource
         /// </summary>
         public IAbstractSQLModelController? Controller { get; set; }
 
-        /// <summary>
-        /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="RecordSource"/>.
-        /// If any filter operations has been implemented in the Controller, The RecordSource can trigger them.
-        /// </summary>
-        public event FilterEventHandler? RunFilter;
 
         /// <summary>
         /// Parameterless Constructor to instantiate a RecordSource object.
@@ -50,7 +51,6 @@ namespace Backend.Recordsource
                 navigator = new Navigator(this, navigator.Index);
                 return navigator!;
             }
-
             navigator = new Navigator(this);
             return navigator!;
         }
@@ -96,12 +96,11 @@ namespace Backend.Recordsource
             foreach (var child in Children) child.Update(crud, model);
         }
 
-        public void Update(CRUD crud, ISQLModel model)
+        public virtual void Update(CRUD crud, ISQLModel model)
         {
             switch (crud)
             {
                 case CRUD.INSERT:
-                    if (Controller!.VoidParentUpdate) return;
                     Add(model);
                     Controller?.GoLast();
                     break;
@@ -113,12 +112,11 @@ namespace Backend.Recordsource
                     if (navigator == null) throw new NoNavigatorException();
                     if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
                     else Controller?.GoPrevious();
-                    if (Controller!.VoidParentUpdate) return;
                     break;
             }
-            RunFilter?.Invoke(this, new());
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);
+
     }
 }

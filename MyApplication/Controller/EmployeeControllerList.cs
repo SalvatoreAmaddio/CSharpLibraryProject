@@ -3,7 +3,7 @@ using FrontEnd.FilterSource;
 using MyApplication.Model;
 using MyApplication.View;
 using FrontEnd.Events;
-using Backend.Database;
+
 namespace MyApplication.Controller
 {
     public class EmployeeControllerList : AbstractFormListController<Employee>
@@ -36,7 +36,7 @@ namespace MyApplication.Controller
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-            Source.ReplaceRange(results);
+            Source.ReplaceRecords(results);
             GoFirst();
         }
 

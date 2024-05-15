@@ -5,6 +5,7 @@ using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Events;
 using FrontEnd.Model;
+using FrontEnd.Source;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -28,6 +29,7 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
+        public new IRecordSource<M> Source { get; protected set; }
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;
@@ -51,8 +53,17 @@ namespace FrontEnd.Controller
         public ICommand UpdateCMD { get; set; }
         public ICommand DeleteCMD { get; set; }
 
-        public AbstractFormController() : base()
+        public AbstractFormController() 
         {
+            Db = DatabaseManager.Do[DatabaseIndex];
+            if (Db.Records == null) throw new Exception($"{Db} has no records");
+            Source = new RecordSource<M>(Db.Records)
+            {
+                Controller = this
+            };
+            Db.Records.AddChild(Source);
+            GoFirst();
+
             UpdateCMD = new CMD<M>(Update);
             DeleteCMD = new CMD<M>(Delete);
         }

@@ -4,9 +4,7 @@ using FrontEnd.Controller;
 using FrontEnd.Events;
 using System.ComponentModel;
 using System.Text;
-using FrontEnd.Forms;
 using Backend.Database;
-using Backend.Exceptions;
 
 namespace FrontEnd.FilterSource
 {
@@ -95,7 +93,7 @@ namespace FrontEnd.FilterSource
     /// <summary>
     /// A List for dealing with <see cref="IFilterOption"/> objcets.
     /// <para/>
-    /// This class works in conjunction with the <see cref="Forms.FilterOption"/> GUI Control.
+    /// This class works in conjunction with the <see cref="FilterOption"/> GUI Control.
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
@@ -111,7 +109,7 @@ namespace FrontEnd.FilterSource
 
         public IParentSource? ParentSource { get; set; }
 
-        public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
+        public SourceOption(IRecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
         {
             _displayProperty = displayProperty;
             source.ParentSource?.AddChild(this);

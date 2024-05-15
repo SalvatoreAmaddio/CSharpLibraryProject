@@ -11,7 +11,7 @@ namespace FrontEnd.Forms
     /// </summary>
     public partial class Combo : ComboBox
     {
-        ResourceDictionary resourceDict = new()
+        private readonly ResourceDictionary resourceDict = new()
         {
             Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/ComboStyle.xaml")
         };
@@ -22,12 +22,24 @@ namespace FrontEnd.Forms
             Style = (Style)resourceDict["ComboStyle"];
         }
 
-        private RecordSource GetSource() => (RecordSource)ItemsSource;
         protected override async void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
-            var item = GetSource().FirstOrDefault(s => s.Equals(SelectedItem));
-            await FillText(item);
+            try
+            {
+                object? model = e.AddedItems[e.AddedItems.Count - 1];
+                object? item = null;
+                foreach (object record in ItemsSource)
+                {
+                    if (record.Equals(model))
+                    {
+                        item = record;
+                        break;
+                    }
+                }
+                await FillText(item);
+            }
+            catch { }
         }
 
         private Task FillText(object? item) 
