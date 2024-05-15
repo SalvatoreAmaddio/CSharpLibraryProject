@@ -3,7 +3,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:FrontEnd.Forms"
                     >
-    <!--x:Class="FrontEnd.Forms.Lista"-->
 
     <SolidColorBrush x:Key="ListBox.Static.Background" Color="#EDF1FF"/>
     <SolidColorBrush x:Key="ListBox.Static.Border" Color="#EDF1FF"/>
@@ -62,8 +61,6 @@
         <Setter Property="Margin" Value="0"/>
         <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Contained"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
-        <!--<EventSetter Event="LostFocus" Handler="OnListViewItemLostFocus"/>
-        <EventSetter Event="GotFocus" Handler="OnListViewItemGotFocus"/>-->
     </Style>
 
 </ResourceDictionary>

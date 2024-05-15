@@ -61,8 +61,21 @@ namespace FrontEnd.Forms
 
         public Lista() 
         {
-            ItemContainerStyle = (Style)resourceDict["ListaItemStyle"];
-            Style = (Style)resourceDict["ListaStyle"];
+            Style listaItem = (Style)resourceDict["ListaItemStyle"];
+            listaItem.Setters.Add(new EventSetter
+            {
+                Event = ListViewItem.GotFocusEvent,
+                Handler = new RoutedEventHandler(OnListViewItemGotFocus)
+            });
+
+            listaItem.Setters.Add(new EventSetter
+            {
+                Event = ListViewItem.LostFocusEvent,
+                Handler = new RoutedEventHandler(OnListViewItemLostFocus)
+            });
+
+            this.ItemContainerStyle = listaItem;
+            this.Style = (Style)resourceDict["ListaStyle"];
         }
 
         private object? OldSelection;
