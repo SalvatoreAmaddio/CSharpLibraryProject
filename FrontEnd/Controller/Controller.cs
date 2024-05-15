@@ -186,11 +186,6 @@ namespace FrontEnd.Controller
             if (OpenWindowOnNew) return;
             List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList();
 
-            foreach(var x in Source) 
-            {
-                var g = x.IsNewRecord();
-            }
-
             foreach (var item in toRemove)
                 Source.Remove(item);
         }
