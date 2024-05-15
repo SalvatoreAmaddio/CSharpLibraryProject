@@ -4,7 +4,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/colors.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/controls.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/ListaStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

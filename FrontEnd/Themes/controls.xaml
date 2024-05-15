@@ -32,8 +32,4 @@
 
     <Style TargetType="TabItem" BasedOn="{StaticResource TabStyle}"/>
 
-    <Style TargetType="forms:Combo">
-        <Setter Property="Template" Value="{StaticResource ComboBoxStyle1}"/>
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemContainerStyle1}"/>
-    </Style>
 </ResourceDictionary>

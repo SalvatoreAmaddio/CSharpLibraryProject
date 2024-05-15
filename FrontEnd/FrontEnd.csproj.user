@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Forms\Controls\Combo.xaml.cs">
+    <Compile Update="Forms\Controls\Combo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Forms\Controls\Text.xaml.cs">
@@ -13,9 +13,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Forms\Controls\Combo.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Forms\Controls\Text.xaml">
       <SubType>Designer</SubType>
     </Page>
