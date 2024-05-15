@@ -19,7 +19,6 @@ namespace FrontEnd.Forms
 
         public Combo() 
         { 
-            IsEditable = true;
             ItemContainerStyle = (Style)resourceDict["ComboItemContainerStyle"];
             Style = (Style)resourceDict["ComboStyle"];
         }

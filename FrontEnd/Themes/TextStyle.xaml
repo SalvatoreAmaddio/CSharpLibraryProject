@@ -7,7 +7,7 @@
 
     <Style TargetType="local:Text" x:Key="TextTemplateStyle">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Template" Value="{DynamicResource TextTemplate}"/>
+        <Setter Property="Template" Value="{StaticResource TextTemplate}"/>
     </Style>
         
     <ControlTemplate x:Key="TextTemplate" TargetType="{x:Type local:Text}">
@@ -18,6 +18,7 @@
                 <Button ToolTip="Clear text" x:Name="PART_clear_button" HorizontalAlignment="Right" Width="10" Background="Transparent" BorderThickness="0" Margin="0,0,5,0" Visibility="{TemplateBinding ClearButtonVisibility}"/>
             </Grid>
         </Border>
+        
         <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Opacity" TargetName="border" Value="0.56"/>
