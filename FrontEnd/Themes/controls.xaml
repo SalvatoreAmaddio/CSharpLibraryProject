@@ -8,6 +8,7 @@
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/TabStyle.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/DatePickerStyle.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/ComboStyle.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/TextStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Label" x:Key="ColumnStyle">
@@ -22,6 +23,8 @@
     <Style TargetType="TextBox">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+    
+    
 
     <Style TargetType="DatePicker">
         <Setter Property="Template" Value="{StaticResource DatePickerTemplate}"/>

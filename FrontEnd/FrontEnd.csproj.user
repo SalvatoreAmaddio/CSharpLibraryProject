@@ -5,7 +5,7 @@
     <Compile Update="Forms\Controls\Combo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Forms\Controls\Text.xaml.cs">
+    <Compile Update="Forms\Controls\Text.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Reports\ListPage.xaml.cs">
@@ -13,9 +13,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Forms\Controls\Text.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Reports\ListPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -38,6 +35,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\TabStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\TextStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Resource Update="Themes\controls.xaml">
