@@ -10,7 +10,7 @@
         Title="MainWindow">
 
     <Grid Background="#EDF1FF">
-        <TabControl Background="#EDF1FF">
+        <TabControl>
             <fr:Tab Header="Employees">
                 <Frame>
                     <Frame.Content>
