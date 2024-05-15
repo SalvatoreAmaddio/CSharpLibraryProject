@@ -245,7 +245,7 @@ namespace FrontEnd.Controller
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<Backend.Recordsource.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
 
     }
 }
