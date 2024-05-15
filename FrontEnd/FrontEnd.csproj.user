@@ -8,6 +8,9 @@
     <Compile Update="Forms\Controls\DateField.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\Tab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\Text.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -23,6 +26,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Forms\Controls\Lista.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Forms\Controls\Tab.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Forms\Controls\Text.xaml">

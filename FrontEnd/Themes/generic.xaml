@@ -158,14 +158,14 @@
                                     <Setter Property="Width" Value="33"/>
                                     <Setter Property="Command" Value="{Binding OnClickCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
                                     <Setter Property="FontWeight" Value="Bold"/>
-                                    <Setter Property="FontSize" Value="20"/>
+                                    <Setter Property="FontSize" Value="10"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <Button Content="🢐🢐" ToolTip="First Record" CommandParameter="1"/>
-                            <Button Content="🢐" ToolTip="Previous Record" CommandParameter="2"/>
+                            <Button Content="◀◀" ToolTip="First Record" CommandParameter="1"/>
+                            <Button Content="◀" ToolTip="Previous Record" CommandParameter="2"/>
                             <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
-                            <Button Content="🢒" ToolTip="Next Record" CommandParameter="3"/>
-                            <Button Content="🢒🢒" ToolTip="Last Record" CommandParameter="4"/>
+                            <Button Content="▶" ToolTip="Next Record" CommandParameter="3"/>
+                            <Button Content="▶▶" ToolTip="Last Record" CommandParameter="4"/>
                             <Separator Width="20" Background="Transparent"/>
                             <Button Content="NEW" FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5"/>
                         </StackPanel>
@@ -194,7 +194,7 @@
                         <Grid.Background>
                             <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" />
                         </Grid.Background>
-                        <Label Padding="5,0,0,0" Content="{Binding IsDirty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource IsDirtyConverter}}" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" FontWeight="Bold" FontSize="20"/>
+                        <Label Padding="5,0,0,0" Content="{Binding IsDirty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource IsDirtyConverter}}" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" FontWeight="Bold" FontSize="10"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

@@ -20,7 +20,7 @@ namespace Backend.Model
         public AbstractSQLModel()
         {
             _ = new QueryBuilder(this);
-            AllFields = new(GetAllTableFields());
+            //AllFields = new(GetAllTableFields());
         }
 
         public abstract ISQLModel Read(DbDataReader reader);

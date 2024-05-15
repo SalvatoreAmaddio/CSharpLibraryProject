@@ -10,23 +10,25 @@
         WindowState="Maximized"
         Title="MainWindow">
 
-    <Grid>
-        <TabControl>
-            <TabItem Header="Employees">
+    <Grid Background="#EDF1FF">
+        <TabControl Background="#EDF1FF">
+            <fr:Tab Header="Tab1">
+            </fr:Tab>
+            <fr:Tab Header="Employees">
                 <Frame>
                     <Frame.Content>
                         <local:EmployeeListPage/>
                     </Frame.Content>
                 </Frame>
-            </TabItem>
+            </fr:Tab>
 
-            <!--<TabItem Header="Report Viewer">
+            <fr:Tab Header="Report Viewer">
                 <Frame>
                     <Frame.Content>
                         <local:Report/>
                     </Frame.Content>
                 </Frame>
-            </TabItem>-->
+            </fr:Tab>
         </TabControl>
     </Grid>
 

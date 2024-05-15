@@ -22,4 +22,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
     </Style>
+    
+   
 </ResourceDictionary>
