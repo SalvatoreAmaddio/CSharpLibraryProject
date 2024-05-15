@@ -8,7 +8,7 @@
     <Compile Update="Forms\Controls\DateField.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Forms\Controls\Tab.xaml.cs">
+    <Compile Update="Forms\Tab.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Forms\Controls\Text.xaml.cs">
@@ -28,20 +28,26 @@
     <Page Update="Forms\Controls\Lista.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Forms\Controls\Tab.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Forms\Controls\Text.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Reports\ListPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Themes\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\FrontEndDictionary.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\generic.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\styles.xaml">
+    <Page Update="Themes\TabStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Resource Update="Themes\controls.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
 </Project>

@@ -33,7 +33,7 @@ namespace FrontEnd.Forms
         {
             ResourceDictionary resourceDict = new ()
             {
-                Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/styles.xaml")
+                Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/controls.xaml")
             };
             Style? labelStyle = null;
 

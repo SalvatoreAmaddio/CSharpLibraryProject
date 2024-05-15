@@ -9,7 +9,7 @@
         WindowState="Maximized"
         Title="MainWindow">
 
-    <Grid Background="#EDF1FF">
+    <Grid Background="{StaticResource DefaultWhite}">
         <TabControl>
             <fr:Tab Header="Employees">
                 <Frame>
