@@ -1,10 +1,8 @@
 ﻿using Backend.Database;
-using FrontEnd.Forms.FormComponents;
 using FrontEnd.Utils;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace FrontEnd.Forms.Controls
 {
