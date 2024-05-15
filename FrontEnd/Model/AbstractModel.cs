@@ -7,13 +7,20 @@ using System.Windows;
 
 namespace FrontEnd.Model
 {
-    public interface IAbstractModel : ISQLModel
+    public interface IAbstractModel : ISQLModel, INotifier 
     {
+        /// <summary>
+        /// It gets and sets a value that indicates if any property, which uses <see cref="UpdateProperty{T}(ref T, ref T, string)"/>, of a object extending <see cref="AbstractNotifier"/> has changed.
+        /// </summary>
+        /// <value>True if a property has changed.</value>
+        public bool IsDirty { get; set; }
+
     }
+
     /// <summary>
     /// This class extends the <see cref="AbstractSQLModel"/> and adds extra functionalities for UI purposes
     /// </summary>
-    public abstract class AbstractModel : AbstractSQLModel, INotifier, IAbstractModel
+    public abstract class AbstractModel : AbstractSQLModel, IAbstractModel
     {
         public event OnDirtyChangedEventHandler? OnDirtyChanged;
         bool _isDirty = false;

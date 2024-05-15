@@ -20,7 +20,6 @@ namespace FrontEnd.Controller
     {
         string _search = string.Empty;
         bool _isloading = false;
-        bool _isDirty = false;
         private bool _allowNewRecord = true;
         protected ISQLModel? _currentModel;
         private string _records = string.Empty;
@@ -29,15 +28,6 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                _isDirty = value;
-                RaisePropertyChanged(nameof(IsDirty));
-            }
-        }
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;
@@ -104,7 +94,6 @@ namespace FrontEnd.Controller
             BeforeUpdate?.Invoke(this, args);
             if (args.Cancel) return;
             _backProp = value;
-            IsDirty = true;
             RaisePropertyChanged(propName);
             AfterUpdate?.Invoke(this, args);
         }
