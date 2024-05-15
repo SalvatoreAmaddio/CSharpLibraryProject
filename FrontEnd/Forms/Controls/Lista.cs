@@ -2,8 +2,6 @@
 using System.Windows.Controls;
 using FrontEnd.Controller;
 using FrontEnd.Model;
-using Backend.Model;
-using Backend.Recordsource;
 
 namespace FrontEnd.Forms
 {
@@ -12,7 +10,7 @@ namespace FrontEnd.Forms
     /// Such as column's header, see the <see cref="Header"/> property.
     /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
     /// <para/>
-    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="RecordSource"/>
+    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="Backend.Recordsource.RecordSource"/>
     /// </summary>
     public partial class Lista : ListView
     {
@@ -114,7 +112,7 @@ namespace FrontEnd.Forms
                 }
                 else //rollback to the previous selecteditem.
                 {
-                    ISQLModel? oldModel = (ISQLModel?)OldSelection;
+                    AbstractModel? oldModel = (AbstractModel?)OldSelection;
                     Controller?.CleanSource();
                     Controller?.GoAt(oldModel);
                 }

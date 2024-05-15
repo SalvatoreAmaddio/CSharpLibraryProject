@@ -6,18 +6,12 @@ using MvvmHelpers;
 
 namespace Backend.Recordsource
 {
-    public interface IRecordSource : IParentSource, IChildSource, ICollection<ISQLModel>
-    {
-        public string RecordPositionDisplayer();
-        public INavigator Navigate();
-
-    }
 
     /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
-    public class RecordSource : ObservableRangeCollection<ISQLModel>, IRecordSource
+    public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
         protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
@@ -73,14 +67,14 @@ namespace Backend.Recordsource
         /// Return a the position of the records within the RecordSource.
         /// </summary>
         /// <returns>A string.</returns>
-        public string RecordPositionDisplayer()
+        public virtual string RecordPositionDisplayer()
         {
-            if (navigator == null) throw new NoNavigatorException();
+            if (Navigate() == null) throw new NoNavigatorException();
             return true switch
             {
-                true when navigator.NoRecords => "NO RECORDS",
-                true when navigator.IsNewRecord => "New Record",
-                _ => $"Record {navigator?.RecNum} of {navigator?.RecordCount}",
+                true when Navigate().NoRecords => "NO RECORDS",
+                true when Navigate().IsNewRecord => "New Record",
+                _ => $"Record {Navigate()?.RecNum} of {Navigate()?.RecordCount}",
             };
         }
 
@@ -117,6 +111,11 @@ namespace Backend.Recordsource
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);
+
+        public void ReplaceRecords(IEnumerable<ISQLModel> range)
+        {
+            ReplaceRange(range);
+        }
 
     }
 }

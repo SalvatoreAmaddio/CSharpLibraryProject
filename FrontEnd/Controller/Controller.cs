@@ -5,7 +5,7 @@ using Backend.Model;
 using Backend.Recordsource;
 using FrontEnd.Events;
 using FrontEnd.Model;
-using FrontEnd.Source;
+using FrontEnd.Recordsource;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -29,7 +29,6 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
-        public new IRecordSource<M> Source { get; protected set; }
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;
@@ -55,17 +54,16 @@ namespace FrontEnd.Controller
 
         public AbstractFormController() 
         {
-            Db = DatabaseManager.Do[DatabaseIndex];
-            if (Db.Records == null) throw new Exception($"{Db} has no records");
-            Source = new RecordSource<M>(Db.Records)
+            UpdateCMD = new CMD<M>(Update);
+            DeleteCMD = new CMD<M>(Delete);
+        }
+
+        protected override RecordSource initSource()
+        {
+            return new RecordSource<M>(Db.Records)
             {
                 Controller = this
             };
-            Db.Records.AddChild(Source);
-            GoFirst();
-
-            UpdateCMD = new CMD<M>(Update);
-            DeleteCMD = new CMD<M>(Delete);
         }
 
         public bool PerformUpdate() => Update(CurrentRecord);
@@ -162,7 +160,7 @@ namespace FrontEnd.Controller
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);
             QueryBuiler = new(SearchQry);
-            Source.RunFilter += OnSourceRunFilter;
+            ((RecordSource<M>)Source).RunFilter += OnSourceRunFilter;
         }
         public abstract Task SearchRecordAsync();
         public abstract void OnOptionFilter();
@@ -187,6 +185,11 @@ namespace FrontEnd.Controller
         {
             if (OpenWindowOnNew) return;
             List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList();
+
+            foreach(var x in Source) 
+            {
+                var g = x.IsNewRecord();
+            }
 
             foreach (var item in toRemove)
                 Source.Remove(item);
@@ -237,12 +240,12 @@ namespace FrontEnd.Controller
         }
 
         /// <summary>
-        /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
+        /// Wrap up method for the <see cref="Backend.Recordsource.RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
         /// </summary>
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<Backend.Recordsource.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
 
     }
 }

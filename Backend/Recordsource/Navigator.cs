@@ -8,7 +8,7 @@ namespace Backend.Recordsource
     /// </summary>
     public class Navigator : INavigator
     {
-        private ISQLModel[] _records;
+        protected ISQLModel[] _records;
         public int Index { get; set; } = -1;
         public int RecordCount => _records.Length;
         public bool IsNewRecord => Index > LastIndex;
