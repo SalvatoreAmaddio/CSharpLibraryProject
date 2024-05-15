@@ -16,10 +16,11 @@ namespace Backend.Model
         public string InsertQry { get; set; } = string.Empty;
         public string DeleteQry { get; set; } = string.Empty;
         public string RecordCountQry { get; set; } = string.Empty;
-
+        public List<SimpleTableField> AllFields { get; }
         public AbstractSQLModel()
         {
             _ = new QueryBuilder(this);
+            AllFields = new(GetAllTableFields());
         }
 
         public abstract ISQLModel Read(DbDataReader reader);
@@ -50,6 +51,20 @@ namespace Backend.Model
                 var field = prop.GetCustomAttribute<Mandatory>();
                 if (field != null)
                     yield return prop;
+            }
+        }
+
+        private IEnumerable<SimpleTableField> GetAllTableFields()
+        {
+            Type type = GetType();
+            PropertyInfo[] props = type.GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                AbstractField? field = prop.GetCustomAttribute<AbstractField>();
+                if (field != null)
+                {
+                    yield return new SimpleTableField(prop.Name, null, prop);
+                }
             }
         }
 
@@ -96,16 +111,14 @@ namespace Backend.Model
             }
         }
 
-        private readonly List<EmptyField> emptyFields = [];
+        private readonly List<SimpleTableField> emptyFields = [];
 
         public string GetEmptyMandatoryFields() 
         {
             StringBuilder sb = new();
 
-            foreach(EmptyField field in emptyFields) 
-            { 
+            foreach(SimpleTableField field in emptyFields) 
                 sb.Append($"- {field.Name}\n");
-            }
 
             return sb.ToString();
         }
@@ -121,33 +134,36 @@ namespace Backend.Model
 
                 if (value == null) 
                 {
-                    emptyFields.Add(new(name,value));
+                    emptyFields.Add(new(name,value, field));
                     continue;
                 }
 
                 if (field.PropertyType == typeof(string)) 
                     if (string.IsNullOrEmpty(value.ToString())) 
                     {
-                        emptyFields.Add(new(name, value));
+                        emptyFields.Add(new(name, value, field));
                         continue;
                     }
 
                 if (field.PropertyType == typeof(ISQLModel))
                     if (((ISQLModel)field).IsNewRecord()) 
                     {
-                        emptyFields.Add(new(name, value));
+                        emptyFields.Add(new(name, value, field));
                         continue;
                     }
             }
 
             return emptyFields.Count == 0;
         }
+    
+    }
 
-        internal class EmptyField(string name, object? value) 
-        {
-            public string Name { get; } = name;
-            public object? Value { get; } = value;
-            public override string? ToString() => Name;
-        }
+    public class SimpleTableField(string name, object? value, PropertyInfo property)
+    {
+        public PropertyInfo Property = property;
+        public string Name { get; } = name;
+        public object? Value { get; set; } = value;
+        public bool Changed { get; set; } = true;
+        public override string? ToString() => Name;
     }
 }

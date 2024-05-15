@@ -1,5 +1,6 @@
 ﻿using Backend.Database;
 using System.Data.Common;
+using static Backend.Model.AbstractSQLModel;
 
 namespace Backend.Model
 {
@@ -9,6 +10,8 @@ namespace Backend.Model
     /// </summary>
     public interface ISQLModel 
     {
+        public List<SimpleTableField> AllFields { get; }
+
         /// <summary>
         /// This method allows the creation of an object by reading the DataReader.
         /// <para></para>

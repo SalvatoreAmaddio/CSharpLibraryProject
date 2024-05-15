@@ -2,6 +2,7 @@
 using FrontEnd.Events;
 using FrontEnd.Notifier;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -15,6 +16,13 @@ namespace FrontEnd.Model
         /// <value>True if a property has changed.</value>
         public bool IsDirty { get; set; }
 
+        /// <summary>
+        /// Occurs when the <see cref="IsDirty"/> property gets from true to false.
+        /// This event is set and triggered by the <see cref="Forms.SubForm"/> class.
+        /// </summary>
+        public event OnDirtyChangedEventHandler? OnDirtyChanged;
+
+        public void Undo();
     }
 
     /// <summary>
@@ -44,6 +52,10 @@ namespace FrontEnd.Model
 
         public void UpdateProperty<T>(ref T value, ref T _backProp, [CallerMemberName] string propName = "")
         {
+            SimpleTableField? field = AllFields.Find(s => s.Name.Equals(propName));
+            field.Value = _backProp;
+            field.Changed = true;
+
             BeforeUpdateArgs args = new(value, _backProp, propName);
             BeforeUpdate?.Invoke(this, args);
             if (args.Cancel) return;
@@ -53,6 +65,15 @@ namespace FrontEnd.Model
             AfterUpdate?.Invoke(this, args);
         }
 
+        public void Undo() 
+        { 
+            foreach (var field in AllFields.Where(s=>s.Changed)) 
+            {
+                field.Property.SetValue(this, field.Value);
+            }
+
+            IsDirty = false;
+        }
         public override bool AllowUpdate()
         {
             bool result = base.AllowUpdate();
