@@ -5,15 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyApplication.View"
         xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
-        xmlns:controller="clr-namespace:MyApplication.Controller"
         mc:Ignorable="d"
         WindowState="Maximized"
         Title="MainWindow">
 
     <Grid Background="#EDF1FF">
         <TabControl Background="#EDF1FF">
-            <fr:Tab Header="Tab1">
-            </fr:Tab>
             <fr:Tab Header="Employees">
                 <Frame>
                     <Frame.Content>
