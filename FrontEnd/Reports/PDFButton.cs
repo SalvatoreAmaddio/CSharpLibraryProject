@@ -10,7 +10,7 @@ namespace FrontEnd.Reports
             ToolTip = "Print";
             Content = new Image()
             {
-                Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/pdf.png")
+                Source = Helper.LoadFromImages("pdf")
             };
 
         }

@@ -1,5 +1,6 @@
 ﻿using FrontEnd.Controller;
 using FrontEnd.Model;
+using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -48,10 +49,7 @@ namespace FrontEnd.Forms
         private static Style CreateStyle(Style? basedOn) => new(targetType: typeof(Label), basedOn: basedOn);
         private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
-        private readonly ResourceDictionary resourceDict = new()
-        {
-            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/Lista.xaml")
-        };
+        private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Lista));
 
         private object? OldSelection;
 

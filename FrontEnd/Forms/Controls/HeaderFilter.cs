@@ -29,11 +29,11 @@ namespace FrontEnd.Forms
         private Button? DropDownButton;
         private readonly Image Filter = new()
         {
-            Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/filter.png")
+            Source = Helper.LoadFromImages("filter") 
         };
         private readonly Image ClearFilter = new()
         {
-            Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/clear_filter.png")
+            Source = Helper.LoadFromImages("clearfilter")
         };
 
         static HeaderFilter() => DefaultStyleKeyProperty.OverrideMetadata(typeof(HeaderFilter), new FrameworkPropertyMetadata(typeof(HeaderFilter)));

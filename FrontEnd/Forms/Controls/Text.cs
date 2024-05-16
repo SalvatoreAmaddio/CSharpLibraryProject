@@ -17,13 +17,10 @@ namespace FrontEnd.Forms
         private Button? ClearButton;
         private readonly Image ClearImg = new()
         {
-            Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/close.png")
+            Source = Helper.LoadFromImages("close")
         };
 
-        private readonly ResourceDictionary resourceDict = new()
-        {
-            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/Text.xaml")
-        };
+        private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Text));
 
         static Text() 
         {

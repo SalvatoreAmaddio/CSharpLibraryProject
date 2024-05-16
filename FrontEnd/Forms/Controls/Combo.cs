@@ -11,7 +11,7 @@ namespace FrontEnd.Forms
     /// </summary>
     public partial class Combo : ComboBox
     {
-        private readonly ResourceDictionary resourceDict = Helper.GetDictionary("Combo");
+        private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Combo));
 
         public Combo() 
         { 
