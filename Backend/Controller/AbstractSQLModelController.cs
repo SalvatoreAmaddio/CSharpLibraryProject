@@ -35,7 +35,8 @@ namespace Backend.Controller
 
         public virtual void GoNext()
         {
-            Navigator.MoveNext();
+            bool moved = Navigator.MoveNext();
+            if (!moved) return;
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
@@ -64,6 +65,7 @@ namespace Backend.Controller
         public virtual void GoNew()
         {
             if (!AllowNewRecord) return;
+            if (Navigator.IsNewRecord) return;
             Navigator.MoveNew();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();

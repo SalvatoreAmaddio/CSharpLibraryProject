@@ -1,18 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using FrontEnd.Controller;
+﻿using FrontEnd.Controller;
 using FrontEnd.Model;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace FrontEnd.Forms
 {
-    /// <summary>
-    /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
-    /// Such as column's header, see the <see cref="Header"/> property.
-    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
-    /// <para/>
-    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="Backend.Recordsource.RecordSource"/>
-    /// </summary>
-    public partial class Lista : ListView
+    public class Lista : ListView
     {
         #region Header
         /// <summary>
@@ -24,12 +19,11 @@ namespace FrontEnd.Forms
             set => SetValue(HeaderProperty, value);
         }
 
-        public static readonly DependencyProperty HeaderProperty =
-            DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata(OnHeaderPropertyChanged));
+        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(nameof(Header), typeof(Grid), typeof(Lista), new PropertyMetadata(OnHeaderPropertyChanged));
 
         private static void OnHeaderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ResourceDictionary resourceDict = new ()
+            ResourceDictionary resourceDict = new()
             {
                 Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/controls.xaml")
             };
@@ -44,12 +38,11 @@ namespace FrontEnd.Forms
             grid.Name = "listHeader";
         }
         #endregion
-        
-        private static Style CreateStyle(Style? basedOn) 
+
+        private static Style CreateStyle(Style? basedOn)
         {
             return new Style(targetType: typeof(Label), basedOn: basedOn);
         }
-
         private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
         ResourceDictionary resourceDict = new()
@@ -57,7 +50,9 @@ namespace FrontEnd.Forms
             Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/ListaStyle.xaml")
         };
 
-        public Lista() 
+        private object? OldSelection;
+
+        public Lista()
         {
             Style listaItem = (Style)resourceDict["ListaItemStyle"];
             listaItem.Setters.Add(new EventSetter
@@ -68,46 +63,56 @@ namespace FrontEnd.Forms
 
             listaItem.Setters.Add(new EventSetter
             {
-                Event = ListViewItem.LostFocusEvent,
-                Handler = new RoutedEventHandler(OnListViewItemLostFocus)
+                Event = ListViewItem.LostKeyboardFocusEvent,
+                Handler = new KeyboardFocusChangedEventHandler(ListViewItemKeyboardFocusChanged)
             });
 
-            this.ItemContainerStyle = listaItem;
-            this.Style = (Style)resourceDict["ListaStyle"];
+            ItemContainerStyle = listaItem;
+            Style = (Style)resourceDict["ListaStyle"];
         }
 
-        private object? OldSelection;
+        private void ListViewItemKeyboardFocusChanged(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (e.NewFocus is null || e.NewFocus is not FrameworkElement element) return;
+            if (element.DataContext is IAbstractFormController) 
+            {
+                AbstractModel ListViewItemDataContext = (AbstractModel)((ListViewItem)sender).DataContext;
+                OnListViewItemLostFocus(ListViewItemDataContext);
+            }
+        }
+
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
+
             int lastRemovedIndex = e.RemovedItems.Count - 1;
+
             if (lastRemovedIndex >= 0) 
             {
                 OldSelection = e.RemovedItems[lastRemovedIndex];
             }
-            int lastIndex  = e.AddedItems.Count - 1;
-            try 
+
+            int lastIndex = e.AddedItems.Count - 1;
+            try
             {
                 AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
                 ScrollIntoView(lastSelectedObject);
             }
             catch (Exception) { }
         }
-
-        private void OnListViewItemLostFocus(object sender, RoutedEventArgs e)
+        
+        private void OnListViewItemLostFocus(AbstractModel record)
         {
-            if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
-           
-            if (record.IsNewRecord()) 
+
+            if (record.IsNewRecord())
             {
-                MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?","Wait",MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     bool? updateResult = Controller?.PerformUpdate();
                     if (!updateResult!.Value) //if the update failed, move the focus to the ListViewItem.
                     {
-                        ((ListViewItem)sender).Focus();
-                        ScrollIntoView(sender);
+                        ScrollIntoView(record);
                     }
                 }
                 else //rollback to the previous selecteditem.
@@ -119,9 +124,13 @@ namespace FrontEnd.Forms
             }
         }
 
-        private void OnListViewItemGotFocus(object sender, RoutedEventArgs e) 
+        private void OnListViewItemGotFocus(object sender, RoutedEventArgs e)
         {
             if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
+            if (!record.Equals(SelectedItem)) 
+            {
+                OnListViewItemLostFocus((AbstractModel)SelectedItem);
+            }
             Controller?.GoAt(record);
         }
     }

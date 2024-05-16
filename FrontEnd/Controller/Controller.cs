@@ -87,6 +87,7 @@ namespace FrontEnd.Controller
         public override void GoNew()
         {
             if (!AllowNewRecord) return;
+            if (Navigator.IsNewRecord) return;
             Navigator.MoveNew();
             CurrentRecord = new M();
             InvokeOnNewRecordEvent();
@@ -197,7 +198,7 @@ namespace FrontEnd.Controller
                 OpenNew();
                 return;
             }
-
+            if (Source.Any(s => s.IsNewRecord())) return;
             Source.Add(new M());
             Navigator.MoveLast();
             CurrentModel = Navigator.Current;
