@@ -2,9 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/images.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/colors.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/controls.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Images.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Strings.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Colors.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Controls.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

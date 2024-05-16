@@ -3,6 +3,7 @@ using System.Windows.Data;
 using System.Globalization;
 using FrontEnd.Controller;
 using FrontEnd.Model;
+using FrontEnd.Utils;
 
 namespace FrontEnd.Forms.FormComponents
 {
@@ -43,20 +44,23 @@ namespace FrontEnd.Forms.FormComponents
     /// </summary>
     public class IsDirtyConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        private string? NextStr = Helper.LoadFromStrings("next");
+        private string? editing = Helper.LoadFromStrings("editing");
+
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {
-                return boolValue ? "🖎" : "▶";
+                return boolValue ? editing : NextStr;
             }
-            return "▶";
+            return NextStr;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
-                return boolValue ? "🖎" : "▶";
-            return "▶";
+                return boolValue ? editing : NextStr;
+            return NextStr;
         }
     }
 }

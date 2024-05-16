@@ -7,6 +7,14 @@ namespace FrontEnd.Utils
     public class Helper
     {
         /// <summary>
+        /// Load a Resource string from the Strings.xaml dictionary.
+        /// </summary>
+        /// <param name="strKey">The resource's key</param>
+        /// <returns>A string</returns>
+        public static string? LoadFromStrings(string strKey) =>
+        GetDictionary("Strings")[strKey]?.ToString();
+
+        /// <summary>
         /// Load a BitmapImage from the Images.xaml dictionary.
         /// </summary>
         /// <param name="imgKey">The resource's key</param>

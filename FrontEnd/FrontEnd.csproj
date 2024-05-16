@@ -51,7 +51,7 @@
     <Resource Include="images\plus.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
-	<Resource Include="Themes\controls.xaml" />
+	<Resource Include="Themes\Controls.xaml" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

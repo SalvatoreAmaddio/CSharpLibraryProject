@@ -5,6 +5,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/images.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Strings.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="{x:Type formComp:RecordTracker}">
@@ -28,11 +29,11 @@
                                     <Setter Property="FontSize" Value="10"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <Button Content="◀◀" ToolTip="First Record" CommandParameter="1"/>
-                            <Button Content="◀" ToolTip="Previous Record" CommandParameter="2"/>
+                            <Button Content="{StaticResource first}" ToolTip="First Record" CommandParameter="1"/>
+                            <Button Content="{StaticResource previous}" ToolTip="Previous Record" CommandParameter="2"/>
                             <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
-                            <Button Content="▶" ToolTip="Next Record" CommandParameter="3"/>
-                            <Button Content="▶▶" ToolTip="Last Record" CommandParameter="4"/>
+                            <Button Content="{StaticResource next}" ToolTip="Next Record" CommandParameter="3"/>
+                            <Button Content="{StaticResource last}" ToolTip="Last Record" CommandParameter="4"/>
                             <Separator Width="20" Background="Transparent"/>
                             <Button FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5" Background="Transparent" BorderThickness="0">
                                 <Image Source="{StaticResource plus}"/>
