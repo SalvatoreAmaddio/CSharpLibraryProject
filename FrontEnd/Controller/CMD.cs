@@ -4,6 +4,19 @@ using System.Windows.Input;
 
 namespace FrontEnd.Controller
 {
+    public class CMDAsync(Func<Task> execute) : ICommand
+    {
+        public event EventHandler? CanExecuteChanged;
+        private readonly Func<Task> task = execute;
+
+        public bool CanExecute(object? parameter)
+        {
+            return InternetConnection.Do.IsConnected();
+        }
+
+        public async void Execute(object? parameter) => await task.Invoke();
+
+    }
     /// <summary>
     /// This class implements <see cref="ICommand"/>
     /// </summary>

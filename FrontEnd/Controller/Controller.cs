@@ -2,6 +2,7 @@
 using Backend.Database;
 using Backend.Exceptions;
 using Backend.Model;
+using Backend.Source;
 using FrontEnd.Events;
 using FrontEnd.Model;
 using System.ComponentModel;
@@ -45,6 +46,7 @@ namespace FrontEnd.Controller
         public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
         public ICommand UpdateCMD { get; set; }
         public ICommand DeleteCMD { get; set; }
+        public ICommand RequeryCMD { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event AfterUpdateEventHandler? AfterUpdate;
@@ -55,10 +57,36 @@ namespace FrontEnd.Controller
         {
             UpdateCMD = new CMD<M>(Update);
             DeleteCMD = new CMD<M>(Delete);
+            RequeryCMD = new CMDAsync(Requery);
+        }
+
+        /// <summary>
+        /// This method is called by <see cref="RequeryCMD"/> command to Requery the database table.
+        /// It awaits the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/> whose result is then used to replace the records kept in the <see cref="IAbstractSQLModelController.Db"/> property and in the <see cref="IAbstractSQLModelController.Source"/> property.
+        /// </summary>
+        protected virtual async Task Requery() 
+        {
+            IsLoading = true;
+            RecordSource? results = null;
+            await Task.Run(async () => 
+            {
+                results = await RecordSource.CreateFromAsyncList(Db.RetrieveAsync());
+
+            });
+
+            if (results == null) throw new Exception("Source is null");
+            Db.Records?.ReplaceRange(results);
+            Source.ReplaceRange(results);
+            IsLoading = false;
         }
 
         public bool PerformUpdate() => Update(CurrentRecord);
 
+        /// <summary>
+        /// This method is called by <see cref="UpdateCMD"/> command to perform an Update or Insert CRUD operation.
+        /// </summary>
+        /// <param name="model">The record that must be inserted or updated</param>
+        /// <returns>true if the operation was successful</returns>
         protected virtual bool Update(M? model)
         {
             if (model == null) return false;
@@ -67,6 +95,11 @@ namespace FrontEnd.Controller
             return true;
         }
 
+        /// <summary>
+        /// This method is called by <see cref="DeleteCMD"/> command to perform a Delete CRUD operation.
+        /// </summary>
+        /// <param name="model">The record that must be deleted</param>
+        /// <returns>true if the operation was successful</returns>
         protected virtual void Delete(M? model)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this record?", "Confirm", MessageBoxButton.YesNo);

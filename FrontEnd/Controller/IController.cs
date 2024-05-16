@@ -169,6 +169,11 @@ namespace FrontEnd.Controller
         /// Gets and Sets the Command to perform Delete CRUD operation.
         /// </summary>
         public ICommand DeleteCMD { get; set; }
+
+        /// <summary>
+        /// Gets and Sets the Command to requery the database table.
+        /// </summary>
+        public ICommand RequeryCMD { get; set; }
     }
 
     /// <summary>
