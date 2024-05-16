@@ -1,5 +1,5 @@
 ﻿using Backend.Model;
-using Backend.Recordsource;
+using Backend.Source;
 using FrontEnd.Controller;
 using FrontEnd.Events;
 using System.ComponentModel;
@@ -109,7 +109,7 @@ namespace FrontEnd.FilterSource
 
         public IParentSource? ParentSource { get; set; }
 
-        public SourceOption(Backend.Recordsource.RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
+        public SourceOption(Backend.Source.RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
         {
             _displayProperty = displayProperty;
             source.ParentSource?.AddChild(this);

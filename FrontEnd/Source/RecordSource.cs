@@ -1,17 +1,16 @@
 ﻿using Backend.Database;
 using Backend.Model;
-using Backend.Recordsource;
+using Backend.Source;
 using FrontEnd.Controller;
 using FrontEnd.Events;
 using FrontEnd.Model;
-using FrontEnd.RecordSource;
 
-namespace FrontEnd.Recordsource
+namespace FrontEnd.Source
 {
-    public class RecordSource<M>(IEnumerable<ISQLModel> source) : Backend.Recordsource.RecordSource(source) where M : AbstractModel, new()
+    public class RecordSource<M>(IEnumerable<ISQLModel> source) : RecordSource(source) where M : AbstractModel, new()
     {
         /// <summary>
-        /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="Backend.Recordsource.RecordSource"/>.
+        /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="Backend.Source.RecordSource"/>.
         /// If any filter operations has been implemented in the Controller, The RecordSource can trigger them.
         /// </summary>
         public event FilterEventHandler? RunFilter;

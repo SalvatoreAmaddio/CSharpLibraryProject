@@ -11,7 +11,7 @@ namespace FrontEnd.Forms
     /// Such as column's header, see the <see cref="Header"/> property.
     /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
     /// <para/>
-    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Recordsource.RecordSource"/>
+    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Source.RecordSource"/>
     /// </summary>
     public class Lista : ListView
     {

@@ -1,4 +1,4 @@
-﻿namespace Backend.Recordsource
+﻿namespace Backend.Source
 {
     public abstract class AbstractNavigator : INavigator
     {

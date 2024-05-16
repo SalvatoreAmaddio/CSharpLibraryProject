@@ -1,4 +1,4 @@
-﻿using Backend.Recordsource;
+﻿using Backend.Source;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -7,7 +7,7 @@ namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class extends <see cref="ComboBox"/> and adds some extra functionalities for dealing with the SelectedItem property.
-    /// Furthermore, its ItemsSource is meant to be a <see cref="Backend.Recordsource.RecordSource"/> object.
+    /// Furthermore, its ItemsSource is meant to be a <see cref="Backend.Source.RecordSource"/> object.
     /// </summary>
     public partial class Combo : ComboBox
     {

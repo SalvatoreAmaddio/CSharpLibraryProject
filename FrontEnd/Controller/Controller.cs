@@ -2,10 +2,9 @@
 using Backend.Database;
 using Backend.Exceptions;
 using Backend.Model;
-using Backend.Recordsource;
 using FrontEnd.Events;
 using FrontEnd.Model;
-using FrontEnd.Recordsource;
+using FrontEnd.Source;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -30,7 +29,6 @@ namespace FrontEnd.Controller
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
         public bool VoidParentUpdate { get; protected set; } = false;
-
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;
@@ -60,7 +58,7 @@ namespace FrontEnd.Controller
             DeleteCMD = new CMD<M>(Delete);
         }
 
-        protected override Backend.Recordsource.RecordSource initSource()
+        protected override Backend.Source.RecordSource initSource()
         {
             return new RecordSource<M>(Db.Records)
             {
@@ -238,12 +236,12 @@ namespace FrontEnd.Controller
         }
 
         /// <summary>
-        /// Wrap up method for the <see cref="Backend.Recordsource.RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
+        /// Wrap up method for the <see cref="Backend.Source.RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
         /// </summary>
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<Backend.Recordsource.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<Backend.Source.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Source.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
 
     }
 }

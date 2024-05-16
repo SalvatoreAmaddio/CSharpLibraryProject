@@ -1,14 +1,9 @@
-﻿using Backend.Recordsource;
+﻿using Backend.Source;
 using FrontEnd.Model;
 using System.Collections;
 
-namespace FrontEnd.RecordSource
+namespace FrontEnd.Source
 {
-    public interface ISourceNavigator<M> : IEnumerator<M?>, INavigator where M : AbstractModel, new()
-    {
-
-    }
-
     public class SourceNavigator<M> : AbstractNavigator, ISourceNavigator<M> where M : AbstractModel, new()
     {
         protected M[] _records;

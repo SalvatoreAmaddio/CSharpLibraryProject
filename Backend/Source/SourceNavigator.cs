@@ -1,7 +1,7 @@
 ﻿using Backend.Model;
 using System.Collections;
 
-namespace Backend.Recordsource
+namespace Backend.Source
 {
     /// <summary>
     /// Concrete implementation of the <see cref="ISourceNavigator"/> Interface.
