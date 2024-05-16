@@ -10,7 +10,7 @@ namespace Backend.Controller
         public IAbstractDatabase Db { get; protected set; } = null!;
         public abstract int DatabaseIndex { get; }
         public RecordSource Source { get; protected set; }
-        protected INavigator Navigator => Source.Navigate();
+        protected ISourceNavigator Navigator => Source.Navigate();
         public AbstractSQLModelController()
         {
             Db = DatabaseManager.Do[DatabaseIndex];

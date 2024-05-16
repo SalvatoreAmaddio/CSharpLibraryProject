@@ -8,12 +8,12 @@ namespace Backend.Recordsource
 {
 
     /// <summary>
-    /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="INavigator"/>.
-    /// see also the <seealso cref="Navigator"/> class.
+    /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="ISourceNavigator"/>.
+    /// see also the <seealso cref="SourceNavigator"/> class.
     /// </summary>
     public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
-        protected INavigator? navigator;
+        private ISourceNavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
         public IParentSource? ParentSource { get; set; }
 
@@ -21,7 +21,6 @@ namespace Backend.Recordsource
         /// The Controller to which this RecordSource is associated to.
         /// </summary>
         public IAbstractSQLModelController? Controller { get; set; }
-
 
         /// <summary>
         /// Parameterless Constructor to instantiate a RecordSource object.
@@ -35,25 +34,25 @@ namespace Backend.Recordsource
         public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
 
         /// <summary>
-        /// Override the default <c>GetEnumerator()</c> method to replace it with a <see cref="INavigator"></see> object./>
+        /// Override the default <c>GetEnumerator()</c> method to replace it with a <see cref="ISourceNavigator"></see> object./>
         /// </summary>
         /// <returns>An Enumerator object.</returns>
         public new IEnumerator<ISQLModel> GetEnumerator()
         {
             if (navigator != null) 
             {
-                navigator = new Navigator(this, navigator.Index);
+                navigator = new SourceNavigator(this, navigator.Index);
                 return navigator!;
             }
-            navigator = new Navigator(this);
+            navigator = new SourceNavigator(this);
             return navigator!;
         }
 
         /// <summary>
-        /// Return the Enumerator as an <see cref="INavigator"/> object.
+        /// Return the Enumerator as an <see cref="ISourceNavigator"/> object.
         /// </summary>
-        /// <returns>A <see cref="INavigator"/> object.</returns>
-        public INavigator Navigate() => (INavigator)GetEnumerator();
+        /// <returns>A <see cref="ISourceNavigator"/> object.</returns>
+        public ISourceNavigator Navigate() => (ISourceNavigator)GetEnumerator();
 
         /// <summary>
         /// It takes an IAsyncEnumerable, converts it to a List and returns a RecordSource object.
@@ -87,7 +86,7 @@ namespace Backend.Recordsource
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
             if (crud == CRUD.UPDATE) return;
-            foreach (var child in Children) child.Update(crud, model);
+            foreach (IChildSource child in Children) child.Update(crud, model);
         }
 
         public virtual void Update(CRUD crud, ISQLModel model)
@@ -112,10 +111,7 @@ namespace Backend.Recordsource
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);
 
-        public void ReplaceRecords(IEnumerable<ISQLModel> range)
-        {
-            ReplaceRange(range);
-        }
+        public void ReplaceRecords(IEnumerable<ISQLModel> range) => ReplaceRange(range);
 
     }
 }
