@@ -12,7 +12,7 @@ namespace FrontEnd.Forms
     {
         private readonly ResourceDictionary resourceDict = new()
         {
-            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/ComboStyle.xaml")
+            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/Combo.xaml")
         };
 
         public Combo() 

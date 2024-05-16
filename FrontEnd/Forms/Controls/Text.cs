@@ -22,7 +22,7 @@ namespace FrontEnd.Forms
 
         private readonly ResourceDictionary resourceDict = new()
         {
-            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/TextStyle.xaml")
+            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/Text.xaml")
         };
 
         static Text() 

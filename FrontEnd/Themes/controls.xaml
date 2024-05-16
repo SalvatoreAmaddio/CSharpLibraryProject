@@ -4,10 +4,10 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/colors.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/TabStyle.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/DatePickerStyle.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/ComboStyle.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/TextStyle.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Tab.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/DatePicker.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Combo.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Text.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Label" x:Key="ColumnStyle">

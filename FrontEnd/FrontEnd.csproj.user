@@ -19,13 +19,13 @@
     <Page Update="Themes\Colors.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\ComboStyle.xaml">
+    <Page Update="Themes\Combo.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\CommandPanel.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\DatePickerStyle.xaml">
+    <Page Update="Themes\DatePicker.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\HeaderFilter.xaml">
@@ -46,7 +46,7 @@
     <Page Update="Themes\generic.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\ListaStyle.xaml">
+    <Page Update="Themes\Lista.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\LoadingMask.xaml">
@@ -70,10 +70,10 @@
     <Page Update="Themes\SubForm.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\TabStyle.xaml">
+    <Page Update="Themes\Tab.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\TextStyle.xaml">
+    <Page Update="Themes\Text.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Resource Update="Themes\controls.xaml">
