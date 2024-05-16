@@ -6,7 +6,7 @@
 </div>
 
 ## Description
-DesktopBusinessAppBuilder is a comprehensive framework designed to accelerate the development of desktop business applications. Utilizing C#, .NET, and WPF, it supports both backend and frontend development, providing seamless integration with databases like MySQL and SQLite. 
+DesktopBusinessAppSharpBuilder is a comprehensive framework designed to accelerate the development of desktop business applications. Utilizing C#, .NET, and WPF, it supports both backend and frontend development, providing seamless integration with databases like MySQL and SQLite. 
 
 ## Warning:
 Framwork still under development.
