@@ -6,9 +6,7 @@
 </div>
 
 ## Description
-
-This is a library that helps building Business-oriented applications by using 
-C# and Windows Presentation Forms (WPF). It provides a set of classes for both the Backend and the Frontend. 
+DesktopBusinessAppBuilder is a comprehensive framework designed to accelerate the development of desktop business applications. Utilizing C#, .NET, and WPF, it supports both backend and frontend development, providing seamless integration with databases like MySQL and SQLite. 
 
 ## Warning:
-Library still under development.
+Framwork still under development.
