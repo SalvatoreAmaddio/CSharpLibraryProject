@@ -74,7 +74,7 @@ namespace FrontEnd.Forms
         private void ListViewItemKeyboardFocusChanged(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (e.NewFocus is null || e.NewFocus is not FrameworkElement element) return;
-            if (element.DataContext is IAbstractFormController) 
+            if (element.DataContext is IAbstractFormController)
             {
                 AbstractModel ListViewItemDataContext = (AbstractModel)((ListViewItem)sender).DataContext;
                 OnListViewItemLostFocus(ListViewItemDataContext);
