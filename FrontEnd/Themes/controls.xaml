@@ -6,7 +6,6 @@
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/colors.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Tab.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/DatePicker.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Combo.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Text.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
