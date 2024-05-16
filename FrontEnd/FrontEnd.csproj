@@ -21,11 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\nowifi.png" />
-    <None Remove="images\plus.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 
