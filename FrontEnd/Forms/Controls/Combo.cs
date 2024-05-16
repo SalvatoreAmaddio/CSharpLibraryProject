@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FrontEnd.Utils;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -10,10 +11,7 @@ namespace FrontEnd.Forms
     /// </summary>
     public partial class Combo : ComboBox
     {
-        private readonly ResourceDictionary resourceDict = new()
-        {
-            Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/Combo.xaml")
-        };
+        private readonly ResourceDictionary resourceDict = Helper.GetDictionary("Combo");
 
         public Combo() 
         { 

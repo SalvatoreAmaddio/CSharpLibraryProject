@@ -11,8 +11,18 @@ namespace FrontEnd.Forms
     /// </summary>
     public abstract class AbstractButton : Button 
     {
+        protected abstract string ToolTipText { get; }
+        protected abstract string ImgKey { get; }
         protected abstract string CommandName { get; }
-        public AbstractButton() => DataContextChanged += OnDataContextChanged;
+        public AbstractButton() 
+        {
+            DataContextChanged += OnDataContextChanged;
+            ToolTip = ToolTipText;
+            Content = new Image()
+            {
+                Source = Helper.LoadFromImages(ImgKey)
+            };
+        }
 
         #region IsWithinList
         /// <summary>
@@ -55,15 +65,8 @@ namespace FrontEnd.Forms
     public class SaveButton : AbstractButton
     {
         protected override string CommandName => "UpdateCMD";
-        public SaveButton() 
-        {
-            ToolTip = "Save";
-            Content = new Image()
-            {
-                Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/save.png")
-            };
-        }
-
+        protected override string ImgKey => "save";
+        protected override string ToolTipText => "Save";
     }
 
     /// <summary>
@@ -71,15 +74,9 @@ namespace FrontEnd.Forms
     /// </summary>
     public class DeleteButton : AbstractButton
     {
+        protected override string ImgKey => "delete";
+        protected override string ToolTipText => "Delete";
         protected override string CommandName => "DeleteCMD";
-        public DeleteButton()
-        {
-            ToolTip = "Delete";
-            Content = new Image()
-            {
-                Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/delete.png")
-            };
-        }
     }
 
     /// <summary>
@@ -87,15 +84,8 @@ namespace FrontEnd.Forms
     /// </summary>
     public class OpenButton : AbstractButton
     {
+        protected override string ToolTipText => "Open";
         protected override string CommandName => "OpenCMD";
-
-        public OpenButton()
-        {
-            ToolTip = "Open";
-            Content = new Image()
-            {
-                Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/folder.png")
-            };
-        }
+        protected override string ImgKey => "folder";
     }
 }

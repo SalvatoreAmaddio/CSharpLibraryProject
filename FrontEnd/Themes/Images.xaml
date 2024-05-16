@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <BitmapImage x:Key="ClearFilter" UriSource="pack://application:,,,/FrontEnd;component/images/clear_filter.png"/>
-    <BitmapImage x:Key="Plus" UriSource="pack://application:,,,/FrontEnd;component/Images/plus.png"/>
+    <BitmapImage x:Key="plus" UriSource="pack://application:,,,/FrontEnd;component/Images/plus.png"/>
     <BitmapImage x:Key="Close" UriSource="pack://application:,,,/FrontEnd;component/Images/close.png"/>
-    <BitmapImage x:Key="Delete" UriSource="pack://application:,,,/FrontEnd;component/Images/delete.png"/>
+    <BitmapImage x:Key="delete" UriSource="pack://application:,,,/FrontEnd;component/Images/delete.png"/>
     <BitmapImage x:Key="Filter" UriSource="pack://application:,,,/FrontEnd;component/Images/filter.png"/>
-    <BitmapImage x:Key="Folder" UriSource="pack://application:,,,/FrontEnd;component/Images/folder.png"/>
-    <BitmapImage x:Key="Nowifi" UriSource="pack://application:,,,/FrontEnd;component/Images/nowifi.png"/>
+    <BitmapImage x:Key="folder" UriSource="pack://application:,,,/FrontEnd;component/Images/folder.png"/>
+    <BitmapImage x:Key="nowifi" UriSource="pack://application:,,,/FrontEnd;component/Images/nowifi.png"/>
     <BitmapImage x:Key="PDF" UriSource="pack://application:,,,/FrontEnd;component/Images/pdf.png"/>
     <BitmapImage x:Key="save" UriSource="pack://application:,,,/FrontEnd;component/Images/save.png"/>
 

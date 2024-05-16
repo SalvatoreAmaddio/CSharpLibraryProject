@@ -6,6 +6,19 @@ namespace FrontEnd.Utils
 {
     public class Helper
     {
+
+        public static BitmapImage LoadFromImages(string imgKey)
+        {
+            return LoadImg(GetDictionary("Images")[imgKey]?.ToString());
+        }
+
+        public static ResourceDictionary GetDictionary(string name) 
+        { 
+            return new()
+            {
+                Source = new Uri($"pack://application:,,,/FrontEnd;component/Themes/{name}.xaml")
+            };
+        }
         public static T? FindAncestor<T>(DependencyObject? current) where T : DependencyObject
         {
             if (current == null) return null;
@@ -48,8 +61,9 @@ namespace FrontEnd.Utils
             return null;
         }
 
-        public static BitmapImage LoadImg(string path) 
+        public static BitmapImage LoadImg(string? path) 
         {
+            if (string.IsNullOrEmpty(path)) throw new Exception("Path cannot be empty");
             BitmapImage bitmap = new();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(path);
