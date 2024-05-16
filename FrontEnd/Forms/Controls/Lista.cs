@@ -9,7 +9,7 @@ namespace FrontEnd.Forms
     /// <summary>
     /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
     /// Such as column's header, see the <see cref="Header"/> property.
-    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
+    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormListController"/>.
     /// <para/>
     /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Source.RecordSource"/>
     /// </summary>

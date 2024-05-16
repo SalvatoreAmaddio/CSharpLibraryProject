@@ -10,7 +10,7 @@ namespace FrontEnd.Forms
     /// This class extends a <see cref="TextBox"/> and adds extra functionalities.
     /// Such as a Placeholder property.
     /// <para/>
-    /// It also overrides the TextProperty whose Binding is set to <see cref="UpdateSourceTrigger.PropertyChanged"/>.
+    /// It also overrides the TextProperty by setting its Binding to <see cref="UpdateSourceTrigger.PropertyChanged"/>.
     /// </summary>
     public partial class Text : TextBox
     {
@@ -20,7 +20,7 @@ namespace FrontEnd.Forms
             Source = Helper.LoadImg("pack://application:,,,/FrontEnd;component/Images/close.png")
         };
 
-        ResourceDictionary resourceDict = new()
+        private readonly ResourceDictionary resourceDict = new()
         {
             Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/TextStyle.xaml")
         };
@@ -137,6 +137,9 @@ namespace FrontEnd.Forms
             }
         }
 
+        /// <summary>
+        /// This class is meant to handle multibinding involving strings and booleans to be converted as a <see cref="Visibility"/> object.
+        /// </summary>
         internal class MultiBindingConverter : IMultiValueConverter
         {
             private string? txt;

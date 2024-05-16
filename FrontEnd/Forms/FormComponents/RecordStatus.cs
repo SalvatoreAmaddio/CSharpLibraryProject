@@ -15,7 +15,7 @@ namespace FrontEnd.Forms.FormComponents
         static RecordStatus() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordStatus), new FrameworkPropertyMetadata(typeof(RecordStatus)));
 
         /// <summary>
-        /// This property tells if the Current Record is being changed or not.
+        /// Tells if the Current Record is being changed or not.
         /// </summary>
         /// <value>True if the record is being changed.</value>
         public bool IsDirty
@@ -49,14 +49,14 @@ namespace FrontEnd.Forms.FormComponents
             {
                 return boolValue ? "🖎" : "▶";
             }
-            return "🢒";
+            return "▶";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
-                return boolValue ? "🖎" : "🢒";
-            return "🢒";
+                return boolValue ? "🖎" : "▶";
+            return "▶";
         }
     }
 }

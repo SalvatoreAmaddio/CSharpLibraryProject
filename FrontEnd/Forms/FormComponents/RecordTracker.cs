@@ -83,10 +83,7 @@ namespace FrontEnd.Forms.FormComponents
             });
         }
 
-        private static MessageBoxResult Ask() 
-        { 
-            return MessageBox.Show("Do you want to save the record before moving?", "Confirm", MessageBoxButton.YesNo);
-        }
+        private static MessageBoxResult Ask() => MessageBox.Show("Do you want to save the record before moving?", "Confirm", MessageBoxButton.YesNo);
 
         protected virtual void OnClicked(int movement)
         {
