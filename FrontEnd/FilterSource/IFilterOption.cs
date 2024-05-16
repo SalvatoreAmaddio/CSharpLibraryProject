@@ -11,12 +11,12 @@ namespace FrontEnd.FilterSource
     /// <summary>
     /// This interface extends <see cref="INotifyPropertyChanged"/> and defines the properties and methods to be implemented by the <see cref="FilterOption"/> class.
     /// <para/>
-    /// This interface works in conjunction with the <see cref="FilterOption"/> GUI Control.
+    /// This interface works in conjunction with the <see cref="Forms.HeaderFilter"/> GUI Control.
     /// </summary>
     public interface IFilterOption : INotifyPropertyChanged
     {
         /// <summary>
-        /// Gets and sets a boolean indicating if an option has been selected.
+        /// Gets and sets a boolean indicating if an option has been selected. This property triggers the <see cref="OnSelectionChanged"/> event.
         /// </summary>
         public bool IsSelected { get; set; }
 
@@ -31,7 +31,7 @@ namespace FrontEnd.FilterSource
         public object? Value { get; }        
         
         /// <summary>
-        /// Event that triggers when an option is selected or deselected.
+        /// Occurs when an option is selected or deselected.
         /// </summary>
         public event SelectionChangedEventHandler? OnSelectionChanged;
         
@@ -44,7 +44,7 @@ namespace FrontEnd.FilterSource
     /// <summary>
     /// Concrete impementation of the <see cref="IFilterOption"/>
     /// <para/>
-    /// This class works in conjunction with the <see cref="FilterOption"/> GUI Control.
+    /// This class works in conjunction with the <see cref="Forms.HeaderFilter"/> GUI Control.
     /// </summary>
     public class FilterOption : IFilterOption
     {
@@ -78,43 +78,36 @@ namespace FrontEnd.FilterSource
             PropertyChanged?.Invoke(this, new(nameof(IsSelected)));
         }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is FilterOption option &&
-                   EqualityComparer<ISQLModel>.Default.Equals(Record, option.Record);
-        }
+        public override bool Equals(object? obj) =>
+        obj is FilterOption option && Record.Equals(option.Record);
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Record);
-        }
+        public override int GetHashCode() => HashCode.Combine(Record);
     }
 
     /// <summary>
-    /// A List for dealing with <see cref="IFilterOption"/> objcets.
+    /// It instantiates a List&lt;<see cref="IFilterOption"/>> object.
     /// <para/>
-    /// This class works in conjunction with the <see cref="FilterOption"/> GUI Control.
+    /// This class works in conjunction with the <see cref="Forms.HeaderFilter"/> class.
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
     public class SourceOption : List<IFilterOption>, IChildSource
     {
-        /// <summary>
-        /// It loops through the List and builds the SQL logic to filter the Select the statement.
-        /// </summary>
-        /// <param name="filterQueryBuilder"></param>
-        /// <returns>A string</returns>
-
         private readonly string _displayProperty;
 
         public IParentSource? ParentSource { get; set; }
 
-        public SourceOption(Backend.Source.RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
+        public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
         {
             _displayProperty = displayProperty;
             source.ParentSource?.AddChild(this);
         }
 
+        /// <summary>
+        /// It loops through the List and builds the SQL logic to filter the Select the statement.
+        /// </summary>
+        /// <param name="filterQueryBuilder"></param>
+        /// <returns>A string</returns>
         public string Conditions(FilterQueryBuilder filterQueryBuilder) 
         {
             StringBuilder sb = new();

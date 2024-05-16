@@ -25,7 +25,8 @@ namespace FrontEnd.Controller
     }
 
     /// <summary>
-    /// This class implements <see cref="ICommand"/> and deal with click events that take a <see cref="AbstractModel"/> object as argument
+    /// This class implements <see cref="ICommand"/> and deal with click events that take a <see cref="AbstractModel"/> object as argument.
+    /// Objects of this class are tipically used to deal with CRUD operations.
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     public class CMD<M> : ICommand where M : AbstractModel, new()

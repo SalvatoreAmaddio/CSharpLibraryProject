@@ -9,7 +9,7 @@ using FrontEnd.Forms;
 namespace FrontEnd.Controller
 {
     /// <summary>
-    /// This interface defines a set of methods and properties that Controllers dealing with SubForm objects must implements
+    /// This interface defines a set of methods and properties to work as a bridge between an instances of <see cref="IAbstractFormController"/>, <see cref="IAbstractFormListController"/>  and <see cref="SubForm"/> objects.
     /// </summary>
     public interface ISubFormController
     {
@@ -63,7 +63,7 @@ namespace FrontEnd.Controller
     }
 
     /// <summary>
-    /// This interface extends <see cref="IAbstractSQLModelController"/> and adds properties for managing GUI functionalities.
+    /// This interface extends <see cref="IAbstractSQLModelController"/> and adds properties and methods to work as a bridge between <see cref="AbstractModel"/> objects and <see cref="Form"/> objects.
     /// </summary>
     public interface IAbstractFormController : IAbstractSQLModelController, INotifier
     {
@@ -80,9 +80,9 @@ namespace FrontEnd.Controller
     }
 
     /// <summary>
-    /// This interface extends <see cref="IAbstractFormController"/> and adds a set of methods and properties used by Form UI Components to manage filtering operations.
+    /// This interface extends <see cref="IAbstractFormController"/> and adds a set of methods and properties to work as a bridge between <see cref="AbstractModel"/> objects and <see cref="FormList"/> objects.
     /// <para/>
-    /// see also <seealso cref="RecordTracker"/>, <seealso cref="FilterOption"/>
+    /// see also <seealso cref="RecordTracker"/>, <seealso cref="HeaderFilter"/>
     /// </summary>
     public interface IAbstractFormListController : IAbstractFormController
     {
@@ -107,7 +107,7 @@ namespace FrontEnd.Controller
         public Task SearchRecordAsync();
 
         /// <summary>
-        /// This method is called by the <see cref="Forms.FilterOption"/> object when an option is selected or unselected.
+        /// This method is called by the <see cref="Forms.HeaderFilter"/> object when an option is selected or unselected.
         /// It instructs the Controller to filter its RecordSource.
         /// <para/>
         /// For Example:

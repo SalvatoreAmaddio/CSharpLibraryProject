@@ -7,7 +7,7 @@ using System.Windows.Data;
 namespace FrontEnd.Forms
 {
     /// <summary>
-    /// Abstract class that defines a set of common properties and methods for custom buttons which are binds to the Commands defined in the <see cref="AbstractFormController{M}"/>.
+    /// Abstract class that defines a set of common properties and methods for custom buttons which are to be bound to the Command objects defined in the <see cref="AbstractFormController{M}"/> and <see cref="AbstractFormListController{M}"/>.
     /// </summary>
     public abstract class AbstractButton : Button 
     {
@@ -42,25 +42,15 @@ namespace FrontEnd.Forms
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is not IAbstractFormController controller) return;
-
-            Binding CommandParameterBinding = new("CurrentRecord")
-            {
-                Source = controller,
-            };
-
-            SetBinding(CommandParameterProperty, CommandParameterBinding);
-
-            Binding CommandBinding = new(CommandName)
-            {
-                Source = controller,
-            };
-
-            SetBinding(CommandProperty, CommandBinding);
+            SetBinding(CommandParameterProperty, CreateBinding("CurrentRecord", controller));
+            SetBinding(CommandProperty, CreateBinding(CommandName, controller));
         }
+
+        private static Binding CreateBinding(string property, object source) => new(property) { Source = source };
     }
 
     /// <summary>
-    /// Instantiate SaveButton and binds it to the UpdateCMD Command defined in the <see cref="AbstractFormController{M}"/>
+    /// Instantiate SaveButton and binds it to the <see cref="AbstractFormController{M}.UpdateCMD"/> Command.
     /// </summary>
     public class SaveButton : AbstractButton
     {
@@ -77,7 +67,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// Instantiate DeleteButton and binds it to the DeleteCMD Command defined in the <see cref="AbstractContentControl"/>
+    /// Instantiate DeleteButton and binds it to the <see cref="AbstractFormController{M}.DeleteCMD"/> Command.
     /// </summary>
     public class DeleteButton : AbstractButton
     {
@@ -93,7 +83,7 @@ namespace FrontEnd.Forms
     }
 
     /// <summary>
-    /// Instantiate OpenButton and binds it to the OpenCMD Command defined in the <see cref="AbstractFormListController{M}"/>
+    /// Instantiate OpenButton and binds it to the <see cref="AbstractFormListController{M}.OpenCMD"/> Command.
     /// </summary>
     public class OpenButton : AbstractButton
     {

@@ -231,10 +231,10 @@
     </Style>
 
     <!--FilterOption-->
-    <Style TargetType="{x:Type local:FilterOption}">
+    <Style TargetType="{x:Type local:HeaderFilter}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:FilterOption}">
+                <ControlTemplate TargetType="{x:Type local:HeaderFilter}">
                     <Grid Grid.Column="1">
                         <Grid.Resources>
                             <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" x:Key="DefColor"/>

@@ -25,7 +25,7 @@ namespace FrontEnd.Events
         public readonly string propertyName = propertyName;
 
         /// <summary>
-        /// Check the if current property name is equal to the given value. 
+        /// Check the if current property's name is equal to the given value. 
         /// </summary>
         /// <param name="value">the name of a Property</param>
         /// <returns>bool if the current property name is equal to the given value</returns>
@@ -42,9 +42,9 @@ namespace FrontEnd.Events
     public class BeforeUpdateArgs(object? value, object? backProperty, string propertyName) : AfterUpdateArgs(value, backProperty, propertyName)
     {
         /// <summary>
-        /// This property is used to notify if an update can be processed or not.
+        /// Gets and sets a boolean to notify if an update can be processed or not.
         /// </summary>
-        /// <value>True is the property can be updated,</value>
+        /// <value>true is the <see cref="AbstractModel"/>'s property can be updated,</value>
         public bool Cancel { get; set; } = false;
     }
 }

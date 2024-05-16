@@ -3,7 +3,7 @@
 namespace FrontEnd.Controller
 {
     /// <summary>
-    /// This class helps build the Search Query and the parameters to be used when searching the recordset. 
+    /// This class helps build the Search Query and sets its parameters to be used when searching the recordset. 
     /// <para/>
     /// <c>IMPORTANT:</c>
     /// This class is not designed to handle Aggregation Queries.

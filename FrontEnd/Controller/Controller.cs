@@ -12,7 +12,7 @@ using System.Windows.Input;
 namespace FrontEnd.Controller
 {
     /// <summary>
-    /// Actual implementation of <see cref="IAbstractFormController{M}"/>
+    /// This class extends <see cref="AbstractSQLModelController"/> and implementats <see cref="IAbstractFormController{M}"/>
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
     public abstract class AbstractFormController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
