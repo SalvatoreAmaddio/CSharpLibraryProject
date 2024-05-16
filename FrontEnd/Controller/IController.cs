@@ -60,7 +60,6 @@ namespace FrontEnd.Controller
         /// </code>
         /// </summary>
         public void OnSubFormFilter();
-
     }
 
     /// <summary>
@@ -78,6 +77,11 @@ namespace FrontEnd.Controller
         /// </summary>
         /// <returns>true if the operation was successful.</returns>
         public bool PerformUpdate();
+
+        /// <summary>
+        /// Indicates if the RecordSource should bypass its Child Source's update.
+        /// </summary>
+        public bool VoidParentUpdate { get; }
     }
 
     /// <summary>
@@ -147,7 +151,6 @@ namespace FrontEnd.Controller
         /// Removes empty new records from the Source.
         /// </summary>
         public void CleanSource();
-
     }
 
     /// <summary>
@@ -193,6 +196,5 @@ namespace FrontEnd.Controller
         /// Gets and Sets the string parameter used in a search textbox to filter the RecordSource.
         /// </summary>
         public string Search { get; set; }
-
     }
 }

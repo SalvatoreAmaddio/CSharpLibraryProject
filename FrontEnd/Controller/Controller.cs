@@ -29,6 +29,8 @@ namespace FrontEnd.Controller
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
+        public bool VoidParentUpdate { get; protected set; } = false;
+
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;

@@ -113,10 +113,5 @@ namespace Backend.Controller
         /// Gets a string representing the Record position to be displayed
         /// </summary>
         public string Records { get; }
-
-        /// <summary>
-        /// Indicates if the RecordSource should bypass its Child Source's update.
-        /// </summary>
-        public bool VoidParentUpdate { get; }
     }
 }

@@ -19,7 +19,6 @@ namespace Backend.Controller
             Db.Records.AddChild(Source);
             GoFirst();
         }
-
         protected virtual RecordSource initSource() 
         {
             return new RecordSource(Db.Records)
@@ -27,11 +26,9 @@ namespace Backend.Controller
                 Controller = this
             };
         }
-
         public virtual bool AllowNewRecord { get; set; }
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
-        public bool VoidParentUpdate { get; protected set; } = false;
 
         public virtual void GoNext()
         {
