@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("0c9ee542-7558-4041-bc1a-18842d21f111")]
-[assembly: AssemblyDescription("Backend system")]
+[assembly: AssemblyDescription("Backend DesktopBusinessAppSharpBuilder")]
 [assembly: AssemblyCopyright($"Copyright © Salvatore Amaddio R. 2024")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyTrademark("SalvatoreTrademark")]
+[assembly: AssemblyCulture("en-GB")]
 
