@@ -248,7 +248,7 @@
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                    <Button Content="Clear" Background="{DynamicResource DefColor}" BorderThickness="0" FontWeight="Bold" Margin="0,0,0,0" x:Name="PART_clear_button"/>
+                                    <Button Content="Clear" ToolTip="Clear filter" Background="{DynamicResource DefColor}" BorderThickness="0" FontWeight="Bold" Margin="0,0,0,0" x:Name="PART_clear_button"/>
                                     <ListBox ItemsSource="{TemplateBinding ItemsSource}" BorderThickness="0" Grid.Row="1">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
