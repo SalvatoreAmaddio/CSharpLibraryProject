@@ -7,6 +7,11 @@ namespace Backend.Controller
     public interface IAbstractSQLModelController
     {
         /// <summary>
+        /// Indicates if the RecordSource should bypass its Child Source's update.
+        /// </summary>
+        public bool VoidParentUpdate { get; }
+
+        /// <summary>
         /// Override this method to return a zero-based index. This index fetches an 
         /// IAbstractDatabase from the <see cref="ControllerManager"/> and allow the Constructor to initialize the <see cref="Db"/> and <see cref="Source"/> properties.
         /// <para/>

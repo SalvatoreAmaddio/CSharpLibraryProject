@@ -7,6 +7,7 @@ namespace Backend.Controller
 {
     public abstract class AbstractSQLModelController : IAbstractSQLModelController
     {
+        public bool VoidParentUpdate { get; protected set; } = false;
         public IAbstractDatabase Db { get; protected set; } = null!;
         public abstract int DatabaseIndex { get; }
         public RecordSource Source { get; protected set; }
@@ -15,17 +16,13 @@ namespace Backend.Controller
         {
             Db = DatabaseManager.Do[DatabaseIndex];
             if (Db.Records == null) throw new Exception($"{Db} has no records");
-            Source = initSource();
-            Db.Records.AddChild(Source);
-            GoFirst();
-        }
-
-        protected virtual RecordSource initSource() 
-        {
-            return new RecordSource(Db.Records)
+            Source = new RecordSource(Db.Records)
             {
                 Controller = this
             };
+
+            Db.Records.AddChild(Source);
+            GoFirst();
         }
 
         public virtual bool AllowNewRecord { get; set; }
@@ -34,30 +31,30 @@ namespace Backend.Controller
 
         public virtual void GoNext()
         {
-            bool moved = Navigator.GoNext();
+            bool moved = Navigator.MoveNext();
             if (!moved) return;
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
         public virtual void GoPrevious()
         {
-            Navigator.GoPrevious();
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            Navigator.MovePrevious();
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
         public virtual void GoLast()
         {
-            Navigator.GoLast();
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            Navigator.MoveLast();
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
         public virtual void GoFirst()
         {
-            Navigator.GoFirst();
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            Navigator.MoveFirst();
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
@@ -65,15 +62,15 @@ namespace Backend.Controller
         {
             if (!AllowNewRecord) return;
             if (Navigator.IsNewRecord) return;
-            Navigator.GoNew();
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            Navigator.MoveNew();
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
         public virtual void GoAt(int index)
         {
-            Navigator.GoAt(index);
-            CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+            Navigator.MoveAt(index);
+            CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
         }
 
@@ -83,8 +80,8 @@ namespace Backend.Controller
             else if (record.IsNewRecord()) GoNew();
             else
             {
-                Navigator.GoAt(record);
-                CurrentModel = Navigator.CurrentRecord<ISQLModel?>();
+                Navigator.MoveAt(record);
+                CurrentModel = Navigator.Current;
                 Records = Source.RecordPositionDisplayer();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Backend.Controller;
 using Backend.Database;
+using Backend.Events;
 using Backend.Exceptions;
 using Backend.Model;
 using MvvmHelpers;
@@ -8,10 +9,16 @@ namespace Backend.Source
 {
     /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="ISourceNavigator"/>.
-    /// see also the <seealso cref="SourceNavigator"/> class.
+    /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
     public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
+        /// <summary>
+        /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="Backend.Source.RecordSource"/>.
+        /// If any filter operations has been implemented in the Controller, The RecordSource can trigger them.
+        /// </summary>
+        public event FilterEventHandler? RunFilter;
+
         protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
         public IParentSource? ParentSource { get; set; }
@@ -39,19 +46,15 @@ namespace Backend.Source
         /// Override the default <c>GetEnumerator()</c> method to replace it with a <see cref="ISourceNavigator"></see> object./>
         /// </summary>
         /// <returns>An Enumerator object.</returns>
-        public new IEnumerator<ISQLModel> GetEnumerator()
-        {
-            return (SourceNavigator)GetSourceNavigator();
-        }
-        protected virtual INavigator GetSourceNavigator()
+        public new IEnumerator<ISQLModel?> GetEnumerator()
         {
             if (navigator != null)
             {
-                navigator = new SourceNavigator(this, navigator.Index);
-                return (SourceNavigator)navigator;
+                navigator = new Navigator(this, navigator.Index);
+                return (Navigator)navigator;
             }
-            navigator = new SourceNavigator(this);
-            return (SourceNavigator)navigator;
+            navigator = new Navigator(this);
+            return (Navigator)navigator;
         }
 
         /// <summary>
@@ -67,6 +70,7 @@ namespace Backend.Source
             child.ParentSource = this;
             Children.Add(child);
         }
+
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
             if (crud == CRUD.UPDATE) return;
@@ -74,6 +78,7 @@ namespace Backend.Source
         }
         public virtual void Update(CRUD crud, ISQLModel model)
         {
+            if (Controller!=null && Controller.VoidParentUpdate) return;
             switch (crud)
             {
                 case CRUD.INSERT:
@@ -90,7 +95,10 @@ namespace Backend.Source
                     else Controller?.GoPrevious();
                     break;
             }
+            if (Controller != null && Controller.VoidParentUpdate) return;
+            RunFilter?.Invoke(this, new());
         }
+
         public void RemoveChild(IChildSource child) => Children.Remove(child);
         #endregion
 

@@ -77,11 +77,6 @@ namespace FrontEnd.Controller
         /// </summary>
         /// <returns>true if the operation was successful.</returns>
         public bool PerformUpdate();
-
-        /// <summary>
-        /// Indicates if the RecordSource should bypass its Child Source's update.
-        /// </summary>
-        public bool VoidParentUpdate { get; }
     }
 
     /// <summary>

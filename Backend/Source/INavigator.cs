@@ -1,6 +1,14 @@
-﻿namespace Backend.Source
+﻿using Backend.Model;
+
+namespace Backend.Source
 {
-    public interface INavigator 
+    /// <summary>
+    /// This interface extends the IEnumerator&lt;ISQLModel&gt; 
+    /// to add extra functionalities.
+    /// For instance, this enumerator can move up and down the IEnumerable.
+    /// This interface is meant for dealing with IEnumerable&lt;<see cref="ISQLModel"/>&gt; only.
+    /// </summary>
+    public interface INavigator : IEnumerator<ISQLModel?>
     {
         /// <summary>
         /// Tells if there are no records at all. 
@@ -50,7 +58,7 @@
         /// <returns>
         /// true if the Enumerator did move.
         /// </returns>
-        public bool GoPrevious();
+        public bool MovePrevious();
 
         /// <summary>
         /// Moves the Enumerator to the first element in the collection.
@@ -58,7 +66,7 @@
         /// <returns>
         /// true if the Enumerator could move.
         /// </returns>
-        public bool GoFirst();
+        public bool MoveFirst();
 
         /// <summary>
         /// Moves the Enumerator to the last element in the collection.
@@ -66,7 +74,7 @@
         /// <returns>
         /// true if the Enumerator could move.
         /// </returns>
-        public bool GoLast();
+        public bool MoveLast();
 
         /// <summary>
         /// Moves the Enumerator beyond the last element in the collection indicating a new Record can be added.
@@ -74,7 +82,7 @@
         /// <returns>
         /// true if the Enumerator could move.
         /// </returns>
-        public bool GoNew();
+        public bool MoveNew();
 
         /// <summary>
         /// Moves the Enumerator to the element at the given position in collection.
@@ -83,7 +91,7 @@
         /// <returns>
         /// true if the Enumerator could move.
         /// </returns>
-        public bool GoAt(int index);
+        public bool MoveAt(int index);
 
         /// <summary>
         /// Moves the Enumerator to the given element in collection.
@@ -92,17 +100,13 @@
         /// <returns>
         /// true if the Enumerator could move.
         /// </returns>
-        public bool GoAt(object record);
+        public bool MoveAt(object record);
 
         /// <summary>
         /// Tells how many records are in the collection.
         /// </summary>
         /// <value>The number of records in collection</value>
         public int RecordCount { get; }
-
-        public bool GoNext();
-
-        public M? CurrentRecord<M>();
     }
 
 }

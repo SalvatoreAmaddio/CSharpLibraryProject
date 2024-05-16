@@ -4,7 +4,6 @@ using Backend.Exceptions;
 using Backend.Model;
 using FrontEnd.Events;
 using FrontEnd.Model;
-using FrontEnd.Source;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -24,11 +23,6 @@ namespace FrontEnd.Controller
         protected ISQLModel? _currentModel;
         private string _records = string.Empty;
         public AbstractModel? ParentRecord { get; private set; }
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event AfterUpdateEventHandler? AfterUpdate;
-        public event BeforeUpdateEventHandler? BeforeUpdate;
-        public event NewRecordEventHandler? NewRecordEvent;
-        public bool VoidParentUpdate { get; protected set; } = false;
         public override ISQLModel? CurrentModel
         {
             get => _currentModel;
@@ -52,18 +46,15 @@ namespace FrontEnd.Controller
         public ICommand UpdateCMD { get; set; }
         public ICommand DeleteCMD { get; set; }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event AfterUpdateEventHandler? AfterUpdate;
+        public event BeforeUpdateEventHandler? BeforeUpdate;
+        public event NewRecordEventHandler? NewRecordEvent;
+
         public AbstractFormController() 
         {
             UpdateCMD = new CMD<M>(Update);
             DeleteCMD = new CMD<M>(Delete);
-        }
-
-        protected override Backend.Source.RecordSource initSource()
-        {
-            return new RecordSource<M>(Db.Records)
-            {
-                Controller = this
-            };
         }
 
         public bool PerformUpdate() => Update(CurrentRecord);
@@ -88,7 +79,7 @@ namespace FrontEnd.Controller
         {
             if (!AllowNewRecord) return;
             if (Navigator.IsNewRecord) return;
-            Navigator.GoNew();
+            Navigator.MoveNew();
             CurrentRecord = new M();
             InvokeOnNewRecordEvent();
             Records = Source.RecordPositionDisplayer();
@@ -161,7 +152,7 @@ namespace FrontEnd.Controller
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);
             QueryBuiler = new(SearchQry);
-            ((RecordSource<M>)Source).RunFilter += OnSourceRunFilter;
+            Source.RunFilter += OnSourceRunFilter;
         }
         public abstract Task SearchRecordAsync();
         public abstract void OnOptionFilter();
@@ -200,8 +191,8 @@ namespace FrontEnd.Controller
             }
             if (Source.Any(s => s.IsNewRecord())) return;
             Source.Add(new M());
-            Navigator.GoLast();
-            CurrentModel = Navigator.CurrentRecord<M>();
+            Navigator.MoveLast();
+            CurrentModel = Navigator.Current;
             InvokeOnNewRecordEvent();
             Records = "New Record";
         }
@@ -225,12 +216,12 @@ namespace FrontEnd.Controller
         {
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
-            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.GoNew();
+            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.MoveNew();
             else
             {
                 CleanSource();
-                Navigator.GoAt(record);
-                CurrentModel = Navigator.CurrentRecord<M>();
+                Navigator.MoveAt(record);
+                CurrentModel = Navigator.Current;
                 Records = Source.RecordPositionDisplayer();
             }
         }
