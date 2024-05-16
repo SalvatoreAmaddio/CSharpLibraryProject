@@ -7,7 +7,6 @@ using FrontEnd.Model;
 
 namespace FrontEnd.Recordsource
 {
-
     public class RecordSource<M>(IEnumerable<ISQLModel> source) : RecordSource(source) where M : AbstractModel, new()
     {
         /// <summary>
@@ -23,7 +22,7 @@ namespace FrontEnd.Recordsource
             if (crud != null)
                 if (crud == CRUD.INSERT && formController.VoidParentUpdate) return true;
             else
-                 if (formController.VoidParentUpdate) return true;
+                if (formController.VoidParentUpdate) return true;
             return false;
         }
 
