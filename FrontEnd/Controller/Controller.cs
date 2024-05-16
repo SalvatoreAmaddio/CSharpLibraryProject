@@ -90,7 +90,7 @@ namespace FrontEnd.Controller
         {
             if (!AllowNewRecord) return;
             if (Navigator.IsNewRecord) return;
-            Navigator.MoveNew();
+            Navigator.GoNew();
             CurrentRecord = new M();
             InvokeOnNewRecordEvent();
             Records = Source.RecordPositionDisplayer();
@@ -202,7 +202,7 @@ namespace FrontEnd.Controller
             }
             if (Source.Any(s => s.IsNewRecord())) return;
             Source.Add(new M());
-            Navigator.MoveLast();
+            Navigator.GoLast();
             CurrentModel = Navigator.Current;
             InvokeOnNewRecordEvent();
             Records = "New Record";
@@ -227,11 +227,11 @@ namespace FrontEnd.Controller
         {
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
-            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.MoveNew();
+            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.GoNew();
             else
             {
                 CleanSource();
-                Navigator.MoveAt(record);
+                Navigator.GoAt(record);
                 CurrentModel = Navigator.Current;
                 Records = Source.RecordPositionDisplayer();
             }

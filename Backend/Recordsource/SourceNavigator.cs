@@ -18,7 +18,7 @@ namespace Backend.Recordsource
         /// <para>Returns null if the current position is poiting to a New Record</para></value>
         public ISQLModel? Current
         {
-            get => (ISQLModel?)CurrentRecord();
+            get => CurrentRecord<ISQLModel?>();
         }
 
         public SourceNavigator(IEnumerable<ISQLModel> source)

@@ -4,10 +4,11 @@ using Backend.Recordsource;
 using FrontEnd.Controller;
 using FrontEnd.Events;
 using FrontEnd.Model;
+using FrontEnd.RecordSource;
 
 namespace FrontEnd.Recordsource
 {
-    public class RecordSource<M>(IEnumerable<ISQLModel> source) : RecordSource(source) where M : AbstractModel, new()
+    public class RecordSource<M>(IEnumerable<ISQLModel> source) : Backend.Recordsource.RecordSource(source) where M : AbstractModel, new()
     {
         /// <summary>
         /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="Backend.Recordsource.RecordSource"/>.
@@ -33,5 +34,22 @@ namespace FrontEnd.Recordsource
             if (VoidUpdate(null)) return;
             RunFilter?.Invoke(this, new());
         }
+
+        public new IEnumerator<M> GetEnumerator()
+        {
+            return (SourceNavigator<M>)GetSourceNavigator();
+        }
+
+        protected override INavigator GetSourceNavigator()
+        {
+            if (navigator != null)
+            {
+                navigator = new SourceNavigator<M>(this.Cast<M>(), navigator.Index);
+                return (SourceNavigator<M>)navigator;
+            }
+            navigator = new SourceNavigator<M>(this.Cast<M>());
+            return (SourceNavigator<M>)navigator;
+        }
+
     }
 }

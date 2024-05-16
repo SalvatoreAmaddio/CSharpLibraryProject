@@ -6,14 +6,13 @@ using MvvmHelpers;
 
 namespace Backend.Recordsource
 {
-
     /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="ISourceNavigator"/>.
     /// see also the <seealso cref="SourceNavigator"/> class.
     /// </summary>
     public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
     {
-        private ISourceNavigator? navigator;
+        protected INavigator? navigator;
         protected List<IChildSource> Children { get; } = [];
         public IParentSource? ParentSource { get; set; }
 
@@ -22,6 +21,7 @@ namespace Backend.Recordsource
         /// </summary>
         public IAbstractSQLModelController? Controller { get; set; }
 
+        #region Constructor
         /// <summary>
         /// Parameterless Constructor to instantiate a RecordSource object.
         /// </summary>
@@ -32,27 +32,69 @@ namespace Backend.Recordsource
         /// </summary>
         /// <param name="source">An IEnumerable&lt;<see cref="ISQLModel"/>&gt;</param>
         public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
+        #endregion
 
+        #region Enumerator
         /// <summary>
         /// Override the default <c>GetEnumerator()</c> method to replace it with a <see cref="ISourceNavigator"></see> object./>
         /// </summary>
         /// <returns>An Enumerator object.</returns>
         public new IEnumerator<ISQLModel> GetEnumerator()
         {
-            if (navigator != null) 
+            return (SourceNavigator)GetSourceNavigator();
+        }
+        protected virtual INavigator GetSourceNavigator()
+        {
+            if (navigator != null)
             {
                 navigator = new SourceNavigator(this, navigator.Index);
-                return navigator!;
+                return (SourceNavigator)navigator;
             }
             navigator = new SourceNavigator(this);
-            return navigator!;
+            return (SourceNavigator)navigator;
         }
 
         /// <summary>
         /// Return the Enumerator as an <see cref="ISourceNavigator"/> object.
         /// </summary>
         /// <returns>A <see cref="ISourceNavigator"/> object.</returns>
-        public ISourceNavigator Navigate() => (ISourceNavigator)GetEnumerator();
+        public INavigator Navigate() => (INavigator)GetEnumerator();
+        #endregion
+
+        #region ObserverPattern
+        public void AddChild(IChildSource child)
+        {
+            child.ParentSource = this;
+            Children.Add(child);
+        }
+        public void NotifyChildren(CRUD crud, ISQLModel model)
+        {
+            if (crud == CRUD.UPDATE) return;
+            foreach (IChildSource child in Children) child.Update(crud, model);
+        }
+        public virtual void Update(CRUD crud, ISQLModel model)
+        {
+            switch (crud)
+            {
+                case CRUD.INSERT:
+                    Add(model);
+                    Controller?.GoLast();
+                    break;
+                //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
+                //  break;
+                case CRUD.DELETE:
+                    bool removed = Remove(model);
+                    if (!removed) break;
+                    if (navigator == null) throw new NoNavigatorException();
+                    if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
+                    else Controller?.GoPrevious();
+                    break;
+            }
+        }
+        public void RemoveChild(IChildSource child) => Children.Remove(child);
+        #endregion
+
+        public void ReplaceRecords(IEnumerable<ISQLModel> range) => ReplaceRange(range);
 
         /// <summary>
         /// It takes an IAsyncEnumerable, converts it to a List and returns a RecordSource object.
@@ -76,42 +118,5 @@ namespace Backend.Recordsource
                 _ => $"Record {Navigate()?.RecNum} of {Navigate()?.RecordCount}",
             };
         }
-
-        public void AddChild(IChildSource child) 
-        {
-            child.ParentSource = this;
-            Children.Add(child);
-        }    
-
-        public void NotifyChildren(CRUD crud, ISQLModel model)
-        {
-            if (crud == CRUD.UPDATE) return;
-            foreach (IChildSource child in Children) child.Update(crud, model);
-        }
-
-        public virtual void Update(CRUD crud, ISQLModel model)
-        {
-            switch (crud)
-            {
-                case CRUD.INSERT:
-                    Add(model);
-                    Controller?.GoLast();
-                    break;
-              //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
-                //  break;
-                case CRUD.DELETE:
-                    bool removed = Remove(model);
-                    if (!removed) break;
-                    if (navigator == null) throw new NoNavigatorException();
-                    if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
-                    else Controller?.GoPrevious();
-                    break;
-            }
-        }
-
-        public void RemoveChild(IChildSource child) => Children.Remove(child);
-
-        public void ReplaceRecords(IEnumerable<ISQLModel> range) => ReplaceRange(range);
-
     }
 }

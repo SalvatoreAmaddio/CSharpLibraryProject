@@ -27,27 +27,27 @@
             Index = IsEmpty ? -1 : ++Index;
             return Index <= LastIndex;
         }
-        public bool MovePrevious()
+        public bool GoPrevious()
         {
             Index = IsEmpty ? -1 : --Index;
             return Index > -1;
         }
-        public bool MoveFirst()
+        public bool GoFirst()
         {
             Index = (IsEmpty) ? -1 : 0;
             return RecordCount > 0;
         }
-        public bool MoveLast()
+        public bool GoLast()
         {
             Index = (IsEmpty) ? -1 : LastIndex;
             return RecordCount > 0;
         }
-        public bool MoveNew()
+        public bool GoNew()
         {
             Index = RecordCount;
             return true;
         }
-        public bool MoveAt(int index)
+        public bool GoAt(int index)
         {
             Index = (IsEmpty) ? -1 : index;
             return Index <= LastIndex;
@@ -56,25 +56,26 @@
         public override string? ToString() => $"Count: {RecordCount}; Record Number: {RecNum}; BOF: {BOF}; EOF: {EOF}; NewRecord: {IsNewRecord}; No Records: {NoRecords}";
         protected abstract void ClearArray();
         protected abstract object GetObject(int index);
-        protected object? CurrentRecord()
+
+        public M? CurrentRecord<M>()
         {
             try
             {
-                return GetObject(Index);
+                return (M?)GetObject(Index);
             }
             catch (Exception ex) when (ex is IndexOutOfRangeException || ex is ArgumentOutOfRangeException)
             {
                 if (IsEmpty || IsNewRecord)
-                    return null;
+                    return default;
                 else
                 {
-                    MoveFirst();
-                    return GetObject(Index);
+                    GoFirst();
+                    return (M?)GetObject(Index);
                 }
             }
         }
 
-        public bool MoveAt(object record)
+        public bool GoAt(object record)
         {
             for (int i = 0; i < RecordCount; i++)
             {
@@ -86,6 +87,8 @@
             }
             return false;
         }
+
+        public bool GoNext() => MoveNext();
     }
 
 }

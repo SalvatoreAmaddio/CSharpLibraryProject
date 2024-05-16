@@ -7,6 +7,23 @@ namespace Backend.Controller
     public interface IAbstractSQLModelController
     {
         /// <summary>
+        /// Override this method to return a zero-based index. This index fetches an 
+        /// IAbstractDatabase from the <see cref="ControllerManager"/> and allow the Constructor to initialize the <see cref="Db"/> and <see cref="Source"/> properties.
+        /// <para/>
+        /// For Example:
+        /// <code>
+        /// public override int DatabaseIndex => 0; //fetch the first IAbstractDatabase
+        /// </code>
+        /// </summary>
+        /// <returns>A zero-based integer that identifies the IAbstractDatabase in the <see cref="ControllerManager"/></returns>
+        public int DatabaseIndex { get; }
+
+        /// <summary>
+        /// Gets a string representing the Record position to be displayed
+        /// </summary>
+        public string Records { get; }
+
+        /// <summary>
         /// An instance of a <see cref="IAbstractDatabase"/>.
         /// </summary>
         /// <value>An object representing a Database that extends <see cref="AbstractDatabase"/></value>
@@ -96,22 +113,5 @@ namespace Backend.Controller
         /// </summary>
         /// <exception cref="NoModelException">Thrown if the <see cref="Model"/> is null.</exception>
         public void DeleteRecord(string? sql = null, List<QueryParameter>? parameters = null);
-
-        /// <summary>
-        /// Override this method to return a zero-based index. This index fetches an 
-        /// IAbstractDatabase from the <see cref="ControllerManager"/> and allow the Constructor to initialize the <see cref="Db"/> and <see cref="Source"/> properties.
-        /// <para/>
-        /// For Example:
-        /// <code>
-        /// public override int DatabaseIndex => 0; //fetch the first IAbstractDatabase
-        /// </code>
-        /// </summary>
-        /// <returns>A zero-based integer that identifies the IAbstractDatabase in the <see cref="ControllerManager"/></returns>
-        public int DatabaseIndex { get; }
-
-        /// <summary>
-        /// Gets a string representing the Record position to be displayed
-        /// </summary>
-        public string Records { get; }
     }
 }
