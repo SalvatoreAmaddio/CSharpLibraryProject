@@ -109,7 +109,7 @@ namespace FrontEnd.FilterSource
 
         public IParentSource? ParentSource { get; set; }
 
-        public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
+        public SourceOption(Backend.Recordsource.RecordSource source, string displayProperty) : base(source.Select(s=>new FilterOption(s,displayProperty)))
         {
             _displayProperty = displayProperty;
             source.ParentSource?.AddChild(this);

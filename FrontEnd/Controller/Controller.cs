@@ -60,7 +60,7 @@ namespace FrontEnd.Controller
             DeleteCMD = new CMD<M>(Delete);
         }
 
-        protected override RecordSource initSource()
+        protected override Backend.Recordsource.RecordSource initSource()
         {
             return new RecordSource<M>(Db.Records)
             {
@@ -203,7 +203,7 @@ namespace FrontEnd.Controller
             if (Source.Any(s => s.IsNewRecord())) return;
             Source.Add(new M());
             Navigator.GoLast();
-            CurrentModel = Navigator.Current;
+            CurrentModel = Navigator.CurrentRecord<M>();
             InvokeOnNewRecordEvent();
             Records = "New Record";
         }
@@ -232,7 +232,7 @@ namespace FrontEnd.Controller
             {
                 CleanSource();
                 Navigator.GoAt(record);
-                CurrentModel = Navigator.Current;
+                CurrentModel = Navigator.CurrentRecord<M>();
                 Records = Source.RecordPositionDisplayer();
             }
         }
@@ -243,7 +243,7 @@ namespace FrontEnd.Controller
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<Backend.Recordsource.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Recordsource.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
 
     }
 }
