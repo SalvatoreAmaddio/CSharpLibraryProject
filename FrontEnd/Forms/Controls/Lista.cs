@@ -102,9 +102,9 @@ namespace FrontEnd.Forms
             catch { }
         }
         
-        private void OnListViewItemLostFocus(AbstractModel record)
+        private void OnListViewItemLostFocus(AbstractModel? record)
         {
-            if (!record.IsNewRecord()) return;
+            if (record is null || !record.IsNewRecord()) return;
             MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {

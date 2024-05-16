@@ -4,13 +4,13 @@ using System.Collections;
 namespace Backend.Source
 {
     /// <summary>
-    /// Concrete implementation of the <see cref="ISourceNavigator"/> Interface.
+    /// Concrete implementation of the <see cref="INavigator"/> Interface.
     /// </summary>
     public class Navigator : INavigator
     {
         protected ISQLModel[] _records;
         public int Index { get; set; } = -1;
-        public virtual int RecordCount { get; }
+        public int RecordCount => _records.Length;
         public bool IsNewRecord => Index > LastIndex;
         public bool IsEmpty => RecordCount == 0;
         public bool BOF => Index == 0;
@@ -24,7 +24,15 @@ namespace Backend.Source
         /// <value>An integer telling which is the last position in the array.</value>
         protected int LastIndex => (IsEmpty) ? -1 : RecordCount - 1;
         object? IEnumerator.Current => Current;
-        
+
+        public Navigator(IEnumerable<ISQLModel> source)
+        {
+            _records = source.ToArray();
+            if (IsEmpty) Index = -1;
+        }
+
+        public Navigator(IEnumerable<ISQLModel> source, int index) : this(source) => Index = index;
+
         /// <summary>
         /// Gets the record in the array at the current position within the array.
         /// </summary>
@@ -41,7 +49,7 @@ namespace Backend.Source
                 catch (Exception ex) when (ex is IndexOutOfRangeException || ex is ArgumentOutOfRangeException)
                 {
                     if (IsEmpty || IsNewRecord)
-                        return default;
+                        return null;
                     else
                     {
                         MoveFirst();
@@ -50,14 +58,6 @@ namespace Backend.Source
                 }
             }
         }
-
-        public Navigator(IEnumerable<ISQLModel> source)
-        {
-            _records = source.ToArray();
-            if (IsEmpty) Index = -1;
-        }
-
-        public Navigator(IEnumerable<ISQLModel> source, int index) : this(source) => Index = index;
 
         public void Dispose()
         {

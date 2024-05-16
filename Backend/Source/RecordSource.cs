@@ -19,8 +19,8 @@ namespace Backend.Source
         /// </summary>
         public event FilterEventHandler? RunFilter;
 
-        protected INavigator? navigator;
-        protected List<IChildSource> Children { get; } = [];
+        private INavigator? navigator;
+        private List<IChildSource> Children { get; } = [];
         public IParentSource? ParentSource { get; set; }
 
         /// <summary>
@@ -51,16 +51,16 @@ namespace Backend.Source
             if (navigator != null)
             {
                 navigator = new Navigator(this, navigator.Index);
-                return (Navigator)navigator;
+                return navigator;
             }
             navigator = new Navigator(this);
-            return (Navigator)navigator;
+            return navigator;
         }
 
         /// <summary>
-        /// Return the Enumerator as an <see cref="ISourceNavigator"/> object.
+        /// Return the Enumerator as an <see cref="INavigator"/> object.
         /// </summary>
-        /// <returns>A <see cref="ISourceNavigator"/> object.</returns>
+        /// <returns>A <see cref="INavigator"/> object.</returns>
         public INavigator Navigate() => (INavigator)GetEnumerator();
         #endregion
 
@@ -118,12 +118,12 @@ namespace Backend.Source
         /// <returns>A string.</returns>
         public virtual string RecordPositionDisplayer()
         {
-            if (Navigate() == null) throw new NoNavigatorException();
+            if (navigator == null) throw new NoNavigatorException();
             return true switch
             {
-                true when Navigate().NoRecords => "NO RECORDS",
-                true when Navigate().IsNewRecord => "New Record",
-                _ => $"Record {Navigate()?.RecNum} of {Navigate()?.RecordCount}",
+                true when navigator.NoRecords => "NO RECORDS",
+                true when navigator.IsNewRecord => "New Record",
+                _ => $"Record {navigator?.RecNum} of {navigator?.RecordCount}",
             };
         }
     }
