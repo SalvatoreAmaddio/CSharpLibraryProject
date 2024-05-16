@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyApplication.View"
-        xmlns:ctr="clr-namespace:FrontEnd.Forms.Controls;assembly=FrontEnd"
+        xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Title="Welcome" Height="450" Width="450">
 
-    <ctr:LoadingMask MainWindow="MainWindow">
+    <fr:LoadingMask MainWindow="MainWindow">
         <Label/>
-    </ctr:LoadingMask>
+    </fr:LoadingMask>
 </Window>

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace FrontEnd.Forms.Controls
+namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class instantiate a ContentControl for a Window object to show a loading process

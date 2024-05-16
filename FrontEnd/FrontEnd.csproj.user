@@ -22,7 +22,22 @@
     <Page Update="Themes\ComboStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Themes\CommandPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\DatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\HeaderFilter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Form.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\FormList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\FormRow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\FrontEndDictionary.xaml">
@@ -32,6 +47,27 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\ListaStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\LoadingMask.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\PageTracker.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\RecordStatus.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\RecordTracker.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ReportPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ReportViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\SubForm.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\TabStyle.xaml">
