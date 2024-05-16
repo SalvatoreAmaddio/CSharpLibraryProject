@@ -8,14 +8,11 @@
     <Compile Update="Forms\Controls\Text.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Reports\ListPage.xaml.cs">
+    <Compile Update="Reports\ListPage.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Reports\ListPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Themes\Colors.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -50,6 +47,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\Lista.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ListPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\LoadingMask.xaml">
