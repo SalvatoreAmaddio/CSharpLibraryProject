@@ -167,7 +167,9 @@
                             <Button Content="▶" ToolTip="Next Record" CommandParameter="3"/>
                             <Button Content="▶▶" ToolTip="Last Record" CommandParameter="4"/>
                             <Separator Width="20" Background="Transparent"/>
-                            <Button Content="NEW" FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5"/>
+                            <Button FontSize="10" ToolTip="New Record" Visibility="{TemplateBinding GoNewVisibility}" CommandParameter="5" Background="Transparent" BorderThickness="0">
+                                <Image Source="pack://application:,,,/FrontEnd;component/Images/plus.png"/>
+                            </Button>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Visibility="{TemplateBinding NoInternetVisibility}" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,5,0">
@@ -346,14 +348,14 @@
                                 <Setter Property="Width" Value="33"/>
                                 <Setter Property="Command" Value="{Binding OnClickCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontSize" Value="10"/>
                             </Style>
                         </StackPanel.Resources>
-                        <Button Content="🢐🢐" ToolTip="First Record" CommandParameter="1"/>
-                        <Button Content="🢐" ToolTip="Previous Record" CommandParameter="2"/>
+                        <Button Content="◀◀" ToolTip="First Record" CommandParameter="1"/>
+                        <Button Content="◀" ToolTip="Previous Record" CommandParameter="2"/>
                         <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
-                        <Button Content="🢒" ToolTip="Next Record" CommandParameter="3"/>
-                        <Button Content="🢒🢒" ToolTip="Last Record" CommandParameter="4"/>
+                        <Button Content="▶" ToolTip="Next Record" CommandParameter="3"/>
+                        <Button Content="▶▶" ToolTip="Last Record" CommandParameter="4"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
