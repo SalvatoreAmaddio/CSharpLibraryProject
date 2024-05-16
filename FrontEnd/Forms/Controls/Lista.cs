@@ -7,6 +7,13 @@ using System.Windows.Input;
 
 namespace FrontEnd.Forms
 {
+    /// <summary>
+    /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
+    /// Such as column's header, see the <see cref="Header"/> property.
+    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormController"/>.
+    /// <para/>
+    /// Its ItemsSource property should be a IEnumerable&lt;<see cref="ISQLModel"/>&gt; such as a <see cref="Backend.Recordsource.RecordSource"/>
+    /// </summary>
     public class Lista : ListView
     {
         #region Header
@@ -39,13 +46,10 @@ namespace FrontEnd.Forms
         }
         #endregion
 
-        private static Style CreateStyle(Style? basedOn)
-        {
-            return new Style(targetType: typeof(Label), basedOn: basedOn);
-        }
+        private static Style CreateStyle(Style? basedOn) => new(targetType: typeof(Label), basedOn: basedOn);
         private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
-        ResourceDictionary resourceDict = new()
+        private readonly ResourceDictionary resourceDict = new()
         {
             Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/ListaStyle.xaml")
         };
@@ -120,10 +124,8 @@ namespace FrontEnd.Forms
         private void OnListViewItemGotFocus(object sender, RoutedEventArgs e)
         {
             if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
-            if (!record.Equals(SelectedItem)) 
-            {
+            if (!record.Equals(SelectedItem))
                 OnListViewItemLostFocus((AbstractModel)SelectedItem);
-            }
             Controller?.GoAt(record);
         }
     }
