@@ -18,7 +18,7 @@ namespace FrontEnd.Model
 
         /// <summary>
         /// Occurs when the <see cref="IsDirty"/> property gets from true to false.
-        /// This event is set and triggered by the <see cref="Forms.SubForm"/> class.
+        /// This event gets subscribed and triggered by the <see cref="Forms.SubForm"/> class.
         /// </summary>
         public event OnDirtyChangedEventHandler? OnDirtyChanged;
 
@@ -55,10 +55,9 @@ namespace FrontEnd.Model
 
         public void UpdateProperty<T>(ref T value, ref T _backProp, [CallerMemberName] string propName = "")
         {
-            //SimpleTableField? field = AllFields.Find(s => s.Name.Equals(propName));
-            //field.Value = _backProp;
-            //field.Changed = true;
-
+            SimpleTableField? field = AllFields.Find(s => s.Name.Equals(propName));
+            field?.SetValue(_backProp);
+            field?.Change(true);
             BeforeUpdateArgs args = new(value, _backProp, propName);
             BeforeUpdate?.Invoke(this, args);
             if (args.Cancel) return;
@@ -72,8 +71,8 @@ namespace FrontEnd.Model
         { 
             foreach (var field in AllFields.Where(s=>s.Changed)) 
             {
-                field.Property.SetValue(this, field.Value);
-                field.Changed = false;
+                field.Property.SetValue(this, field.GetValue());
+                field.Change(false);
             }
 
             IsDirty = false;

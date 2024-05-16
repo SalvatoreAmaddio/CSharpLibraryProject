@@ -7,7 +7,7 @@ namespace Backend.Model
 {
 
     /// <summary>
-    /// This class defines the basic structure that each Model should extend.
+    /// This class implements <see cref="ISQLModel"/> and represents a SQL's Table.
     /// </summary>
     abstract public class AbstractSQLModel : ISQLModel
     {
@@ -15,12 +15,12 @@ namespace Backend.Model
         public string UpdateQry { get; set; } = string.Empty;
         public string InsertQry { get; set; } = string.Empty;
         public string DeleteQry { get; set; } = string.Empty;
-        public string RecordCountQry { get; set; } = string.Empty;
+        public string RecordCountQry { get; set; } = string.Empty;        
         public List<SimpleTableField> AllFields { get; }
         public AbstractSQLModel()
         {
             _ = new QueryBuilder(this);
-            //AllFields = new(GetAllTableFields());
+            AllFields = new(GetAllTableFields());
         }
 
         public abstract ISQLModel Read(DbDataReader reader);
@@ -162,8 +162,12 @@ namespace Backend.Model
     {
         public PropertyInfo Property = property;
         public string Name { get; } = name;
-        public object? Value { get; set; } = value;
-        public bool Changed { get; set; } = true;
+        private object? Value { get; set; } = value;
+        public bool Changed { get; private set; } = true;
         public override string? ToString() => Name;
+
+        public object? GetValue() => Value;
+        public void SetValue(object? value) => Value = value;
+        public void Change(bool value) => Changed = value;
     }
 }

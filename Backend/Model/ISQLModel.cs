@@ -1,6 +1,5 @@
 ﻿using Backend.Database;
 using System.Data.Common;
-using static Backend.Model.AbstractSQLModel;
 
 namespace Backend.Model
 {
@@ -10,6 +9,9 @@ namespace Backend.Model
     /// </summary>
     public interface ISQLModel 
     {
+        /// <summary>
+        /// Gets a List of all properties marked with a <see cref="AbstractField"/> attribute
+        /// </summary>
         public List<SimpleTableField> AllFields { get; }
 
         /// <summary>
