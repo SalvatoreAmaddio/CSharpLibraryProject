@@ -87,10 +87,8 @@ namespace FrontEnd.Forms
 
             int lastRemovedIndex = e.RemovedItems.Count - 1;
 
-            if (lastRemovedIndex >= 0) 
-            {
+            if (lastRemovedIndex >= 0)
                 OldSelection = e.RemovedItems[lastRemovedIndex];
-            }
 
             int lastIndex = e.AddedItems.Count - 1;
             try
@@ -98,29 +96,24 @@ namespace FrontEnd.Forms
                 AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
                 ScrollIntoView(lastSelectedObject);
             }
-            catch (Exception) { }
+            catch { }
         }
         
         private void OnListViewItemLostFocus(AbstractModel record)
         {
-
-            if (record.IsNewRecord())
+            if (!record.IsNewRecord()) return;
+            MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    bool? updateResult = Controller?.PerformUpdate();
-                    if (!updateResult!.Value) //if the update failed, move the focus to the ListViewItem.
-                    {
-                        ScrollIntoView(record);
-                    }
-                }
-                else //rollback to the previous selecteditem.
-                {
-                    AbstractModel? oldModel = (AbstractModel?)OldSelection;
-                    Controller?.CleanSource();
-                    Controller?.GoAt(oldModel);
-                }
+                bool? updateResult = Controller?.PerformUpdate();
+                if (!updateResult!.Value) //if the update failed, move the focus to the ListViewItem.
+                    ScrollIntoView(record);
+            }
+            else //rollback to the previous selecteditem.
+            {
+                AbstractModel? oldModel = (AbstractModel?)OldSelection;
+                Controller?.CleanSource();
+                Controller?.GoAt(oldModel);
             }
         }
 
