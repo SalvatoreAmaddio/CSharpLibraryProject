@@ -18,6 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("0c9ee542-7558-4041-bc1a-18842d21f111")]
 [assembly: AssemblyDescription("Backend DesktopBusinessAppSharpBuilder")]
 [assembly: AssemblyCopyright($"Copyright © Salvatore Amaddio R. 2024")]
-[assembly: AssemblyTrademark("SalvatoreTrademark")]
-[assembly: AssemblyCulture("en-GB")]
 
