@@ -20,7 +20,7 @@ namespace FrontEnd.Controller
         public AbstractModel? ParentRecord { get; }
 
         /// <summary>
-        /// This method is called by the SubForm to notify its controller that the ParentController has moved to another Record.
+        /// This method is called by the <see cref="SubForm"/> class to notify that its ParentController has moved to another Record.
         /// </summary>
         /// <param name="ParentRecord"></param>
         public void SetParentRecord(AbstractModel? ParentRecord);
@@ -69,7 +69,7 @@ namespace FrontEnd.Controller
     public interface IAbstractFormController : IAbstractSQLModelController, INotifier
     {
         /// <summary>
-        /// Gets and Sets a boolean indicating if the Form's ProgressBar is running/> 
+        /// Notify the GUI that a process involving an instance of <see cref="AbstractForm"/> is running.
         /// </summary>
         public bool IsLoading { get; set; }
 
@@ -79,6 +79,16 @@ namespace FrontEnd.Controller
         /// <returns>true if the operation was successful.</returns>
         public bool PerformUpdate();
 
+        /// <summary>
+        /// Handles record's integrity checks before the Window closes. <para/>
+        /// For Example; Subscribe the Closing event of your Window and implement it as follow:
+        /// <code>
+        ///private void Window_Closing(object sender, CancelEventArgs e)
+        ///{
+        ///    ((EmployeeController) DataContext).OnWindowClosing(e);
+        ///}
+        /// </code>
+        /// </summary>
         public void OnWindowClosing(CancelEventArgs e);
     }
 
@@ -141,7 +151,13 @@ namespace FrontEnd.Controller
         public string SearchQry { get; set; }
 
         /// <summary>
-        /// Tells if the Controller shall open a Window or add a new row to the <see cref="Lista"/> to add a New Record.
+        /// Tells if the Controller shall open a Window or add a new row to the <see cref="Lista"/> to add a New Record.<para/>
+        /// <c>KEEP IN MIND THAT:</c>
+        /// <list type="bullet">
+        /// <item>If set to true, the <see cref="VoidParentUpdate"/> property gets set to false.</item>
+        /// <item>If set to false, the <see cref="VoidParentUpdate"/> property gets set to true.</item>
+        /// </list>
+        /// Default value is true.
         /// </summary>
         public bool OpenWindowOnNew { get; set; }
 

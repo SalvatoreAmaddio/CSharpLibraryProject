@@ -85,18 +85,18 @@ namespace FrontEnd.Controller
         /// </summary>
         protected virtual async Task Requery() 
         {
-            IsLoading = true;
+            IsLoading = true; //notify the GUI that there is a process going on.
             RecordSource? results = null;
-            await Task.Run(async () => 
+            await Task.Run(async () => //retrieve the records. Do not freeze the GUI.
             {
                 results = await RecordSource.CreateFromAsyncList(Db.RetrieveAsync());
 
             });
 
-            if (results == null) throw new Exception("Source is null");
-            Db.Records?.ReplaceRange(results);
-            Source.ReplaceRange(results);
-            IsLoading = false;
+            if (results == null) throw new Exception("Source is null"); //Something has gone wrong.
+            Db.Records?.ReplaceRange(results); //Replace the Master RecordSource's records with the newly fetched ones.
+            Source.ReplaceRange(results); //Update also its child source for this controller.
+            IsLoading = false; //Notify the GUI the process has terminated
         }
 
         public bool PerformUpdate() => Update(CurrentRecord);
@@ -151,14 +151,14 @@ namespace FrontEnd.Controller
         public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (CurrentModel == null) throw new NoModelException();
-            if (!((AbstractModel)CurrentModel).IsDirty) return false;
+            if (!((AbstractModel)CurrentModel).IsDirty) return false; //if the record has not been changed there is nothing to update.
             CRUD crud = (!CurrentModel.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
-            if (!CurrentModel.AllowUpdate()) return false;
+            if (!CurrentModel.AllowUpdate()) return false; //the record did not meet the criteria to be updated.
             Db.Model = CurrentModel;
             Db.Crud(crud, sql, parameters);
             ((AbstractModel)CurrentModel).IsDirty = false;
-            Db.Records?.NotifyChildren(crud, Db.Model);
-            if (crud == CRUD.INSERT) GoLast();
+            Db.Records?.NotifyChildren(crud, Db.Model); //tell children sources to reflect the changes occured in the master source's collection.
+            if (crud == CRUD.INSERT) GoLast(); //if the we have inserted a new record instruct the Navigator to move to the last record.
             return true;
         }
 
@@ -176,20 +176,20 @@ namespace FrontEnd.Controller
         public void OnWindowClosing(CancelEventArgs e)
         {
             bool dirty = Source.Any(s => ((M)s).IsDirty);
-            e.Cancel = dirty;
+            e.Cancel = dirty; // if the record is not dirty, there is nothing to check, close the window.
 
-            if (dirty)
+            if (dirty) //the record has been changed, check its integrity before closing.
             {
                 MessageBoxResult result = MessageBox.Show("Do you want to save your changes before closing?", "Wait", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.No) 
+                if (result == MessageBoxResult.No) //the user has decided to undo its changes to the record. 
                 {
-                    CurrentRecord?.Undo();
-                    e.Cancel = false;
+                    CurrentRecord?.Undo(); //set the record's property to how they were before changing.
+                    e.Cancel = false; //can close the window.
                 }
-                else 
+                else //the user has decided to apply its changes to the record. 
                 {
-                    bool updateResult = PerformUpdate();
-                    e.Cancel = !updateResult;
+                    bool updateResult = PerformUpdate(); //perform an update against the Database.
+                    e.Cancel = !updateResult; //if the update fails, force the User to stay on the Windwow. If the update was successful, close the window.
                 }
             }
         }
@@ -246,11 +246,12 @@ namespace FrontEnd.Controller
         public void CleanSource()
         {
             if (OpenWindowOnNew) return;
-            List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList();
+            List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList(); //get only the records which are new in the collection.
 
-            foreach (var item in toRemove)
-                Source.Remove(item);
+            foreach (var item in toRemove) 
+                Source.Remove(item); //get rid of them.
         }
+
         public override void GoNew()
         {
             if (OpenWindowOnNew) 
@@ -264,7 +265,7 @@ namespace FrontEnd.Controller
             Source.Add(new M()); //add a new record to the collection.
             Navigator.MoveLast(); //Therefore, you can now move to the last record which is indeed a new record.
             CurrentModel = Navigator.Current; //set the CurrentModel property.
-            InvokeOnNewRecordEvent(); //Invoke the the OnNewRecordEvent() if it has been subscribed.
+            InvokeOnNewRecordEvent(); //if you are using SubForms, Invoke the the OnNewRecordEvent().
             Records = "New Record"; //update RecordTracker's record displayer.
         }
         public override void GoPrevious()

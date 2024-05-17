@@ -126,20 +126,20 @@ namespace Backend.Controller
             if (CurrentModel == null) throw new NoModelException();
             Db.Model = CurrentModel;
             Db.Crud(CRUD.DELETE, sql, parameters);
-            if (Db.Model.IsNewRecord()) 
+            if (Db.Model.IsNewRecord()) //this occurs in ListView objects when you add a new record but then decided to delete it.
             {
-                Source.Remove(Db.Model);
-                if (Navigator.BOF && !Navigator.NoRecords) GoFirst();
-                else GoPrevious();
+                Source.Remove(Db.Model); //remove the record from the Source, thereof from the ListView
+                if (Navigator.BOF && !Navigator.NoRecords) GoFirst(); //The record is deleted, handle the direction that the Navigator object should point at.
+                else GoPrevious(); //if we still have records move back.
             }
             else
-                Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
+                Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model); //notify children sources that the master source has changed.
         }
 
         public virtual bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (CurrentModel == null) throw new NoModelException();
-            if (!CurrentModel.AllowUpdate()) return false;
+            if (!CurrentModel.AllowUpdate()) return false; //cannot update.
             Db.Model = CurrentModel;
             CRUD crud = (!Db.Model.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             Db.Crud(crud, sql, parameters);

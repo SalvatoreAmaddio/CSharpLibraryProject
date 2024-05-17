@@ -7,7 +7,7 @@ namespace Backend.Controller
     public interface IAbstractSQLModelController
     {
         /// <summary>
-        /// Indicates if the RecordSource should bypass its Child Source's update.
+        /// Tells if the RecordSource should not notify its Children about record updates.
         /// </summary>
         public bool VoidParentUpdate { get; }
 
@@ -84,7 +84,7 @@ namespace Backend.Controller
         public void GoAt(int index);
 
         /// <summary>
-        /// It finds the given record and tells the RecordSource's Enumerator to go to a its zero-based position.
+        /// It finds the given record and tells the RecordSource's Enumerator to go to its zero-based position.
         /// see <see cref="RecordSource"/>
         /// </summary>
         /// <param name="record">the record to move to.</param>
