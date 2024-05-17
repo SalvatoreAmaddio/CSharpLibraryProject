@@ -9,11 +9,9 @@
         xmlns:controller="clr-namespace:MyApplication.Controller"
         Title="Employee Form" 
         WindowState="Maximized"
+        d:DataContext="{d:DesignInstance Type=controller:EmployeeControllerList, IsDesignTimeCreatable=False}"
+        Closing="Window_Closing"
         >
-
-    <Window.DataContext>
-        <controller:EmployeeController/>
-    </Window.DataContext>
 
     <fr:Form>
         <Grid Margin="10" fr:Definition.RowDefinitions="30,30,30,30,30,30,30,200" fr:Definition.ColumnDefinitions="80,150,30,150">

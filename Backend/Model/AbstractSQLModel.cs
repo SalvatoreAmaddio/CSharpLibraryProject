@@ -163,7 +163,7 @@ namespace Backend.Model
         public PropertyInfo Property = property;
         public string Name { get; } = name;
         private object? Value { get; set; } = value;
-        public bool Changed { get; private set; } = true;
+        public bool Changed { get; private set; } = false;
         public override string? ToString() => Name;
 
         public object? GetValue() => Value;

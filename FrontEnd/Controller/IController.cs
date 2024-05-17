@@ -5,6 +5,7 @@ using FrontEnd.Notifier;
 using System.Windows.Input;
 using FrontEnd.Forms.FormComponents;
 using FrontEnd.Forms;
+using System.ComponentModel;
 
 namespace FrontEnd.Controller
 {
@@ -77,6 +78,8 @@ namespace FrontEnd.Controller
         /// </summary>
         /// <returns>true if the operation was successful.</returns>
         public bool PerformUpdate();
+
+        public void OnWindowClosing(CancelEventArgs e);
     }
 
     /// <summary>

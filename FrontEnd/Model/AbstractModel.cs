@@ -2,7 +2,6 @@
 using FrontEnd.Events;
 using FrontEnd.Notifier;
 using System.ComponentModel;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 

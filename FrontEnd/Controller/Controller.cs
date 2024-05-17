@@ -91,8 +91,7 @@ namespace FrontEnd.Controller
         {
             if (model == null) return false;
             CurrentRecord = model;
-            AlterRecord();
-            return true;
+            return AlterRecord();
         }
 
         /// <summary>
@@ -155,6 +154,27 @@ namespace FrontEnd.Controller
         public virtual void OnSubFormFilter()
         {
             throw new NotImplementedException();
+        }
+
+        public void OnWindowClosing(CancelEventArgs e)
+        {
+            bool dirty = Source.Any(s => ((M)s).IsDirty);
+            e.Cancel = dirty;
+
+            if (dirty)
+            {
+                MessageBoxResult result = MessageBox.Show("Do you want to save your changes before closing?", "Wait", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No) 
+                {
+                    CurrentRecord?.Undo();
+                    e.Cancel = false;
+                }
+                else 
+                {
+                    bool updateResult = PerformUpdate();
+                    e.Cancel = !updateResult;
+                }
+            }
         }
     }
 
@@ -260,12 +280,12 @@ namespace FrontEnd.Controller
         }
 
         /// <summary>
-        /// Wrap up method for the <see cref="Backend.Source.RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
+        /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
         /// </summary>
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<Backend.Source.RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => Backend.Source.RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
 
     }
 }
