@@ -22,6 +22,18 @@ namespace FrontEnd.Controller
         bool _isloading = false;
         protected ISQLModel? _currentModel;
         private string _records = string.Empty;
+        private Window? _window;
+        public Window? Window
+        { 
+            get => _window; 
+            set 
+            {
+                _window = value;
+                if (_window != null)
+                    _window.Closing += OnWindowClosing;
+            } 
+        }
+
         public AbstractModel? ParentRecord { get; private set; }
         public override ISQLModel? CurrentModel
         {
@@ -177,7 +189,7 @@ namespace FrontEnd.Controller
             throw new NotImplementedException("You have not override the OnSubFormFilter() method in the Controller class that handles the SubForm.");
         }
 
-        public void OnWindowClosing(CancelEventArgs e)
+        public void OnWindowClosing(object? sender, CancelEventArgs e)
         {
             bool dirty = Source.Any(s => ((M)s).IsDirty);
             e.Cancel = dirty; // if the record is not dirty, there is nothing to check, close the window.

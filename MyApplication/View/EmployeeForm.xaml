@@ -10,7 +10,6 @@
         Title="Employee Form" 
         WindowState="Maximized"
         d:DataContext="{d:DesignInstance Type=controller:EmployeeControllerList, IsDesignTimeCreatable=False}"
-        Closing="Window_Closing"
         >
 
     <fr:Form>

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using FrontEnd.Forms.FormComponents;
 using FrontEnd.Forms;
 using System.ComponentModel;
+using System.Windows;
 
 namespace FrontEnd.Controller
 {
@@ -69,6 +70,12 @@ namespace FrontEnd.Controller
     public interface IAbstractFormController : IAbstractSQLModelController, INotifier
     {
         /// <summary>
+        /// Gets and sets a reference to a <see cref="Window"/> object that the Controller is associated to. 
+        /// When this property is set, the Window's Closing event gets subscribed to the  <see cref="OnWindowClosing(object?, CancelEventArgs)"/> method.
+        /// </summary>
+        public Window? Window { get; set; }
+
+        /// <summary>
         /// Notify the GUI that a process involving an instance of <see cref="AbstractForm"/> is running.
         /// </summary>
         public bool IsLoading { get; set; }
@@ -89,7 +96,7 @@ namespace FrontEnd.Controller
         ///}
         /// </code>
         /// </summary>
-        public void OnWindowClosing(CancelEventArgs e);
+        public void OnWindowClosing(object? sender, CancelEventArgs e);
     }
 
     /// <summary>
