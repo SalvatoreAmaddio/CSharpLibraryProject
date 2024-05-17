@@ -20,7 +20,6 @@ namespace FrontEnd.Controller
     {
         string _search = string.Empty;
         bool _isloading = false;
-        private bool _allowNewRecord = true;
         protected ISQLModel? _currentModel;
         private string _records = string.Empty;
         public AbstractModel? ParentRecord { get; private set; }
@@ -41,7 +40,17 @@ namespace FrontEnd.Controller
         }
 
         public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
-        public override bool AllowNewRecord { get => _allowNewRecord; set => UpdateProperty(ref value, ref _allowNewRecord); }
+
+        public override bool AllowNewRecord 
+        { 
+            get => _allowNewRecord;
+            set
+            {
+                UpdateProperty(ref value, ref _allowNewRecord);
+                base.AllowNewRecord = value;
+            }
+        }
+
         public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
         public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
         public ICommand UpdateCMD { get; set; }
@@ -109,9 +118,7 @@ namespace FrontEnd.Controller
 
         public override void GoNew()
         {
-            if (!AllowNewRecord) return;
-            if (Navigator.IsNewRecord) return;
-            Navigator.MoveNew();
+            if (!CanMove() || !Navigator.MoveNew()) return;
             CurrentRecord = new M();
             InvokeOnNewRecordEvent();
             Records = Source.RecordPositionDisplayer();
@@ -242,31 +249,36 @@ namespace FrontEnd.Controller
                 OpenNew();
                 return;
             }
-            if (Source.Any(s => s.IsNewRecord())) return;
-            Source.Add(new M());
-            Navigator.MoveLast();
-            CurrentModel = Navigator.Current;
-            InvokeOnNewRecordEvent();
-            Records = "New Record";
+            if (!CanMove()) return;
+            if (Source.Any(s => s.IsNewRecord())) return; //If there is already a new record exit the method.
+            Source.Add(new M()); //add a new record to the collection.
+            Navigator.MoveLast(); //Therefore, you can now move to the last record which is indeed a new record.
+            CurrentModel = Navigator.Current; //set the CurrentModel property.
+            InvokeOnNewRecordEvent(); //Invoke the the OnNewRecordEvent() if it has been subscribed.
+            Records = "New Record"; //update RecordTracker's record displayer.
         }
         public override void GoPrevious()
         {
+            if (!CanMove()) return;
             CleanSource();            
             base.GoPrevious();
         }
         public override void GoLast()
         {
+            if (!CanMove()) return;
             CleanSource();
             base.GoLast();
         }
         public override void GoFirst()
         {
+            if (!CanMove()) return;
             CleanSource();
             base.GoFirst();
         }
 
         public override void GoAt(ISQLModel? record)
         {
+            if (!CanMove()) return;
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
             else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.MoveNew();

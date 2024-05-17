@@ -50,7 +50,7 @@ namespace Backend.Source
         {
             if (navigator != null)
             {
-                navigator = new Navigator(this, navigator.Index);
+                navigator = new Navigator(this, navigator.Index, navigator.AllowNewRecord);
                 return navigator;
             }
             navigator = new Navigator(this);

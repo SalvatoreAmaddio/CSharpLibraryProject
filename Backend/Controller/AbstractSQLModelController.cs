@@ -7,6 +7,7 @@ namespace Backend.Controller
 {
     public abstract class AbstractSQLModelController : IAbstractSQLModelController
     {
+        protected bool _allowNewRecord = true;
         public bool VoidParentUpdate { get; protected set; } = false;
         public IAbstractDatabase Db { get; protected set; } = null!;
         public abstract int DatabaseIndex { get; }
@@ -33,12 +34,29 @@ namespace Backend.Controller
             GoFirst();
         }
 
-        public virtual bool AllowNewRecord { get; set; }
+        public virtual bool AllowNewRecord 
+        { 
+            get => _allowNewRecord; 
+            set 
+            {
+                _allowNewRecord = value;
+                Navigator.AllowNewRecord = value;
+            } 
+        }
+
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
+        
+        protected bool CanMove() 
+        {
+            if (CurrentModel != null)
+                if (!CurrentModel.AllowUpdate()) return false;
+            return true;
+        }
 
         public virtual void GoNext()
         {
+            if (!CanMove()) return;
             bool moved = Navigator.MoveNext();
             if (!moved) return;
             CurrentModel = Navigator.Current;
@@ -47,6 +65,7 @@ namespace Backend.Controller
 
         public virtual void GoPrevious()
         {
+            if (!CanMove()) return;
             Navigator.MovePrevious();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
@@ -54,6 +73,7 @@ namespace Backend.Controller
 
         public virtual void GoLast()
         {
+            if (!CanMove()) return;
             Navigator.MoveLast();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
@@ -61,6 +81,7 @@ namespace Backend.Controller
 
         public virtual void GoFirst()
         {
+            if (!CanMove()) return;
             Navigator.MoveFirst();
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
@@ -68,6 +89,7 @@ namespace Backend.Controller
 
         public virtual void GoNew()
         {
+            if (!CanMove()) return;
             if (!AllowNewRecord) return;
             if (Navigator.IsNewRecord) return;
             Navigator.MoveNew();
@@ -77,6 +99,7 @@ namespace Backend.Controller
 
         public virtual void GoAt(int index)
         {
+            if (!CanMove()) return;
             Navigator.MoveAt(index);
             CurrentModel = Navigator.Current;
             Records = Source.RecordPositionDisplayer();
@@ -84,6 +107,7 @@ namespace Backend.Controller
 
         public virtual void GoAt(ISQLModel? record)
         {
+            if (!CanMove()) return;
             if (record == null) CurrentModel = null;
             else if (record.IsNewRecord()) GoNew();
             else

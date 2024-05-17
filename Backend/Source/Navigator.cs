@@ -16,6 +16,7 @@ namespace Backend.Source
         public bool BOF => Index == 0;
         public bool EOF => Index == LastIndex;
         public bool NoRecords => !IsNewRecord && IsEmpty;
+        public bool AllowNewRecord { get; set; } = true;
         public int RecNum => Index + 1;
 
         /// <summary>
@@ -31,7 +32,11 @@ namespace Backend.Source
             if (IsEmpty) Index = -1;
         }
 
-        public Navigator(IEnumerable<ISQLModel> source, int index) : this(source) => Index = index;
+        public Navigator(IEnumerable<ISQLModel> source, int index, bool allowNewRecord) : this(source) 
+        {
+            Index = index;
+            AllowNewRecord = allowNewRecord;
+        }
 
         /// <summary>
         /// Gets the record in the array at the current position within the array.
@@ -66,6 +71,7 @@ namespace Backend.Source
         }
         public bool MoveNext()
         {
+            if (EOF) return MoveNew();
             Index = IsEmpty ? -1 : ++Index;
             return Index <= LastIndex;
         }
@@ -86,6 +92,7 @@ namespace Backend.Source
         }
         public bool MoveNew()
         {
+            if (!AllowNewRecord || IsNewRecord) return false;
             Index = RecordCount;
             return true;
         }

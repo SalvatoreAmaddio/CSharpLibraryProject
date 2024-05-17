@@ -78,6 +78,7 @@ namespace Backend.Source
 
         /// <summary>
         /// Moves the Enumerator beyond the last element in the collection indicating a new Record can be added.
+        /// This method returns false if <see cref="AllowNewRecord"/> is set to false.
         /// </summary>
         /// <returns>
         /// true if the Enumerator could move.
@@ -107,6 +108,11 @@ namespace Backend.Source
         /// </summary>
         /// <value>The number of records in collection</value>
         public int RecordCount { get; }
+
+        /// <summary>
+        /// Tells if the Enumerator can add a new record. See also <see cref="MoveNew"/>
+        /// </summary>
+        public bool AllowNewRecord { get; set; }
     }
 
 }

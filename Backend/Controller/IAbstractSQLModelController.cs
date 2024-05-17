@@ -47,9 +47,9 @@ namespace Backend.Controller
         public RecordSource Source { get; }
 
         /// <summary>
-        /// Gets and Sets whether or no a new Record can be added. Default value is True.
+        /// Gets and Sets whether or no a new Record can be added. Default value is true.
         /// </summary>
-        /// <value>True if you can add new records.</value>
+        /// <value>True if the <see cref="Navigator"/> can add new records.</value>
         public bool AllowNewRecord { get; set; }
 
         /// <summary>

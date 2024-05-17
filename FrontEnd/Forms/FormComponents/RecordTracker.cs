@@ -110,13 +110,9 @@ namespace FrontEnd.Forms.FormComponents
                 case 3:
                     if (Controller.Source.Navigate().EOF) 
                     {
-                        if (Controller.AllowNewRecord) 
-                        {
-                            if (Controller is IAbstractFormListController listController)
-                                if (listController.OpenWindowOnNew) break;
-
+                            if (Controller is IAbstractFormListController listController && listController.OpenWindowOnNew)
+                                break;
                             Controller.GoNew();
-                        }
                     }
                     else Controller.GoNext();
                     break;
