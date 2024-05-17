@@ -46,7 +46,7 @@ namespace FrontEnd.Forms.FormComponents
         }
 
         public static readonly DependencyProperty RecordsProperty =
-            DependencyProperty.Register(nameof(Records), typeof(string), typeof(RecordTracker), new PropertyMetadata());
+            DependencyProperty.Register(nameof(Records), typeof(string), typeof(RecordTracker), new PropertyMetadata("Record 1 of 100"));
         #endregion
 
         #region GoNewVisibility

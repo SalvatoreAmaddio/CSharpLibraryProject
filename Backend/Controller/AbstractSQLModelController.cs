@@ -14,7 +14,15 @@ namespace Backend.Controller
         protected INavigator Navigator => Source.Navigate();
         public AbstractSQLModelController()
         {
-            Db = DatabaseManager.Do[DatabaseIndex];
+            try 
+            {
+                Db = DatabaseManager.Do[DatabaseIndex];
+            }
+            catch (IndexOutOfRangeException e) 
+            {
+                Console.WriteLine(e.Message);
+            }
+
             if (Db.Records == null) throw new Exception($"{Db} has no records");
             Source = new RecordSource(Db.Records)
             {

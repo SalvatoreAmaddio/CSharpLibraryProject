@@ -3,6 +3,7 @@ using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace FrontEnd.Forms
 {
@@ -87,5 +88,21 @@ namespace FrontEnd.Forms
         protected override string ToolTipText => "Open";
         protected override string CommandName => "OpenCMD";
         protected override string ImgKey => "folder";
+    }
+
+    /// <summary>
+    /// Instantiate RequeryButton and binds it to the <see cref="AbstractFormController{M}.RequeryCMD"/> Command.
+    /// </summary>
+    public class RequeryButton : AbstractButton
+    {
+        protected override string ToolTipText => "Requery";
+        protected override string CommandName => "RequeryCMD";
+        protected override string ImgKey => "requery";
+
+        public RequeryButton() 
+        {
+            Background = Brushes.Transparent;
+            BorderThickness = new(0);
+        }
     }
 }

@@ -8,6 +8,10 @@ namespace MyApplication.Controller
 {
     public class EmployeeControllerList : AbstractFormListController<Employee>
     {
+        static EmployeeControllerList() 
+        { 
+        
+        }
         public GenderListController Genders { get; private set; } = new();
         public DepartmentListController Departments { get; private set; } = new();
         public JobTitleListController Titles { get; private set; } = new();

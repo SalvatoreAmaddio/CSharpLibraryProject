@@ -21,6 +21,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\excel.png" />
+    <None Remove="images\requery.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 
@@ -44,11 +49,13 @@
   <ItemGroup>
     <Resource Include="images\clear_filter.png" />
     <Resource Include="images\delete.png" />
+    <Resource Include="images\excel.png" />
     <Resource Include="images\filter.png" />
     <Resource Include="images\folder.png" />
     <Resource Include="images\nowifi.png" />
     <Resource Include="images\pdf.png" />
     <Resource Include="images\plus.png" />
+    <Resource Include="images\requery.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
 	<Resource Include="Themes\Controls.xaml" />
