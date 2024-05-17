@@ -50,18 +50,19 @@ namespace FrontEnd.Forms
         private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
         private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Lista));
+        private readonly Style listaItem;
 
         private object? OldSelection;
+        private readonly EventSetter ListViewItemGotFocusEventSetter = new()
+        {
+            Event = ListViewItem.GotFocusEvent,
+        };
 
         public Lista()
         {
-            Style listaItem = (Style)resourceDict["ListaItemStyle"];
-            listaItem.Setters.Add(new EventSetter
-            {
-                Event = ListViewItem.GotFocusEvent,
-                Handler = new RoutedEventHandler(OnListViewItemGotFocus)
-            });
-
+            ListViewItemGotFocusEventSetter.Handler = new RoutedEventHandler(OnListViewItemGotFocus);
+            listaItem = (Style)resourceDict["ListaItemStyle"];
+            listaItem.Setters.Add(ListViewItemGotFocusEventSetter);
             listaItem.Setters.Add(new EventSetter
             {
                 Event = ListViewItem.LostKeyboardFocusEvent,
@@ -100,9 +101,9 @@ namespace FrontEnd.Forms
             catch { }
         }
         
-        private void OnListViewItemLostFocus(AbstractModel? record)
+        private bool OnListViewItemLostFocus(AbstractModel? record)
         {
-            if (record is null || !record.IsNewRecord()) return;
+            if (record is null || !record.IsNewRecord()) return true;
             MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
@@ -115,15 +116,32 @@ namespace FrontEnd.Forms
                 AbstractModel? oldModel = (AbstractModel?)OldSelection;
                 Controller?.CleanSource();
                 Controller?.GoAt(oldModel);
+                return false;
             }
+            return true;
         }
 
+        bool skipEvent = false;
         private void OnListViewItemGotFocus(object sender, RoutedEventArgs e)
         {
+            if (skipEvent) return;
             if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
-            if (!record.Equals(SelectedItem))
-                OnListViewItemLostFocus((AbstractModel)SelectedItem);
-            Controller?.GoAt(record);
+            if (!record.Equals(SelectedItem)) 
+            {
+                AbstractModel model = (AbstractModel)SelectedItem;
+                bool result = OnListViewItemLostFocus((AbstractModel)SelectedItem);
+                if (!result) return;
+                if (!model.AllowUpdate()) 
+                {
+                    ListViewItem listViewItem = (ListViewItem)ItemContainerGenerator.ContainerFromItem(SelectedItem);
+                    e.Handled = true;
+                    skipEvent = true;
+                    listViewItem.Focus();
+                    skipEvent = false;
+                    return;
+                }
+                Controller?.GoAt(record);
+            }
         }
     }
 }
