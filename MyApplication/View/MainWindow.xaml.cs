@@ -1,4 +1,5 @@
-﻿using FrontEnd.Utils;
+﻿using FrontEnd.Dialogs;
+using FrontEnd.Utils;
 using System.Windows;
 
 namespace MyApplication.View

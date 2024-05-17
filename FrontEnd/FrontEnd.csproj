@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <None Remove="images\excel.png" />
+    <None Remove="images\redlight.png" />
     <None Remove="images\requery.png" />
   </ItemGroup>
 
@@ -58,6 +59,7 @@
     <Resource Include="images\requery.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
+	<Resource Include="images\redlight.png" />
 	<Resource Include="Themes\Controls.xaml" />
   </ItemGroup>
 

@@ -12,5 +12,6 @@
     <BitmapImage x:Key="save" UriSource="pack://application:,,,/FrontEnd;component/Images/save.png"/>
     <BitmapImage x:Key="requery" UriSource="pack://application:,,,/FrontEnd;component/Images/requery.png"/>
     <BitmapImage x:Key="excel" UriSource="pack://application:,,,/FrontEnd;component/Images/excel.png"/>
+    <BitmapImage x:Key="redlight" UriSource="pack://application:,,,/FrontEnd;component/Images/redlight.png"/>
 
 </ResourceDictionary>

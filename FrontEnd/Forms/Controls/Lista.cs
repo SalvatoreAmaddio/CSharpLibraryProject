@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using FrontEnd.Dialogs;
 using FrontEnd.Model;
 using FrontEnd.Utils;
 using System.Windows;
@@ -128,9 +129,8 @@ namespace FrontEnd.Forms
             if (!record.IsDirty && !record.IsNewRecord()) return true; //The user is on a record which has not been changed and it is not a new Record. No need for checking.
 
             //The user is attempting to switch to another Record without saving the changes to the previous record.
-            MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes) //The user has decided to save the record before switching.
+            bool? result = new MissingData().ShowDialog();
+            if (result == true) //The user has decided to save the record before switching.
             {
                 bool? updateResult = Controller?.PerformUpdate(); //perform the update.
                 if (!updateResult!.Value) //The update failed due to conditions not met defined in the record AllowUpdate() method.
