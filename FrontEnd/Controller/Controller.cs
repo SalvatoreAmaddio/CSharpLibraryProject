@@ -69,12 +69,16 @@ namespace FrontEnd.Controller
             RequeryCMD = new CMDAsync(Requery);
         }
 
+        /// <summary>
+        /// It checks if the <see cref="CurrentRecord"/>'s property meets the conditions to be updated. This method is called whenever the <see cref="Navigator"/> moves.
+        /// </summary>
+        /// <returns>true if the Navigator can move.</returns>
         protected override bool CanMove()
         {
             if (CurrentRecord != null)
             {
-                if (CurrentRecord.IsNewRecord() && !CurrentRecord.IsDirty) return true;
-                if (!CurrentRecord.AllowUpdate()) return false;
+                if (CurrentRecord.IsNewRecord() && !CurrentRecord.IsDirty) return true; //the record is a new record and no changes have been made yet.
+                if (!CurrentRecord.AllowUpdate()) return false; //the record has changed but it did not met the conditions to be updated.
             }
             return true;
         }
@@ -170,7 +174,7 @@ namespace FrontEnd.Controller
 
         public virtual void OnSubFormFilter()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("You have not override the OnSubFormFilter() method in the Controller class that handles the SubForm.");
         }
 
         public void OnWindowClosing(CancelEventArgs e)
@@ -256,11 +260,11 @@ namespace FrontEnd.Controller
         {
             if (OpenWindowOnNew) 
             {
-                base.GoNew();
-                OpenNew();
+                base.GoNew(); //tell the Navigator to add a new record.
+                OpenNew(); //open a new window displaying the new record.
                 return;
             }
-            if (!CanMove()) return;
+            if (!CanMove()) return; //Cannot move to a new record because the current record break integrity rules.
             if (Source.Any(s => s.IsNewRecord())) return; //If there is already a new record exit the method.
             Source.Add(new M()); //add a new record to the collection.
             Navigator.MoveLast(); //Therefore, you can now move to the last record which is indeed a new record.

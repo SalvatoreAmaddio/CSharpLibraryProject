@@ -35,15 +35,20 @@ namespace FrontEnd.Utils
 
         public static T? FindAncestor<T>(DependencyObject? current) where T : DependencyObject
         {
-            if (current == null) return null;
-            do
+            while (current != null)
             {
                 if (current is T)
                     return (T)current;
-                current = VisualTreeHelper.GetParent(current);
+                    // Check visual tree
+                DependencyObject parent = VisualTreeHelper.GetParent(current);
+
+                if (parent == null)
+                    parent = LogicalTreeHelper.GetParent(current);
+                
+                current = parent;
             }
-            while (current != null);
             return null;
+            
         }
 
         /// <summary>

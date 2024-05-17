@@ -87,10 +87,12 @@ namespace FrontEnd.Forms
         {
             // do not proceed if the newly Focused Element is not a FramewWork element, also VERY IMPORTANT if the OldFocus is an AbstractButton then exit.
             if (e.NewFocus is not FrameworkElement newlyFocusedElement || e.OldFocus is AbstractButton) return;
-            if (newlyFocusedElement.DataContext is IAbstractFormController && newlyFocusedElement is not AbstractButton) //Only if the DataContext of the List is an instance of IAbstractFormController we can continue. Also, very important the newlyFocusedElement must not be an AbstractButton
+            bool isTabItem = (newlyFocusedElement is Frame frame && frame.Parent is TabItem); //check if the Lista is within a TabControl
+
+            if (isTabItem || (newlyFocusedElement.DataContext is IAbstractFormController && newlyFocusedElement is not AbstractButton)) //Only if the DataContext of the List is an instance of IAbstractFormController we can continue. Also, very important the newlyFocusedElement must not be an AbstractButton
             {
                 AbstractModel ListViewItemDataContext = (AbstractModel)((ListViewItem)sender).DataContext; //get the Record displayed by ListViewItem.
-                OnListViewItemLostFocus(ListViewItemDataContext); // perform record's integrity checks before switching to a new record.
+                OnListViewItemLostFocus(ListViewItemDataContext, isTabItem); // perform record's integrity checks before switching to a new record.
             }
             e.Handled = true;
         }
@@ -120,7 +122,7 @@ namespace FrontEnd.Forms
         /// </summary>
         /// <param name="record"></param>
         /// <returns>true if the switch is allowed </returns>
-        private bool OnListViewItemLostFocus(AbstractModel? record)
+        private bool OnListViewItemLostFocus(AbstractModel? record, bool isTabItem)
         {
             if (record is null) return true; //record is null, nothing to check, exit the method.
             if (!record.IsDirty && !record.IsNewRecord()) return true; //The user is on a record which has not been changed and it is not a new Record. No need for checking.
@@ -133,7 +135,7 @@ namespace FrontEnd.Forms
                 bool? updateResult = Controller?.PerformUpdate(); //perform the update.
                 if (!updateResult!.Value) //The update failed due to conditions not met defined in the record AllowUpdate() method.
                 {
-                    Refocus(); //force the user to stay on the Record and do not switch.
+                    Refocus(isTabItem); //force the user to stay on the Record and do not switch.
                     return false; // cannot switch.
                 }
             }
@@ -141,7 +143,7 @@ namespace FrontEnd.Forms
             {
                 if (record.IsDirty && !record.IsNewRecord()) //but if the user was updating a record which is not new then
                 { 
-                    Refocus(); // force the user to stay on the record.
+                    Refocus(isTabItem); // force the user to stay on the record.
                     return false; // cannot switch.
                 }
                 AbstractModel? oldModel = (AbstractModel?)OldSelection; // get the previous selection.
@@ -153,10 +155,25 @@ namespace FrontEnd.Forms
         }
 
         /// <summary>
+        /// This method is called within scenarios where the <see cref="Lista"/> is within a <see cref="TabControl"/> and the user attempted to switch tab without ensuring record integrity has been kept within the <see cref="Lista"/>
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private void SwitchTabBack()
+        {
+            TabItem? tab = Helper.FindAncestor<TabItem>(this) ?? throw new Exception($"Failed to get {nameof(TabItem)} object");
+            TabControl? tabs = Helper.FindAncestor<TabControl>(tab) ?? throw new Exception($"Failed to get {nameof(TabControl)} object");
+            tabs.SelectedItem = tab;
+        }
+
+        /// <summary>
         /// Reset the focus to the current selected ListViewItem by passing the <see cref="OnListViewItemGotFocus(object, RoutedEventArgs)"/>
         /// </summary>
-        private void Refocus() 
+        private void Refocus(bool isTabItem = false) 
         {
+            if (isTabItem)
+            {
+                SwitchTabBack();
+            }
             ListViewItem listViewItem = (ListViewItem)ItemContainerGenerator.ContainerFromItem(SelectedItem);
             skipFocusEvent = true; //no need to trigger the OnListViewItemGotFocus event.
             listViewItem.Focus(); //do the focus without triggering the OnListViewItemGotFocus event.
@@ -172,7 +189,7 @@ namespace FrontEnd.Forms
             if (((ListViewItem)sender).DataContext is not AbstractModel record) return; //not and AbstractModel, therefore useless.
             if (!record.Equals(SelectedItem)) // The user is selecting a different item.
             {
-                bool result = OnListViewItemLostFocus((AbstractModel)SelectedItem); //perform record's integrity checks.
+                bool result = OnListViewItemLostFocus((AbstractModel)SelectedItem, false); //perform record's integrity checks.
                 if (!result) return; // no need to continue, the OnListViewItemLostFocus has handled it.
 
                 //The switch was succesful and mandatory condition for record's integrity have been met.
