@@ -69,6 +69,16 @@ namespace FrontEnd.Controller
             RequeryCMD = new CMDAsync(Requery);
         }
 
+        protected override bool CanMove()
+        {
+            if (CurrentRecord != null)
+            {
+                if (CurrentRecord.IsNewRecord() && !CurrentRecord.IsDirty) return true;
+                if (!CurrentRecord.AllowUpdate()) return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// This method is called by <see cref="RequeryCMD"/> command to Requery the database table.
         /// It awaits the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/> whose result is then used to replace the records kept in the <see cref="IAbstractSQLModelController.Db"/> property and in the <see cref="IAbstractSQLModelController.Source"/> property.

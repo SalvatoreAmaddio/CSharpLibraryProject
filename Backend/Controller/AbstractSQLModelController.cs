@@ -47,10 +47,13 @@ namespace Backend.Controller
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
         
-        protected bool CanMove() 
+        protected virtual bool CanMove() 
         {
             if (CurrentModel != null)
+            {
+                if (CurrentModel.IsNewRecord()) return true;
                 if (!CurrentModel.AllowUpdate()) return false;
+            }
             return true;
         }
 
@@ -123,7 +126,14 @@ namespace Backend.Controller
             if (CurrentModel == null) throw new NoModelException();
             Db.Model = CurrentModel;
             Db.Crud(CRUD.DELETE, sql, parameters);
-            Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
+            if (Db.Model.IsNewRecord()) 
+            {
+                Source.Remove(Db.Model);
+                if (Navigator.BOF && !Navigator.NoRecords) GoFirst();
+                else GoPrevious();
+            }
+            else
+                Db?.Records?.NotifyChildren(CRUD.DELETE, Db.Model);
         }
 
         public virtual bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
