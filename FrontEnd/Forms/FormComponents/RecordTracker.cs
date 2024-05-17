@@ -16,7 +16,7 @@ namespace FrontEnd.Forms.FormComponents
     {
         static RecordTracker() => DefaultStyleKeyProperty.OverrideMetadata(typeof(RecordTracker), new FrameworkPropertyMetadata(typeof(RecordTracker)));
 
-        public RecordTracker() 
+        public RecordTracker()
         {
             OnClickCommand = new TrackerClickCommand(OnClicked);
             InternetConnection.Do.InternetStatusChanged += OnInternetStatusChanged;
