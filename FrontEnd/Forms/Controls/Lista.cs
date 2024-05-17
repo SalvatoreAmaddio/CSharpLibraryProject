@@ -9,18 +9,21 @@ namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class extends the <see cref="ListView"/> class and adds extra functionalities.
-    /// Such as column's header, see the <see cref="Header"/> property.
-    /// Also, the DataContext of this object is meant to be a <see cref="IAbstractFormListController"/>.
+    /// Such as column's header, see the <see cref="Header"/> property and handles some user's inputs.
+    /// The DataContext of this object is meant to be an instance of <see cref="IAbstractFormListController"/>.
     /// <para/>
     /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Source.RecordSource"/>
     /// </summary>
     public class Lista : ListView
     {
+        /// <summary>
+        /// Flag used to bypass the GotFocusEvent of a ListViewItem object.
+        /// </summary>
         bool skipFocusEvent = false;
 
         #region Header
         /// <summary>
-        /// Gets and Sets a <see cref="Grid"/> object which serves as column's header.
+        /// Gets and Sets a <see cref="Grid"/> object which serves as column's header. See also the <see cref="HeaderFilter"/> class.
         /// </summary>
         public Grid Header
         {
@@ -32,10 +35,8 @@ namespace FrontEnd.Forms
 
         private static void OnHeaderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ResourceDictionary resourceDict = new()
-            {
-                Source = new Uri("pack://application:,,,/FrontEnd;component/Themes/controls.xaml")
-            };
+            //Style the columns with a default style.
+            ResourceDictionary resourceDict = Helper.GetDictionary("controls");
             Style? labelStyle = null;
 
             if (resourceDict["ColumnStyle"] is Style columnStyle)
@@ -43,28 +44,32 @@ namespace FrontEnd.Forms
 
             Grid grid = (Grid)e.NewValue;
             grid.Resources.MergedDictionaries.Add(resourceDict);
-            grid.Resources.Add(typeof(Label), CreateStyle(labelStyle));
-            grid.Name = "listHeader";
+            grid.Resources.Add(typeof(Label), new Style(typeof(Label), labelStyle));
+            grid.Name = "listHeader"; //tells WPF that this is Grid is an Header for the Lista object, therefore it should always have an extra column which represent the RecordStatus object.
         }
         #endregion
 
-        private static Style CreateStyle(Style? basedOn) => new(targetType: typeof(Label), basedOn: basedOn);
+        /// <summary>
+        /// Gets the DataContext, which should be the Controller that is associated with this object.
+        /// </summary>
         private IAbstractFormListController? Controller => (IAbstractFormListController)DataContext;
 
-        private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Lista));
-        private readonly Style listaItem;
+        private readonly ResourceDictionary styleDictionary = Helper.GetDictionary(nameof(Lista));
 
+        /// <summary>
+        /// olds a reference to the previously selected object.
+        /// </summary>
         private object? OldSelection;
-        private readonly EventSetter ListViewItemGotFocusEventSetter = new()
-        {
-            Event = ListViewItem.GotFocusEvent,
-        };
-
+    
         public Lista()
         {
-            ListViewItemGotFocusEventSetter.Handler = new RoutedEventHandler(OnListViewItemGotFocus);
-            listaItem = (Style)resourceDict["ListaItemStyle"];
-            listaItem.Setters.Add(ListViewItemGotFocusEventSetter);
+            Style listaItem = (Style)styleDictionary["ListaItemStyle"];
+            listaItem.Setters.Add(new EventSetter 
+            { 
+                Event = ListViewItem.GotFocusEvent,
+                Handler = new RoutedEventHandler(OnListViewItemGotFocus)
+            });
+
             listaItem.Setters.Add(new EventSetter
             {
                 Event = ListViewItem.LostKeyboardFocusEvent,
@@ -72,63 +77,79 @@ namespace FrontEnd.Forms
             });
 
             ItemContainerStyle = listaItem;
-            Style = (Style)resourceDict["ListaStyle"];
+            Style = (Style)styleDictionary["ListaStyle"];
         }
-
+        
+        /// <summary>
+        /// Handles the switching from one row to another by clicking on them.
+        /// </summary>
         private void ListViewItemKeyboardFocusChanged(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (e.NewFocus is not FrameworkElement element || e.OldFocus is AbstractButton) return;
-            if (element.DataContext is IAbstractFormController && element is not AbstractButton)
+            // do not proceed if the newly Focused Element is not a FramewWork element, also VERY IMPORTANT if the OldFocus is an AbstractButton then exit.
+            if (e.NewFocus is not FrameworkElement newlyFocusedElement || e.OldFocus is AbstractButton) return;
+            if (newlyFocusedElement.DataContext is IAbstractFormController && newlyFocusedElement is not AbstractButton) //Only if the DataContext of the List is an instance of IAbstractFormController we can continue. Also, very important the newlyFocusedElement must not be an AbstractButton
             {
-                AbstractModel ListViewItemDataContext = (AbstractModel)((ListViewItem)sender).DataContext;
-                OnListViewItemLostFocus(ListViewItemDataContext);
+                AbstractModel ListViewItemDataContext = (AbstractModel)((ListViewItem)sender).DataContext; //get the Record displayed by ListViewItem.
+                OnListViewItemLostFocus(ListViewItemDataContext); // perform record's integrity checks before switching to a new record.
             }
             e.Handled = true;
         }
 
+        /// <summary>
+        /// override the default behaviour for OnSelectionChanged event.
+        /// </summary>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
 
             int lastRemovedIndex = e.RemovedItems.Count - 1;
-
             if (lastRemovedIndex >= 0)
-                OldSelection = e.RemovedItems[lastRemovedIndex];
+                OldSelection = e.RemovedItems[lastRemovedIndex]; //hold a reference to the previously selected item as it might be needed to force the user to go back to that.
 
             int lastIndex = e.AddedItems.Count - 1;
             try
             {
                 AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
-                ScrollIntoView(lastSelectedObject);
+                ScrollIntoView(lastSelectedObject); //usefull for a large list where the user is selecting a record which is out of the current view. Scroll to it to make it visible
             }
-            catch { }
+            catch { } //fail silently.
         }
-        
+
+        /// <summary>
+        /// Performs some record's integrity checks before allowing the user to switch.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns>true if the switch is allowed </returns>
         private bool OnListViewItemLostFocus(AbstractModel? record)
         {
-            if (record is null) return true;
-            if (!record.IsDirty && !record.IsNewRecord()) return true;
+            if (record is null) return true; //record is null, nothing to check, exit the method.
+            if (!record.IsDirty && !record.IsNewRecord()) return true; //The user is on a record which has not been changed and it is not a new Record. No need for checking.
 
+            //The user is attempting to switch to another Record without saving the changes to the previous record.
             MessageBoxResult result = MessageBox.Show("You must save the record before performing any other action. Do you want to save the record?", "Wait", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
+
+            if (result == MessageBoxResult.Yes) //The user has decided to save the record before switching.
             {
-                bool? updateResult = Controller?.PerformUpdate();
-                if (!updateResult!.Value) //if the update failed, move the focus to the ListViewItem.
-                    ScrollIntoView(record);
-            }
-            else //rollback to the previous selecteditem.
-            {
-                if (record.IsDirty && !record.IsNewRecord()) //you are updating a record which is not new
-                { 
-                    Refocus();
-                    return false;
+                bool? updateResult = Controller?.PerformUpdate(); //perform the update.
+                if (!updateResult!.Value) //The update failed due to conditions not met defined in the record AllowUpdate() method.
+                {
+                    Refocus(); //force the user to stay on the Record and do not switch.
+                    return false; // cannot switch.
                 }
-                AbstractModel? oldModel = (AbstractModel?)OldSelection;
-                Controller?.CleanSource();
-                Controller?.GoAt(oldModel);
-                return false;
             }
-            return true;
+            else //The user has decided NOT to save the record. rollback to the previous selecteditem.
+            {
+                if (record.IsDirty && !record.IsNewRecord()) //but if the user was updating a record which is not new then
+                { 
+                    Refocus(); // force the user to stay on the record.
+                    return false; // cannot switch.
+                }
+                AbstractModel? oldModel = (AbstractModel?)OldSelection; // get the previous selection.
+                Controller?.CleanSource(); //remove new records from the source as it was decided to not save them.
+                Controller?.GoAt(oldModel); // tell the controller to select the previous selection.
+                return false; // cannot switch because the user decided to abort the new Record.
+            }
+            return true; //switch allowed.
         }
 
         /// <summary>
@@ -137,30 +158,25 @@ namespace FrontEnd.Forms
         private void Refocus() 
         {
             ListViewItem listViewItem = (ListViewItem)ItemContainerGenerator.ContainerFromItem(SelectedItem);
-            skipFocusEvent = true;
-            listViewItem.Focus();
-            skipFocusEvent = false;
+            skipFocusEvent = true; //no need to trigger the OnListViewItemGotFocus event.
+            listViewItem.Focus(); //do the focus without triggering the OnListViewItemGotFocus event.
+            skipFocusEvent = false; //bypass has finished, reset the flag to its default value.
         }
 
+        /// <summary>
+        /// When clicking on an Row.
+        /// </summary>
         private void OnListViewItemGotFocus(object sender, RoutedEventArgs e)
         {
-            if (skipFocusEvent) return;
-            if (((ListViewItem)sender).DataContext is not AbstractModel record) return;
-            if (!record.Equals(SelectedItem)) 
+            if (skipFocusEvent) return; //A focus has been requested by the event should not be fired.
+            if (((ListViewItem)sender).DataContext is not AbstractModel record) return; //not and AbstractModel, therefore useless.
+            if (!record.Equals(SelectedItem)) // The user is selecting a different item.
             {
-                AbstractModel model = (AbstractModel)SelectedItem;
-                bool result = OnListViewItemLostFocus((AbstractModel)SelectedItem);
-                if (!result) return;
-                if (!model.AllowUpdate()) 
-                {
-                    ListViewItem listViewItem = (ListViewItem)ItemContainerGenerator.ContainerFromItem(SelectedItem);
-                    e.Handled = true;
-                    skipFocusEvent = true;
-                    listViewItem.Focus();
-                    skipFocusEvent = false;
-                    return;
-                }
-                Controller?.GoAt(record);
+                bool result = OnListViewItemLostFocus((AbstractModel)SelectedItem); //perform record's integrity checks.
+                if (!result) return; // no need to continue, the OnListViewItemLostFocus has handled it.
+
+                //The switch was succesful and mandatory condition for record's integrity have been met.
+                Controller?.GoAt(record); // notify the controller that the SelectedItem has changed and therefore updates other linked controls such as RecordTracker
             }
         }
     }
