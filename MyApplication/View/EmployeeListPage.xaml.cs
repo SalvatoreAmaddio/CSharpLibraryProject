@@ -11,7 +11,7 @@ namespace MyApplication.View
         public EmployeeListPage()
         {
             InitializeComponent();
-            this.DataContext = new EmployeeControllerList();
+            DataContext = new EmployeeControllerList();
         }
     }
 }
