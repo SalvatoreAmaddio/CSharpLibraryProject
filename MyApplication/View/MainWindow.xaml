@@ -7,10 +7,11 @@
         xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
         mc:Ignorable="d"
         WindowState="Maximized"
+        Closing="Window_Closing"
         Title="MainWindow">
 
     <Grid Background="{StaticResource DefaultWhite}">
-        <TabControl>
+        <TabControl x:Name="MainTab">
             <TabItem Header="Employees">
                 <Frame>
                     <Frame.Content>

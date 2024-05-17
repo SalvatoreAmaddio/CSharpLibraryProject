@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrontEnd.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,22 @@ namespace MyApplication.View
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            IEnumerable<TabItem> tabWithControllers = MainTab.Items.Cast<TabItem>().Where(item => item.Content is Frame frame && frame.Content is FrameworkElement element && element.DataContext is IAbstractFormController);
+            foreach (TabItem item in tabWithControllers)
+            {
+                FrameworkElement element = (FrameworkElement)((Frame)item.Content).Content;
+                IAbstractFormController controller = (IAbstractFormController)element.DataContext;
+                controller.OnWindowClosing(sender, e);
+                if (e.Cancel) 
+                {
+                        MainTab.SelectedItem = item;
+                        break;
+                }
+            }
         }
     }
 }
