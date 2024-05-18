@@ -18,6 +18,4 @@
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/PageTracker.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Dialogs.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
-
 </ResourceDictionary>

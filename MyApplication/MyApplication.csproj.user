@@ -18,6 +18,9 @@
     <Compile Update="View\LoadingForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\LoginForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -36,6 +39,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\LoadingForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\LoginForm.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\MainWindow.xaml">
