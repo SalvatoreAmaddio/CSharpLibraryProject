@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using CredentialManagement;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace Backend.Utils
 {
@@ -55,7 +58,72 @@ namespace Backend.Utils
                 LoadedDLL.Add(assembly);
             }
         }
+        public static Credential GetCredentials(string target) 
+        {
+            Credential cm = new () { Target = target };
+            cm.Load();
+            return cm;
+        }
 
+        /// <summary>
+        /// Removes sensitive information in the local computer's Windows Credential Manager System.
+        /// </summary>
+        /// <param name="target">A name that works as the unique identifier of the credential</param>
+        /// <returns>true if the credential has been successfully removed</returns>
+        public static bool RemoveCredentials(string target)
+        {
+            using (var cred = new Credential() { Target = target })
+            {
+                return cred.Delete();
+            }
+        }
+
+        /// <summary>
+        /// Safely stores sensitive information in the local computer's Windows Credential Manager System.
+        /// </summary>
+        /// <param name="credentiaID">A name that works as unique identifier</param>
+        /// <param name="username">A string representing the name of the information to store</param>
+        /// <param name="password">The actual value that must be safely stored</param>
+        /// <returns>true if the credential has been successfully stored</returns>
+        public static bool StoreCredentials(string credentiaID, string username, string password) 
+        {
+            using (var cred = new Credential())
+            {
+                cred.Target = credentiaID;
+                cred.Username = username;
+                cred.Password = password;
+                cred.Type = CredentialType.Generic;
+                cred.PersistanceType = PersistanceType.LocalComputer;
+                return cred.Save();
+            }
+        }
+
+        //public static void StoreCredentials(string target, string username, string password)
+        //{
+        //    try
+        //    {
+        //        string cmd = $"cmdkey /add:{target} /user:{username} /pass:{password}";
+        //        ProcessStartInfo psi = new ("cmd.exe", "/c " + cmd)
+        //        {
+        //            RedirectStandardOutput = true,
+        //            UseShellExecute = false,
+        //            CreateNoWindow = true
+        //        };
+
+        //        using (Process process = Process.Start(psi))
+        //        {
+        //            process?.WaitForExit();
+        //            if (process.ExitCode == 0)
+        //                Console.WriteLine("Credentials stored successfully.");
+        //            else
+        //                Console.WriteLine("Failed to store credentials.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Exception: {ex.Message}");
+        //    }
+        //}
     }
     
     /// <summary>
