@@ -21,10 +21,10 @@ namespace MyApplication.View
 
         private void OnLoginClicked(object sender, RoutedEventArgs e)
         {
-           user.UserName = userName.Text;
-           user.Password = pswd.Password;
-           user.RememberMe = (bool)rememberme.IsChecked;
-           bool result = user.Login();
+            user.UserName = userName.Text;
+            user.Password = pswd.Password;
+            user.RememberMe = (bool)rememberme.IsChecked;
+            bool result = user.Login();
 
             if (result) 
                 this.GoToWindow(new MainWindow());
