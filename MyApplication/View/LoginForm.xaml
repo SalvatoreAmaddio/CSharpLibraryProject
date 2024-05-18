@@ -17,11 +17,11 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="0" x:Name="AttemptRow"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <fr:Text Placeholder="Username..." x:Name="user"/>
+        <fr:Text Placeholder="Username..." x:Name="userName"/>
         <PasswordBox Grid.Row="2" x:Name="pswd">
             <i:Interaction.Behaviors>
                 <b:PlaceholderPasswordBox Placeholder="Password..."/>

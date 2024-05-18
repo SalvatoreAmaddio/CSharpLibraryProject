@@ -1,4 +1,5 @@
 ﻿using FrontEnd.ExtensionMethods;
+using FrontEnd.Model;
 using System.Windows;
 
 namespace MyApplication.View
@@ -6,7 +7,7 @@ namespace MyApplication.View
     public partial class LoginForm : Window
     {
 
-        int attempts = 3;
+        User user = new User();
         public LoginForm()
         {
             InitializeComponent();
@@ -20,32 +21,21 @@ namespace MyApplication.View
 
         private void OnLoginClicked(object sender, RoutedEventArgs e)
         {
-            var u = user.Text;
-            var pass = pswd.Password;
-            bool? rem = rememberme.IsChecked;
+           user.UserName = userName.Text;
+           user.Password = pswd.Password;
+           user.RememberMe = (bool)rememberme.IsChecked;
+           bool result = user.Login();
 
-            //attempt login
-            bool userCheck = u.Equals("salvatore");
-            bool passwordCheck = pass.Equals("soloio59");
-
-            if (userCheck && passwordCheck) // you are in.
-            { 
-                if (rem.HasValue && (bool)rem) 
-                { 
-                    //save credential
-                }
-
-                //this.GoToWindow(new MainWindow());
-                //go to main window.
-            }
-            else //attempt failed.
+            if (result) 
+                this.GoToWindow(new MainWindow());
+            else
             {
-                attempts--;
-                if (attempts == 0) Close(); //close application                 
-                if (attempts == 1)
-                    attemptsLeft.Content = $"{attempts} ATTEMPT LEFT!";
+                AttemptRow.Height = new(30);
+                if (user.Attempts == 0) Close(); //close application                 
+                if (user.Attempts == 1)
+                    attemptsLeft.Content = $"{user.Attempts} ATTEMPT LEFT!";
                 else
-                    attemptsLeft.Content = $"{attempts} attempt(s) left.";
+                    attemptsLeft.Content = $"{user.Attempts} attempt(s) left.";
             }
         }
 
