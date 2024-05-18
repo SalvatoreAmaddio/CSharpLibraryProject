@@ -1,9 +1,11 @@
 ﻿
+using Backend.Model;
 using Backend.Utils;
+using System.Data.Common;
 
 namespace FrontEnd.Model
 {
-    public class User : AbstractNotifier
+    public class User : AbstractModel
     {
         private string _username = string.Empty;
         private string _password = string.Empty;
@@ -13,6 +15,13 @@ namespace FrontEnd.Model
         public bool RememberMe { get => _rememberme; set => UpdateProperty(ref value, ref _rememberme); }
         public int Attempts { get; protected set; } = 3;
         public string Target { get; set; } = "LOGIN";
+        
+        public User(DbDataReader reader) 
+        {
+            _username = reader.GetString(0);
+            _password = reader.GetString(1);
+        }
+
         public User() { }
 
         /// <summary>
@@ -43,5 +52,8 @@ namespace FrontEnd.Model
         {
             CredentialManager.Store(new(Target, UserName, Password));
         }
+
+        public override ISQLModel Read(DbDataReader reader) => new(reader);
+
     }
 }
