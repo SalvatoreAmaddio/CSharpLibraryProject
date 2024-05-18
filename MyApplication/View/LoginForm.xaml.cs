@@ -34,6 +34,7 @@ namespace MyApplication.View
                 this.GoToWindow(new MainWindow());
             else
             {
+                InvalidCredentialRow.Height = new(30);
                 AttemptRow.Height = new(30);
                 if (user.Attempts == 0) Close(); //close application                 
                 if (user.Attempts == 1)

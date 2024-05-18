@@ -17,6 +17,7 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="0" x:Name="InvalidCredentialRow"/>
             <RowDefinition Height="0" x:Name="AttemptRow"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -29,7 +30,8 @@
         </PasswordBox>
 
         <CheckBox x:Name="rememberme" Grid.Row="3" Content="Remember me" HorizontalAlignment="Right"/>
-        <Label x:Name="attemptsLeft" Grid.Row="4" Content="3 Attempt(s) left." Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
-        <Button Content="LOGIN" Grid.Row="5" Click="OnLoginClicked"/>
+        <Label Grid.Row="4" Content="Invalid Username or Password" Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
+        <Label x:Name="attemptsLeft" Grid.Row="5" Content="3 Attempt(s) left." Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
+        <Button Content="LOGIN" Grid.Row="6" Click="OnLoginClicked"/>
     </Grid>
 </Window>
