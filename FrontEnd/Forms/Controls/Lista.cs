@@ -121,7 +121,8 @@ namespace FrontEnd.Forms
         /// <summary>
         /// Performs some record's integrity checks before allowing the user to switch.
         /// </summary>
-        /// <param name="record"></param>
+        /// <param name="record">The record to check</param>
+        /// <param name="isTabItem">tells if the list is within a TabControl</param>
         /// <returns>true if the switch is allowed </returns>
         private bool OnListViewItemLostFocus(AbstractModel? record, bool isTabItem)
         {
@@ -129,8 +130,9 @@ namespace FrontEnd.Forms
             if (!record.IsDirty && !record.IsNewRecord()) return true; //The user is on a record which has not been changed and it is not a new Record. No need for checking.
 
             //The user is attempting to switch to another Record without saving the changes to the previous record.
-            bool? result = new MissingData().ShowDialog();
-            if (result == true) //The user has decided to save the record before switching.
+            DialogResult result = UnsavedDialog.Ask();
+
+            if (result == DialogResult.Yes) //The user has decided to save the record before switching.
             {
                 bool? updateResult = Controller?.PerformUpdate(); //perform the update.
                 if (!updateResult!.Value) //The update failed due to conditions not met defined in the record AllowUpdate() method.

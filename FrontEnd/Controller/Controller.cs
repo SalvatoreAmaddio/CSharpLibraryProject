@@ -3,6 +3,7 @@ using Backend.Database;
 using Backend.Exceptions;
 using Backend.Model;
 using Backend.Source;
+using FrontEnd.Dialogs;
 using FrontEnd.Events;
 using FrontEnd.Model;
 using System.ComponentModel;
@@ -196,8 +197,8 @@ namespace FrontEnd.Controller
 
             if (dirty) //the record has been changed, check its integrity before closing.
             {
-                MessageBoxResult result = MessageBox.Show("Do you want to save your changes before closing?", "Wait", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.No) //the user has decided to undo its changes to the record. 
+                DialogResult result = UnsavedDialog.Ask("Do you want to save your changes before closing?");
+                if (result == DialogResult.No) //the user has decided to undo its changes to the record. 
                 {
                     CurrentRecord?.Undo(); //set the record's property to how they were before changing.
                     e.Cancel = false; //can close the window.
