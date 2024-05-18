@@ -8,7 +8,24 @@ using System.Windows.Controls;
 namespace FrontEnd.Forms
 {
     /// <summary>
-    /// This class instantiate a ContentControl for a Window object to show a loading process
+    /// This class instantiate a ContentControl for a Window object to show a loading process.
+    /// For Example, in your xaml:
+    /// <code>
+    /// &lt;!--IMPORT THE NAMESPACE-->
+    /// xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
+    /// 
+    /// &lt;Window x:Class="MyApplication.View.LoadingForm"
+    ///     ....
+    ///     ResizeMode="NoResize"
+    ///     WindowStartupLocation="CenterScreen"
+    ///     Title="Welcome" Height="450" Width="450">
+    ///     
+    ///     &lt;fr:LoadingMask MainWindow="LoginForm">    
+    ///         &lt;!--YOUR CONTENT HERE-->
+    ///     &lt;/fr:LoadingMask>
+    /// &lt;/Window>
+    /// </code>
+    /// see also the <see cref="MainWindow"/> property.
     /// </summary>
     public class LoadingMask : ContentControl
     {
