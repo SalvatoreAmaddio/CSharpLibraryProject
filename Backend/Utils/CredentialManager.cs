@@ -4,7 +4,9 @@ using System.Text;
 namespace Backend.Utils
 {
     /// <summary>
-    /// This class stores sensitive information in the Windows Credential Manager System. The information is stored in the local computer
+    /// This class stores sensitive information in the Windows Credential Manager System. 
+    /// The information is stored in the local computer.
+    /// This class use the Win32 API.
     /// </summary>
     public static class CredentialManager
     {
@@ -48,21 +50,21 @@ namespace Backend.Utils
         /// <returns>true if the credential was successfully stored</returns>
         public static bool Store(Credential cred)
         {
-            var byteArray = Encoding.Unicode.GetBytes(cred.Password);
+            byte[] byteArray = Encoding.Unicode.GetBytes(cred.Password); //Encode password.
 
-            var credential = new CREDENTIAL
+            CREDENTIAL credential = new() //create Credential Struct
             {
                 TargetName = cred.Target,
                 UserName = cred.Username,
                 CredentialBlob = Marshal.StringToCoTaskMemUni(cred.Password),
                 CredentialBlobSize = (uint)byteArray.Length,
                 Type = CRED_TYPE_GENERIC,
-                Persist = 2  // CRED_PERSIST_LOCAL_MACHINE
+                Persist = 2  // STORE THE CREDENTIAL IN THE LOCL MACHINE
             };
 
             bool result = CredWrite(ref credential, 0);
 
-            Marshal.FreeCoTaskMem(credential.CredentialBlob);
+            Marshal.FreeCoTaskMem(credential.CredentialBlob); //FREE MEMORY
             return result;
         }
 
