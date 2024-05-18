@@ -36,7 +36,7 @@ namespace MyApplication.View
                     //save credential
                 }
 
-                //access mainwindow
+                MessageBox.Show("Welcome");
             }
             else //attempt failed.
             {
