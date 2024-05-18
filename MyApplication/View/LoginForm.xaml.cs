@@ -28,7 +28,7 @@ namespace MyApplication.View
             user.UserName = userName.Text;
             user.Password = pswd.Password;
             user.RememberMe = (bool)rememberme.IsChecked;
-            bool result = user.Login("salvatore", "soloio59");
+            bool result = user.Login("soloio59");
 
             if (result) 
                 this.GoToWindow(new MainWindow());
