@@ -1,4 +1,5 @@
 ﻿using Backend.Database;
+using FrontEnd.ExtensionMethods;
 using FrontEnd.Utils;
 using System.Reflection;
 using System.Windows;
@@ -33,12 +34,8 @@ namespace FrontEnd.Forms
             string? assemblyName = entryAssembly?.GetName().Name;
             string? Namespace = entryAssembly?.EntryPoint?.DeclaringType?.Namespace;
             Type? mainWinType = Type.GetType($"{Namespace}.View.{MainWindow}, {assemblyName}") ?? throw new Exception($"Could not find the Type of {MainWindow}");
-            Window? window = Helper.GetActiveWindow();
             await Task.Run(DatabaseManager.Do.FetchData);
-            window?.Hide();
-            Window? mainWin = (Window?)Activator.CreateInstance(mainWinType);
-            mainWin?.Show();
-            window?.Close();
+            Helper.GetActiveWindow()?.GoToWindow((Window?)Activator.CreateInstance(mainWinType));
         }
     }
 }

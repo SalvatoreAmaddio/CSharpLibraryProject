@@ -1,12 +1,11 @@
-﻿using System.Windows;
+﻿using FrontEnd.ExtensionMethods;
+using System.Windows;
 
 namespace MyApplication.View
 {
-    /// <summary>
-    /// Interaction logic for LoginForm.xaml
-    /// </summary>
     public partial class LoginForm : Window
     {
+
         int attempts = 3;
         public LoginForm()
         {
@@ -36,7 +35,7 @@ namespace MyApplication.View
                     //save credential
                 }
 
-                MessageBox.Show("Welcome");
+                this.GoToWindow(new MainWindow());
                 //go to main window.
             }
             else //attempt failed.
