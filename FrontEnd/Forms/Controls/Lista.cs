@@ -173,9 +173,8 @@ namespace FrontEnd.Forms
         private void Refocus(bool isTabItem = false) 
         {
             if (isTabItem)
-            {
                 SwitchTabBack();
-            }
+
             ListViewItem listViewItem = (ListViewItem)ItemContainerGenerator.ContainerFromItem(SelectedItem);
             skipFocusEvent = true; //no need to trigger the OnListViewItemGotFocus event.
             listViewItem.Focus(); //do the focus without triggering the OnListViewItemGotFocus event.

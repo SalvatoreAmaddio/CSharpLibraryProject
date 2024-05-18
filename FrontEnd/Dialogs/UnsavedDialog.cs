@@ -21,11 +21,9 @@ namespace FrontEnd.Dialogs
     }
 
     /// <summary>
-    /// Custom Window Dialog to ask the user what action they would like to perform in case some data are missing.
-    /// This dialog is usually call when the user attempt to leave a record without saving it.
     /// This class also calls the Win32 API to hide the close button.
     /// </summary>
-    public class UnsavedDialog : Window
+    public abstract class AbstractDialog : Window 
     {
         #region TextProperty
         public string Text
@@ -34,7 +32,7 @@ namespace FrontEnd.Dialogs
             set => SetValue(TextProperty, value);
         }
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(UnsavedDialog), new PropertyMetadata("You must save the record before performing any other action. Do you want to save the record?"));
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(AbstractDialog), new PropertyMetadata("You must save the record before performing any other action. Do you want to save the record?"));
         #endregion
 
         #region Win32 API
@@ -50,7 +48,7 @@ namespace FrontEnd.Dialogs
         private static extern IntPtr GetForegroundWindow();
         #endregion
 
-        #region Win32 API for focus on Yes Button
+        #region Win32 API for focus on Button
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr SetFocus(IntPtr hWnd);
 
@@ -60,33 +58,49 @@ namespace FrontEnd.Dialogs
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
         #endregion
-
-        private Button? yesButton;
-        private Button? noButton;
-        private DialogResult Result { get; set; } = 0;
-        private UnsavedDialog() 
+        
+        /// <summary>
+        /// The result returned by <see cref="Window.ShowDialog"/>. The default value is <see cref="DialogResult.None"/>
+        /// </summary>
+        protected DialogResult Result { get; set; } = 0;
+        
+        public AbstractDialog() 
         {
-            Width = 400;
-            Height = 200;
             ResizeMode = ResizeMode.NoResize;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            Title = "Wait!";
             WindowStyle = WindowStyle.SingleBorderWindow;
-            Loaded += OnLoaded;
             Owner = Helper.GetActiveWindow();
+            Loaded += OnLoaded;
+            Width = 400;
+            SizeToContent = SizeToContent.Height;
         }
 
-        private Task<bool> SetFocus() 
+        public AbstractDialog(string? text, string? title) : this()
         {
-            return Task.FromResult((yesButton == null) ? false : yesButton.Focus());
+            if (!string.IsNullOrEmpty(text))
+                Text = text;
+
+            if (!string.IsNullOrEmpty(title))
+                Title = title;
         }
 
         /// <summary>
-        /// Attempts to set the focus on the YesButton but it still does not work.
+        /// Wrap up method to be called in a Static method of the child class.
         /// </summary>
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        /// <param name="dialog">An instance of <see cref="AbstractDialog"/></param>
+        /// <returns>A <see cref="DialogResult"/> enum</returns>
+        protected static DialogResult _ask(AbstractDialog dialog) 
         {
-            await SetFocus();
+            bool? result = dialog.ShowDialog();
+            if (result == null) return Dialogs.DialogResult.None;
+            return dialog.Result;
+        }
+
+        /// <summary>
+        /// Removes the close button. Also, it attempts to set the focus on the YesButton but it still does not work.
+        /// </summary>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
             //use the Win32 API to remove the close button.
             IntPtr hWnd = new WindowInteropHelper(this).Handle;
             int currentStyle = GetWindowLong(hWnd, GWL_STYLE);
@@ -95,25 +109,55 @@ namespace FrontEnd.Dialogs
             //use the Win32 API to set the focus on the Yes Button.
             IntPtr buttonHandle = new WindowInteropHelper(this).Handle;
             SetForegroundWindow(buttonHandle);
-            yesButton?.Focus();
-            Keyboard.Focus(yesButton);
-            yesButton.IsDefault = true;
+            ButtonToFocusOn()?.Focus();
+            Keyboard.Focus(ButtonToFocusOn());
+            ButtonToFocusOn().IsDefault = true;
         }
 
+        /// <summary>
+        /// Override this method to set which Button should have the focus when the dialog opens.
+        /// </summary>
+        /// <returns>The button which should have the focus on.</returns>
+        public abstract Button? ButtonToFocusOn();
+
+        /// <summary>
+        /// This method is called within the <see cref="OnApplyTemplate"/>. Override this method 
+        /// to get and manage UI controls. <para/> 
+        /// For Example:
+        /// <code>
+        /// okButton = (Button?)GetTemplateChild("Okay");
+        /// if (okButton == null) throw new Exception("Failed to find the button");
+        /// okButton.Click += OnOkClicked;
+        /// </code>
+        /// </summary>
+        public abstract void OnLoadedTemplate();
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            this.OnLoadedTemplate();
+        }
+    }
+
+    /// <summary>
+    /// Custom Window Dialog to ask the user what action they would like to perform in case some data are missing.
+    /// This dialog is usually called when the user attempt to leave a record without saving it.<para/>
+    /// This dialog is used in: <see cref="Lista"/>, <see cref="Controller.IAbstractFormController.OnWindowClosing(object?, System.ComponentModel.CancelEventArgs)"/> 
+    /// </summary>
+    public class UnsavedDialog : AbstractDialog
+    {
+        private Button? yesButton;
+        private Button? noButton;
         static UnsavedDialog()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(UnsavedDialog), new FrameworkPropertyMetadata(typeof(UnsavedDialog)));
         }
 
-        public override void OnApplyTemplate()
+        private UnsavedDialog(string? text = null, string? title = null) : base(text, title)
         {
-            base.OnApplyTemplate();
-            yesButton = (Button?)GetTemplateChild("Yes");
-            noButton = (Button?)GetTemplateChild("No");
-            if (yesButton == null || noButton == null) throw new Exception("Failed to find the buttons");
-            yesButton.Click += OnYesClicked;
-            noButton.Click += OnNoClicked;
         }
+
+        public override Button? ButtonToFocusOn() => yesButton;
 
         private void OnNoClicked(object sender, RoutedEventArgs e)
         {
@@ -127,15 +171,51 @@ namespace FrontEnd.Dialogs
             DialogResult = true;
         }
 
-        public static DialogResult Ask(string? text = null) 
+        public override void OnLoadedTemplate()
         {
-            UnsavedDialog missingData = new();
-            if (!string.IsNullOrEmpty(text))
-                missingData.Text = text;
-
-            bool? result = missingData.ShowDialog();
-            if (result == null) return Dialogs.DialogResult.None;
-            return missingData.Result;
+            yesButton = (Button?)GetTemplateChild("Yes");
+            noButton = (Button?)GetTemplateChild("No");
+            if (yesButton == null || noButton == null) throw new Exception("Failed to find the buttons");
+            yesButton.Click += OnYesClicked;
+            noButton.Click += OnNoClicked;
         }
+        public static DialogResult Ask(string? text = null, string? title = "Wait") => _ask(new UnsavedDialog(text, title));
+    }
+
+    /// <summary>
+    /// Custom Window Dialog to tells the user they have missed some mandatory fields.
+    /// This dialog is usually called when the user attempt to save a record without meeting Record's Integrity criteria. <para/>
+    /// This dialog is used in: <see cref="Model.AbstractModel.AllowUpdate()"/> 
+    /// </summary>
+    public class BrokenIntegrityDialog : AbstractDialog
+    {
+        private Button? okButton;
+
+        static BrokenIntegrityDialog()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(BrokenIntegrityDialog), new FrameworkPropertyMetadata(typeof(BrokenIntegrityDialog)));
+        }
+
+        private BrokenIntegrityDialog(string? text = null, string? title = null) : base(text, title)
+        {
+        }
+
+        public override Button? ButtonToFocusOn() => okButton;
+
+        public override void OnLoadedTemplate()
+        {
+            okButton = (Button?)GetTemplateChild("Okay");
+            if (okButton == null) throw new Exception("Failed to find the button");
+            okButton.Click += OnOkClicked;
+        }
+
+        private void OnOkClicked(object sender, RoutedEventArgs e)
+        {
+            Result = Dialogs.DialogResult.Ok;
+            DialogResult = true;
+        }
+
+        public static DialogResult Throw(string? text = null, string? title = "Something is missing") => _ask(new BrokenIntegrityDialog(text, title));
+
     }
 }

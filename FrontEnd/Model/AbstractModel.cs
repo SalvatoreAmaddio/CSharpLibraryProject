@@ -1,4 +1,5 @@
 ﻿using Backend.Model;
+using FrontEnd.Dialogs;
 using FrontEnd.Events;
 using FrontEnd.Notifier;
 using System.ComponentModel;
@@ -81,7 +82,7 @@ namespace FrontEnd.Model
             bool result = base.AllowUpdate();
 
             if (!result)
-                MessageBox.Show($"Please fill all mandatory fields:\n{GetEmptyMandatoryFields()}","Something is missing");
+                BrokenIntegrityDialog.Throw($"Please fill all mandatory fields:\n{GetEmptyMandatoryFields()}");
 
             return result;
         }

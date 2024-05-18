@@ -24,13 +24,43 @@
                                 <ColumnDefinition Width="7*"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="{StaticResource redlight}" VerticalAlignment="Stretch" Height="100" Grid.Column="0" Grid.RowSpan="2"/>
-                            <Label Grid.Column="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="15">
+                            <Label Grid.Column="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="15" Padding="10">
                                 <TextBlock TextWrapping="Wrap" Text="{TemplateBinding Text}"/>
                             </Label>
                             <StackPanel FocusManager.FocusedElement="{Binding ElementName=Yes}" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button Tag="Yes" Content="YES" Width="70" x:Name="Yes" IsTabStop="True" TabIndex="0"/>
-                                <Separator Width="20" Background="Transparent" IsTabStop="True" TabIndex="1"/>
-                                <Button Tag="No" Content="NO" Width="70" x:Name="No"/>
+                                <Separator Width="20" Background="Transparent"/>
+                                <Button Tag="No" Content="NO" Width="70" x:Name="No" IsTabStop="True" TabIndex="1"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:BrokenIntegrityDialog}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:BrokenIntegrityDialog}">
+                    <Border Background="White"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Background="White" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="7*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{StaticResource redlight}" VerticalAlignment="Stretch" Height="100" Grid.Column="0" Grid.RowSpan="2"/>
+                            <Label Grid.Column="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="15" Padding="10">
+                                <TextBlock TextWrapping="Wrap" Text="{TemplateBinding Text}"/>
+                            </Label>
+                            <StackPanel FocusManager.FocusedElement="{Binding ElementName=Yes}" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Tag="Okay" Content="Okay" Width="70" x:Name="Okay" IsTabStop="True" TabIndex="0"/>
                             </StackPanel>
                         </Grid>
                     </Border>
