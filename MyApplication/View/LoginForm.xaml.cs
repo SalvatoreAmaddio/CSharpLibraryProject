@@ -37,6 +37,7 @@ namespace MyApplication.View
                 }
 
                 MessageBox.Show("Welcome");
+                //go to main window.
             }
             else //attempt failed.
             {
