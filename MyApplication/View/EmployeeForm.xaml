@@ -9,7 +9,7 @@
         xmlns:controller="clr-namespace:MyApplication.Controller"
         Title="Employee Form" 
         WindowState="Maximized"
-        d:DataContext="{d:DesignInstance Type=controller:EmployeeControllerList, IsDesignTimeCreatable=False}"
+        d:DataContext="{d:DesignInstance Type=controller:EmployeeControllerList, IsDesignTimeCreatable=False}" Height="490" Width="475"
         >
 
     <fr:Form>
@@ -54,7 +54,7 @@
                                     </Grid>
                                 </fr:FormRow>
                             </DataTemplate>
-                        </fr:Lista.ItemTemplate>                        
+                        </fr:Lista.ItemTemplate>
                     </fr:Lista>
                 </fr:FormList>
             </fr:SubForm>
