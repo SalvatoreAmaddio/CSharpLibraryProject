@@ -39,7 +39,7 @@ namespace Backend.Utils
 
         /// <summary>
         /// Gets and Sets the Credential Unique identifier to retrieve the email's password stored in the local computer's Windows Credential Manager System.<para/>
-        /// See also: <seealso cref="Sys.GetCredentials(string)"/>, <seealso cref="Sys.StoreCredentials(string, string, string)"/>, <see cref="Sys.RemoveCredentials(string)"/>
+        /// See also: <seealso cref="CredentialManager"/>, <seealso cref="Credential"/>
         /// </summary>
         public string CredentialID { get; set; } = string.Empty;
 
@@ -103,7 +103,7 @@ namespace Backend.Utils
                     client.Connect(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
 
                     if (AuthenticationRequired)
-                        client.Authenticate(SenderEmail, Sys.GetCredentials(CredentialID).Password);
+                        client.Authenticate(SenderEmail, CredentialManager.Get(CredentialID));
 
                     client.Send(Message);
                     client.Disconnect(true);

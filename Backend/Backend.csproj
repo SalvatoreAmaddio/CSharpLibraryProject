@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CredentialManagement" Version="1.0.2" />
     <PackageReference Include="MailKit" Version="4.6.0" />
     <PackageReference Include="MimeKit" Version="4.6.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
