@@ -50,6 +50,7 @@ namespace Backend.Utils
         /// <returns>true if the credential was successfully stored</returns>
         public static bool Store(Credential cred)
         {
+            if (Exist(cred.Target)) throw new Exception("This credential is already stored");
             byte[] byteArray = Encoding.Unicode.GetBytes(cred.Password); //Encode password.
 
             CREDENTIAL credential = new() //create Credential Struct
@@ -69,11 +70,25 @@ namespace Backend.Utils
         }
 
         /// <summary>
+        /// Check if the credential exists within the Windows Credential Manager System
+        /// </summary>
+        /// <param name="credential">A Credential object</param>
+        /// <returns>true if it exists</returns>
+        public static bool Exist(Credential credential) => Exist(credential.Target);
+
+        /// <summary>
+        /// Check if the credential exists within the Windows Credential Manager System
+        /// </summary>
+        /// <param name="target">Credential's Unique Identifier</param>
+        /// <returns>true if it exists</returns>
+        public static bool Exist(string target) => CredRead(target, CRED_TYPE_GENERIC, 0, out IntPtr credentialPtr);
+
+        /// <summary>
         /// Retrieve the credential stored in the Windows Credential Manager System.
         /// </summary>
         /// <param name="target">a string that works as the credential unique identifier</param>
-        /// <returns>the information value as a string.</returns>
-        public static string? Get(string target)
+        /// <returns>A <see cref="Credential"/> object.</returns>
+        public static Credential? Get(string target)
         {
             bool result = CredRead(target, CRED_TYPE_GENERIC, 0, out IntPtr credentialPtr);
             if (result)
@@ -82,8 +97,9 @@ namespace Backend.Utils
                     if (pointer == null) throw new Exception();
                     CREDENTIAL credential = (CREDENTIAL)pointer;
                     string password = Marshal.PtrToStringUni(credential.CredentialBlob, (int)(credential.CredentialBlobSize / 2));
+                    string username = credential.UserName;
                     CredFree(credentialPtr);
-                    return password;
+                    return new (target, username, password);
             }
             else
             {

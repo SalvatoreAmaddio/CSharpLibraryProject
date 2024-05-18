@@ -1,4 +1,5 @@
-﻿using FrontEnd.ExtensionMethods;
+﻿using Backend.Utils;
+using FrontEnd.ExtensionMethods;
 using FrontEnd.Model;
 using System.Windows;
 
@@ -16,7 +17,10 @@ namespace MyApplication.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            //check if credentials were saved.
+            if (CredentialManager.Exist(user.Target)) 
+            {
+                this.GoToWindow(new MainWindow());
+            }
         }
 
         private void OnLoginClicked(object sender, RoutedEventArgs e)

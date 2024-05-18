@@ -1,4 +1,6 @@
 ﻿
+using Backend.Utils;
+
 namespace FrontEnd.Model
 {
     public class User : AbstractNotifier
@@ -10,29 +12,32 @@ namespace FrontEnd.Model
         public string Password { get => _password; set => UpdateProperty(ref value, ref _password); }
         public bool RememberMe { get => _rememberme; set => UpdateProperty(ref value, ref _rememberme); }
         public int Attempts { get; protected set; } = 3;
-
+        public string Target { get; set; } = "LOGIN";
         public User() { }
 
         public virtual bool Login()
         {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password)) throw new Exception("UserName and/or Password are empty");
             bool userCheck = UserName.Equals("salvatore");
             bool passwordCheck = Password.Equals("soloio59");
             if (userCheck && passwordCheck) // you are in.
             {
                 if (RememberMe)
                     SaveCredentials();
-
-                //this.GoToWindow(new MainWindow());
-                //go to main window.
                 return true;
             }
             Attempts--;
             return false;
         }
         
+        public virtual void DeleteCredential() 
+        {
+            CredentialManager.Delete(Target);
+        }
+
         public virtual void SaveCredentials() 
-        { 
-            
+        {
+            CredentialManager.Store(new(Target, UserName, Password));
         }
     }
 }

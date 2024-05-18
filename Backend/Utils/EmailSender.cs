@@ -103,7 +103,7 @@ namespace Backend.Utils
                     client.Connect(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
 
                     if (AuthenticationRequired)
-                        client.Authenticate(SenderEmail, CredentialManager.Get(CredentialID));
+                        client.Authenticate(SenderEmail, CredentialManager.Get(CredentialID).Password);
 
                     client.Send(Message);
                     client.Disconnect(true);
