@@ -35,7 +35,7 @@ namespace MyApplication.View
                     //save credential
                 }
 
-                this.GoToWindow(new MainWindow());
+                //this.GoToWindow(new MainWindow());
                 //go to main window.
             }
             else //attempt failed.
