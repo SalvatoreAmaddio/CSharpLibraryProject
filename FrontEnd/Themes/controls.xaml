@@ -31,4 +31,8 @@
 
     <Style TargetType="TabItem" BasedOn="{StaticResource TabStyle}"/>
 
+    <Style TargetType="CheckBox">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
 </ResourceDictionary>

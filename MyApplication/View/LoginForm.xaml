@@ -8,12 +8,15 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:b="clr-namespace:FrontEnd.Behaviours;assembly=FrontEnd"
         mc:Ignorable="d"
-        Title="LoginForm" Height="150" Width="300">
+        ResizeMode="NoResize"
+        Title="LoginForm" SizeToContent="Height" Width="300">
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -24,6 +27,9 @@
                 <b:PlaceholderPasswordBox Placeholder="Password..."/>
             </i:Interaction.Behaviors>
         </PasswordBox>
-        <Button Content="CLICK" Grid.Row="3" Click="Button_Click"/>
+
+        <CheckBox Grid.Row="3" Content="Remember me" HorizontalAlignment="Right"/>
+        <Label Grid.Row="4" Content="3 Attempt(s) left." Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
+        <Button Content="LOGIN" Grid.Row="5" Click="Button_Click"/>
     </Grid>
 </Window>
