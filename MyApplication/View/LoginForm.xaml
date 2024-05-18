@@ -21,15 +21,15 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <fr:Text Placeholder="Username..."/>
-        <PasswordBox Grid.Row="2" x:Name="Psw">
+        <fr:Text Placeholder="Username..." x:Name="user"/>
+        <PasswordBox Grid.Row="2" x:Name="pswd">
             <i:Interaction.Behaviors>
                 <b:PlaceholderPasswordBox Placeholder="Password..."/>
             </i:Interaction.Behaviors>
         </PasswordBox>
 
-        <CheckBox Grid.Row="3" Content="Remember me" HorizontalAlignment="Right"/>
-        <Label Grid.Row="4" Content="3 Attempt(s) left." Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
-        <Button Content="LOGIN" Grid.Row="5" Click="Button_Click"/>
+        <CheckBox x:Name="rememberme" Grid.Row="3" Content="Remember me" HorizontalAlignment="Right"/>
+        <Label x:Name="attemptsLeft" Grid.Row="4" Content="3 Attempt(s) left." Foreground="Red" FontWeight="DemiBold" HorizontalContentAlignment="Center"/>
+        <Button Content="LOGIN" Grid.Row="5" Click="OnLoginClicked"/>
     </Grid>
 </Window>
