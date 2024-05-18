@@ -15,12 +15,16 @@ namespace FrontEnd.Model
         public string Target { get; set; } = "LOGIN";
         public User() { }
 
-        public virtual bool Login()
+        /// <summary>
+        /// It attempts to login.
+        /// </summary>
+        /// <param name="pwd">The password to be checked against</param>
+        /// <returns>true if the login attempt was successful</returns>
+        /// <exception cref="Exception"></exception>
+        public virtual bool Login(string pwd)
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password)) throw new Exception("UserName and/or Password are empty");
-            bool userCheck = UserName.Equals("salvatore");
-            bool passwordCheck = Password.Equals("soloio59");
-            if (userCheck && passwordCheck) // you are in.
+            if (string.IsNullOrEmpty(Password)) throw new Exception("Password is empty");
+            if (Password.Equals(pwd))
             {
                 if (RememberMe)
                     SaveCredentials();
