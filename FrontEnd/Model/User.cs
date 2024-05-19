@@ -1,5 +1,4 @@
-﻿
-using Backend.Model;
+﻿using Backend.Model;
 using Backend.Utils;
 using System.Data.Common;
 
@@ -7,10 +6,16 @@ namespace FrontEnd.Model
 {
     public class User : AbstractModel
     {
+        private long _userid;
         private string _username = string.Empty;
         private string _password = string.Empty;
         private bool _rememberme = false;
+
+        [PK]
+        public long UserID { get => _userid; set => UpdateProperty(ref value, ref _userid); }
+        [Field]
         public string UserName { get => _username; set => UpdateProperty(ref value, ref _username); }
+        [Field]
         public string Password { get => _password; set => UpdateProperty(ref value, ref _password); }
         public bool RememberMe { get => _rememberme; set => UpdateProperty(ref value, ref _rememberme); }
         public int Attempts { get; protected set; } = 3;
@@ -53,7 +58,7 @@ namespace FrontEnd.Model
             CredentialManager.Store(new(Target, UserName, Password));
         }
 
-        public override ISQLModel Read(DbDataReader reader) => new(reader);
+        public override ISQLModel Read(DbDataReader reader) => new User(reader);
 
     }
 }
