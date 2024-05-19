@@ -10,7 +10,26 @@
         Title="MainWindow">
 
     <Grid Background="{StaticResource DefaultWhite}">
-        <TabControl x:Name="MainTab">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu VerticalAlignment="Top">
+            <MenuItem Header="{StaticResource openCurtain}" VerticalAlignment="Center" Click="OpenCurtain"/>
+
+            <MenuItem Header="User" VerticalAlignment="Center">
+                <MenuItem Header="Logout"/>
+                <MenuItem Header="Change Password"/>
+                <MenuItem Header="Info"/>
+            </MenuItem>
+        </Menu>
+
+        <fr:Curtain x:Name="Curtain" Visibility="Hidden">
+            
+        </fr:Curtain>
+        
+        <TabControl x:Name="MainTab" Grid.Row="1">
             <TabItem Header="Employees">
                 <Frame>
                     <Frame.Content>

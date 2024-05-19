@@ -11,4 +11,6 @@
     <clr:String x:Key="memo">📝</clr:String>
     <clr:String x:Key="lock">🔒</clr:String>
     <clr:String x:Key="magnifier">🔍</clr:String>
+    <clr:String x:Key="closeCurtain">⮜</clr:String>
+    <clr:String x:Key="openCurtain">⮞</clr:String>
 </ResourceDictionary>

@@ -10,6 +10,12 @@ namespace MyApplication.View
         {
             InitializeComponent();
             Helper.ManageTabClosing(MainTab);
+            Curtain.SoftwareInfo = new Backend.Utils.SoftwareInfo();
+        }
+
+        private void OpenCurtain(object sender, RoutedEventArgs e)
+        {
+            Curtain.Visibility = Visibility.Visible;
         }
     }
 }
