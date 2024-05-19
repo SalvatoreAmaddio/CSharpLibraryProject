@@ -1,5 +1,6 @@
 ﻿using Backend.Database;
 using Backend.Utils;
+using FrontEnd.Model;
 using MyApplication.Model;
 using System.Windows;
 
@@ -18,6 +19,7 @@ namespace MyApplication
                 DatabaseManager.Do.Add(new SQLiteDatabase(new Department()));
                 DatabaseManager.Do.Add(new SQLiteDatabase(new JobTitle()));
                 DatabaseManager.Do.Add(new SQLiteDatabase(new Payslip()));
+                DatabaseManager.Do.Add(new SQLiteDatabase(new User()));
             }
             catch(Exception ex)  
             {

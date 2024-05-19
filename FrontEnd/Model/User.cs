@@ -19,24 +19,23 @@ namespace FrontEnd.Model
         public string Password { get => _password; set => UpdateProperty(ref value, ref _password); }
         public bool RememberMe { get => _rememberme; set => UpdateProperty(ref value, ref _rememberme); }
         public int Attempts { get; protected set; } = 3;
-        public string Target { get; set; } = "LOGIN";
-        
-        public User(DbDataReader reader) 
+        public string Target { get; } = "LOGIN";
+
+        public User(DbDataReader reader) : this()
         {
-            _username = reader.GetString(0);
-            _password = reader.GetString(1);
+            _userid = reader.GetInt64(0);
+            _username = reader.GetString(1);
+            _password = reader.GetString(2);
         }
 
-        public User() { }
-
-        /// <summary>
-        /// It attempts to login.
-        /// </summary>
-        /// <param name="pwd">The password to be checked against</param>
-        /// <returns>true if the login attempt was successful</returns>
-        /// <exception cref="Exception"></exception>
-        public virtual bool Login(string pwd)
+        public User() 
         {
+            SelectQry = $"SELECT * FROM {nameof(User)} WHERE {nameof(UserName)} = @{nameof(UserName)};";
+        }
+
+        public virtual bool Login(string? pwd)
+        {
+            if (Attempts == 0) throw new Exception("Runout of login attempts");
             if (string.IsNullOrEmpty(Password)) throw new Exception("Password is empty");
             if (Password.Equals(pwd))
             {
@@ -48,16 +47,12 @@ namespace FrontEnd.Model
             return false;
         }
         
-        public virtual void Logout() 
-        {
-            CredentialManager.Delete(Target);
-        }
+        public virtual void Logout() => CredentialManager.Delete(Target);
 
-        public virtual void SaveCredentials() 
-        {
-            CredentialManager.Store(new(Target, UserName, Password));
-        }
+        public virtual void SaveCredentials() => CredentialManager.Store(new(Target, UserName, Password));
 
         public override ISQLModel Read(DbDataReader reader) => new User(reader);
+
+        public void ResetAttempts() => Attempts = 3;
     }
 }

@@ -66,6 +66,14 @@ namespace Backend.Database
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IAbstractDatabase this[int index] => (index < 0 || index >= Databases.Count) ? throw new IndexOutOfRangeException() : Databases[index];
 
+        public IAbstractDatabase? Find(string name) 
+        { 
+            foreach(IAbstractDatabase db in Databases) 
+            {
+                if (db.Model.GetType().Name.Equals(name)) return db;
+            }       
+            return null;
+        }
     }
 
 }

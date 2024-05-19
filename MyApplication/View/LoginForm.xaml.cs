@@ -12,14 +12,20 @@ namespace MyApplication.View
             CurrentUser.Is = new User();
             InitializeComponent();
             Loaded += OnLoaded;
-            Closed += (s, e) => App.Current.Shutdown();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (CredentialManager.Exist(CurrentUser.Target)) 
+            if (CurrentUser.ReadCredential()) 
             {
-                this.GoToWindow(new MainWindow());
+                bool result = CurrentUser.Login(CurrentUser.InterrogateDatabase());
+                if (!result) 
+                {
+                    CredentialManager.Delete(CurrentUser.Target);
+                    CurrentUser.ResetAttempts();
+                    return;
+                }
+                AttemptLogin(result);
             }
         }
 
@@ -28,9 +34,13 @@ namespace MyApplication.View
             CurrentUser.UserName = userName.Text;
             CurrentUser.Password = pswd.Password;
             CurrentUser.RememberMe = (bool)rememberme.IsChecked;
-            bool result = CurrentUser.Login("soloio59");
-
-            if (result) 
+            string? p = CurrentUser.InterrogateDatabase();
+            AttemptLogin(CurrentUser.Login(p));
+        }
+    
+        private void AttemptLogin(bool result) 
+        {
+            if (result)
                 this.GoToWindow(new MainWindow());
             else
             {
