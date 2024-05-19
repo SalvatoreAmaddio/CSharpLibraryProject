@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <Menu VerticalAlignment="Top">
-            <MenuItem Header="{StaticResource openCurtain}" VerticalAlignment="Center" Click="OpenCurtain"/>
+            <fr:OpenCurtain Click="OpenCurtain"/>
             <MenuItem Header="User" VerticalAlignment="Center">
                 <MenuItem Header="Logout"/>
                 <MenuItem Header="Change Password"/>

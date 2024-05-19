@@ -15,9 +15,9 @@ namespace FrontEnd.Forms
     /// <para/>
     /// For Example in your xaml:
     /// <code>
-    /// &lt;!--Create a button to open the Curtain-->
+    /// &lt;!--Create a MenuItem to open the Curtain-->
     /// &lt;Menu VerticalAlignment="Top">
-    ///     &lt;MenuItem Header="{StaticResource openCurtain}" Click="Open"/>
+    ///     &lt;fr:OpenCurtain Click="Open"/>
     ///     ...
     /// &lt;/Menu>
     /// ...
@@ -29,6 +29,7 @@ namespace FrontEnd.Forms
     /// //Click event to open the curtain
     /// private void OpenCurtain(object sender, RoutedEventArgs e) => Curtain.Open();
     /// </code>
+    /// See also <seealso cref="OpenCurtain"/>, <seealso cref="Backend.Utils.SoftwareInfo"/>
     /// </summary>
     public class Curtain : ContentControl
     {
@@ -56,6 +57,7 @@ namespace FrontEnd.Forms
             curtain.SetBinding(DeveloperWebsiteProperty, new Binding(nameof(DeveloperWebsite)) { Source = e.NewValue });
             curtain.SetBinding(SoftwareNameProperty, new Binding(nameof(SoftwareName)) { Source = e.NewValue });
             curtain.SetBinding(SoftwareVersionProperty, new Binding(nameof(SoftwareVersion)) { Source = e.NewValue });
+            curtain.SetBinding(ClientNameProperty, new Binding(nameof(ClientName)) { Source = e.NewValue });
         }
 
         #endregion
@@ -108,6 +110,16 @@ namespace FrontEnd.Forms
         }
 
         public static readonly DependencyProperty SoftwareNameProperty = DependencyProperty.Register(nameof(SoftwareName), typeof(string), typeof(Curtain), new PropertyMetadata(string.Empty));
+        #endregion
+
+        #region ClientName
+        public string ClientName
+        {
+            get => (string)GetValue(ClientNameProperty);
+            set => SetValue(ClientNameProperty, value);
+        }
+
+        public static readonly DependencyProperty ClientNameProperty = DependencyProperty.Register(nameof(ClientName), typeof(string), typeof(Curtain), new PropertyMetadata(string.Empty));
         #endregion
 
         #region SoftwareVersion

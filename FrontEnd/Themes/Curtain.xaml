@@ -54,10 +54,10 @@
                                         </Style>
                                     </StackPanel.Resources>
                                     <Label Content="Welcome to" FontSize="20"/>
-                                    <Label Content="{TemplateBinding SoftwareName}"/>
-                                    <Label Content="{TemplateBinding SoftwareVersion}"/>
-                                    <Label Content="Developed for:"/>
-                                    <Label Content="Mister X"/>
+                                    <Label Content="{TemplateBinding SoftwareName}" FontWeight="Light"/>
+                                    <Label Content="{TemplateBinding SoftwareVersion}" FontWeight="Light"/>
+                                    <Label Content="Developed for:" FontWeight="Light"/>
+                                    <Label Content="{TemplateBinding ClientName}" FontWeight="Light"/>
                                 </StackPanel>
                             </Border>
 

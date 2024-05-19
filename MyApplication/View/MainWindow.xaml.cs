@@ -1,5 +1,4 @@
 ﻿using Backend.Utils;
-using FrontEnd.Dialogs;
 using FrontEnd.Utils;
 using System.Windows;
 
@@ -11,12 +10,9 @@ namespace MyApplication.View
         {
             InitializeComponent();
             Helper.ManageTabClosing(MainTab);
-            Curtain.SoftwareInfo = new SoftwareInfo("Salvatore Amaddio","www.salvatoreamaddio.co.uk","Mister X","2024");
+            Curtain.SoftwareInfo = new SoftwareInfo("Salvatore Amaddio","www.salvatoreamaddio.co.uk","Mister J","2024");
         }
 
-        private void OpenCurtain(object sender, RoutedEventArgs e)
-        {
-            Curtain.Open();
-        }
+        private void OpenCurtain(object sender, RoutedEventArgs e) => Curtain.Open();
     }
 }
