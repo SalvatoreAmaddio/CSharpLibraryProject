@@ -1,21 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Reflection;
 namespace Backend.Utils
 {
+    /// <summary>
+    /// This class holds some information about the Developer and the Client.
+    /// </summary>
     public class SoftwareInfo
     {
         public string DeveloperName { get; set; } = string.Empty;
         public Uri? DeveloperWebsite { get; set; }
-        public string Description { get; set; } = string.Empty;
+        /// <summary>
+        /// When the Software was Developed
+        /// </summary>
         public string SoftwareYear { get; set; } = DateTime.Now.Year.ToString();
+        
+        /// <summary>
+        /// This property is set by the <see cref="Assembly.GetName()"/> property.
+        /// </summary>
         public string? SoftwareName { get; } = string.Empty;
+
+        /// <summary>
+        /// This property is set by the <see cref="Assembly.GetName()"/>.Version property.
+        /// </summary>
         public string? SoftwareVersion { get; } = string.Empty;
+        
+        /// <summary>
+        /// The name of the client this software was developed for.
+        /// </summary>
         public string ClientName { get; set;} = string.Empty;
+        
+        /// <summary>
+        /// This property refers to the <see cref="Assembly.GetEntryAssembly()"/>
+        /// </summary>
         public Assembly? AppAssembly { get; }
 
         public SoftwareInfo() 
