@@ -1,4 +1,5 @@
 ﻿using Backend.Database;
+using Backend.Exceptions;
 using Backend.Model;
 
 namespace Backend.Utils
@@ -8,6 +9,16 @@ namespace Backend.Utils
     /// </summary>
     public class CurrentUser
     {
+        /// <summary>
+        /// Sets the KeyTarget
+        /// </summary>
+        public static string KeyTarget { private get; set; } = string.Empty;
+
+        /// <summary>
+        /// Sets the IVTarget.
+        /// </summary>
+        public static string IVTarget { private get; set; } = string.Empty;
+
         /// <summary>
         /// Sets the Current User.
         /// </summary>
@@ -20,14 +31,12 @@ namespace Backend.Utils
         {
             get
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 return Is.UserID;
             }
             private set
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 Is.UserID = value;
             }
         }
@@ -39,14 +48,12 @@ namespace Backend.Utils
         { 
             get 
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 return Is.UserName;
             }
             set 
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 Is.UserName = value;
             }
         }
@@ -58,14 +65,12 @@ namespace Backend.Utils
         {
             get
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 return Is.Password;
             }
             set
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 Is.Password = value;
             }
         }
@@ -77,14 +82,12 @@ namespace Backend.Utils
         {
             get
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 return Is.RememberMe;
             }
             set
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 Is.RememberMe = value;
             }
         }
@@ -96,8 +99,7 @@ namespace Backend.Utils
         {
             get
             {
-                if (Is == null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is == null) throw new CurrentUserNotSetException();
                 return Is.Attempts;
             }
         }
@@ -109,8 +111,7 @@ namespace Backend.Utils
         { 
             get 
             {
-                if (Is== null)
-                    throw new ArgumentNullException(nameof(Is));
+                if (Is== null) throw new CurrentUserNotSetException();
                 return Is.Target;
             }
         }
@@ -124,31 +125,39 @@ namespace Backend.Utils
         /// </summary>
         /// <param name="decrypt">true if the Password should be decrypted</param>
         /// <returns>A password if the user was found.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="CurrentUserNotSetException"></exception>
         public static string? FetchUserPassword(bool decrypt = false) 
         {
-            if (Is == null) throw new ArgumentNullException(nameof(Is));
+            if (Is == null) throw new CurrentUserNotSetException();
             List<QueryParameter> para = [new(nameof(UserName), Is.UserName)];
             IUser? user = DatabaseManager.Do.Find("User")?.Retrieve(null, para).Cast<IUser>().FirstOrDefault();
             if (user == null) return null;
             UserID = user.UserID;
-            return (decrypt) ? new Encrypter(user.Password).Decrypt() : user.Password;
+
+            if (decrypt) 
+            {
+                Encrypter encrypter = new(user.Password);
+                encrypter.ReadStoredKeyIV(KeyTarget, IVTarget);
+                return encrypter.Decrypt();
+            }
+            return user.Password;
         }
 
         /// <summary>
         /// It changes the password for the Current User. The new password will be encrypted.
         /// </summary>
         /// <param name="pwd">The new password</param>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="CurrentUserNotSetException"></exception>
         public static void ChangePassword(string pwd)
         {
-            if (Is == null) throw new ArgumentNullException(nameof(Is));
+            if (Is == null) throw new CurrentUserNotSetException();
             Encrypter encrypter = new(pwd);
             Password = encrypter.Encrypt();
-            encrypter.ReplaceStoredKey();
-            encrypter.ReplaceStoredIV();
+            if (string.IsNullOrEmpty(KeyTarget) && string.IsNullOrEmpty(IVTarget)) throw new Exception();
             List<QueryParameter> para = [new(nameof(Password), Is.Password), new(nameof(Is.UserID), Is.UserID)];
             DatabaseManager.Do.Find("User")?.Crud(CRUD.UPDATE, $"UPDATE User SET Password=@Password WHERE UserID=@UserID", para);
+            encrypter.ReplaceStoredKey(KeyTarget);
+            encrypter.ReplaceStoredIV(IVTarget);
         }
 
         /// <summary>

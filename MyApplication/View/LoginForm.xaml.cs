@@ -10,6 +10,8 @@ namespace MyApplication.View
         public LoginForm()
         {
             CurrentUser.Is = new User();
+            CurrentUser.KeyTarget = "EncrypterKey";
+            CurrentUser.IVTarget = "EncrypterIV";
             InitializeComponent();
             Loaded += OnLoaded;
         }
@@ -25,7 +27,7 @@ namespace MyApplication.View
                     CurrentUser.ResetAttempts();
                     return;
                 }
-                AttemptLogin(result);
+                this.GoToWindow(new MainWindow());
             }
         }
 
@@ -35,23 +37,15 @@ namespace MyApplication.View
             CurrentUser.Password = pswd.Password;
             CurrentUser.RememberMe = (bool)rememberme.IsChecked;
             string? p = CurrentUser.FetchUserPassword(true);
-            AttemptLogin(CurrentUser.Login(p));
-        }
-    
-        private void AttemptLogin(bool result) 
-        {
-            if (result)
+            if (CurrentUser.Login(p))
                 this.GoToWindow(new MainWindow());
             else
             {
                 InvalidCredentialRow.Height = new(30);
                 AttemptRow.Height = new(30);
                 if (CurrentUser.Attempts == 0) Close(); //close application                 
-                if (CurrentUser.Attempts == 1)
-                    attemptsLeft.Content = $"{CurrentUser.Attempts} ATTEMPT LEFT!";
-                else
-                    attemptsLeft.Content = $"{CurrentUser.Attempts} attempt(s) left.";
+                attemptsLeft.Content = (CurrentUser.Attempts == 1) ? $"{CurrentUser.Attempts} ATTEMPT LEFT!" : $"{CurrentUser.Attempts} attempt(s) left.";
             }
-        }
+        }    
     }
 }

@@ -5,54 +5,68 @@ namespace Backend.Utils
     /// <summary>
     /// This class encrypts and decrypts strings.
     /// </summary>
+    /// <param name="str">The string to descrypt or encrypt</param>
     public class Encrypter(string str)
     {
-        public byte[]? key;
-        public byte[]? initVector;
+        private byte[]? key;
+        private byte[]? initVector;
         private string Str { get; set; } = str;
-       
-        private void ReadStoredKeys() 
-        { 
-            key = GetStoredKey();
-            initVector = GetStoredIV();
-        }
-
-        private static byte[]? GetStoredKey() 
+        
+        /// <summary>
+        /// It reads any stored Key's credential and IV's credential.
+        /// </summary>
+        /// <param name="keyTarget"></param>
+        /// <param name="ivTarget"></param>
+        public void ReadStoredKeyIV(string keyTarget, string ivTarget) 
         {
-            Credential? credential = CredentialManager.Get("EncrypterKEY");
-            if (credential == null) return null;
-            return Convert.FromBase64String(credential.Password);
+            Credential? keyCredential = CredentialManager.Get(keyTarget);
+            Credential? ivCredential = CredentialManager.Get(ivTarget);
+            if (keyCredential != null) 
+                key = Convert.FromBase64String(keyCredential.Password);
+            if (ivCredential != null)
+                initVector = Convert.FromBase64String(ivCredential.Password);
         }
 
-        private static byte[]? GetStoredIV()
+        /// <summary>
+        /// It replaced the stored IV's credential.
+        /// </summary>
+        /// <param name="target"></param>
+        public void ReplaceStoredIV(string target)
         {
-            Credential? credential = CredentialManager.Get("EncrypterIV");
-            if (credential == null) return null;
-            return Convert.FromBase64String(credential.Password);
+            if (CredentialManager.Exist(target)) CredentialManager.Delete(target);
+            StoreIV(target);
         }
 
-        public void ReplaceStoredIV()
+        /// <summary>
+        /// It replaced the stored Key's credential.
+        /// </summary>
+        /// <param name="target"></param>
+        public void ReplaceStoredKey(string target)
         {
-            if (CredentialManager.Exist("EncrypterIV")) CredentialManager.Delete("EncrypterIV");
-            StoreKey();
+            if (CredentialManager.Exist(target)) CredentialManager.Delete(target);
+            StoreKey(target);
         }
 
-        public void ReplaceStoredKey()
-        {
-            if (CredentialManager.Exist("EncrypterKEY")) CredentialManager.Delete("EncrypterKEY");
-            StoreKey();
-        }
-
-        public void StoreKey() 
+        /// <summary>
+        /// Stores the Credential's key in the local computer.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void StoreKey(string target) 
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
-            CredentialManager.Store(new("EncrypterKEY", "key", Convert.ToBase64String(key)));
+            CredentialManager.Store(new(target, "key", Convert.ToBase64String(key)));
         }
 
-        public void StoreIV()
+        /// <summary>
+        /// Stores the Credential's IV in the local computer.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void StoreIV(string target)
         {
             if (initVector == null) throw new ArgumentNullException(nameof(initVector));
-            CredentialManager.Store(new("EncrypterIV", "iv", Convert.ToBase64String(initVector)));
+            CredentialManager.Store(new(target, "iv", Convert.ToBase64String(initVector)));
         }
 
         /// <summary>
@@ -61,7 +75,6 @@ namespace Backend.Utils
         /// <returns>The encrypted string</returns>
         public string Encrypt() 
         {
-            ReadStoredKeys();
             using (Aes aes = Aes.Create())
             {
                 key ??= aes.Key;
@@ -76,7 +89,6 @@ namespace Backend.Utils
         /// <returns>The string with its original value</returns>
         public string Decrypt()
         {
-            ReadStoredKeys();
             using (Aes aes = Aes.Create())
             {
                 key ??= aes.Key;
@@ -84,7 +96,6 @@ namespace Backend.Utils
                 return DecryptString(key, initVector);
             }
         }
-
 
         private string DecryptString(byte[] key, byte[] iv)
         {
