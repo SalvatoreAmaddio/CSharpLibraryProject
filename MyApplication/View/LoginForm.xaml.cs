@@ -18,7 +18,7 @@ namespace MyApplication.View
         {
             if (CurrentUser.ReadCredential()) 
             {
-                bool result = CurrentUser.Login(CurrentUser.InterrogateDatabase());
+                bool result = CurrentUser.Login(CurrentUser.FetchUserPassword());
                 if (!result) 
                 {
                     CredentialManager.Delete(CurrentUser.Target);
@@ -34,7 +34,7 @@ namespace MyApplication.View
             CurrentUser.UserName = userName.Text;
             CurrentUser.Password = pswd.Password;
             CurrentUser.RememberMe = (bool)rememberme.IsChecked;
-            string? p = CurrentUser.InterrogateDatabase();
+            string? p = CurrentUser.FetchUserPassword(true);
             AttemptLogin(CurrentUser.Login(p));
         }
     

@@ -50,7 +50,7 @@ namespace Backend.Utils
         /// <returns>true if the credential was successfully stored</returns>
         public static bool Store(Credential cred)
         {
-            if (Exist(cred.Target)) throw new Exception("This credential is already stored");
+            if (Exist(cred.Target)) throw new Exception("This credential is already stored.");
             byte[] byteArray = Encoding.Unicode.GetBytes(cred.Password); //Encode password.
 
             CREDENTIAL credential = new() //create Credential Struct

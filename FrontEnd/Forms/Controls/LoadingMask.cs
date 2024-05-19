@@ -1,4 +1,5 @@
 ﻿using Backend.Database;
+using Backend.Utils;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Utils;
 using System.Reflection;
@@ -47,9 +48,8 @@ namespace FrontEnd.Forms
         
         protected virtual async void OnLoading(object sender, RoutedEventArgs e)
         {
-            Assembly? entryAssembly = Assembly.GetEntryAssembly();
-            string? assemblyName = entryAssembly?.GetName().Name;
-            string? Namespace = entryAssembly?.EntryPoint?.DeclaringType?.Namespace;
+            string? assemblyName = Sys.AppName;
+            string? Namespace = Sys.AppAssembly?.EntryPoint?.DeclaringType?.Namespace;
             Type? mainWinType = Type.GetType($"{Namespace}.View.{MainWindow}, {assemblyName}") ?? throw new Exception($"Could not find the Type of {MainWindow}");
             await Task.Run(DatabaseManager.Do.FetchData);
             Helper.GetActiveWindow()?.GoToWindow((Window?)Activator.CreateInstance(mainWinType));

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-namespace Backend.Utils
+﻿namespace Backend.Utils
 {
     /// <summary>
     /// This class holds some information about the Developer and the Client.
@@ -14,12 +13,12 @@ namespace Backend.Utils
         public string SoftwareYear { get; set; } = DateTime.Now.Year.ToString();
         
         /// <summary>
-        /// This property is set by the <see cref="Assembly.GetName()"/> property.
+        /// This property is set by the <see cref="Sys.AppName"/>.
         /// </summary>
         public string? SoftwareName { get; } = string.Empty;
 
         /// <summary>
-        /// This property is set by the <see cref="Assembly.GetName()"/>.Version property.
+        /// This property is set by the <see cref="Sys.AppVersion"/>.
         /// </summary>
         public string? SoftwareVersion { get; } = string.Empty;
         
@@ -28,16 +27,10 @@ namespace Backend.Utils
         /// </summary>
         public string ClientName { get; set;} = string.Empty;
         
-        /// <summary>
-        /// This property refers to the <see cref="Assembly.GetEntryAssembly()"/>
-        /// </summary>
-        public Assembly? AppAssembly { get; }
-
         public SoftwareInfo() 
         {
-            AppAssembly = Assembly.GetEntryAssembly();
-            SoftwareName = AppAssembly?.GetName()?.Name;
-            SoftwareVersion = $"v. {AppAssembly?.GetName()?.Version?.ToString()}";
+            SoftwareName = Sys.AppName;
+            SoftwareVersion = $"v. {Sys.AppVersion}";
         }
 
         public SoftwareInfo(string developerName, string developerWebsite, string client, string year) : this()

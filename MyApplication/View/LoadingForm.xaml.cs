@@ -1,5 +1,4 @@
-﻿using Backend.Database;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MyApplication.View
 {

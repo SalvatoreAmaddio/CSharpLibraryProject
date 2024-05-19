@@ -7,7 +7,53 @@ namespace Backend.Utils
     /// </summary>
     public class Encrypter(string str)
     {
+        public byte[]? key;
+        public byte[]? initVector;
         private string Str { get; set; } = str;
+       
+        private void ReadStoredKeys() 
+        { 
+            key = GetStoredKey();
+            initVector = GetStoredIV();
+        }
+
+        private static byte[]? GetStoredKey() 
+        {
+            Credential? credential = CredentialManager.Get("EncrypterKEY");
+            if (credential == null) return null;
+            return Convert.FromBase64String(credential.Password);
+        }
+
+        private static byte[]? GetStoredIV()
+        {
+            Credential? credential = CredentialManager.Get("EncrypterIV");
+            if (credential == null) return null;
+            return Convert.FromBase64String(credential.Password);
+        }
+
+        public void ReplaceStoredIV()
+        {
+            if (CredentialManager.Exist("EncrypterIV")) CredentialManager.Delete("EncrypterIV");
+            StoreKey();
+        }
+
+        public void ReplaceStoredKey()
+        {
+            if (CredentialManager.Exist("EncrypterKEY")) CredentialManager.Delete("EncrypterKEY");
+            StoreKey();
+        }
+
+        public void StoreKey() 
+        {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            CredentialManager.Store(new("EncrypterKEY", "key", Convert.ToBase64String(key)));
+        }
+
+        public void StoreIV()
+        {
+            if (initVector == null) throw new ArgumentNullException(nameof(initVector));
+            CredentialManager.Store(new("EncrypterIV", "iv", Convert.ToBase64String(initVector)));
+        }
 
         /// <summary>
         /// Encrypts the string.
@@ -15,11 +61,12 @@ namespace Backend.Utils
         /// <returns>The encrypted string</returns>
         public string Encrypt() 
         {
+            ReadStoredKeys();
             using (Aes aes = Aes.Create())
             {
-                byte[] key = aes.Key;
-                byte[] iv = aes.IV;
-                return EncryptString(key, iv);
+                key ??= aes.Key;
+                initVector ??= aes.IV;
+                return EncryptString(key, initVector);
             }
         }
 
@@ -29,11 +76,12 @@ namespace Backend.Utils
         /// <returns>The string with its original value</returns>
         public string Decrypt()
         {
+            ReadStoredKeys();
             using (Aes aes = Aes.Create())
             {
-                byte[] key = aes.Key;
-                byte[] iv = aes.IV;
-                return DecryptString(key, iv);
+                key ??= aes.Key;
+                initVector ??= aes.IV;
+                return DecryptString(key, initVector);
             }
         }
 

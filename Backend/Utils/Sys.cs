@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
 
@@ -7,6 +6,21 @@ namespace Backend.Utils
 {
     public class Sys
     {
+        /// <summary>
+        /// Gets the Application's Assembly.
+        /// </summary>
+        public static Assembly? AppAssembly { get; } = Assembly.GetEntryAssembly();
+        
+        /// <summary>
+        /// Gets the Application's Name
+        /// </summary>
+        public static string? AppName { get; } = AppAssembly?.GetName()?.Name;
+
+        /// <summary>
+        /// Gets the Application's Version
+        /// </summary>
+        public static string? AppVersion { get => AppAssembly?.GetName()?.Version?.ToString(); }
+
         /// <summary>
         /// Collection of Loaded Assemblies. See <see cref="LoadedAssembly"/>
         /// </summary>
