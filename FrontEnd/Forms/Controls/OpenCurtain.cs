@@ -20,6 +20,7 @@ namespace FrontEnd.Forms
         {
             Header = Helper.LoadFromStrings("openCurtain");
             VerticalAlignment = VerticalAlignment.Center;
+            ToolTip = "Open Curtain";
         }
     }
 }

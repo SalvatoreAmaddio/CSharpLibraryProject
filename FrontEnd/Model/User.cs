@@ -4,7 +4,7 @@ using System.Data.Common;
 
 namespace FrontEnd.Model
 {
-    public class User : AbstractModel
+    public class User : AbstractModel, IUser
     {
         private long _userid;
         private string _username = string.Empty;
@@ -59,6 +59,5 @@ namespace FrontEnd.Model
         }
 
         public override ISQLModel Read(DbDataReader reader) => new User(reader);
-
     }
 }

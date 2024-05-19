@@ -14,7 +14,7 @@
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Width" Value="250"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Panel.ZIndex" Value="2"/>
+        <Setter Property="Panel.ZIndex" Value="99"/>
         <Setter Property="Grid.RowSpan" Value="2"/>
         <Setter Property="HeaderTitle" Value="Ciao!"/>
         <Setter Property="Visibility" Value="Hidden"/>
