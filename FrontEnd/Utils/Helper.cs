@@ -6,6 +6,7 @@ using FrontEnd.Controller;
 using System.ComponentModel;
 using Backend.Utils;
 using FrontEnd.ExtensionMethods;
+using FrontEnd.Dialogs;
 
 namespace FrontEnd.Utils
 {
@@ -143,8 +144,8 @@ namespace FrontEnd.Utils
         /// <param name="loginForm">The window to open once logged out occured, usually a Login Window</param>
         public static void Logout(Window loginForm) 
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to logout?", "Confirm", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.No) return;
+            DialogResult result = ConfirmDialog.Ask("Are you sure you want to logout?");
+            if (result == DialogResult.No) return;
             CurrentUser.Logout();
             GetActiveWindow()?.GoToWindow(loginForm);
         }

@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Remove="images\excel.png" />
     <None Remove="images\padlock.png" />
+    <None Remove="images\questionmark.png" />
     <None Remove="images\redlight.png" />
     <None Remove="images\requery.png" />
   </ItemGroup>
@@ -59,6 +60,7 @@
     <Resource Include="images\padlock.png" />
     <Resource Include="images\pdf.png" />
     <Resource Include="images\plus.png" />
+    <Resource Include="images\questionmark.png" />
     <Resource Include="images\requery.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />

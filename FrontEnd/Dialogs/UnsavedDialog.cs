@@ -146,26 +146,22 @@ namespace FrontEnd.Dialogs
     /// </summary>
     public class UnsavedDialog : AbstractDialog
     {
-        private Button? yesButton;
-        private Button? noButton;
-        static UnsavedDialog()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(UnsavedDialog), new FrameworkPropertyMetadata(typeof(UnsavedDialog)));
-        }
+        protected Button? yesButton;
+        protected Button? noButton;
+        static UnsavedDialog() => DefaultStyleKeyProperty.OverrideMetadata(typeof(UnsavedDialog), new FrameworkPropertyMetadata(typeof(UnsavedDialog)));
 
-        private UnsavedDialog(string? text = null, string? title = null) : base(text, title)
-        {
-        }
+        protected UnsavedDialog(string? text = null, string? title = null) : base(text, title)
+        { }
 
         public override Button? ButtonToFocusOn() => yesButton;
 
-        private void OnNoClicked(object sender, RoutedEventArgs e)
+        protected virtual void OnNoClicked(object sender, RoutedEventArgs e)
         {
             Result = Dialogs.DialogResult.No;
             DialogResult = false;
         }
 
-        private void OnYesClicked(object sender, RoutedEventArgs e)
+        protected virtual void OnYesClicked(object sender, RoutedEventArgs e)
         {
             Result = Dialogs.DialogResult.Yes;
             DialogResult = true;
@@ -216,6 +212,26 @@ namespace FrontEnd.Dialogs
         }
 
         public static DialogResult Throw(string? text = null, string? title = "Something is missing") => _ask(new BrokenIntegrityDialog(text, title));
+
+    }
+
+    /// <summary>
+    /// This class extends <see cref="UnsavedDialog"/> and it is used to ask a user if they want to proceed with a given action or not.
+    /// This dialog is usally used to ask a user if they want to delete a record or logout from the system.
+    /// </summary>
+    public class ConfirmDialog : UnsavedDialog
+    {
+        protected ConfirmDialog(string? text = null, string? title = null) : base(text, title)
+        { 
+        
+        }
+
+        static ConfirmDialog()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ConfirmDialog), new FrameworkPropertyMetadata(typeof(ConfirmDialog)));
+        }
+
+        public static new DialogResult Ask(string? text = null, string? title = "Confirm") => _ask(new ConfirmDialog(text, title));
 
     }
 }

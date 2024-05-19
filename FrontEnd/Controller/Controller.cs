@@ -137,8 +137,8 @@ namespace FrontEnd.Controller
         /// <returns>true if the operation was successful</returns>
         protected virtual void Delete(M? model)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this record?", "Confirm", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.No) return;
+            DialogResult result = ConfirmDialog.Ask("Are you sure you want to delete this record?");
+            if (result == DialogResult.No) return;
             CurrentRecord = model;
             DeleteRecord();
         }
