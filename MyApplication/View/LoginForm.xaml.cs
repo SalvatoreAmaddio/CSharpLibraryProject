@@ -12,6 +12,7 @@ namespace MyApplication.View
             CurrentUser.Is = new User();
             InitializeComponent();
             Loaded += OnLoaded;
+            Closed += (s, e) => App.Current.Shutdown();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
