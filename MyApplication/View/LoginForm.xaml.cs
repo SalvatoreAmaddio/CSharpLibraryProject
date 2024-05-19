@@ -20,7 +20,7 @@ namespace MyApplication.View
         {
             if (CurrentUser.ReadCredential()) 
             {
-                bool result = CurrentUser.Login(CurrentUser.FetchUserPassword());
+                bool result = CurrentUser.Login(CurrentUser.FetchUserPassword(true));
                 if (!result) 
                 {
                     CredentialManager.Delete(CurrentUser.Target);
