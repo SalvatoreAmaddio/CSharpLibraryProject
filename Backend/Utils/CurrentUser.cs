@@ -81,6 +81,14 @@ namespace Backend.Utils
             return DatabaseManager.Do.Find("User")?.Retrieve(null,para).Cast<IUser>().FirstOrDefault()?.Password;
         }
 
+        public static void ChangePassword(string pwd)
+        {
+            if (Is == null) throw new ArgumentNullException(nameof(Is));
+            Password = new Encrypter(pwd).Encrypt();            
+            List<QueryParameter> para = [new(nameof(UserName), Is.UserName), new(nameof(Password), Is.Password), new(nameof(Is.UserID), Is.UserID)];
+            DatabaseManager.Do.Find("User")?.Crud(CRUD.UPDATE,null, para);
+        }
+
         public static bool Login(string? pwd) 
         {
             if (Is == null)

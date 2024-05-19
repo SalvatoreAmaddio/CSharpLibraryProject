@@ -20,5 +20,11 @@ namespace MyApplication.View
         {
             Helper.Logout(new LoginForm());
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentUser.ChangePassword("soloio59");
+            MessageBox.Show(CurrentUser.Password);
+        }
     }
 }

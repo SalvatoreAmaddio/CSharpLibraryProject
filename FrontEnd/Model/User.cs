@@ -4,6 +4,7 @@ using System.Data.Common;
 
 namespace FrontEnd.Model
 {
+    [Table(nameof(User))]
     public class User : AbstractModel, IUser
     {
         private long _userid;
