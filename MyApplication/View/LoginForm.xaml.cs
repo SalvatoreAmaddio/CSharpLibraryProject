@@ -43,6 +43,5 @@ namespace MyApplication.View
                     attemptsLeft.Content = $"{CurrentUser.Attempts} attempt(s) left.";
             }
         }
-
     }
 }
