@@ -35,7 +35,7 @@ namespace FrontEnd.Model
 
         public virtual bool Login(string? pwd)
         {
-            if (Attempts == 0) throw new Exception("Runout of login attempts");
+            if (Attempts == 0) throw new Exception("Ran out of login attempts");
             if (string.IsNullOrEmpty(Password)) throw new Exception("Password is empty");
             if (Password.Equals(pwd))
             {
