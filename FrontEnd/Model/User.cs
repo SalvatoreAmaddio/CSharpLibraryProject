@@ -48,7 +48,7 @@ namespace FrontEnd.Model
             return false;
         }
         
-        public virtual void DeleteCredential() 
+        public virtual void Logout() 
         {
             CredentialManager.Delete(Target);
         }

@@ -4,6 +4,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using FrontEnd.Controller;
 using System.ComponentModel;
+using Backend.Utils;
+using FrontEnd.ExtensionMethods;
 
 namespace FrontEnd.Utils
 {
@@ -133,6 +135,18 @@ namespace FrontEnd.Utils
             bitmap.UriSource = new Uri(path);
             bitmap.EndInit();
             return bitmap;
+        }
+
+        /// <summary>
+        /// It logs the user out and remove the login <see cref="Credential"/> saved in the local computer.
+        /// </summary>
+        /// <param name="loginForm">The window to open once logged out occured, usually a Login Window</param>
+        public static void Logout(Window loginForm) 
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to logout?", "Confirm", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No) return;
+            CurrentUser.Logout();
+            GetActiveWindow()?.GoToWindow(loginForm);
         }
     }
 }

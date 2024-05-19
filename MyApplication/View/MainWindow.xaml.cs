@@ -1,4 +1,5 @@
 ﻿using Backend.Utils;
+using FrontEnd.ExtensionMethods;
 using FrontEnd.Utils;
 using System.Windows;
 
@@ -14,5 +15,10 @@ namespace MyApplication.View
         }
 
         private void OpenCurtain(object sender, RoutedEventArgs e) => Curtain.Open();
+
+        private void OnLogoutClicked(object sender, RoutedEventArgs e)
+        {
+            Helper.Logout(new LoginForm());
+        }
     }
 }

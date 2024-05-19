@@ -79,6 +79,13 @@ namespace Backend.Utils
             if (Is == null)
                 throw new ArgumentNullException(nameof(Is));
             return Is.Login(pwd);
-        } 
+        }
+
+        public static void Logout()
+        {
+            if (Is == null)
+                throw new ArgumentNullException(nameof(Is));
+            Is.Logout();
+        }
     }
 }

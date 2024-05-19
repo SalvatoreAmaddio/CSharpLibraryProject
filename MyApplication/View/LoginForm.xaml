@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fr="clr-namespace:FrontEnd.Forms;assembly=FrontEnd"
-        xmlns:local="clr-namespace:MyApplication.View"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:b="clr-namespace:FrontEnd.Behaviours;assembly=FrontEnd"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="LoginForm" SizeToContent="Height" Width="300">
+        WindowStartupLocation="CenterScreen"
+        Title="Login Form" SizeToContent="Height" Width="300">
     
     <Grid Margin="10">
         <Grid.RowDefinitions>

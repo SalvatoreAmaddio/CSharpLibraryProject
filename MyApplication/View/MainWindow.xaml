@@ -18,7 +18,7 @@
         <Menu VerticalAlignment="Top">
             <fr:OpenCurtain Click="OpenCurtain"/>
             <MenuItem Header="User" VerticalAlignment="Center">
-                <MenuItem Header="Logout"/>
+                <MenuItem Header="Logout" Click="OnLogoutClicked"/>
                 <MenuItem Header="Change Password"/>
                 <MenuItem Header="Info"/>
             </MenuItem>

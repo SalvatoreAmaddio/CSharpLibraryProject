@@ -7,7 +7,6 @@ namespace MyApplication.View
 {
     public partial class LoginForm : Window
     {
-
         public LoginForm()
         {
             CurrentUser.Is = new User();

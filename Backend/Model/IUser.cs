@@ -18,7 +18,7 @@ namespace Backend.Model
         /// <exception cref="Exception"></exception>
         public bool Login(string pwd);
 
-        public void DeleteCredential();
+        public void Logout();
 
         public void SaveCredentials();
 
