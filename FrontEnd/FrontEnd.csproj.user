@@ -22,6 +22,9 @@
     <Page Update="Themes\CommandPanel.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Themes\Curtain.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\DatePicker.xaml">
       <SubType>Designer</SubType>
     </Page>

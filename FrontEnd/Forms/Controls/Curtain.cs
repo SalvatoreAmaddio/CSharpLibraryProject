@@ -1,23 +1,35 @@
 ﻿using Backend.Utils;
-using FrontEnd.Utils;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FrontEnd.Forms
 {
+    /// <summary>
+    /// A Curtain object is a drop-side GUI Content which displays some information about the developer, the application and the client.
+    /// By default, this object is hidden.
+    /// This object works with a instance of <see cref="Backend.Utils.SoftwareInfo"/>.
+    /// <para/>
+    /// For Example in your xaml:
+    /// <code>
+    /// &lt;!--Create a button to open the Curtain-->
+    /// &lt;Menu VerticalAlignment="Top">
+    ///     &lt;MenuItem Header="{StaticResource openCurtain}" Click="Open"/>
+    ///     ...
+    /// &lt;/Menu>
+    /// ...
+    /// &lt;fr:Curtain x:Name="Curtain"/> &lt;!--Place your Curtain object-->
+    /// ...
+    /// </code>
+    /// Then in your code behind:
+    /// <code>
+    /// //Click event to open the curtain
+    /// private void OpenCurtain(object sender, RoutedEventArgs e) => Curtain.Open();
+    /// </code>
+    /// </summary>
     public class Curtain : ContentControl
     {
         Button? PART_CloseButton;
@@ -112,14 +124,16 @@ namespace FrontEnd.Forms
         {
             base.OnApplyTemplate();
 
-            PART_CloseButton = (Button?)GetTemplateChild(nameof(PART_CloseButton));
+            PART_CloseButton = (Button?)GetTemplateChild(nameof(PART_CloseButton)); //get the close button to attach a click event to close the curtain.
             if (PART_CloseButton == null) throw new Exception($"Failed to get {nameof(PART_CloseButton)}");
-            PART_CloseButton.Click += OnCloseButtonClicked;
+            PART_CloseButton.Click += (s,e) => { Visibility = Visibility.Hidden; };
 
-            PART_WebLink = (Hyperlink?)GetTemplateChild(nameof(PART_WebLink));
+            PART_WebLink = (Hyperlink?)GetTemplateChild(nameof(PART_WebLink)); //get the Hyperlink object to attach a RequestNavigate event.
             if (PART_WebLink == null) throw new Exception($"Failed to get {nameof(PART_WebLink)}");
 
             PART_WebLink.RequestNavigate += OnHyperlinkClicked;
+
+            //clean the URI to display the website name only without https:// 
             string url = DeveloperWebsite.AbsoluteUri;
 
             try 
@@ -129,17 +143,21 @@ namespace FrontEnd.Forms
                     url = url.Substring(0, url.Length - 1);
             }
             catch 
-            { 
-                            
+            {
+                throw new Exception();           
             }
-            PART_WebLink.Inlines.Add(url);
-        }
 
-        private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
-        {
-            this.Visibility = Visibility.Hidden;
+            PART_WebLink.Inlines.Add(url); //add the clean URI which is visibile to the User.
         }
+        
+        /// <summary>
+        /// Open the Curtain.
+        /// </summary>
+        public void Open() => Visibility = Visibility.Visible;
 
+        /// <summary>
+        /// Event to open the Browser and navigate to the <see cref="DeveloperWebsite"/>
+        /// </summary>
         private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
         {
             ProcessStartInfo info = new(e.Uri.AbsoluteUri);

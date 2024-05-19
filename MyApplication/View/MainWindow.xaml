@@ -17,7 +17,6 @@
 
         <Menu VerticalAlignment="Top">
             <MenuItem Header="{StaticResource openCurtain}" VerticalAlignment="Center" Click="OpenCurtain"/>
-
             <MenuItem Header="User" VerticalAlignment="Center">
                 <MenuItem Header="Logout"/>
                 <MenuItem Header="Change Password"/>
@@ -25,10 +24,8 @@
             </MenuItem>
         </Menu>
 
-        <fr:Curtain x:Name="Curtain" Visibility="Hidden">
-            
-        </fr:Curtain>
-        
+        <fr:Curtain x:Name="Curtain"/>
+
         <TabControl x:Name="MainTab" Grid.Row="1">
             <TabItem Header="Employees">
                 <Frame>
