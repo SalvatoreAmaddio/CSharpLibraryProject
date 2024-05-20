@@ -40,11 +40,16 @@ namespace MyApplication.View
                 this.GoToWindow(new MainWindow());
             else
             {
-                InvalidCredentialRow.Height = new(30);
-                AttemptRow.Height = new(30);
+                ShowWarnings();
                 if (CurrentUser.Attempts == 0) Close(); //close application                 
                 attemptsLeft.Content = (CurrentUser.Attempts == 1) ? $"{CurrentUser.Attempts} ATTEMPT LEFT!" : $"{CurrentUser.Attempts} attempt(s) left.";
             }
         }    
+    
+        private void ShowWarnings() 
+        {
+            InvalidCredentialRow.Height = new(30);
+            AttemptRow.Height = new(30);
+        }
     }
 }
