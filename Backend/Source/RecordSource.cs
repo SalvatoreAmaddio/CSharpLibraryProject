@@ -26,7 +26,7 @@ namespace Backend.Source
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="ISourceNavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
-    public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource
+    public class RecordSource : ObservableRangeCollection<ISQLModel>, IParentSource, IChildSource, IDisposable
     {
         /// <summary>
         /// This delegate works as a bridge between the <see cref="Controller.IAbstractSQLModelController"/> and this <see cref="Backend.Source.RecordSource"/>.
@@ -184,6 +184,21 @@ namespace Backend.Source
                 true when navigator.IsNewRecord => "New Record",
                 _ => $"Record {navigator?.RecNum} of {navigator?.RecordCount}",
             };
+        }
+
+        public void Dispose()
+        {
+            ParentSource?.RemoveChild(this);
+            UIControls?.Clear();
+            Children.Clear();
+            navigator = null;
+            RunFilter = null;
+            GC.SuppressFinalize(this);
+        }
+
+        ~RecordSource()
+        {
+            Dispose();
         }
     }
 }

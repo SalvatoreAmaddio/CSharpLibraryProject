@@ -10,7 +10,7 @@ namespace FrontEnd.Controller
     /// This class extends <see cref="AbstractFormListController{M}"/> and implements <see cref="IAbstractFormListController{M}"/>
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
-    public abstract class AbstractFormListController<M> : AbstractFormController<M>, IAbstractFormListController<M> where M : AbstractModel, new()
+    public abstract class AbstractFormListController<M> : AbstractFormController<M>, IDisposable, IAbstractFormListController<M> where M : AbstractModel, new()
     {
         bool _openWindowOnNew = true;
         protected FilterQueryBuilder QueryBuiler;
@@ -120,6 +120,11 @@ namespace FrontEnd.Controller
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
         public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+
+        public override void Dispose()
+        {
+            
+        }
 
     }
 }

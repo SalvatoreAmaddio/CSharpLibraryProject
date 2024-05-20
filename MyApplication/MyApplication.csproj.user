@@ -41,6 +41,9 @@
     <Page Update="View\EmployeeListPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\DepartmentListPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\JobTitleListPage.xaml">
       <SubType>Designer</SubType>
     </Page>

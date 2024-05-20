@@ -17,7 +17,7 @@ namespace FrontEnd.Controller
     /// This class extends <see cref="AbstractSQLModelController"/> and implementats <see cref="IAbstractFormController{M}"/>
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
-    public abstract class AbstractFormController<M> : AbstractSQLModelController, ISubFormController, IAbstractFormController<M> where M : AbstractModel, new()
+    public abstract class AbstractFormController<M> : AbstractSQLModelController, ISubFormController, IDisposable, IAbstractFormController<M> where M : AbstractModel, new()
     {
         string _search = string.Empty;
         bool _isloading = false;
@@ -209,6 +209,20 @@ namespace FrontEnd.Controller
                     e.Cancel = !updateResult; //if the update fails, force the User to stay on the Windwow. If the update was successful, close the window.
                 }
             }
+        }
+
+        public virtual void Dispose()
+        {
+            if (_window != null)
+                _window.Closing -= OnWindowClosing;
+            AfterUpdate = null;
+            BeforeUpdate = null;
+            NewRecordEvent = null;
+        }
+
+        ~AbstractFormController()
+        {
+            Dispose();
         }
     }
 

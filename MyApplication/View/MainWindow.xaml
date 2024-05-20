@@ -42,6 +42,14 @@
                     </Frame.Content>
                 </Frame>
             </TabItem>
+
+            <TabItem Header="Departments">
+                <Frame>
+                    <Frame.Content>
+                        <local:DepartmentListPage/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
         </TabControl>
     </Grid>
 
