@@ -110,13 +110,18 @@ namespace FrontEnd.Forms
             base.OnItemsSourceChanged(oldValue, newValue);
 
             if (newValue != null && newValue is RecordSource source)
-                source.AddComboBoxReference(this);
+                source.AddUIControlReference(this);
         }
 
         public async void OnItemSourceUpdated()
         {
             ResetTemplate();
             await AdjustText(null);
+        }
+
+        ~Combo()
+        {
+
         }
     }
 }

@@ -95,6 +95,10 @@ namespace FrontEnd.FilterSource
     public class SourceOption : List<IFilterOption>, IChildSource
     {
         private readonly string _displayProperty;
+        /// <summary>
+        /// A list of <see cref="IUIControl"/> associated to this <see cref="RecordSource"/>.
+        /// </summary>
+        private List<IUIControl>? UIControls;
 
         public IParentSource? ParentSource { get; set; }
 
@@ -137,6 +141,28 @@ namespace FrontEnd.FilterSource
             return sb.ToString();
         }
 
+        /// <summary>
+        /// It adds a <see cref="IUIControl"/> object to the <see cref="UIControls"/>.
+        /// <para/>
+        /// If <see cref="UIControls"/> is null, it gets initialised.
+        /// </summary>
+        /// <param name="control">An object implementing <see cref="IUIControl"/></param>
+        public void AddUIControlReference(IUIControl control)
+        {
+            if (UIControls == null) UIControls = [];
+            UIControls.Add(control);
+        }
+
+        /// <summary>
+        /// This method is called in <see cref="Update(CRUD, ISQLModel)"/>.
+        /// It loops through the <see cref="UIControls"/> to notify the <see cref="IUIControl"/> object to reflect changes that occured to their ItemsSource which is an instance of <see cref="RecordSource"/>.
+        /// </summary>
+        private void NotifyUIControl()
+        {
+            if (UIControls != null && UIControls.Count > 0)
+                foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated();
+        }
+
         public void Update(CRUD crud, ISQLModel model)
         {
             FilterOption option = new(model, _displayProperty);
@@ -146,11 +172,12 @@ namespace FrontEnd.FilterSource
                     Add(option);
                     break;
                 case CRUD.UPDATE:
-                    int index = this.IndexOf(option);
+                    int index = IndexOf(option);
                     IFilterOption oldValue = this[index];
                     bool isSelected = oldValue.IsSelected;
                     this[index] = option;
                     this[index].IsSelected = isSelected;
+                    NotifyUIControl();
                     break;
                 case CRUD.DELETE:
                      Remove(option);

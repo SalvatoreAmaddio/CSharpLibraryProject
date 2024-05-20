@@ -1,4 +1,5 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Source;
+using FrontEnd.Controller;
 using FrontEnd.FilterSource;
 using FrontEnd.Utils;
 using System.Windows;
@@ -25,9 +26,8 @@ namespace FrontEnd.Forms
     /// </code>
     /// This class works in conjunction with <seealso cref="IFilterOption"/>, <seealso cref="FilterOption"/>
     /// </summary>
-    public class HeaderFilter : AbstractControl
+    public class HeaderFilter : AbstractControl, IUIControl
     {
-        private Popup? PART_popup;
         private Button? PART_DropDownButton;
         private ListBox? PART_ListBox;
 
@@ -85,18 +85,9 @@ namespace FrontEnd.Forms
                 clearButton.Click += OnClearButtonClicked;
 
             PART_ListBox = (ListBox)GetTemplateChild(nameof(PART_ListBox));
-            PART_popup = (Popup)GetTemplateChild(nameof(PART_popup));
-            PART_popup.Opened += OnPopupOpened;
         }
 
         #region Events
-        private void OnPopupOpened(object? sender, EventArgs e)
-        {
-            if (PART_ListBox == null) return;
-            DataTemplate tempDataTemplate = PART_ListBox.ItemTemplate;
-            PART_ListBox.ItemTemplate = null;
-            PART_ListBox.ItemTemplate = tempDataTemplate;
-        }
         private void OnClearButtonClicked(object sender, RoutedEventArgs e)
         {
             foreach(var item in ItemsSource) 
@@ -143,7 +134,8 @@ namespace FrontEnd.Forms
         private void BindEvents(object new_source)
         {
             if (new_source == null) return;
-            IEnumerable<IFilterOption> source = (IEnumerable<IFilterOption>)new_source;
+            SourceOption source = (SourceOption)new_source;
+            source.AddUIControlReference(this);
             foreach (IFilterOption option in source)
                 option.OnSelectionChanged += OnOptionSelected;
         }
@@ -155,6 +147,13 @@ namespace FrontEnd.Forms
             ToolTip = "Clear Filter";
             ((IAbstractFormListController)DataContext).OnOptionFilter();
             if (!ItemsSource.Any(s=>s.IsSelected)) ResetDropDownButtonAppereance();
+        }
+
+        public void OnItemSourceUpdated()
+        {
+            DataTemplate tempDataTemplate = PART_ListBox.ItemTemplate;
+            PART_ListBox.ItemTemplate = null;
+            PART_ListBox.ItemTemplate = tempDataTemplate;
         }
         #endregion
 

@@ -140,12 +140,11 @@ namespace Backend.Source
         /// <para/>
         /// If <see cref="UIControls"/> is null, it gets initialised.
         /// </summary>
-        /// <param name="combo">An object implementing <see cref="IUIControl"/></param>
-        public void AddComboBoxReference(IUIControl combo) 
+        /// <param name="control">An object implementing <see cref="IUIControl"/></param>
+        public void AddUIControlReference(IUIControl control) 
         {
             if (UIControls == null) UIControls = [];
-            UIControls.Add(combo);
-
+            UIControls.Add(control);
         }
 
         /// <summary>
