@@ -18,14 +18,18 @@ namespace Backend.Database
         public override string ConnectionString() => $"Data Source={DatabaseName};Version={Version};";
         protected override string LastIDQry() => "SELECT last_insert_rowid()";
 
+        /// <summary>
+        /// If the software is published as SingleFile, the SQLite connection must be established through external Assembly.
+        /// On Application' startup, it is important that you call <see cref="Sys.LoadEmbeddedDll(string)"/> by passing the string "System.Data.SQLite" as its argument.
+        /// </summary>
+        /// <returns>A DbConnection object</returns>
+        /// <exception cref="Exception">Throw an exception</exception>
         public override DbConnection Connect()
         {
-            //If the software is published as SingleFile, the SQLite connection must be established through external Assembly.
-            //It is important that you call Sys.LoadEmbeddedDll("System.Data.SQLite"); on Application' startup.
             Assembly? assembly = Sys.LoadedDLL.FirstOrDefault(s => s.Name.Equals("System.Data.SQLite"))?.Assembly;
             if (assembly == null) return new SQLiteConnection(ConnectionString()); //if the assembly is null, it is assumed the application is not published as single file.
-            //Attempt to create an instance of IDBConnection through the assembly.
-            IDbConnection? connection = (IDbConnection?)assembly.CreateInstance("System.Data.SQLite.SQLiteConnection") ?? throw new Exception("Failed to create a connection object from LoadedAssembly");
+            //Attempt to create an instance of IDBConnection through the assembly.            
+            IDbConnection ? connection = (IDbConnection?)assembly.CreateInstance("System.Data.SQLite.SQLiteConnection") ?? throw new Exception("Failed to create a connection object from LoadedAssembly");
             connection.ConnectionString = ConnectionString(); //set the connection string.
             return (DbConnection)connection;
         }
