@@ -8,6 +8,21 @@ using MvvmHelpers;
 namespace Backend.Source
 {
     /// <summary>
+    /// This interface serves as a bridge between a <see cref="RecordSource"/> object and a Combo object in the contest of GUI Development.
+    /// The main purpose of this interface is to update the ComboBox control to reflect changes that occured in the ComboBox's ItemSource which is an instance of <see cref="RecordSource"/>
+    /// <para/>
+    /// Indeed, the <see cref="OnItemSourceUpdated"/> is called in <see cref="RecordSource.Update(CRUD, ISQLModel)"/>.
+    /// </summary>
+    public interface IUIControl 
+    {
+        /// <summary>
+        /// Whenever the Parent RecordSource is updated, it notifies this object to reflect the update.
+        /// </summary>
+        public void OnItemSourceUpdated(); 
+       
+    }
+
+    /// <summary>
     /// This class extends the <see cref="ObservableRangeCollection{T}"/> and deals with IEnumerable&lt;<see cref="ISQLModel"/>&gt;. As Enumerator it uses a <see cref="ISourceNavigator"/>.
     /// see also the <seealso cref="Navigator"/> class.
     /// </summary>
@@ -27,6 +42,11 @@ namespace Backend.Source
         /// The Controller to which this RecordSource is associated to.
         /// </summary>
         public IAbstractSQLModelController? Controller { get; set; }
+
+        /// <summary>
+        /// A list of <see cref="IUIControl"/> associated to this <see cref="RecordSource"/>.
+        /// </summary>
+        private List<IUIControl>? UIControls;
 
         #region Constructor
         /// <summary>
@@ -53,10 +73,7 @@ namespace Backend.Source
         /// </summary>
         /// <param name="db">An instance of <see cref="IAbstractDatabase"/></param>
         /// <param name="controller">An instance of <see cref="IAbstractSQLModelController"/></param>
-        public RecordSource(IAbstractDatabase db, IAbstractSQLModelController controller) : this(db) 
-        {
-            Controller = controller;
-        }
+        public RecordSource(IAbstractDatabase db, IAbstractSQLModelController controller) : this(db) => Controller = controller;
         #endregion
 
         #region Enumerator
@@ -93,6 +110,7 @@ namespace Backend.Source
         {
             foreach (IChildSource child in Children) child.Update(crud, model);
         }
+
         public virtual void Update(CRUD crud, ISQLModel model)
         {
             if (Controller!=null && Controller.VoidParentUpdate) return;
@@ -102,9 +120,9 @@ namespace Backend.Source
                     Add(model);
                     Controller?.GoLast();
                     break;
-                //case CRUD.UPDATE: //NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
-                //    this[IndexOf(model)] = model;
-                //    break;
+                case CRUD.UPDATE:
+                    NotifyUIControl();
+                    break;
                 case CRUD.DELETE:
                     bool removed = Remove(model);
                     if (!removed) break;
@@ -115,6 +133,29 @@ namespace Backend.Source
             }
             if (Controller != null && Controller.VoidParentUpdate) return;
             RunFilter?.Invoke(this, new());
+        }
+
+        /// <summary>
+        /// It adds a <see cref="IUIControl"/> object to the <see cref="UIControls"/>.
+        /// <para/>
+        /// If <see cref="UIControls"/> is null, it gets initialised.
+        /// </summary>
+        /// <param name="combo">An object implementing <see cref="IUIControl"/></param>
+        public void AddComboBoxReference(IUIControl combo) 
+        {
+            if (UIControls == null) UIControls = [];
+            UIControls.Add(combo);
+
+        }
+
+        /// <summary>
+        /// This method is called in <see cref="Update(CRUD, ISQLModel)"/>.
+        /// It loops through the <see cref="UIControls"/> to notify the <see cref="IUIControl"/> object to reflect changes that occured to their ItemsSource which is an instance of <see cref="RecordSource"/>.
+        /// </summary>
+        private void NotifyUIControl()
+        {
+            if (UIControls != null && UIControls.Count > 0)
+                foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated();
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);

@@ -1,5 +1,7 @@
-﻿using FrontEnd.Model;
+﻿using Backend.Source;
+using FrontEnd.Model;
 using FrontEnd.Utils;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,38 +11,46 @@ namespace FrontEnd.Forms
     /// <summary>
     /// This class extends <see cref="ComboBox"/> and adds some extra functionalities for dealing with the SelectedItem property.
     /// Furthermore, its ItemsSource is meant to be a <see cref="Backend.Source.RecordSource"/> object.
+    /// Also, this class implements <see cref="IUIControl"/> to provide a better communication between the <see cref="RecordSource"/> and the Combo.
     /// </summary>
-    public partial class Combo : ComboBox
+    public partial class Combo : ComboBox, IUIControl
     {
         private readonly ResourceDictionary resourceDict = Helper.GetDictionary(nameof(Combo));
 
         public Combo() 
-        { 
+        {
             ItemContainerStyle = (Style)resourceDict["ComboItemContainerStyle"];
             Style = (Style)resourceDict["ComboStyle"];
         }
 
         public AbstractModel? ParentModel => DataContext as AbstractModel;
         
-        protected override void OnDropDownOpened(EventArgs e)
+        /// <summary>
+        /// Adjust the <see cref="ComboBox.Text"/> property to relect the Selected Item.
+        /// </summary>
+        /// <param name="model">The selected item whose ToString() method should be displayed</param>
+        /// <returns>A Task</returns>
+        private Task AdjustText(object? model) 
         {
-            base.OnDropDownOpened(e);
-            RequerySource();
-        }
-
-        private void RequerySource() 
-        {
-            string tempControllerRecordSource = ControllerRecordSource;
-            object tempSelectedItem = SelectedItem;
-            bool? tempIsDirty = ParentModel?.IsDirty;
-            ClearValue(ControllerRecordSourceProperty);
-            SetBinding(ItemsSourceProperty, new Binding($"{nameof(DataContext)}.{tempControllerRecordSource}")
+            model ??= SelectedItem;
+            object? item = null;
+            foreach (object record in ItemsSource)
             {
-                RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
-            });
-            SelectedItem = tempSelectedItem;
-            if (tempSelectedItem!=null && tempIsDirty.HasValue)
-                ((AbstractModel)DataContext).IsDirty = tempIsDirty.Value;
+                if (record.Equals(model))
+                {
+                    item = record;
+                    break;
+                }
+            }
+            Text = item?.ToString();
+            return Task.CompletedTask;
+        }
+        
+        private void ResetTemplate() 
+        {
+            ControlTemplate temp = Template;
+            Template = null;
+            Template = temp;
         }
 
         protected override async void OnSelectionChanged(SelectionChangedEventArgs e)
@@ -49,24 +59,9 @@ namespace FrontEnd.Forms
             try
             {
                 object? model = e.AddedItems[e.AddedItems.Count - 1];
-                object? item = null;
-                foreach (object record in ItemsSource)
-                {
-                    if (record.Equals(model))
-                    {
-                        item = record;
-                        break;
-                    }
-                }
-                await FillText(item);
+                await AdjustText(model);
             }
             catch { }
-        }
-
-        private Task FillText(object? item) 
-        {
-            Text = item?.ToString();
-            return Task.CompletedTask;
         }
 
         #region Placeholder
@@ -107,5 +102,21 @@ namespace FrontEnd.Forms
         }
         #endregion
 
+        /// <summary>
+        /// This method has been overriden to associate this object to the RecordSource.
+        /// </summary>
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
+
+            if (newValue != null && newValue is RecordSource source)
+                source.AddComboBoxReference(this);
+        }
+
+        public async void OnItemSourceUpdated()
+        {
+            ResetTemplate();
+            await AdjustText(null);
+        }
     }
 }

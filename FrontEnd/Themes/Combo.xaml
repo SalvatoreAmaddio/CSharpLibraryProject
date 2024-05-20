@@ -246,7 +246,14 @@
             <Setter Property="IsTabStop" Value="false"/>
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
-        </Style>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+    </Style>
             
         <Style x:Key="FocusVisual1">
             <Setter Property="Control.Template">
