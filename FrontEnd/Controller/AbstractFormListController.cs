@@ -1,4 +1,5 @@
 ﻿using Backend.Database;
+using Backend.Exceptions;
 using Backend.Model;
 using Backend.Source;
 using FrontEnd.Model;
@@ -120,6 +121,24 @@ namespace FrontEnd.Controller
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
         public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+
+        public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
+        {
+            if (CurrentRecord == null) throw new NoModelException();
+            if (!CurrentRecord.IsDirty) return false; //if the record has not been changed there is nothing to update.
+            CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
+            if (!CurrentRecord.AllowUpdate()) return false; //the record did not meet the criteria to be updated.
+            Db.Model = CurrentRecord;
+            //Db.Crud(crud, sql, parameters);
+            CurrentRecord.GetTablePK().SetValue(100);
+            CurrentRecord.IsDirty = false;
+            //if (crud == CRUD.INSERT) 
+            //{
+            //    Source.RemoveAt(Source.Count-1);
+            //}
+            //Db.Records?.NotifyChildren(crud, Db.Model); //tell children sources to reflect the changes occured in the master source's collection.
+            return true;
+        }
 
         public override void Dispose()
         {

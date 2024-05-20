@@ -108,17 +108,17 @@ namespace Backend.Source
 
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
+            var x = Children.Count;
             foreach (IChildSource child in Children) child.Update(crud, model);
         }
 
         public virtual void Update(CRUD crud, ISQLModel model)
         {
-            if (Controller!=null && Controller.VoidParentUpdate) return;
             switch (crud)
             {
                 case CRUD.INSERT:
                     Add(model);
-                    Controller?.GoLast();
+//                    Controller?.GoLast();
                     break;
                 case CRUD.UPDATE:
                     NotifyUIControl();
@@ -126,11 +126,14 @@ namespace Backend.Source
                 case CRUD.DELETE:
                     bool removed = Remove(model);
                     if (!removed) break;
-                    if (navigator == null) throw new NoNavigatorException();
-                    if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
-                    else Controller?.GoPrevious();
+                    if (navigator != null) 
+                    {
+                        if (navigator.BOF && !navigator.NoRecords) Controller?.GoFirst();
+                        else Controller?.GoPrevious();
+                    }
                     break;
             }
+
             if (Controller != null && Controller.VoidParentUpdate) return;
             RunFilter?.Invoke(this, new());
         }

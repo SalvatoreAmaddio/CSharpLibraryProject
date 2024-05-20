@@ -104,18 +104,14 @@ namespace FrontEnd.Forms
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
-
             int lastRemovedIndex = e.RemovedItems.Count - 1;
             if (lastRemovedIndex >= 0)
                 OldSelection = e.RemovedItems[lastRemovedIndex]; //hold a reference to the previously selected item as it might be needed to force the user to go back to that.
 
             int lastIndex = e.AddedItems.Count - 1;
-            try
-            {
-                AbstractModel? lastSelectedObject = (AbstractModel?)e.AddedItems[lastIndex];
+
+            if (lastIndex >= 0 && e.AddedItems[lastIndex] is AbstractModel lastSelectedObject)
                 ScrollIntoView(lastSelectedObject); //usefull for a large list where the user is selecting a record which is out of the current view. Scroll to it to make it visible
-            }
-            catch { } //fail silently.
         }
 
         /// <summary>
