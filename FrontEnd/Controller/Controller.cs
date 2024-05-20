@@ -75,7 +75,7 @@ namespace FrontEnd.Controller
         public event BeforeUpdateEventHandler? BeforeUpdate;
         public event NewRecordEventHandler? NewRecordEvent;
 
-        public AbstractFormController() 
+        public AbstractFormController() : base()
         {
             UpdateCMD = new CMD<M>(Update);
             DeleteCMD = new CMD<M>(Delete);

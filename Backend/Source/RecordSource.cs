@@ -39,6 +39,24 @@ namespace Backend.Source
         /// </summary>
         /// <param name="source">An IEnumerable&lt;<see cref="ISQLModel"/>&gt;</param>
         public RecordSource(IEnumerable<ISQLModel> source) : base(source) { }
+
+        /// <summary>
+        /// It instantiates a RecordSource object filled with the given <see cref="IAbstractDatabase.Records"/> IEnumerable.
+        /// This constructor will consider this RecordSource object as a child of the <see cref="IAbstractDatabase.Records"/>
+        /// </summary>
+        /// <param name="db">An instance of <see cref="IAbstractDatabase"/></param>
+        public RecordSource(IAbstractDatabase db) : this(db.Records) => db.Records.AddChild(this);
+
+        /// <summary>
+        /// It instantiates a RecordSource object filled with the given <see cref="IAbstractDatabase.Records"/> IEnumerable.
+        /// This constructor will consider this RecordSource object as a child of the <see cref="IAbstractDatabase.Records"/>
+        /// </summary>
+        /// <param name="db">An instance of <see cref="IAbstractDatabase"/></param>
+        /// <param name="controller">An instance of <see cref="IAbstractSQLModelController"/></param>
+        public RecordSource(IAbstractDatabase db, IAbstractSQLModelController controller) : this(db) 
+        {
+            Controller = controller;
+        }
         #endregion
 
         #region Enumerator
@@ -73,7 +91,6 @@ namespace Backend.Source
 
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
-            if (crud == CRUD.UPDATE) return;
             foreach (IChildSource child in Children) child.Update(crud, model);
         }
         public virtual void Update(CRUD crud, ISQLModel model)
@@ -85,8 +102,9 @@ namespace Backend.Source
                     Add(model);
                     Controller?.GoLast();
                     break;
-                //case CRUD.UPDATE: NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
-                //  break;
+                //case CRUD.UPDATE: //NO NEEDED BECAUSE OBJECTS ARE REFERENCED.
+                //    this[IndexOf(model)] = model;
+                //    break;
                 case CRUD.DELETE:
                     bool removed = Remove(model);
                     if (!removed) break;

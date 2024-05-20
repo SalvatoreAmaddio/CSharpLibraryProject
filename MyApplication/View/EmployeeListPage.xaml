@@ -36,7 +36,7 @@
                             <fr:Text Grid.Column="1" Text="{Binding LastName}"/>
                             <DatePicker Grid.Column="2" SelectedDate="{Binding DOB}"/>
                             <fr:Combo Grid.Column="3" ControllerRecordSource="Genders.Source" SelectedItem="{Binding Gender}"/>
-                            <fr:Combo Grid.Column="4" ControllerRecordSource="Titles.Source" SelectedItem="{Binding JobTitle}"/>
+                            <fr:Combo Grid.Column="4" ControllerRecordSource="Titles" SelectedItem="{Binding JobTitle}"/>
                             <fr:Combo Grid.Column="5" ControllerRecordSource="Departments.Source" SelectedItem="{Binding Department}"/>
                             <fr:SaveButton Grid.Column="6" IsWithinList="True"/>
                             <fr:DeleteButton Grid.Column="7" IsWithinList="True"/>

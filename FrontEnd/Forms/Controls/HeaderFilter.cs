@@ -3,6 +3,7 @@ using FrontEnd.FilterSource;
 using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
 namespace FrontEnd.Forms
@@ -26,7 +27,10 @@ namespace FrontEnd.Forms
     /// </summary>
     public class HeaderFilter : AbstractControl
     {
-        private Button? DropDownButton;
+        private Popup? PART_popup;
+        private Button? PART_DropDownButton;
+        private ListBox? PART_ListBox;
+
         private readonly Image Filter = new()
         {
             Source = Helper.LoadFromImages("filter") 
@@ -65,23 +69,34 @@ namespace FrontEnd.Forms
 
         private void ResetDropDownButtonAppereance()
         {
-            if (DropDownButton == null) throw new Exception("DropDownButton is null");
-            DropDownButton.Content = Filter;
+            if (PART_DropDownButton == null) throw new Exception("DropDownButton is null");
+            PART_DropDownButton.Content = Filter;
             ToolTip = "Filter";
         }
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            DropDownButton = (Button)GetTemplateChild("PART_dropdown_button");
-            DropDownButton.Click += OnDropdownButtonClicked;
+            PART_DropDownButton = (Button)GetTemplateChild(nameof(PART_DropDownButton));
+            PART_DropDownButton.Click += OnDropdownButtonClicked;
             ResetDropDownButtonAppereance();
 
-            if (GetTemplateChild("PART_clear_button") is Button clearButton)
+            if (GetTemplateChild("PART_ClearButton") is Button clearButton)
                 clearButton.Click += OnClearButtonClicked;
+
+            PART_ListBox = (ListBox)GetTemplateChild(nameof(PART_ListBox));
+            PART_popup = (Popup)GetTemplateChild(nameof(PART_popup));
+            PART_popup.Opened += OnPopupOpened;
         }
 
         #region Events
+        private void OnPopupOpened(object? sender, EventArgs e)
+        {
+            if (PART_ListBox == null) return;
+            DataTemplate tempDataTemplate = PART_ListBox.ItemTemplate;
+            PART_ListBox.ItemTemplate = null;
+            PART_ListBox.ItemTemplate = tempDataTemplate;
+        }
         private void OnClearButtonClicked(object sender, RoutedEventArgs e)
         {
             foreach(var item in ItemsSource) 
@@ -91,7 +106,7 @@ namespace FrontEnd.Forms
             IsOpen = false;
             ResetDropDownButtonAppereance();
         }
-        private void OnDropdownButtonClicked(object sender, RoutedEventArgs e) => IsOpen = !IsOpen;
+        private void OnDropdownButtonClicked(object sender, RoutedEventArgs e) => IsOpen = !IsOpen;            
         #endregion
 
         #region IsOpen
@@ -127,6 +142,7 @@ namespace FrontEnd.Forms
 
         private void BindEvents(object new_source)
         {
+            if (new_source == null) return;
             IEnumerable<IFilterOption> source = (IEnumerable<IFilterOption>)new_source;
             foreach (IFilterOption option in source)
                 option.OnSelectionChanged += OnOptionSelected;
@@ -134,8 +150,8 @@ namespace FrontEnd.Forms
 
         private void OnOptionSelected(object? sender, EventArgs e)
         {
-            if (DropDownButton == null) throw new Exception("DropDownButton is null");
-            DropDownButton.Content = ClearFilter;
+            if (PART_DropDownButton == null) throw new Exception("DropDownButton is null");
+            PART_DropDownButton.Content = ClearFilter;
             ToolTip = "Clear Filter";
             ((IAbstractFormListController)DataContext).OnOptionFilter();
             if (!ItemsSource.Any(s=>s.IsSelected)) ResetDropDownButtonAppereance();

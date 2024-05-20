@@ -24,13 +24,7 @@ namespace Backend.Controller
                 Console.WriteLine(e.Message);
             }
 
-            if (Db.Records == null) throw new Exception($"{Db} has no records");
-            Source = new RecordSource(Db.Records)
-            {
-                Controller = this
-            };
-
-            Db.Records.AddChild(Source);
+            Source = new RecordSource(Db, this);
             GoFirst();
         }
 

@@ -3,6 +3,8 @@ using FrontEnd.FilterSource;
 using MyApplication.Model;
 using MyApplication.View;
 using FrontEnd.Events;
+using Backend.Source;
+using Backend.Database;
 
 namespace MyApplication.Controller
 {
@@ -14,7 +16,7 @@ namespace MyApplication.Controller
         }
         public GenderListController Genders { get; private set; } = new();
         public DepartmentListController Departments { get; private set; } = new();
-        public JobTitleListController Titles { get; private set; } = new();
+        public RecordSource Titles { get; private set; } = new(DatabaseManager.Do.Find<JobTitle>());
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
@@ -22,7 +24,7 @@ namespace MyApplication.Controller
         public override int DatabaseIndex => 0;
         public EmployeeControllerList()
         {
-            TitleOptions = new(Titles.Source, "Title");
+            TitleOptions = new(Titles, "Title");
             GenderOptions = new(Genders.Source, "GenderName");
             DepartmentOptions = new(Departments.Source, "DepartmentName");
             AfterUpdate += OnAfterUpdate;

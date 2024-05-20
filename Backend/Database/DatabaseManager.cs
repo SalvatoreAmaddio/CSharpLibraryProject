@@ -87,9 +87,10 @@ namespace Backend.Database
         /// <returns>An instance of <see cref="IAbstractDatabase"/> object. Returns null if the instance was not found.</returns>
         public IAbstractDatabase? Find<M>() where M : ISQLModel, new()
         {
-            M m = new();
-            foreach (IAbstractDatabase db in Databases)
-                if (db.Model.GetType().Equals(m)) return db;
+            foreach (IAbstractDatabase db in Databases) 
+            {
+                if (db.Model.GetType().Equals(typeof(M))) return db;
+            }
             return null;
         }
     }

@@ -1,4 +1,5 @@
-﻿using FrontEnd.Utils;
+﻿using FrontEnd.Model;
+using FrontEnd.Utils;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,6 +18,29 @@ namespace FrontEnd.Forms
         { 
             ItemContainerStyle = (Style)resourceDict["ComboItemContainerStyle"];
             Style = (Style)resourceDict["ComboStyle"];
+        }
+
+        public AbstractModel? ParentModel => DataContext as AbstractModel;
+        
+        protected override void OnDropDownOpened(EventArgs e)
+        {
+            base.OnDropDownOpened(e);
+            RequerySource();
+        }
+
+        private void RequerySource() 
+        {
+            string tempControllerRecordSource = ControllerRecordSource;
+            object tempSelectedItem = SelectedItem;
+            bool? tempIsDirty = ParentModel?.IsDirty;
+            ClearValue(ControllerRecordSourceProperty);
+            SetBinding(ItemsSourceProperty, new Binding($"{nameof(DataContext)}.{tempControllerRecordSource}")
+            {
+                RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
+            });
+            SelectedItem = tempSelectedItem;
+            if (tempSelectedItem!=null && tempIsDirty.HasValue)
+                ((AbstractModel)DataContext).IsDirty = tempIsDirty.Value;
         }
 
         protected override async void OnSelectionChanged(SelectionChangedEventArgs e)
@@ -69,16 +93,17 @@ namespace FrontEnd.Forms
             set => SetValue(ControllerRecordSourceProperty, value);
         }
 
-        public static readonly DependencyProperty ControllerRecordSourceProperty = DependencyProperty.Register(nameof(ControllerRecordSource), typeof(string), typeof(Combo), new PropertyMetadata(string.Empty, OnIsWithinListPropertyChanged));
-        private static void OnIsWithinListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static readonly DependencyProperty ControllerRecordSourceProperty = DependencyProperty.Register(nameof(ControllerRecordSource), typeof(string), typeof(Combo), new PropertyMetadata(string.Empty, OnControllerRecordSourcePropertyChanged));
+        private static void OnControllerRecordSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             bool isEmpty = string.IsNullOrEmpty(e.NewValue.ToString());
+            Combo control = (Combo)d;
             if (!isEmpty)
-                ((Combo)d).SetBinding(ItemsSourceProperty, new Binding($"{nameof(DataContext)}.{e.NewValue}")
-                {
-                    RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
-                });
-            else BindingOperations.ClearBinding(d, ItemsSourceProperty);
+                control.SetBinding(ItemsSourceProperty, new Binding($"{nameof(DataContext)}.{e.NewValue}")
+                    {
+                        RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Lista), 1)
+                    });
+            else control.ClearValue(ItemsSourceProperty);
         }
         #endregion
 

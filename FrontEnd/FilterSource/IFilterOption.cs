@@ -138,13 +138,21 @@ namespace FrontEnd.FilterSource
 
         public void Update(CRUD crud, ISQLModel model)
         {
+            FilterOption option = new(model, _displayProperty);
             switch (crud)
             {
                 case CRUD.INSERT:
-                    Add(new FilterOption(model, _displayProperty));
+                    Add(option);
+                    break;
+                case CRUD.UPDATE:
+                    int index = this.IndexOf(option);
+                    IFilterOption oldValue = this[index];
+                    bool isSelected = oldValue.IsSelected;
+                    this[index] = option;
+                    this[index].IsSelected = isSelected;
                     break;
                 case CRUD.DELETE:
-                     Remove(new FilterOption(model, _displayProperty));
+                     Remove(option);
                     break;
             }
         }
