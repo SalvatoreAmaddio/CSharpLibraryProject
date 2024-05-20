@@ -35,10 +35,10 @@
                 </Frame>
             </TabItem>
 
-            <TabItem Header="Report Viewer">
+            <TabItem Header="Job Titles">
                 <Frame>
                     <Frame.Content>
-                        <local:Report/>
+                        <local:JobTitleListPage/>
                     </Frame.Content>
                 </Frame>
             </TabItem>
