@@ -108,7 +108,6 @@ namespace Backend.Source
 
         public void NotifyChildren(CRUD crud, ISQLModel model)
         {
-            var x = Children.Count;
             foreach (IChildSource child in Children) child.Update(crud, model);
         }
 
@@ -117,8 +116,9 @@ namespace Backend.Source
             switch (crud)
             {
                 case CRUD.INSERT:
+                    if (Controller != null && Controller.VoidParentUpdate) return;
                     Add(model);
-//                    Controller?.GoLast();
+                    Controller?.GoLast();
                     break;
                 case CRUD.UPDATE:
                     NotifyUIControl();
@@ -154,7 +154,7 @@ namespace Backend.Source
         /// This method is called in <see cref="Update(CRUD, ISQLModel)"/>.
         /// It loops through the <see cref="UIControls"/> to notify the <see cref="IUIControl"/> object to reflect changes that occured to their ItemsSource which is an instance of <see cref="RecordSource"/>.
         /// </summary>
-        private void NotifyUIControl()
+        public void NotifyUIControl()
         {
             if (UIControls != null && UIControls.Count > 0)
                 foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated();

@@ -1,7 +1,9 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Source;
+using FrontEnd.Controller;
 using FrontEnd.Dialogs;
 using FrontEnd.Model;
 using FrontEnd.Utils;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +17,7 @@ namespace FrontEnd.Forms
     /// <para/>
     /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Source.RecordSource"/>
     /// </summary>
-    public class Lista : ListView
+    public class Lista : ListView, IUIControl
     {
         /// <summary>
         /// Flag used to bypass the GotFocusEvent of a ListViewItem object.
@@ -65,8 +67,8 @@ namespace FrontEnd.Forms
         public Lista()
         {
             Style listaItem = (Style)styleDictionary["ListaItemStyle"];
-            listaItem.Setters.Add(new EventSetter 
-            { 
+            listaItem.Setters.Add(new EventSetter
+            {
                 Event = ListViewItem.GotFocusEvent,
                 Handler = new RoutedEventHandler(OnListViewItemGotFocus)
             });
@@ -112,6 +114,8 @@ namespace FrontEnd.Forms
 
             if (lastIndex >= 0 && e.AddedItems[lastIndex] is AbstractModel lastSelectedObject)
                 ScrollIntoView(lastSelectedObject); //usefull for a large list where the user is selecting a record which is out of the current view. Scroll to it to make it visible
+            else
+                SelectedItem = Items[Items.Count-1];
         }
 
         /// <summary>
@@ -192,6 +196,18 @@ namespace FrontEnd.Forms
                 //The switch was succesful and mandatory condition for record's integrity have been met.
                 Controller?.GoAt(record); // notify the controller that the SelectedItem has changed and therefore updates other linked controls such as RecordTracker
             }
+        }
+
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
+            if (newValue != null && newValue is RecordSource source)
+                source.AddUIControlReference(this);
+        }
+
+        public void OnItemSourceUpdated()
+        {
+            
         }
     }
 }

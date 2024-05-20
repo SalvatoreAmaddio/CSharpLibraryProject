@@ -129,14 +129,13 @@ namespace FrontEnd.Controller
             CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             if (!CurrentRecord.AllowUpdate()) return false; //the record did not meet the criteria to be updated.
             Db.Model = CurrentRecord;
-            //Db.Crud(crud, sql, parameters);
-            CurrentRecord.GetTablePK().SetValue(100);
+            Db.Crud(crud, sql, parameters);
             CurrentRecord.IsDirty = false;
-            //if (crud == CRUD.INSERT) 
-            //{
-            //    Source.RemoveAt(Source.Count-1);
-            //}
-            //Db.Records?.NotifyChildren(crud, Db.Model); //tell children sources to reflect the changes occured in the master source's collection.
+            Db.Records?.NotifyChildren(crud, Db.Model); //tell children sources to reflect the changes occured in the master source's collection.
+            if (crud == CRUD.INSERT)
+            {
+                GoLast();
+            }
             return true;
         }
 
