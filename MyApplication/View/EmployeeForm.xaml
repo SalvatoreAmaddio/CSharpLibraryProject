@@ -21,11 +21,11 @@
             <Label Grid.Row="2" Content="DOB"/>
             <DatePicker SelectedDate="{Binding CurrentRecord.DOB}" Grid.Row="2" Grid.Column="1"/>
             <Label Content="Gender" Grid.Row="3"/>
-            <fr:Combo ItemsSource="{Binding Genders.Source}" SelectedItem="{Binding CurrentRecord.Gender}" Grid.Row="3" Grid.Column="1"/>
+            <fr:Combo ItemsSource="{Binding Genders}" SelectedItem="{Binding CurrentRecord.Gender}" Grid.Row="3" Grid.Column="1"/>
             <Label Content="Department" Grid.Row="4"/>
-            <fr:Combo ItemsSource="{Binding Departments.Source}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+            <fr:Combo ItemsSource="{Binding Departments}" SelectedItem="{Binding CurrentRecord.Department, Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
             <Label Content="Job Title" Grid.Row="5"/>
-            <fr:Combo ItemsSource="{Binding Titles.Source}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
+            <fr:Combo ItemsSource="{Binding Titles}" SelectedItem="{Binding CurrentRecord.JobTitle, Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
             <Label Content="Email" Grid.Row="6"/>
             <fr:Text Text="{Binding CurrentRecord.Email}" Grid.Row="6" Grid.Column="1"/>
             <fr:CommandPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" CommandParameter="{Binding CurrentRecord}" UpdateCMD="{Binding UpdateCMD}" DeleteCMD="{Binding DeleteCMD}"/>

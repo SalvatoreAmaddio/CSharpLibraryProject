@@ -14,8 +14,8 @@ namespace MyApplication.Controller
         { 
         
         }
-        public GenderListController Genders { get; private set; } = new();
-        public DepartmentListController Departments { get; private set; } = new();
+        public RecordSource Genders { get; private set; } = new(DatabaseManager.Do.Find<Gender>());
+        public RecordSource Departments { get; private set; } = new(DatabaseManager.Do.Find<Department>());
         public RecordSource Titles { get; private set; } = new(DatabaseManager.Do.Find<JobTitle>());
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
@@ -25,8 +25,8 @@ namespace MyApplication.Controller
         public EmployeeControllerList()
         {
             TitleOptions = new(Titles, "Title");
-            GenderOptions = new(Genders.Source, "GenderName");
-            DepartmentOptions = new(Departments.Source, "DepartmentName");
+            GenderOptions = new(Genders, "GenderName");
+            DepartmentOptions = new(Departments, "DepartmentName");
             AfterUpdate += OnAfterUpdate;
         }
 

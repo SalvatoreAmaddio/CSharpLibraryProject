@@ -1,13 +1,15 @@
-﻿using FrontEnd.Controller;
+﻿using Backend.Database;
+using Backend.Source;
+using FrontEnd.Controller;
 using MyApplication.Model;
 
 namespace MyApplication.Controller
 {
     public class EmployeeController : AbstractFormController<Employee>
     {
-        public GenderListController Genders { get; } = new();
-        public DepartmentListController Departments { get; } = new();
-        public JobTitleListController Titles { get; } = new();
+        public RecordSource Genders { get; private set; } = new(DatabaseManager.Do.Find<Gender>());
+        public RecordSource Departments { get; private set; } = new(DatabaseManager.Do.Find<Department>());
+        public RecordSource Titles { get; private set; } = new(DatabaseManager.Do.Find<JobTitle>());
         public PayslipListController Payslips { get; } = new();
         public override int DatabaseIndex => 0;
     }

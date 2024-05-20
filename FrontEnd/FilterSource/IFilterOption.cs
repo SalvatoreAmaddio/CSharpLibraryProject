@@ -5,13 +5,14 @@ using FrontEnd.Events;
 using System.ComponentModel;
 using System.Text;
 using Backend.Database;
+using FrontEnd.Forms;
 
 namespace FrontEnd.FilterSource
 {
     /// <summary>
     /// This interface extends <see cref="INotifyPropertyChanged"/> and defines the properties and methods to be implemented by the <see cref="FilterOption"/> class.
     /// <para/>
-    /// This interface works in conjunction with the <see cref="Forms.HeaderFilter"/> GUI Control.
+    /// This interface works in conjunction with the <see cref="HeaderFilter"/> GUI Control.
     /// </summary>
     public interface IFilterOption : INotifyPropertyChanged
     {
@@ -87,7 +88,7 @@ namespace FrontEnd.FilterSource
     /// <summary>
     /// It instantiates a List&lt;<see cref="IFilterOption"/>> object.
     /// <para/>
-    /// This class works in conjunction with the <see cref="Forms.HeaderFilter"/> class.
+    /// This class works in conjunction with the <see cref="HeaderFilter"/> class.
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
