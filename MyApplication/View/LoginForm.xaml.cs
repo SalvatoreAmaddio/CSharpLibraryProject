@@ -9,10 +9,10 @@ namespace MyApplication.View
     {
         public LoginForm()
         {
+            InitializeComponent();
             CurrentUser.Is = new User();
             CurrentUser.KeyTarget = "EncrypterKey";
             CurrentUser.IVTarget = "EncrypterIV";
-            InitializeComponent();
             Loaded += OnLoaded;
         }
 
@@ -30,7 +30,6 @@ namespace MyApplication.View
                 this.GoToWindow(new MainWindow());
             }
         }
-
         private void OnLoginClicked(object sender, RoutedEventArgs e)
         {
             CurrentUser.UserName = userName.Text;

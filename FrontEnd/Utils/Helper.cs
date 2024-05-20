@@ -142,10 +142,14 @@ namespace FrontEnd.Utils
         /// It logs the user out and remove the login <see cref="Credential"/> saved in the local computer.
         /// </summary>
         /// <param name="loginForm">The window to open once logged out occured, usually a Login Window</param>
-        public static void Logout(Window loginForm) 
+        public static void Logout(Window loginForm)
         {
             DialogResult result = ConfirmDialog.Ask("Are you sure you want to logout?");
-            if (result == DialogResult.No) return;
+            if (result == DialogResult.No) 
+            {
+                loginForm.Close(); //Windows in WPF stay in memory even if they are not shown.
+                return;
+            }
             CurrentUser.Logout();
             GetActiveWindow()?.GoToWindow(loginForm);
         }
