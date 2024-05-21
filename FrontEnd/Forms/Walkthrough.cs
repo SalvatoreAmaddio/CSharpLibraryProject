@@ -104,7 +104,7 @@ namespace FrontEnd.Forms
 
 
     /// <summary>
-    /// 
+    /// This ItemsControl works together with <see cref="Walkthrough"/>
     /// </summary>
     public class Pages : ItemsControl
     {
