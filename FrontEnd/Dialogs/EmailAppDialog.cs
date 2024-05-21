@@ -61,4 +61,15 @@ namespace FrontEnd.Dialogs
         }
     }
 
+    public class ChangeUserPasswordDialog : Window 
+    {
+        static ChangeUserPasswordDialog() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ChangeUserPasswordDialog), new FrameworkPropertyMetadata(typeof(ChangeUserPasswordDialog)));
+       
+        public ChangeUserPasswordDialog()
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //Helper.ChangeUserPassword("soloio59");
+        }
+
+    }
 }

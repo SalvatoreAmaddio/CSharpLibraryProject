@@ -18,7 +18,7 @@ namespace MyApplication.View
 
         private void OpenCurtain(object sender, RoutedEventArgs e) => Curtain.Open();
         private void OnLogoutClicked(object sender, RoutedEventArgs e) => Helper.Logout(new LoginForm());
-        private void OnChangePasswordClicked(object sender, RoutedEventArgs e) => Helper.ChangeUserPassword("soloio59");
+        private void OnChangePasswordClicked(object sender, RoutedEventArgs e) => new ChangeUserPasswordDialog().ShowDialog();
 
         private void OnWalkthroughClicked(object sender, RoutedEventArgs e)
         {

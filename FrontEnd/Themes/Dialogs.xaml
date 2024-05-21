@@ -141,4 +141,46 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type local:ChangeUserPasswordDialog}">
+        <Setter Property="Title" Value="User's Password"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
+        <Setter Property="SizeToContent" Value="Height"/>
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Icon" Value="{StaticResource padlock}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ChangeUserPasswordDialog}">
+                    <Border Background="White"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Background="White" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+
+                            <PasswordBox Grid.Row="0" x:Name="PART_OldPassword">
+                                <i:Interaction.Behaviors>
+                                    <b:PlaceholderPasswordBox Placeholder="Old Password..."/>
+                                </i:Interaction.Behaviors>
+                            </PasswordBox>
+                            
+                            <PasswordBox Grid.Row="2" x:Name="PART_NewPassword">
+                                <i:Interaction.Behaviors>
+                                    <b:PlaceholderPasswordBox Placeholder="New Password..."/>
+                                </i:Interaction.Behaviors>
+                            </PasswordBox>
+
+                            <Button Grid.Row="4" Tag="change" HorizontalAlignment="Stretch" Content="Change" x:Name="PART_Change" IsTabStop="True" TabIndex="0"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
