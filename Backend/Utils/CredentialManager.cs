@@ -4,8 +4,15 @@ using System.Text;
 namespace Backend.Utils
 {
     public static class SysCredentailTargets
-    { 
-        public static readonly string EmailApp = "EMAIL_APP_CREDENTIAL";
+    {
+
+        private static string _emailUserName = string.Empty;
+        public static string EmailApp 
+        { 
+            get=> $"{_emailUserName}EMAIL_APP_CREDENTIAL";
+            set => _emailUserName = value ;
+        }
+
         public static readonly string EmailAppEncrypterKey = $"{EmailApp}_Encrypter_Key";
         public static readonly string EmailAppEncrypterIV = $"{EmailApp}_Encrypter_IV";
 

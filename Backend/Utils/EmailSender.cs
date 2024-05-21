@@ -38,12 +38,6 @@ namespace Backend.Utils
         public string Host { get; set; } = "smtp.gmail.com";
 
         /// <summary>
-        /// Gets and Sets the Credential Unique identifier to retrieve the email's password stored in the local computer's Windows Credential Manager System.<para/>
-        /// See also: <seealso cref="CredentialManager"/>, <seealso cref="Credential"/>
-        /// </summary>
-        public string CredentialID { get; } = SysCredentailTargets.EmailApp;
-
-        /// <summary>
         /// Gets and Sets a flag telling if the <see cref="Host"/> requires authentication to send an email.
         /// </summary>
         public bool AuthenticationRequired { get; set; } = true;
@@ -104,7 +98,8 @@ namespace Backend.Utils
 
                     if (AuthenticationRequired) 
                     {
-                        Credential? credential = CredentialManager.Get(CredentialID);
+                        SysCredentailTargets.EmailApp = SenderEmail;
+                        Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp);
                         if (credential == null) return;
                         Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
                         client.Authenticate(SenderEmail, encrypter.Decrypt());

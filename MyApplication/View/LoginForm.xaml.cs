@@ -11,8 +11,6 @@ namespace MyApplication.View
         {
             InitializeComponent();
             CurrentUser.Is = new User();
-                CredentialManager.Delete("EncrypterKey");
-                CredentialManager.Delete("EncrypterIV");
             Loaded += OnLoaded;
         }
 
