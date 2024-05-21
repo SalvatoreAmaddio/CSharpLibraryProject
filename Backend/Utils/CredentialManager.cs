@@ -9,11 +9,12 @@ namespace Backend.Utils
         public static readonly string EmailAppEncrypterKey = $"{EmailApp}_Encrypter_Key";
         public static readonly string EmailAppEncrypterIV = $"{EmailApp}_Encrypter_IV";
 
-        public static readonly string UserLogin = "USER_LOGIN_CREDENTIAL";
+        public static readonly string UserLogin = $"{Sys.AppName}_USER_LOGIN_CREDENTIAL";
         public static readonly string UserLoginEncrypterKey = $"{UserLogin}_Encrypter_Key";
         public static readonly string UserLoginEncrypterIV = $"{UserLogin}_Encrypter_IV";
 
     }
+
     /// <summary>
     /// This class stores sensitive information in the Windows Credential Manager System. 
     /// The information is stored in the local computer.

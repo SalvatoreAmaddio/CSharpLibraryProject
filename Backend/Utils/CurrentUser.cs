@@ -12,12 +12,12 @@ namespace Backend.Utils
         /// <summary>
         /// Sets the Secret Key Target
         /// </summary>
-        public static string SecretKeyTarget { private get; set; } = string.Empty;
+        public static string SecretKeyTarget => SysCredentailTargets.UserLoginEncrypterKey;
 
         /// <summary>
         /// Sets the IVTarget.
         /// </summary>
-        public static string IVTarget { private get; set; } = string.Empty;
+        public static string IVTarget => SysCredentailTargets.UserLoginEncrypterIV;
 
         /// <summary>
         /// Sets the Current User.

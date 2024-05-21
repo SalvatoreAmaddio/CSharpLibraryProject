@@ -11,8 +11,8 @@ namespace MyApplication.View
         {
             InitializeComponent();
             CurrentUser.Is = new User();
-            CurrentUser.SecretKeyTarget = "EncrypterKey"; //to edit
-            CurrentUser.IVTarget = "EncrypterIV"; //to edit
+                CredentialManager.Delete("EncrypterKey");
+                CredentialManager.Delete("EncrypterIV");
             Loaded += OnLoaded;
         }
 

@@ -106,8 +106,7 @@ namespace Backend.Utils
                     {
                         Credential? credential = CredentialManager.Get(CredentialID);
                         if (credential == null) return;
-                        Encrypter encrypter = new(credential.Password);
-                        encrypter.ReadStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
+                        Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
                         client.Authenticate(SenderEmail, encrypter.Decrypt());
                     }
 

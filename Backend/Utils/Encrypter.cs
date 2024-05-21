@@ -6,13 +6,25 @@ namespace Backend.Utils
     /// <summary>
     /// This class encrypts and decrypts strings.
     /// </summary>
+    /// <param name="str">the string to encrypt or decrypt.</param>
     public class Encrypter(string str)
     {
         private byte[]? secret_key;
         private byte[]? initVector;
         private string Str { get; set; } = str;
 
-        public Encrypter(string str, string keyTarget, string ivTarget) : this(str) => ReadStoredKeyIV(keyTarget, ivTarget);
+        /// <summary>
+        /// Initialise a Encrypter object with a string to decrypt or encrypt and the targets who are already stored in the local computer
+        /// </summary>
+        /// <param name="str">the string to encrypt or decrypt.</param>
+        /// <param name="secret_key_Target">the target of the secret key which is stored in the local computer</param>
+        /// <param name="ivTarget">the target of the IV which is stored in the local computer</param>
+        /// <exception cref="Exception"></exception>
+        public Encrypter(string str, string secret_key_Target, string ivTarget) : this(str) 
+        {
+            bool read = ReadStoredKeyIV(secret_key_Target, ivTarget);
+            if (!read) throw new Exception("Failed to read stored credentials!");
+        }
 
         /// <summary>
         /// It reads Key's and IV's <see cref="Credential"/> objects stored in the local computer.
