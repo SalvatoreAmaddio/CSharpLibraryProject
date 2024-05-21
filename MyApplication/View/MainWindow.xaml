@@ -24,7 +24,7 @@
             </MenuItem>
             <MenuItem Header="Email Settings" VerticalAlignment="Center">
                 <MenuItem Header="Walthrough" Click="OnWalkthroughClicked"/>
-                <MenuItem Header="Change Password"/>
+                <MenuItem Header="Change Password" Click="MenuItem_Click"/>
             </MenuItem>
         </Menu>
 

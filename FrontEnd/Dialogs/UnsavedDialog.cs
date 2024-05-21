@@ -113,7 +113,14 @@ namespace FrontEnd.Dialogs
             SetForegroundWindow(buttonHandle);
             ButtonToFocusOn()?.Focus();
             Keyboard.Focus(ButtonToFocusOn());
-            ButtonToFocusOn()!.IsDefault = true;
+            try 
+            {
+                ButtonToFocusOn()!.IsDefault = true;
+            }
+            catch(NullReferenceException) 
+            { 
+            
+            }
         }
 
         /// <summary>
@@ -276,6 +283,21 @@ namespace FrontEnd.Dialogs
         }
 
         public static new DialogResult Ask(string? text = null, string? title = "Confirm") => _ask(new ConfirmDialog(text, title));
+
+    }
+
+    public class EmailAppDialog : Window
+    {
+
+        static EmailAppDialog()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(EmailAppDialog), new FrameworkPropertyMetadata(typeof(EmailAppDialog)));
+        }
+
+        public EmailAppDialog() 
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
 
     }
 }

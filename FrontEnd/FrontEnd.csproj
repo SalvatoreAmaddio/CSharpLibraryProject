@@ -21,6 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\emailsetting.png" />
     <None Remove="images\excel.png" />
     <None Remove="images\padlock.png" />
     <None Remove="images\questionmark.png" />
@@ -54,6 +55,7 @@
   <ItemGroup>
     <Resource Include="images\clear_filter.png" />
     <Resource Include="images\delete.png" />
+    <Resource Include="images\emailsetting.png" />
     <Resource Include="images\excel.png" />
     <Resource Include="images\filter.png" />
     <Resource Include="images\folder.png" />

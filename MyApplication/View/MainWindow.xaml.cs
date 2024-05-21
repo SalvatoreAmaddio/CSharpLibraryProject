@@ -1,4 +1,5 @@
 ﻿using Backend.Utils;
+using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Forms;
 using FrontEnd.Utils;
@@ -22,6 +23,12 @@ namespace MyApplication.View
         private void OnWalkthroughClicked(object sender, RoutedEventArgs e)
         {
             new Guide().ShowDialog();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            EmailAppDialog emailAppDialog = new EmailAppDialog();
+            emailAppDialog.ShowDialog();
         }
     }
 }
