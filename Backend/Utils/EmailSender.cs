@@ -3,6 +3,9 @@ using MailKit.Net.Smtp;
 
 namespace Backend.Utils
 {
+    /// <summary>
+    /// This class provide a way of sending emails.
+    /// </summary>
     public class EmailSender
     {
         private MimeMessage Message {get; set;} = new MimeMessage();
