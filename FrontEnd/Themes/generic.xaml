@@ -19,30 +19,7 @@
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/PageTracker.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Dialogs.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Curtain.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Walkthrough.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
-    <Style TargetType="{x:Type local:Walkthrough}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:Walkthrough}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <ContentControl/>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button x:Name="Prev"/>
-                                <Button x:Name="Next"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 </ResourceDictionary>

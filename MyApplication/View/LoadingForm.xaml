@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Welcome" Height="450" Width="450">
 
-    <fr:LoadingMask MainWindow="LoginForm">
+    <fr:LoadingMask MainWindow="Guide">
         <Label/>
     </fr:LoadingMask>
 </Window>

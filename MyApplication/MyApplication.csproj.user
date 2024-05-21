@@ -15,6 +15,9 @@
     <Compile Update="View\EmployeeListPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Guide.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\JobTitleListPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -45,6 +48,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\GenderListPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Guide.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\JobTitleListPage.xaml">

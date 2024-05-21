@@ -20,8 +20,7 @@ namespace FrontEnd.Forms
             set => SetValue(IsLoadingProperty, value);
         }
 
-        public static readonly DependencyProperty IsLoadingProperty =
-            DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(AbstractForm), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsLoadingProperty = DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(AbstractForm), new PropertyMetadata(false));
         #endregion
 
         #region Header
