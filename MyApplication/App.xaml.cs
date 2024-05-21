@@ -10,9 +10,6 @@ namespace MyApplication
     {
         public App() 
         {
-            CredentialManager.Delete("EncrypterKey");
-            CredentialManager.Delete("EncrypterIV");
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Sys.LoadEmbeddedDll("System.Data.SQLite");
             try 
