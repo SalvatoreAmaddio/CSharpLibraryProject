@@ -126,19 +126,31 @@ namespace FrontEnd.Controller
         {
             if (CurrentRecord == null) throw new NoModelException();
             if (!CurrentRecord.IsDirty) return false; //if the record has not been changed there is nothing to update.
-            CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
             if (!CurrentRecord.AllowUpdate()) return false; //the record did not meet the criteria to be updated.
-            Db.Model = CurrentRecord;
-            Db.Crud(crud, sql, parameters);
-            CurrentRecord.IsDirty = false;
-            Db.Records?.NotifyChildren(crud, Db.Model); //tell children sources to reflect the changes occured in the master source's collection.
-            if (crud == CRUD.INSERT)
-            {
-                GoLast();
+            CRUD crud = (!CurrentRecord.IsNewRecord()) ? CRUD.UPDATE : CRUD.INSERT;
+            AbstractModel temp = CurrentRecord;
+
+            if (crud == CRUD.INSERT) 
+            {   //INSERT must follow a slighlty different process to avoid unexpected behaviour between the RecordSource and the Lista object.
+                temp = (AbstractModel)Source[Source.Count - 1];
+                Source.RemoveAt(Source.Count - 1);
+                ExecuteCRUD(ref temp, crud, sql, parameters);
+                temp.IsDirty = false;
+                Db.Records?.NotifyChildren(crud, temp);
+                return true;
             }
+
+            ExecuteCRUD(ref temp, crud, sql, parameters);
+            temp.IsDirty = false;
+            Db.Records?.NotifyChildren(crud, temp);
             return true;
         }
-
+        
+        private void ExecuteCRUD(ref AbstractModel temp, CRUD crud, string? sql = null, List<QueryParameter>? parameters = null) 
+        {
+            Db.Model = temp;
+            Db.Crud(crud, sql, parameters);
+        }
         public override void Dispose()
         {
             

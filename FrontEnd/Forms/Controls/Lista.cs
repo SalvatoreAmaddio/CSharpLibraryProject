@@ -6,6 +6,8 @@ using FrontEnd.Utils;
 using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace FrontEnd.Forms
@@ -78,7 +80,6 @@ namespace FrontEnd.Forms
                 Event = ListViewItem.LostKeyboardFocusEvent,
                 Handler = new KeyboardFocusChangedEventHandler(ListViewItemKeyboardFocusChanged)
             });
-
             ItemContainerStyle = listaItem;
             Style = (Style)styleDictionary["ListaStyle"];
         }
@@ -105,6 +106,7 @@ namespace FrontEnd.Forms
         /// </summary>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
+            var x = SelectedItem;
             base.OnSelectionChanged(e);
             int lastRemovedIndex = e.RemovedItems.Count - 1;
             if (lastRemovedIndex >= 0)
@@ -114,8 +116,6 @@ namespace FrontEnd.Forms
 
             if (lastIndex >= 0 && e.AddedItems[lastIndex] is AbstractModel lastSelectedObject)
                 ScrollIntoView(lastSelectedObject); //usefull for a large list where the user is selecting a record which is out of the current view. Scroll to it to make it visible
-            else
-                SelectedItem = Items[Items.Count-1];
         }
 
         /// <summary>
@@ -207,7 +207,8 @@ namespace FrontEnd.Forms
 
         public void OnItemSourceUpdated()
         {
-            
+         
+
         }
     }
 }

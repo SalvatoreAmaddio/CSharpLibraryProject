@@ -198,7 +198,11 @@ namespace Backend.Database
         private void UpdateRecords()
         {
             if (Records == null) return;
-            if (Model.IsNewRecord()) Records.Add(Model);
+            if (Model.IsNewRecord()) 
+            {
+                Records.Add(Model);
+                return;
+            }
             int index = Records.IndexOf(Model);
             if (index >= 0) Records[index] = Model;
         }

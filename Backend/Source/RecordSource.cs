@@ -116,7 +116,6 @@ namespace Backend.Source
             switch (crud)
             {
                 case CRUD.INSERT:
-                    if (Controller != null && Controller.VoidParentUpdate) return;
                     Add(model);
                     Controller?.GoLast();
                     break;
