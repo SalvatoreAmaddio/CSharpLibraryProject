@@ -25,5 +25,8 @@ namespace FrontEnd.Forms
         #endregion
 
         static Form() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
+
+        ~Form() { }
+
     }
 }

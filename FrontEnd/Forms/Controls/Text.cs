@@ -12,9 +12,11 @@ namespace FrontEnd.Forms
     /// <para/>
     /// It also overrides the TextProperty by setting its Binding to <see cref="UpdateSourceTrigger.PropertyChanged"/>.
     /// </summary>
-    public partial class Text : TextBox
+    public partial class Text : TextBox, IDisposable
     {
+        protected bool _disposed = false;
         private Button? ClearButton;
+
         private readonly Image ClearImg = new()
         {
             Source = Helper.LoadFromImages("close")
@@ -111,6 +113,27 @@ namespace FrontEnd.Forms
         public static readonly DependencyProperty ClearButtonVisibilityProperty =
             DependencyProperty.Register(nameof(ClearButtonVisibility), typeof(Visibility), typeof(Text), new PropertyMetadata(Visibility.Visible));
         #endregion
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                if (ClearButton != null)
+                    ClearButton.Click -= OnClearButtonClicked;
+            }
+
+            _disposed = true;
+        }
+
+        ~Text() => Dispose(false);
 
         /// <summary>
         /// This class converts the value of a <see cref="TextBox.Text"/> property to a <see cref="Visibility"/> object.

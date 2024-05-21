@@ -40,6 +40,8 @@ namespace FrontEnd.Forms.FormComponents
                 });
         }
 
+        ~RecordStatus() { }
+
     }
 
     /// <summary>

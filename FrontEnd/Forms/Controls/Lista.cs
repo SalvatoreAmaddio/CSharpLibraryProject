@@ -1,13 +1,9 @@
-﻿using Backend.Source;
-using FrontEnd.Controller;
+﻿using FrontEnd.Controller;
 using FrontEnd.Dialogs;
 using FrontEnd.Model;
 using FrontEnd.Utils;
-using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace FrontEnd.Forms
@@ -195,6 +191,11 @@ namespace FrontEnd.Forms
                 //The switch was succesful and mandatory condition for record's integrity have been met.
                 Controller?.GoAt(record); // notify the controller that the SelectedItem has changed and therefore updates other linked controls such as RecordTracker
             }
+        }
+
+        ~Lista()
+        {
+
         }
     }
 }

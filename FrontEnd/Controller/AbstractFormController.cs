@@ -211,19 +211,23 @@ namespace FrontEnd.Controller
             }
         }
 
-        public virtual void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (_window != null)
-                _window.Closing -= OnWindowClosing;
-            AfterUpdate = null;
-            BeforeUpdate = null;
-            NewRecordEvent = null;
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                if (_window != null)
+                    _window.Closing -= OnWindowClosing;
+                AfterUpdate = null;
+                BeforeUpdate = null;
+                NewRecordEvent = null;
+            }
+
+            _disposed = true;
         }
 
-        ~AbstractFormController()
-        {
-            Dispose();
-        }
+        ~AbstractFormController() => Dispose(false);
     }
 
 }

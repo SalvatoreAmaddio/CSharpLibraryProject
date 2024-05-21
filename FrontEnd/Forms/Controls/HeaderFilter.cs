@@ -2,12 +2,9 @@
 using FrontEnd.Controller;
 using FrontEnd.FilterSource;
 using FrontEnd.Utils;
-using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace FrontEnd.Forms
 {
@@ -37,6 +34,7 @@ namespace FrontEnd.Forms
         {
             Source = Helper.LoadFromImages("filter") 
         };
+        
         private readonly Image ClearFilter = new()
         {
             Source = Helper.LoadFromImages("clearfilter")
@@ -160,6 +158,7 @@ namespace FrontEnd.Forms
                 option.OnSelectionChanged += OnOptionSelected;
                 return;
             }
+            if (PART_ListBox == null) throw new Exception($"{nameof(PART_ListBox)} cannot be null.");
             DataTemplate tempDataTemplate = PART_ListBox.ItemTemplate;
             PART_ListBox.ItemTemplate = null;
             PART_ListBox.ItemTemplate = tempDataTemplate;
@@ -179,6 +178,26 @@ namespace FrontEnd.Forms
             set => SetValue(TextProperty, value);
         }
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing) 
+            {
+                if (PART_DropDownButton != null)
+                    PART_DropDownButton.Click -= OnDropdownButtonClicked;
+
+                if (GetTemplateChild("PART_ClearButton") is Button clearButton)
+                    clearButton.Click -= OnClearButtonClicked;
+
+                foreach (IFilterOption option in ItemsSource)
+                    option.OnSelectionChanged -= OnOptionSelected;
+
+                ItemsSource = [];
+            }
+        }
+
+        ~HeaderFilter() => Dispose(false);
     }
 
 }

@@ -23,8 +23,10 @@ namespace FrontEnd.Dialogs
     /// <summary>
     /// This class also calls the Win32 API to hide the close button.
     /// </summary>
-    public abstract class AbstractDialog : Window 
+    public abstract class AbstractDialog : Window, IDisposable
     {
+        protected bool _disposed = false;
+
         #region TextProperty
         public string Text
         {
@@ -111,7 +113,7 @@ namespace FrontEnd.Dialogs
             SetForegroundWindow(buttonHandle);
             ButtonToFocusOn()?.Focus();
             Keyboard.Focus(ButtonToFocusOn());
-            ButtonToFocusOn().IsDefault = true;
+            ButtonToFocusOn()!.IsDefault = true;
         }
 
         /// <summary>
@@ -135,8 +137,28 @@ namespace FrontEnd.Dialogs
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.OnLoadedTemplate();
+            OnLoadedTemplate();
         }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                Loaded -= OnLoaded;
+            }
+
+            _disposed = true;
+        }
+
+        ~AbstractDialog() => Dispose(false);
     }
 
     /// <summary>
@@ -176,6 +198,18 @@ namespace FrontEnd.Dialogs
             noButton.Click += OnNoClicked;
         }
         public static DialogResult Ask(string? text = null, string? title = "Wait") => _ask(new UnsavedDialog(text, title));
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing) 
+            {
+                if (yesButton!=null)
+                    yesButton.Click -= OnYesClicked;
+                if (noButton != null)
+                    noButton.Click -= OnNoClicked;
+            }
+        }
     }
 
     /// <summary>
@@ -209,6 +243,16 @@ namespace FrontEnd.Dialogs
         {
             Result = Dialogs.DialogResult.Ok;
             DialogResult = true;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                if (okButton != null)
+                    okButton.Click -= OnOkClicked;
+            }
         }
 
         public static DialogResult Throw(string? text = null, string? title = "Something is missing") => _ask(new BrokenIntegrityDialog(text, title));

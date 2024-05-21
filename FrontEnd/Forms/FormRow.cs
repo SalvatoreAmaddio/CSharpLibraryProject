@@ -13,6 +13,8 @@ namespace FrontEnd.Forms
         static FormRow() => DefaultStyleKeyProperty.OverrideMetadata(typeof(FormRow), new FrameworkPropertyMetadata(typeof(FormRow)));
 
         public FormRow() => RecordTrackerRow = new(0);
+
+        ~FormRow() { }
     }
 
 }

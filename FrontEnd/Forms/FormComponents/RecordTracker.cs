@@ -125,6 +125,18 @@ namespace FrontEnd.Forms.FormComponents
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                InternetConnection.Do.InternetStatusChanged -= OnInternetStatusChanged;
+            }
+        }
+
+        ~RecordTracker() => Dispose(false);
+
         internal class TrackerClickCommand(Action<int> _execute) : ICommand
         {
             public event EventHandler? CanExecuteChanged;

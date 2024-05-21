@@ -31,8 +31,9 @@ namespace FrontEnd.Forms
     /// </code>
     /// See also <seealso cref="OpenCurtain"/>, <seealso cref="Backend.Utils.SoftwareInfo"/>
     /// </summary>
-    public class Curtain : ContentControl
+    public class Curtain : ContentControl, IDisposable
     {
+        protected bool _disposed = false;
         Button? PART_CloseButton;
         Hyperlink? PART_WebLink;
         static Curtain()
@@ -177,5 +178,26 @@ namespace FrontEnd.Forms
             Process.Start(info);
             e.Handled = true;
         }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                if (PART_WebLink != null)
+                    PART_WebLink.RequestNavigate -= OnHyperlinkClicked;
+            }
+
+            _disposed = true;
+        }
+
+        ~Curtain() => Dispose(false);
     }
 }

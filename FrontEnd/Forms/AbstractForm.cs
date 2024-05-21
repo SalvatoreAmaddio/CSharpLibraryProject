@@ -126,5 +126,7 @@ namespace FrontEnd.Forms
                 SetBinding(IsLoadingProperty, isLoadingBinding);
             }
         }
+
+        ~AbstractForm() { }
     }
 }

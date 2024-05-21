@@ -150,10 +150,17 @@ namespace FrontEnd.Controller
             Db.Crud(crud, sql, parameters);
             temp.IsDirty = false;
         }
-        public override void Dispose()
+
+        protected override void Dispose(bool disposing)
         {
-            
+            base.Dispose(disposing);
+            if (disposing) 
+            {
+                SearchParameters.Clear();
+            }
         }
+
+        ~AbstractFormListController() => Dispose(false);
 
     }
 }

@@ -3,14 +3,16 @@ using FrontEnd.Events;
 using FrontEnd.Model;
 using System.Windows.Controls;
 using System.Windows;
+using System.Security.Policy;
 
 namespace FrontEnd.Forms
 {
     /// <summary>
     /// This class instantiate a SubForm which can contain another <see cref="AbstractForm"/> in a <see cref="Form"/>.
     /// </summary>
-    public class SubForm : ContentControl
+    public class SubForm : ContentControl, IDisposable
     {
+        protected bool _disposed = false;
         private AbstractForm? abstractForm;
 
         private event ParentRecordChangedEventHandler? ParentRecordChangedEvent;
@@ -56,5 +58,26 @@ namespace FrontEnd.Forms
         private static void OnParentRecordPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((SubForm)d).OnParentRecordChanged(d, new(e.OldValue, e.NewValue));
         #endregion
 
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                // Unsubscribe from events
+                ParentRecord.OnDirtyChanged -= OnParentRecordDirtyChanged;
+                ParentRecordChangedEvent -= OnParentRecordChanged;
+            }
+
+            _disposed = true;
+        }
+
+        ~SubForm() => Dispose(false);
     }
 }

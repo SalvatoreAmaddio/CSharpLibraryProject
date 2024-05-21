@@ -2,7 +2,6 @@
 using Backend.Utils;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Utils;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -28,8 +27,9 @@ namespace FrontEnd.Forms
     /// </code>
     /// see also the <see cref="MainWindow"/> property.
     /// </summary>
-    public class LoadingMask : ContentControl
+    public class LoadingMask : ContentControl, IDisposable
     {
+        protected bool _disposed = false;
         static LoadingMask() => DefaultStyleKeyProperty.OverrideMetadata(typeof(LoadingMask), new FrameworkPropertyMetadata(typeof(LoadingMask)));
 
         /// <summary>
@@ -54,5 +54,25 @@ namespace FrontEnd.Forms
             await Task.Run(DatabaseManager.Do.FetchData);
             Helper.GetActiveWindow()?.GoToWindow((Window?)Activator.CreateInstance(mainWinType));
         }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                Loaded -= OnLoading;
+            }
+
+            _disposed = true;
+        }
+
+        ~LoadingMask() => Dispose(false);
     }
 }

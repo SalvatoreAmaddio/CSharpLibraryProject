@@ -17,5 +17,8 @@ namespace FrontEnd.Forms
             if (newContent is not Lista) throw new Exception();
             base.OnContentChanged(oldContent, newContent);
         }
+
+        ~FormList() { }
+
     }
 }

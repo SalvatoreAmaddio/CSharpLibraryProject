@@ -5,8 +5,9 @@ using Backend.Source;
 
 namespace Backend.Controller
 {
-    public abstract class AbstractSQLModelController : IAbstractSQLModelController
+    public abstract class AbstractSQLModelController : IAbstractSQLModelController, IDisposable
     {
+        protected bool _disposed = false;
         protected bool _allowNewRecord = true;
         public bool VoidParentUpdate { get; protected set; } = false;
         public IAbstractDatabase Db { get; protected set; } = null!;
@@ -141,5 +142,13 @@ namespace Backend.Controller
             GoAt(CurrentModel);
             return true;
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected abstract void Dispose(bool disposing);
     }
 }
