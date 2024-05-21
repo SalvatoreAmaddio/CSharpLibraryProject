@@ -52,5 +52,8 @@ namespace FrontEnd.Model
         public override ISQLModel Read(DbDataReader reader) => new User(reader);
 
         public void ResetAttempts() => Attempts = 3;
+
+        public override string? ToString() => UserName;
+
     }
 }
