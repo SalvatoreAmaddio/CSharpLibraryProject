@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Backend.Exceptions;
+using System.Security.Cryptography;
 
 namespace Backend.Utils
 {
@@ -41,7 +42,7 @@ namespace Backend.Utils
         /// <param name="ivTarget">The IV's Target</param>
         public void StoreKeyIV(string secret_key_Target, string ivTarget)
         {
-            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new InvalidTargetsException(secret_key_Target, ivTarget);
             if (secret_key != null && initVector != null) 
             {
                 CredentialManager.Store(new(secret_key_Target, "key", Convert.ToBase64String(secret_key)));
@@ -60,7 +61,7 @@ namespace Backend.Utils
         /// <param name="ivTarget">The IV's Target</param>
         public void ReplaceStoredKeyIV(string secret_key_Target, string ivTarget)
         {
-            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new InvalidTargetsException(secret_key_Target, ivTarget);
             if (secret_key == null && initVector == null) throw new ArgumentNullException($"{secret_key} and {initVector} cannot be null. Call this method after you have either called {nameof(Encrypt)} or {nameof(Decrypt)}");
 
             DeleteStoredKeyIV(secret_key_Target, ivTarget);
@@ -75,7 +76,7 @@ namespace Backend.Utils
         /// <param name="ivTarget">The IV's Target</param>
         public void DeleteStoredKeyIV(string secret_key_Target, string ivTarget) 
         {
-            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new InvalidTargetsException(secret_key_Target, ivTarget);
             if (CredentialManager.Exist(secret_key_Target)) CredentialManager.Delete(secret_key_Target);
             if (CredentialManager.Exist(ivTarget)) CredentialManager.Delete(ivTarget);
         }

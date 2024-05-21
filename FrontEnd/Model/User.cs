@@ -29,10 +29,7 @@ namespace FrontEnd.Model
             _password = reader.GetString(2);
         }
 
-        public User() 
-        {
-            SelectQry = $"SELECT * FROM {nameof(User)} WHERE {nameof(UserName)} = @{nameof(UserName)};";
-        }
+        public User() => SelectQry = $"SELECT * FROM {nameof(User)} WHERE {nameof(UserName)} = @{nameof(UserName)};";
 
         public virtual bool Login(string? pwd)
         {

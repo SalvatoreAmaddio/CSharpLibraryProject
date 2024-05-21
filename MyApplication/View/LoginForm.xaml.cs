@@ -11,7 +11,7 @@ namespace MyApplication.View
         {
             InitializeComponent();
             CurrentUser.Is = new User();
-            CurrentUser.KeyTarget = "EncrypterKey"; //to edit
+            CurrentUser.SecretKeyTarget = "EncrypterKey"; //to edit
             CurrentUser.IVTarget = "EncrypterIV"; //to edit
             Loaded += OnLoaded;
         }
