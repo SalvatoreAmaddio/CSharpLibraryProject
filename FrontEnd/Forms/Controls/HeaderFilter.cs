@@ -2,10 +2,12 @@
 using FrontEnd.Controller;
 using FrontEnd.FilterSource;
 using FrontEnd.Utils;
+using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace FrontEnd.Forms
 {
@@ -85,6 +87,7 @@ namespace FrontEnd.Forms
                 clearButton.Click += OnClearButtonClicked;
 
             PART_ListBox = (ListBox)GetTemplateChild(nameof(PART_ListBox));
+            System.Diagnostics.PresentationTraceSources.SetTraceLevel(PART_ListBox.ItemContainerGenerator, System.Diagnostics.PresentationTraceLevel.High);
         }
 
         #region Events
@@ -140,6 +143,16 @@ namespace FrontEnd.Forms
                 option.OnSelectionChanged += OnOptionSelected;
         }
 
+        private void b(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBlock textBlock)
+            {
+                string value = textBlock.Text;
+                // Handle the click event, for example:
+                MessageBox.Show($"TextBlock clicked with value: {value}");
+            }
+        }
+
         private void OnOptionSelected(object? sender, EventArgs e)
         {
             if (PART_DropDownButton == null) throw new Exception("DropDownButton is null");
@@ -171,4 +184,5 @@ namespace FrontEnd.Forms
         }
         #endregion
     }
+
 }

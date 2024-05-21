@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Text;
 using Backend.Database;
 using FrontEnd.Forms;
+using System.Windows;
+using MvvmHelpers;
 
 namespace FrontEnd.FilterSource
 {
@@ -92,7 +94,7 @@ namespace FrontEnd.FilterSource
     /// </summary>
     /// <param name="source">A RecordSource object</param>
     /// <param name="displayProperty">The Record's property to display in the option list.</param>
-    public class SourceOption : List<IFilterOption>, IChildSource
+    public class SourceOption : ObservableRangeCollection<IFilterOption>, IChildSource
     {
         private readonly string _displayProperty;
         /// <summary>

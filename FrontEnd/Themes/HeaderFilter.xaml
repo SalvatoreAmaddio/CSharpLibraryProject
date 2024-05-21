@@ -24,9 +24,11 @@
                                     <ListBox x:Name="PART_ListBox" ItemsSource="{TemplateBinding ItemsSource}" BorderThickness="0" Grid.Row="1">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid local:Definition.ColumnDefinitions="100,20">
-                                                    <TextBlock Text="{Binding Value}"/>
-                                                    <CheckBox Grid.Column="1" IsChecked="{Binding IsSelected}"/>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <CheckBox Grid.Column="0" Content="{Binding Value}" IsChecked="{Binding IsSelected}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
