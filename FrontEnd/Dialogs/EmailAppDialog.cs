@@ -57,7 +57,7 @@ namespace FrontEnd.Dialogs
 
             SysCredentailTargets.EmailApp = Username;
             Encrypter encrypter = new(PART_Password.Password);
-            CredentialManager.Store(new(SysCredentailTargets.EmailApp, Username, encrypter.Encrypt()));
+            CredentialManager.Replace(new(SysCredentailTargets.EmailApp, Username, encrypter.Encrypt()));
             encrypter.ReplaceStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);           
             Properties.Settings.Default.EmailUserName = Username;
             Properties.Settings.Default.Save();

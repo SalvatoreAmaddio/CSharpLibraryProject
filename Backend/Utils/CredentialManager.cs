@@ -61,11 +61,21 @@ namespace Backend.Utils
         private static extern void CredFree([In] IntPtr buffer);
 
         /// <summary>
+        /// Replace the stored credential with a new one.
+        /// </summary>
+        /// <param name="cred">A <see cref="Credential"/> object</param>
+        /// <returns>true if the credential was successfully replaced</returns>
+        public static bool Replace(Credential cred) 
+        {
+            if (Exist(cred.Target)) 
+                Delete(cred.Target);
+            return Store(cred);
+        }
+
+        /// <summary>
         /// Stores credential's information in the Windows Credential Manager System.
         /// </summary>
-        /// <param name="target">a string that works as the credential unique identifier</param>
-        /// <param name="username">a string that works as the name of the information to store</param>
-        /// <param name="password">a string that rapresent the actual sensitive information to store</param>
+        /// <param name="cred">A <see cref="Credential"/> object</param>
         /// <returns>true if the credential was successfully stored</returns>
         public static bool Store(Credential cred)
         {
