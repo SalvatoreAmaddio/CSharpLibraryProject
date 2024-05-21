@@ -6,7 +6,6 @@ namespace FrontEnd.Forms
     public abstract class AbstractControl : Control, IDisposable
     {
         protected bool _disposed = false;
-
         static AbstractControl() => DefaultStyleKeyProperty.OverrideMetadata(typeof(AbstractControl), new FrameworkPropertyMetadata(typeof(AbstractControl)));
 
         public AbstractControl() => DataContextChanged += OnDataContextChanged;

@@ -4,24 +4,21 @@ using System.Windows.Controls;
 
 namespace FrontEnd.Forms
 {
-    public class Walkthrough : ContentControl
+    /// <summary>
+    /// This ContentControl offers a way to display a step guide to help the User to perform a set of actions. 
+    /// See also: <seealso cref="Pages"/>
+    /// </summary>
+    public class Walkthrough : ContentControl, IDisposable
     {
+        protected bool _disposed = false;
         int Index { get; set; } = 0;
         int lastIndex => Collection.Count - 1;
-        Pages Pages { get; set; }
-        INotifyCollectionChanged CollectionChanged { get; set; }
-        ItemCollection Collection { get; set; }
-        Button PART_PreviousButton { get; set; }
-        Button PART_NextButton { get; set; }
-        static Walkthrough()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Walkthrough), new FrameworkPropertyMetadata(typeof(Walkthrough)));
-        }
-
-        public Walkthrough() 
-        { 
-            
-        }
+        Pages? Pages { get; set; }
+        INotifyCollectionChanged? CollectionChangedNotifier { get; set; }
+        ItemCollection? Collection { get; set; }
+        Button? PART_PreviousButton { get; set; }
+        Button? PART_NextButton { get; set; }
+        static Walkthrough() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Walkthrough), new FrameworkPropertyMetadata(typeof(Walkthrough)));
 
         public override void OnApplyTemplate()
         {
@@ -35,6 +32,7 @@ namespace FrontEnd.Forms
 
         private void OnPreviousButtonClicked(object sender, RoutedEventArgs e)
         {
+            if (Collection == null) throw new Exception("");
             if (Index == 0) return;
             Index--;
             Content = Collection[Index];
@@ -42,6 +40,7 @@ namespace FrontEnd.Forms
 
         private void OnNextButtonClicked(object sender, RoutedEventArgs e)
         {
+            if (Collection == null) throw new Exception("");
             if (Index == lastIndex) return;
             Index++;
             Content = Collection[Index];
@@ -56,16 +55,16 @@ namespace FrontEnd.Forms
                 if (Pages.Items is INotifyCollectionChanged collectionChanged) 
                 {
                     Collection = Pages.Items;
-                    CollectionChanged = collectionChanged;
-                    CollectionChanged.CollectionChanged += OnCollectionChanged;
+                    CollectionChangedNotifier = collectionChanged;
+                    CollectionChangedNotifier.CollectionChanged += OnCollectionChanged;
                 }
             }
         }
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            
-            if (Collection == null) return;
-            try 
+
+            if (Collection == null) throw new Exception("");
+            try
             {
                 Content = Collection[Index];
             }
@@ -75,13 +74,40 @@ namespace FrontEnd.Forms
             }
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                // Unsubscribe from events
+                if (CollectionChangedNotifier!=null)
+                    CollectionChangedNotifier.CollectionChanged -= OnCollectionChanged;
+                if (PART_NextButton != null)
+                    PART_NextButton.Click -= OnNextButtonClicked;
+                if (PART_PreviousButton != null)
+                    PART_PreviousButton.Click -= OnPreviousButtonClicked;
+            }
+
+            _disposed = true;
+        }
+
+        ~Walkthrough() => Dispose(false);
+
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Pages : ItemsControl
     {
-      
-
         //private void NotifyCollection_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         //{
         //    if (e.Action == NotifyCollectionChangedAction.Add)
@@ -102,15 +128,9 @@ namespace FrontEnd.Forms
         //    }
         //}
 
-        static Pages()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Pages), new FrameworkPropertyMetadata(typeof(Pages)));
-        }
+        static Pages() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Pages), new FrameworkPropertyMetadata(typeof(Pages)));
 
-        public Pages() 
-        { 
-            
-        }
+        public Pages() { }
        
     }
 }
