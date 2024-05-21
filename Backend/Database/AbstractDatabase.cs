@@ -195,6 +195,9 @@ namespace Backend.Database
         /// <returns>A string representing the SQL Statement to retrieve the last inserted id.</returns>
         protected abstract string LastIDQry();
 
+        /// <summary>
+        /// Update the <see cref="Records"/> property.
+        /// </summary>
         private void UpdateRecords()
         {
             if (Records == null) return;

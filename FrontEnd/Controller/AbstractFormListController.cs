@@ -131,25 +131,24 @@ namespace FrontEnd.Controller
             AbstractModel temp = CurrentRecord;
 
             if (crud == CRUD.INSERT) 
-            {   //INSERT must follow a slighlty different process to avoid unexpected behaviour between the RecordSource and the Lista object.
+            {   //INSERT must follow a slighlty different logic to avoid unexpected behaviour between the RecordSource and the Lista object.
                 temp = (AbstractModel)Source[Source.Count - 1];
                 Source.RemoveAt(Source.Count - 1);
                 ExecuteCRUD(ref temp, crud, sql, parameters);
-                temp.IsDirty = false;
-                Db.Records?.NotifyChildren(crud, temp);
-                return true;
-            }
-
-            ExecuteCRUD(ref temp, crud, sql, parameters);
-            temp.IsDirty = false;
+            } 
+            else ExecuteCRUD(ref temp, crud, sql, parameters);
             Db.Records?.NotifyChildren(crud, temp);
             return true;
         }
         
+        /// <summary>
+        /// Execute a CRUD Operation. This method is only used in <see cref="AlterRecord(string?, List{QueryParameter}?)"/> to avoid code repition.
+        /// </summary>
         private void ExecuteCRUD(ref AbstractModel temp, CRUD crud, string? sql = null, List<QueryParameter>? parameters = null) 
         {
             Db.Model = temp;
             Db.Crud(crud, sql, parameters);
+            temp.IsDirty = false;
         }
         public override void Dispose()
         {
