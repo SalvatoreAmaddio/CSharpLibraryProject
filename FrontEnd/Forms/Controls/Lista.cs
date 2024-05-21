@@ -19,7 +19,7 @@ namespace FrontEnd.Forms
     /// <para/>
     /// Its ItemsSource property should be a IEnumerable&lt;<see cref="AbstractModel"/>&gt; such as a <see cref="Backend.Source.RecordSource"/>
     /// </summary>
-    public class Lista : ListView, IUIControl
+    public class Lista : ListView
     {
         /// <summary>
         /// Flag used to bypass the GotFocusEvent of a ListViewItem object.
@@ -106,7 +106,6 @@ namespace FrontEnd.Forms
         /// </summary>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            var x = SelectedItem;
             base.OnSelectionChanged(e);
             int lastRemovedIndex = e.RemovedItems.Count - 1;
             if (lastRemovedIndex >= 0)
@@ -196,19 +195,6 @@ namespace FrontEnd.Forms
                 //The switch was succesful and mandatory condition for record's integrity have been met.
                 Controller?.GoAt(record); // notify the controller that the SelectedItem has changed and therefore updates other linked controls such as RecordTracker
             }
-        }
-
-        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
-        {
-            base.OnItemsSourceChanged(oldValue, newValue);
-            if (newValue != null && newValue is RecordSource source)
-                source.AddUIControlReference(this);
-        }
-
-        public void OnItemSourceUpdated()
-        {
-         
-
         }
     }
 }
