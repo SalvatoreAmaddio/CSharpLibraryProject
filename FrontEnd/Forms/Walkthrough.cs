@@ -132,6 +132,5 @@ namespace FrontEnd.Forms
         //}
 
         static Pages() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Pages), new FrameworkPropertyMetadata(typeof(Pages)));
-
     }
 }
