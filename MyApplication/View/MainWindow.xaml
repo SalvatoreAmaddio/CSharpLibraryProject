@@ -22,6 +22,10 @@
                 <MenuItem Header="Change Password" Click="OnChangePasswordClicked"/>
                 <MenuItem Header="Info"/>
             </MenuItem>
+            <MenuItem Header="Email Settings" VerticalAlignment="Center">
+                <MenuItem Header="Walthrough" Click="OnWalkthroughClicked"/>
+                <MenuItem Header="Change Password"/>
+            </MenuItem>
         </Menu>
 
         <fr:Curtain x:Name="Curtain"/>

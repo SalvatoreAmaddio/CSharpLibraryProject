@@ -1,5 +1,6 @@
 ﻿using Backend.Utils;
 using FrontEnd.ExtensionMethods;
+using FrontEnd.Forms;
 using FrontEnd.Utils;
 using System.Windows;
 
@@ -18,5 +19,9 @@ namespace MyApplication.View
         private void OnLogoutClicked(object sender, RoutedEventArgs e) => Helper.Logout(new LoginForm());
         private void OnChangePasswordClicked(object sender, RoutedEventArgs e) => Helper.ChangeUserPassword("soloio59");
 
+        private void OnWalkthroughClicked(object sender, RoutedEventArgs e)
+        {
+            new Guide().ShowDialog();
+        }
     }
 }

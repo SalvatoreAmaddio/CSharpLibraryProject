@@ -145,10 +145,8 @@
                         <List>
                             <ListItem>
                                 <Paragraph>
-                                    Step 8: Paste your new generated password. 
-                    Also, remeber to update the email field with your Gmail Account.
-                                    <LineBreak/>
-                                    Once that is done, close the window.
+                                    Step 8: On Email Settings, click on Change Password. Then, paste your new generated password. 
+                                     Also, make sure the email field matches your Gmail Account.
                                 </Paragraph>
                             </ListItem>
                         </List>
