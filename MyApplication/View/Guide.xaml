@@ -15,13 +15,14 @@
             <Setter Property="Background" Value="{StaticResource DefaultWhite}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10"/>
+            <Setter Property="IsReadOnly" Value="True"/>
         </Style>
     </Window.Resources>
     
     <fr:Walkthrough>
         <fr:Pages>
             <Border x:Name="Step1">
-                <RichTextBox IsReadOnly="True">
+                <RichTextBox>
                     <FlowDocument>
                         <Paragraph>
                             Before sending an Email, you must get the Google's Authorisation for this Application to do so.
@@ -44,8 +45,122 @@
             </Border>
 
             <Border x:Name="Step2">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 2: Click on Security.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
 
+                        <Paragraph>
+                            <Image Source="{StaticResource step2}" Width="300"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
             </Border>
+            
+            <Border x:Name="Step3">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 3: Scroll to Google Login and activate the Two-step verification.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+                        <Paragraph>
+                            <Image Source="{StaticResource step3}" HorizontalAlignment="Stretch"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+
+            <Border x:Name="Step4">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 4: Once the Two-step verification has been activated. You will see the option App Passwords.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+                        <Paragraph>
+                            <Image Source="{StaticResource step4}" HorizontalAlignment="Stretch"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+
+            <Border x:Name="Step5">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 5: Fill out the two fields as shown. Then click on Generate.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+                        <Paragraph>
+                            <Image Source="{StaticResource step5}" HorizontalAlignment="Stretch"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+
+            <Border x:Name="Step6">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 6: Copy your new google's generated password.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+                        <Paragraph>
+                            <Image Source="{StaticResource step6}" Width="800"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+
+            <Border x:Name="Step7">
+                <RichTextBox>
+                    <FlowDocument>
+                        <List>
+                            <ListItem>
+                                <Paragraph>
+                                    Step 8: Paste your new generated password. 
+                    Also, remeber to update the email field with your Gmail Account.
+                                    <LineBreak/>
+                                    Once that is done, close the window.
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+                        <Paragraph>
+                            <Image Source="{StaticResource step7}" Width="700"/>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+            
         </fr:Pages>
     </fr:Walkthrough>
 </Window>
