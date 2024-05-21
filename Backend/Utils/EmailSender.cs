@@ -31,11 +31,11 @@ namespace Backend.Utils
         /// List of strings containing Attachment's file paths.
         /// </summary>        
         private List<string> Attachments { get; set; } = [];
-        
+
         /// <summary>
         /// Gets and Sets the host (email provider)
         /// </summary>
-        public string Host { get; set; } = "smtp.gmail.com";
+        public string Host { get; set; } = string.Empty; //"smtp.gmail.com";
 
         /// <summary>
         /// Gets and Sets a flag telling if the <see cref="Host"/> requires authentication to send an email.
@@ -46,6 +46,11 @@ namespace Backend.Utils
         /// Gets and Sets the Port to use.
         /// </summary>
         public int Port { get; set; } = 587;
+
+        public EmailSender() 
+        { 
+            
+        }
 
         /// <summary>
         /// Prepare the body of the email, attachments included.
@@ -84,7 +89,8 @@ namespace Backend.Utils
         {
             if (Message.To.Count == 0) throw new Exception("No Receiver was added");
             if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new Exception("No Sender information");
-            
+            if (string.IsNullOrEmpty(Host)) throw new Exception("No Host provided");
+
             Message.From.Add(new MailboxAddress(SenderName, SenderEmail));
             Message.Subject = Subject;
 
