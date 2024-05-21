@@ -20,7 +20,7 @@ namespace FrontEnd.Model
         public string Password { get => _password; set => UpdateProperty(ref value, ref _password); }
         public bool RememberMe { get => _rememberme; set => UpdateProperty(ref value, ref _rememberme); }
         public int Attempts { get; protected set; } = 3;
-        public string Target { get; } = "USER_LOGIN";
+        public string Target { get; } = SysCredentailTargets.UserLogin;
 
         public User(DbDataReader reader) : this()
         {

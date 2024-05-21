@@ -126,7 +126,7 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
 
-                            <fr:Text x:Name="PART_Username" Grid.Row="0" Placeholder="Email..."/>
+                            <fr:Text x:Name="PART_Username" Grid.Row="0" Placeholder="Email..." Text="{Binding Username, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <PasswordBox Grid.Row="2" x:Name="PART_Password">
                                 <i:Interaction.Behaviors>
                                     <b:PlaceholderPasswordBox Placeholder="App's Password..."/>

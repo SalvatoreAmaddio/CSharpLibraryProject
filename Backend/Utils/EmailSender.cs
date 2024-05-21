@@ -41,7 +41,7 @@ namespace Backend.Utils
         /// Gets and Sets the Credential Unique identifier to retrieve the email's password stored in the local computer's Windows Credential Manager System.<para/>
         /// See also: <seealso cref="CredentialManager"/>, <seealso cref="Credential"/>
         /// </summary>
-        public string CredentialID { get; set; } = string.Empty;
+        public string CredentialID { get; } = SysCredentailTargets.EmailApp;
 
         /// <summary>
         /// Gets and Sets a flag telling if the <see cref="Host"/> requires authentication to send an email.
