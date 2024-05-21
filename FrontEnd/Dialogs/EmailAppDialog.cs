@@ -36,11 +36,11 @@ namespace FrontEnd.Dialogs
             if (PART_Save != null)
                 PART_Save.Click += OnSaveClicked;
 
+            SysCredentailTargets.EmailApp = Properties.Settings.Default.EmailUserName;
             credential = CredentialManager.Get(SysCredentailTargets.EmailApp);
             if (credential != null)
             {
                 Username = credential.Username;
-                SysCredentailTargets.EmailApp = Username;
                 Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
                 PART_Password.Password = encrypter.Decrypt();
             }
@@ -58,7 +58,10 @@ namespace FrontEnd.Dialogs
             SysCredentailTargets.EmailApp = Username;
             Encrypter encrypter = new(PART_Password.Password);
             CredentialManager.Store(new(SysCredentailTargets.EmailApp, Username, encrypter.Encrypt()));
-            encrypter.ReplaceStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
+            encrypter.ReplaceStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);           
+            Properties.Settings.Default.EmailUserName = Username;
+            Properties.Settings.Default.Save();
+
             MessageBox.Show("Saved!");
             Close();
         }
