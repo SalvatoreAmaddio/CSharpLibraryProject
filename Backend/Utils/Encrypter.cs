@@ -5,68 +5,79 @@ namespace Backend.Utils
     /// <summary>
     /// This class encrypts and decrypts strings.
     /// </summary>
-    /// <param name="str">The string to descrypt or encrypt</param>
     public class Encrypter(string str)
     {
-        private byte[]? key;
+        private byte[]? secret_key;
         private byte[]? initVector;
         private string Str { get; set; } = str;
-        
+
+        public Encrypter(string str, string keyTarget, string ivTarget) : this(str) => ReadStoredKeyIV(keyTarget, ivTarget);
+
         /// <summary>
-        /// It reads any stored Key's credential and IV's credential.
+        /// It reads Key's and IV's <see cref="Credential"/> objects stored in the local computer.
         /// </summary>
-        /// <param name="keyTarget"></param>
-        /// <param name="ivTarget"></param>
-        public void ReadStoredKeyIV(string keyTarget, string ivTarget) 
+        /// <param name="secret_key_Target">The Secret Key's Target</param>
+        /// <param name="ivTarget">The IV's Target</param>
+        /// <returns>true if both targets could be read; otherwise false.</returns>
+        public bool ReadStoredKeyIV(string secret_key_Target, string ivTarget) 
         {
-            Credential? keyCredential = CredentialManager.Get(keyTarget);
+            Credential? keyCredential = CredentialManager.Get(secret_key_Target);
             Credential? ivCredential = CredentialManager.Get(ivTarget);
-            if (keyCredential != null) 
-                key = Convert.FromBase64String(keyCredential.Password);
-            if (ivCredential != null)
+            if (keyCredential != null && ivCredential != null) 
+            {
+                secret_key = Convert.FromBase64String(keyCredential.Password);
                 initVector = Convert.FromBase64String(ivCredential.Password);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
-        /// It replaced the stored IV's credential.
+        /// It stores a Key and IV as <see cref="Credential"/>'s objects.<para/>
+        /// <c>WARNING:</c> 
+        /// This method should be called after <see cref="Encrypt"/> or <see cref="Decrypt"/>
         /// </summary>
-        /// <param name="target"></param>
-        public void ReplaceStoredIV(string target)
+        /// <param name="secret_key_Target">The Secret Key's Target</param>
+        /// <param name="ivTarget">The IV's Target</param>
+        public void StoreKeyIV(string secret_key_Target, string ivTarget)
         {
-            if (CredentialManager.Exist(target)) CredentialManager.Delete(target);
-            StoreIV(target);
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (secret_key != null && initVector != null) 
+            {
+                CredentialManager.Store(new(secret_key_Target, "key", Convert.ToBase64String(secret_key)));
+                CredentialManager.Store(new(ivTarget, "iv", Convert.ToBase64String(initVector)));
+                return;
+            }
+            throw new ArgumentNullException($"{secret_key} and {initVector} cannot be null. Call this method after you have either called {nameof(Encrypt)} or {nameof(Decrypt)}");
         }
 
         /// <summary>
-        /// It replaced the stored Key's credential.
+        /// It replaces the stored a Key and IV <see cref="Credential"/>'s objects with new ones.<para/>
+        /// <c>WARNING:</c> 
+        /// This method should be called after <see cref="Encrypt"/> or <see cref="Decrypt"/>
         /// </summary>
-        /// <param name="target"></param>
-        public void ReplaceStoredKey(string target)
+        /// <param name="secret_key_Target">The Secret Key's Target</param>
+        /// <param name="ivTarget">The IV's Target</param>
+        public void ReplaceStoredKeyIV(string secret_key_Target, string ivTarget)
         {
-            if (CredentialManager.Exist(target)) CredentialManager.Delete(target);
-            StoreKey(target);
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (secret_key == null && initVector == null) throw new ArgumentNullException($"{secret_key} and {initVector} cannot be null. Call this method after you have either called {nameof(Encrypt)} or {nameof(Decrypt)}");
+
+            DeleteStoredKeyIV(secret_key_Target, ivTarget);
+            StoreKeyIV(secret_key_Target, ivTarget);
         }
 
-        /// <summary>
-        /// Stores the Credential's key in the local computer.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public void StoreKey(string target) 
-        {
-            if (key == null) throw new ArgumentNullException(nameof(key));
-            CredentialManager.Store(new(target, "key", Convert.ToBase64String(key)));
-        }
 
         /// <summary>
-        /// Stores the Credential's IV in the local computer.
+        /// It deletes the stored a Key and IV <see cref="Credential"/>'s objects.
         /// </summary>
-        /// <param name="target"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public void StoreIV(string target)
+        /// <param name="secret_key_Target">The Secret Key's Target</param>
+        /// <param name="ivTarget">The IV's Target</param>
+        public void DeleteStoredKeyIV(string secret_key_Target, string ivTarget) 
         {
-            if (initVector == null) throw new ArgumentNullException(nameof(initVector));
-            CredentialManager.Store(new(target, "iv", Convert.ToBase64String(initVector)));
+            if (string.IsNullOrEmpty(secret_key_Target) && string.IsNullOrEmpty(ivTarget)) throw new ArgumentNullException($"{secret_key_Target} and {ivTarget} arguments cannot be null or empty strings");
+            if (CredentialManager.Exist(secret_key_Target)) CredentialManager.Delete(secret_key_Target);
+            if (CredentialManager.Exist(ivTarget)) CredentialManager.Delete(ivTarget);
         }
 
         /// <summary>
@@ -77,9 +88,9 @@ namespace Backend.Utils
         {
             using (Aes aes = Aes.Create())
             {
-                key ??= aes.Key;
+                secret_key ??= aes.Key;
                 initVector ??= aes.IV;
-                return EncryptString(key, initVector);
+                return EncryptString(secret_key, initVector);
             }
         }
 
@@ -91,9 +102,9 @@ namespace Backend.Utils
         {
             using (Aes aes = Aes.Create())
             {
-                key ??= aes.Key;
+                secret_key ??= aes.Key;
                 initVector ??= aes.IV;
-                return DecryptString(key, initVector);
+                return DecryptString(secret_key, initVector);
             }
         }
 

@@ -136,8 +136,7 @@ namespace Backend.Utils
 
             if (decrypt) 
             {
-                Encrypter encrypter = new(user.Password);
-                encrypter.ReadStoredKeyIV(KeyTarget, IVTarget);
+                Encrypter encrypter = new(user.Password, KeyTarget, IVTarget);
                 return encrypter.Decrypt();
             }
             return user.Password;
