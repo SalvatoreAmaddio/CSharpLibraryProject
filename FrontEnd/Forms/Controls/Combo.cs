@@ -113,7 +113,7 @@ namespace FrontEnd.Forms
                 source.AddUIControlReference(this);
         }
 
-        public async void OnItemSourceUpdated()
+        public async void OnItemSourceUpdated(object[] args)
         {
             ResetTemplate();
             await AdjustText(null);

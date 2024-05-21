@@ -18,7 +18,8 @@ namespace Backend.Source
         /// <summary>
         /// Whenever the Parent RecordSource is updated, it notifies this object to reflect the update.
         /// </summary>
-        public void OnItemSourceUpdated(); 
+        /// <param name="args"></param>
+        public void OnItemSourceUpdated(object[] args); 
        
     }
 
@@ -120,7 +121,7 @@ namespace Backend.Source
                     Controller?.GoLast();
                     break;
                 case CRUD.UPDATE:
-                    NotifyUIControl();
+                    NotifyUIControl([]);
                     break;
                 case CRUD.DELETE:
                     bool removed = Remove(model);
@@ -153,10 +154,10 @@ namespace Backend.Source
         /// This method is called in <see cref="Update(CRUD, ISQLModel)"/>.
         /// It loops through the <see cref="UIControls"/> to notify the <see cref="IUIControl"/> object to reflect changes that occured to their ItemsSource which is an instance of <see cref="RecordSource"/>.
         /// </summary>
-        public void NotifyUIControl()
+        public void NotifyUIControl(object[] args)
         {
             if (UIControls != null && UIControls.Count > 0)
-                foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated();
+                foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated(args);
         }
 
         public void RemoveChild(IChildSource child) => Children.Remove(child);

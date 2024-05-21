@@ -26,7 +26,7 @@
                                             <DataTemplate>
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*" MinWidth="100"/>
                                                     </Grid.ColumnDefinitions>
                                                     <CheckBox Grid.Column="0" Content="{Binding Value}" IsChecked="{Binding IsSelected}"/>
                                                 </Grid>

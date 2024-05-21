@@ -143,16 +143,6 @@ namespace FrontEnd.Forms
                 option.OnSelectionChanged += OnOptionSelected;
         }
 
-        private void b(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is TextBlock textBlock)
-            {
-                string value = textBlock.Text;
-                // Handle the click event, for example:
-                MessageBox.Show($"TextBlock clicked with value: {value}");
-            }
-        }
-
         private void OnOptionSelected(object? sender, EventArgs e)
         {
             if (PART_DropDownButton == null) throw new Exception("DropDownButton is null");
@@ -162,8 +152,14 @@ namespace FrontEnd.Forms
             if (!ItemsSource.Any(s=>s.IsSelected)) ResetDropDownButtonAppereance();
         }
 
-        public void OnItemSourceUpdated()
+        public void OnItemSourceUpdated(object[] args)
         {
+            if (args.Length == 1) 
+            {
+                IFilterOption option = (IFilterOption) args[0];
+                option.OnSelectionChanged += OnOptionSelected;
+                return;
+            }
             DataTemplate tempDataTemplate = PART_ListBox.ItemTemplate;
             PART_ListBox.ItemTemplate = null;
             PART_ListBox.ItemTemplate = tempDataTemplate;

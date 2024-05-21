@@ -42,6 +42,8 @@ namespace FrontEnd.FilterSource
         /// Deselects an option bypassing the <see cref="OnSelectionChanged"/> event.
         /// </summary>
         public void Deselect();
+
+        public void Copy(IFilterOption obj);
     }
 
     /// <summary>
@@ -52,8 +54,8 @@ namespace FrontEnd.FilterSource
     public class FilterOption : IFilterOption
     {
         private bool _isSelected = false;
-        public object? Value { get; }
-        public ISQLModel Record { get; }
+        public object? Value { get; private set; }
+        public ISQLModel Record { get; private set; }
         public bool IsSelected
         {
             get => _isSelected;
@@ -85,6 +87,12 @@ namespace FrontEnd.FilterSource
         obj is FilterOption option && Record.Equals(option.Record);
 
         public override int GetHashCode() => HashCode.Combine(Record);
+
+        public void Copy(IFilterOption obj)
+        {
+            Value = obj.Value;
+            Record = obj.Record;
+        }
     }
 
     /// <summary>
@@ -159,10 +167,10 @@ namespace FrontEnd.FilterSource
         /// This method is called in <see cref="Update(CRUD, ISQLModel)"/>.
         /// It loops through the <see cref="UIControls"/> to notify the <see cref="IUIControl"/> object to reflect changes that occured to their ItemsSource which is an instance of <see cref="RecordSource"/>.
         /// </summary>
-        private void NotifyUIControl()
+        private void NotifyUIControl(object[] args)
         {
             if (UIControls != null && UIControls.Count > 0)
-                foreach (IUIControl combo in UIControls) combo.OnItemSourceUpdated();
+                foreach (IUIControl control in UIControls) control.OnItemSourceUpdated(args);
         }
 
         public void Update(CRUD crud, ISQLModel model)
@@ -172,14 +180,13 @@ namespace FrontEnd.FilterSource
             {
                 case CRUD.INSERT:
                     Add(option);
+                    NotifyUIControl([option]);
                     break;
                 case CRUD.UPDATE:
                     int index = IndexOf(option);
                     IFilterOption oldValue = this[index];
-                    bool isSelected = oldValue.IsSelected;
-                    this[index] = option;
-                    this[index].IsSelected = isSelected;
-                    NotifyUIControl();
+                    oldValue.Copy(option);
+                    NotifyUIControl([]);
                     break;
                 case CRUD.DELETE:
                      Remove(option);
