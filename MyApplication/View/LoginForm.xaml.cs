@@ -20,8 +20,9 @@ namespace MyApplication.View
         {
             if (CurrentUser.ReadCredential()) 
             {
-                bool result = CurrentUser.Login(CurrentUser.FetchUserPassword(true));
-                if (!result) 
+                string? decryptedPassword = CurrentUser.FetchUserPassword(true);
+                bool hasLoggedIn = CurrentUser.Login(decryptedPassword);
+                if (!hasLoggedIn) 
                 {
                     CredentialManager.Delete(CurrentUser.Target);
                     CurrentUser.ResetAttempts();
@@ -34,9 +35,13 @@ namespace MyApplication.View
         {
             CurrentUser.UserName = userName.Text;
             CurrentUser.Password = pswd.Password;
-            CurrentUser.RememberMe = (bool)rememberme.IsChecked;
-            string? p = CurrentUser.FetchUserPassword(true);
-            if (CurrentUser.Login(p))
+
+            if (rememberme.IsChecked.HasValue && rememberme.IsChecked.Value) 
+                CurrentUser.RememberMe = (bool)rememberme.IsChecked;
+           
+            string? decryptedPassword = CurrentUser.FetchUserPassword(true);
+            bool hasLoggedIn = CurrentUser.Login(decryptedPassword);
+            if (hasLoggedIn)
                 this.GoToWindow(new MainWindow());
             else
             {
