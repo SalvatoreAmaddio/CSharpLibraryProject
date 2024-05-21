@@ -11,7 +11,7 @@ namespace FrontEnd.Controller
     /// This class extends <see cref="AbstractFormListController{M}"/> and implements <see cref="IAbstractFormListController{M}"/>
     /// </summary>
     /// <typeparam name="M">An <see cref="AbstractModel"/> object</typeparam>
-    public abstract class AbstractFormListController<M> : AbstractFormController<M>, IDisposable, IAbstractFormListController<M> where M : AbstractModel, new()
+    public abstract class AbstractFormListController<M> : AbstractFormController<M>, IAbstractFormListController<M> where M : AbstractModel, new()
     {
         bool _openWindowOnNew = true;
         protected FilterQueryBuilder QueryBuiler;
