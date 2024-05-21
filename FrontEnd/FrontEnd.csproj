@@ -25,6 +25,7 @@
     <None Remove="images\padlock.png" />
     <None Remove="images\questionmark.png" />
     <None Remove="images\redlight.png" />
+    <None Remove="images\report.png" />
     <None Remove="images\requery.png" />
   </ItemGroup>
 
@@ -61,6 +62,7 @@
     <Resource Include="images\pdf.png" />
     <Resource Include="images\plus.png" />
     <Resource Include="images\questionmark.png" />
+    <Resource Include="images\report.png" />
     <Resource Include="images\requery.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />

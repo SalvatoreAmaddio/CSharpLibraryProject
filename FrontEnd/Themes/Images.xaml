@@ -15,5 +15,6 @@
     <BitmapImage x:Key="redlight" UriSource="pack://application:,,,/FrontEnd;component/Images/redlight.png"/>
     <BitmapImage x:Key="padlock" UriSource="pack://application:,,,/FrontEnd;component/Images/padlock.png"/>
     <BitmapImage x:Key="question" UriSource="pack://application:,,,/FrontEnd;component/Images/questionmark.png"/>
+    <BitmapImage x:Key="report" UriSource="pack://application:,,,/FrontEnd;component/Images/report.png"/>
 
 </ResourceDictionary>
