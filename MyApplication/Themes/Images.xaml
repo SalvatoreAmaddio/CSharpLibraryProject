@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <BitmapImage x:Key="step1" UriSource="pack://application:,,,/MyApplication;component/images/Step1.jpg"/>
+    <BitmapImage x:Key="step2" UriSource="pack://application:,,,/MyApplication;component/images/Step2.jpg"/>
+    <BitmapImage x:Key="step3" UriSource="pack://application:,,,/MyApplication;component/images/Step3.jpg"/>
+    <BitmapImage x:Key="step4" UriSource="pack://application:,,,/MyApplication;component/images/Step4.jpg"/>
+    <BitmapImage x:Key="step5" UriSource="pack://application:,,,/MyApplication;component/images/Step5.jpg"/>
+    <BitmapImage x:Key="step6" UriSource="pack://application:,,,/MyApplication;component/images/Step6.jpg"/>
+    <BitmapImage x:Key="step7" UriSource="pack://application:,,,/MyApplication;component/images/Step7.jpg"/>
+
+</ResourceDictionary>

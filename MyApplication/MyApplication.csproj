@@ -27,6 +27,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Step1.jpg" />
+    <None Remove="Images\Step2.jpg" />
+    <None Remove="Images\Step3.jpg" />
+    <None Remove="Images\Step4.jpg" />
+    <None Remove="Images\Step5.jpg" />
+    <None Remove="Images\Step6.jpg" />
+    <None Remove="Images\Step7.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Data\mydb.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -54,8 +64,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Themes\" />
+    <Resource Include="Images\Step1.jpg" />
+    <Resource Include="Images\Step2.jpg" />
+    <Resource Include="Images\Step3.jpg" />
+    <Resource Include="Images\Step4.jpg" />
+    <Resource Include="Images\Step5.jpg" />
+    <Resource Include="Images\Step6.jpg" />
+    <Resource Include="Images\Step7.jpg" />
   </ItemGroup>
 
 </Project>

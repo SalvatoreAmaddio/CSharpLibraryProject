@@ -37,7 +37,7 @@
                             </ListItem>
                         </List>
                         <Paragraph>
-                            <Image Source="/Img/Step1.jpg" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <Image Source="{StaticResource step1}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
