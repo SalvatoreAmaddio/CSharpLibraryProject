@@ -154,14 +154,5 @@ namespace FrontEnd.Utils
             GetActiveWindow()?.GoToWindow(loginForm);
         }
 
-        /// <summary>
-        /// It logs the user out and remove the login <see cref="Credential"/> saved in the local computer.
-        /// </summary>
-        /// <param name="loginForm">The window to open once logged out occured, usually a Login Window</param>
-        public static void ChangeUserPassword(string newPassword)
-        {
-            CurrentUser.ChangePassword(newPassword);
-            MessageBox.Show("Password changed","Done");
-        }
     }
 }

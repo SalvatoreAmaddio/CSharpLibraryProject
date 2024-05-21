@@ -128,7 +128,9 @@ namespace Backend.Utils
         }
 
         /// <summary>
-        /// It changes the password for the Current User. The new password will be encrypted.
+        /// It changes the password for the Current User. The new password will be encrypted. 
+        /// This method also removes the User's <see cref="Credential"/> object from the local computer.
+        /// Therefore the user will need to login again on the next Application's Startup.
         /// </summary>
         /// <param name="pwd">The new password</param>
         /// <exception cref="CurrentUserNotSetException"></exception>
@@ -142,6 +144,7 @@ namespace Backend.Utils
             List<QueryParameter> para = [new(nameof(Password), Is.Password), new(nameof(Is.UserID), Is.UserID)];
             DatabaseManager.Do.Find("User")?.Crud(CRUD.UPDATE, $"UPDATE User SET Password=@Password WHERE UserID=@UserID", para);
             encrypter.ReplaceStoredKeyIV(SecretKeyTarget, IVTarget);
+            Logout();
         }
 
         /// <summary>
