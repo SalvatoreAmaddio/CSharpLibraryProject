@@ -102,8 +102,14 @@ namespace Backend.Utils
                 {
                     client.Connect(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
 
-                    if (AuthenticationRequired)
-                        client.Authenticate(SenderEmail, CredentialManager.Get(CredentialID).Password);
+                    if (AuthenticationRequired) 
+                    {
+                        Credential? credential = CredentialManager.Get(CredentialID);
+                        if (credential == null) return;
+                        Encrypter encrypter = new(credential.Password);
+                        encrypter.ReadStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
+                        client.Authenticate(SenderEmail, encrypter.Decrypt());
+                    }
 
                     client.Send(Message);
                     client.Disconnect(true);

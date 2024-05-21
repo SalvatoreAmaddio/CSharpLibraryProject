@@ -339,7 +339,10 @@ namespace FrontEnd.Dialogs
                 return;
             }
 
-            CredentialManager.Store(new(SysCredentailTargets.EmailApp, Username,PART_Password.Password));
+            Encrypter encrypter = new(PART_Password.Password);            
+            CredentialManager.Store(new(SysCredentailTargets.EmailApp, Username, encrypter.Encrypt()));
+            encrypter.ReplaceStoredIV(SysCredentailTargets.EmailAppEncrypterIV);
+            encrypter.ReplaceStoredKey(SysCredentailTargets.EmailAppEncrypterKey);
             MessageBox.Show("Saved!");
             Close();
         }
