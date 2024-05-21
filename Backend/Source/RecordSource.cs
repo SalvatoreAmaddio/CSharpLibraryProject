@@ -134,7 +134,6 @@ namespace Backend.Source
                     break;
             }
 
-            if (Controller != null && Controller.VoidParentUpdate) return;
             RunFilter?.Invoke(this, new());
         }
 

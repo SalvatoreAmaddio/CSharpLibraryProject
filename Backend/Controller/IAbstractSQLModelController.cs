@@ -7,11 +7,6 @@ namespace Backend.Controller
     public interface IAbstractSQLModelController
     {
         /// <summary>
-        /// Tells if the RecordSource should not notify its Children about record updates.
-        /// </summary>
-        public bool VoidParentUpdate { get; }
-
-        /// <summary>
         /// Override this method to return a zero-based index. This index fetches an 
         /// IAbstractDatabase from the <see cref="ControllerManager"/> and allow the Constructor to initialize the <see cref="Db"/> and <see cref="Source"/> properties.
         /// <para/>

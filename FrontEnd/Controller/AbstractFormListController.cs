@@ -21,11 +21,7 @@ namespace FrontEnd.Controller
         public bool OpenWindowOnNew
         {
             get => _openWindowOnNew;
-            set 
-            {
-                _openWindowOnNew = value;
-                VoidParentUpdate = !value;
-            }
+            set => _openWindowOnNew = value;
         }
 
         protected readonly List<QueryParameter> SearchParameters = [];

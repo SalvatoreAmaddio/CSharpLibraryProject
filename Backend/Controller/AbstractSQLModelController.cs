@@ -9,7 +9,6 @@ namespace Backend.Controller
     {
         protected bool _disposed = false;
         protected bool _allowNewRecord = true;
-        public bool VoidParentUpdate { get; protected set; } = false;
         public IAbstractDatabase Db { get; protected set; } = null!;
         public abstract int DatabaseIndex { get; }
         public RecordSource Source { get; protected set; }

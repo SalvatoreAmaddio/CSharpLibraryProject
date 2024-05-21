@@ -53,4 +53,9 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Themes\" />
+  </ItemGroup>
+
 </Project>
