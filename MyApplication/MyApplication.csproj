@@ -48,6 +48,9 @@
     <Compile Update="View\DepartmentListPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\GenderListPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

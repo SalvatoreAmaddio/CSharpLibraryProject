@@ -50,6 +50,14 @@
                     </Frame.Content>
                 </Frame>
             </TabItem>
+
+            <TabItem Header="Gender">
+                <Frame>
+                    <Frame.Content>
+                        <local:GenderListPage/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
         </TabControl>
     </Grid>
 
