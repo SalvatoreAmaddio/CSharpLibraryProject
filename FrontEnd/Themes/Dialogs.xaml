@@ -11,6 +11,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:UnsavedDialog}">
+        <Setter Property="Icon" Value="{StaticResource stopIcon}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:UnsavedDialog}">

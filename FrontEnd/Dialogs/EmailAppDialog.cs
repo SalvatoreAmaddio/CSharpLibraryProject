@@ -40,7 +40,9 @@ namespace FrontEnd.Dialogs
             if (credential != null)
             {
                 Username = credential.Username;
-                PART_Password.Password = credential.Password;
+                SysCredentailTargets.EmailApp = Username;
+                Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
+                PART_Password.Password = encrypter.Decrypt();
             }
         }
 

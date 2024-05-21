@@ -28,6 +28,7 @@
     <None Remove="images\redlight.png" />
     <None Remove="images\report.png" />
     <None Remove="images\requery.png" />
+    <None Remove="images\stopIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +70,7 @@
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
 	<Resource Include="images\redlight.png" />
+	<Resource Include="images\stopIcon.png" />
 	<Resource Include="Themes\Controls.xaml" />
   </ItemGroup>
 
