@@ -12,7 +12,6 @@ namespace FrontEnd.Forms
     {
         protected bool _disposed = false;
         int Index { get; set; } = 0;
-        int lastIndex => Collection.Count - 1;
         Pages? Pages { get; set; }
         INotifyCollectionChanged? CollectionChangedNotifier { get; set; }
         ItemCollection? Collection { get; set; }
@@ -37,11 +36,16 @@ namespace FrontEnd.Forms
             Index--;
             Content = Collection[Index];
         }
+        private int lastIndex()
+        {
+            if (Collection == null) throw new Exception();
+            return Collection.Count - 1;
+        }
 
         private void OnNextButtonClicked(object sender, RoutedEventArgs e)
         {
             if (Collection == null) throw new Exception("");
-            if (Index == lastIndex) return;
+            if (Index == lastIndex()) return;
             Index++;
             Content = Collection[Index];
         }
@@ -60,6 +64,7 @@ namespace FrontEnd.Forms
                 }
             }
         }
+
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
 
@@ -99,9 +104,7 @@ namespace FrontEnd.Forms
         }
 
         ~Walkthrough() => Dispose(false);
-
     }
-
 
     /// <summary>
     /// This ItemsControl works together with <see cref="Walkthrough"/>
@@ -130,7 +133,5 @@ namespace FrontEnd.Forms
 
         static Pages() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Pages), new FrameworkPropertyMetadata(typeof(Pages)));
 
-        public Pages() { }
-       
     }
 }

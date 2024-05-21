@@ -42,7 +42,7 @@
                     </FlowDocument>
                 </RichTextBox>
             </Border>
-            
+
             <Border x:Name="Step2">
 
             </Border>
