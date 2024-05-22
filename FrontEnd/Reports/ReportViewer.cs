@@ -169,7 +169,7 @@ namespace FrontEnd.Reports
 
             return Task.FromResult(doc.Pages.Select(s => s.Child));
         }
-        
+
         /// <summary>
         /// It checks if the Printing process has terminated before changing the Printer's port.
         /// </summary>

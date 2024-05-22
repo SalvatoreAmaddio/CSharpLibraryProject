@@ -21,11 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\send.png" />
-    <None Remove="PrinterPortManager.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 
@@ -34,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Cake.Powershell" Version="3.0.0" />
+	<PackageReference Include="Microsoft.Management.Infrastructure" Version="3.0.0" />
+	<PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.5" />
 	<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
 	<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />

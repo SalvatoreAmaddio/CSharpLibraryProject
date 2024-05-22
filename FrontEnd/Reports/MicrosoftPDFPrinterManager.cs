@@ -1,5 +1,9 @@
 ﻿using Backend.Utils;
+using System.ComponentModel.Composition.Primitives;
 using System.Management;
+using System.Management.Automation;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace FrontEnd.Reports
 {
@@ -31,6 +35,7 @@ namespace FrontEnd.Reports
         //[DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         //public static extern uint CreateDeletePort(int action, string portName);
 
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         public delegate uint CreateDeletePortDelegate(int action, string portName);
 
         public CreateDeletePortDelegate CreateDeletePort;
@@ -89,7 +94,7 @@ namespace FrontEnd.Reports
         /// </summary>
         public void SetPort()
         {
-            CreateDeletePort((int)PortAction.ADD,FilePath);
+            CreateDeletePort((int)PortAction.ADD, FilePath);
             SetDefaultPort();
         }
 
@@ -100,9 +105,10 @@ namespace FrontEnd.Reports
         /// <exception cref="Exception">Throw an exception if the Printer was not found.</exception>
         private void SetDefaultPort(bool useOriginal = false)
         {
-            ManagementObject? printer = GetPrinter() ?? throw new Exception("Printer not found!");
-            printer.Properties["PortName"].Value = (useOriginal) ? originalPort : FilePath;
+            ManagementObject? printer = GetPrinter() ?? throw new Exception("Failed to load Printer.");
+            printer["PortName"] = (useOriginal) ? originalPort : FilePath;
             printer.Put();
         }
+
     }
 }
