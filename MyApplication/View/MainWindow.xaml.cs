@@ -25,23 +25,18 @@ namespace MyApplication.View
 
         private void OnChangeEmailPasswordClicked(object sender, RoutedEventArgs e) => new EmailAppDialog().ShowDialog();
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            EmailSender emailSender = new("smtp.gmail.com", "salvatoreamaddio94@gmail.com", "Salvo","Test");
-            emailSender.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
-            emailSender.Body = "Ciao!";
-            await emailSender.SendAsync();
-        }
+            //EmailSender emailSender = new("smtp.gmail.com", "salvatoreamaddio94@gmail.com", "Salvo","Test");
+            //emailSender.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
+            //emailSender.Body = "Ciao!";
+            //await emailSender.SendAsync();
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            ReportViewerWindow win = new()
-            {
-                FileName = "myInvoice"
-            };
-            win.AddPage(new MyPage());
-            win.SelectedPage = win[0];
-            win.Show();
-        }
+            //ReportViewerWindow win = new()
+            //{
+            //    FileName = "myInvoice"
+            //};
+            //win.AddPage(new MyPage());
+            //win.SelectedPage = win[0];
+            //win.Show();
+
     }
 }

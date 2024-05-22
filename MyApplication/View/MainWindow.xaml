@@ -27,14 +27,12 @@
                 <MenuItem Header="Change Password" Click="OnChangeEmailPasswordClicked"/>
             </MenuItem>
         </Menu>
-
-        <Button Content="OPEN" Click="Button_Click_1"/>
         
         <fr:Curtain x:Name="Curtain"/>
         
         <TabControl x:Name="MainTab" Grid.Row="1">
             
-            <!--<TabItem Header="Employees">
+            <TabItem Header="Employees">
                 <Frame>
                     <Frame.Content>
                         <local:EmployeeListPage/>
@@ -62,14 +60,6 @@
                 <Frame>
                     <Frame.Content>
                         <local:GenderListPage/>
-                    </Frame.Content>
-                </Frame>
-            </TabItem>-->
-
-            <TabItem Header="Report Viewer">
-                <Frame>
-                    <Frame.Content>
-                        <local:Report/>
                     </Frame.Content>
                 </Frame>
             </TabItem>

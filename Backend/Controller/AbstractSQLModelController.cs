@@ -17,7 +17,7 @@ namespace Backend.Controller
         {
             try 
             {
-                Db = DatabaseManager.Do[DatabaseIndex];
+                Db = DatabaseManager.Get(DatabaseIndex);
             }
             catch (IndexOutOfRangeException e) 
             {

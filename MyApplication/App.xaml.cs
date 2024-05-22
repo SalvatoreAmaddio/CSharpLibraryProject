@@ -11,12 +11,12 @@ namespace MyApplication
         public App() 
         {
             Sys.LoadAllEmbeddedDll();
-            DatabaseManager.Do.Add(new SQLiteDatabase(new Employee()));
-            DatabaseManager.Do.Add(new SQLiteDatabase(new Gender()));
-            DatabaseManager.Do.Add(new SQLiteDatabase(new Department()));
-            DatabaseManager.Do.Add(new SQLiteDatabase(new JobTitle()));
-            DatabaseManager.Do.Add(new SQLiteDatabase(new Payslip()));
-            DatabaseManager.Do.Add(new SQLiteDatabase(new User()));
+            DatabaseManager.Add(new SQLiteDatabase(new Employee()));
+            DatabaseManager.Add(new SQLiteDatabase(new Gender()));
+            DatabaseManager.Add(new SQLiteDatabase(new Department()));
+            DatabaseManager.Add(new SQLiteDatabase(new JobTitle()));
+            DatabaseManager.Add(new SQLiteDatabase(new Payslip()));
+            DatabaseManager.Add(new SQLiteDatabase(new User()));
         }
     }
 

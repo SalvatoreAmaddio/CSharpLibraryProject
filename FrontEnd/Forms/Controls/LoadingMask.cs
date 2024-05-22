@@ -51,7 +51,7 @@ namespace FrontEnd.Forms
             string? assemblyName = Sys.AppName;
             string? Namespace = Sys.AppAssembly?.EntryPoint?.DeclaringType?.Namespace;
             Type? mainWinType = Type.GetType($"{Namespace}.View.{MainWindow}, {assemblyName}") ?? throw new Exception($"Could not find the Type of {MainWindow}");
-            await Task.Run(DatabaseManager.Do.FetchData);
+            await Task.Run(DatabaseManager.FetchData);
             Helper.GetActiveWindow()?.GoToWindow((Window?)Activator.CreateInstance(mainWinType));
         }
 

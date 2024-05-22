@@ -66,7 +66,7 @@ namespace Backend.Source
         /// This constructor will consider this RecordSource object as a child of the <see cref="IAbstractDatabase.Records"/>
         /// </summary>
         /// <param name="db">An instance of <see cref="IAbstractDatabase"/></param>
-        public RecordSource(IAbstractDatabase db) : this(db.Records) => db.Records.AddChild(this);
+        public RecordSource(IAbstractDatabase? db) : this(db.Records) => db.Records.AddChild(this);
 
         /// <summary>
         /// It instantiates a RecordSource object filled with the given <see cref="IAbstractDatabase.Records"/> IEnumerable.

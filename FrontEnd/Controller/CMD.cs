@@ -11,7 +11,7 @@ namespace FrontEnd.Controller
 
         public bool CanExecute(object? parameter)
         {
-            return InternetConnection.Do.IsConnected();
+            return InternetConnection.IsConnected();
         }
 
         public async void Execute(object? parameter) => await task.Invoke();
@@ -54,7 +54,7 @@ namespace FrontEnd.Controller
 
         public bool CanExecute(object? parameter)
         {
-            return InternetConnection.Do.IsConnected();
+            return InternetConnection.IsConnected();
         }
 
         public void Execute(object? parameter)

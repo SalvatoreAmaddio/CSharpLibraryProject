@@ -115,7 +115,7 @@ namespace Backend.Utils
             if (Is == null) throw new CurrentUserNotSetException();
             if (string.IsNullOrEmpty(SecretKeyTarget) && string.IsNullOrEmpty(IVTarget)) throw new InvalidTargetsException(SecretKeyTarget, IVTarget);
             List<QueryParameter> para = [new(nameof(UserName), Is.UserName)];
-            IUser? user = DatabaseManager.Do.Find("User")?.Retrieve(null, para).Cast<IUser>().FirstOrDefault();
+            IUser? user = DatabaseManager.Find("User")?.Retrieve(null, para).Cast<IUser>().FirstOrDefault();
             if (user == null) return null;
             UserID = user.UserID;
 
@@ -142,7 +142,7 @@ namespace Backend.Utils
             Encrypter encrypter = new(pwd);
             Password = encrypter.Encrypt();
             List<QueryParameter> para = [new(nameof(Password), Is.Password), new(nameof(Is.UserID), Is.UserID)];
-            DatabaseManager.Do.Find("User")?.Crud(CRUD.UPDATE, $"UPDATE User SET Password=@Password WHERE UserID=@UserID", para);
+            DatabaseManager.Find("User")?.Crud(CRUD.UPDATE, $"UPDATE User SET Password=@Password WHERE UserID=@UserID", para);
             encrypter.ReplaceStoredKeyIV(SecretKeyTarget, IVTarget);
             Logout();
         }

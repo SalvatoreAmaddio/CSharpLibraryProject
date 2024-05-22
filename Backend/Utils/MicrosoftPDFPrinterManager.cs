@@ -4,6 +4,22 @@ using System.Runtime.InteropServices;
 namespace Backend.Utils
 {
     /// <summary>
+    /// This class follows the Singleton pattern to load CreateDeletePort function from the the PrinterPortManager.dll.
+    /// This class works together with <see cref="MicrosoftPDFPrinterManager"/>
+    /// </summary>
+    public sealed class CreateDeletePort 
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        public delegate uint CreateDeletePortDelegate(int action, string portName);
+
+        private static readonly Lazy<CreateDeletePort> lazyInstance = new(() => new CreateDeletePort());
+        public static CreateDeletePortDelegate Execute => lazyInstance.Value.CreateDeletePortDel;
+
+        private readonly CreateDeletePortDelegate CreateDeletePortDel;        
+        internal CreateDeletePort() => CreateDeletePortDel = Sys.LoadedDLL.First(s => s.Name.Contains("PrinterPortManager.dll")).LoadFunction<CreateDeletePortDelegate>("CreateDeletePort");
+    }
+
+    /// <summary>
     /// This class interacts with PDFDriverHelper.dll which add and removes PDF Printer's ports.
     /// Then, the <see cref="ManagementScope"/> set the Port as a Default Port that the Printer will use while printing.
     /// <para/>
@@ -30,23 +46,6 @@ namespace Backend.Utils
 
         //[DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         //public static extern uint CreateDeletePort(int action, string portName);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        public delegate uint CreateDeletePortDelegate(int action, string portName);
-
-        public CreateDeletePortDelegate CreateDeletePort;
-
-        public MicrosoftPDFPrinterManager()
-        {
-            try
-            {
-                CreateDeletePort = Sys.LoadedDLL.First(s => s.Name.Contains("PrinterPortManager.dll")).LoadFunction<CreateDeletePortDelegate>("CreateDeletePort");
-            }
-            catch
-            {
-                throw new Exception($"Have you called Sys.LoadAll()?");
-            }
-        }
 
         /// <summary>
         /// Initiates the <see cref="ManagementScope"/>'s connection. 
@@ -82,7 +81,7 @@ namespace Backend.Utils
         public void ResetPort()
         {
             SetDefaultPort(true);
-            CreateDeletePort((int)PortAction.REMOVE, FilePath);
+            CreateDeletePort.Execute((int)PortAction.REMOVE, FilePath);
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Backend.Utils
         /// </summary>
         public void SetPort()
         {
-            CreateDeletePort((int)PortAction.ADD, FilePath);
+            CreateDeletePort.Execute((int)PortAction.ADD, FilePath);
             SetDefaultPort();
         }
 

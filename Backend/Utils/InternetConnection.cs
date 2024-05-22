@@ -11,7 +11,7 @@ namespace Backend.Utils
     public sealed partial class InternetConnection
     {
         private static readonly Lazy<InternetConnection> lazyInstance = new(() => new InternetConnection());
-        public static InternetConnection Do => lazyInstance.Value;
+        public static InternetConnection Event => lazyInstance.Value;
 
         [LibraryImport("wininet.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -20,7 +20,7 @@ namespace Backend.Utils
         /// <summary>
         /// Gets or Sets if this class should be checking for Iternet Connection or not.
         /// </summary>
-        public bool On { get; set; } = false;
+        public static bool On { get; set; } = false;
 
         /// <summary>
         /// Occurs when the Internet Connection status has changed.
@@ -34,7 +34,7 @@ namespace Backend.Utils
         /// true if the machine is connected to the internet <para/>
         /// <c>IMPORTANT:</c> Returns always true if <see cref="On"/> is set to false.
         /// </returns>
-        public bool IsConnected() => !On ? true : InternetGetConnectedState(out _, 0);
+        public static bool IsConnected() => !On ? true : InternetGetConnectedState(out _, 0);
 
         /// <summary>
         /// This method check if the machine is connected to the Internet.
@@ -43,7 +43,7 @@ namespace Backend.Utils
         /// A Task&lt;bool> <para/>
         /// <c>IMPORTANT:</c> Returns always Task&lt;true> if <see cref="On"/> is set to false.
         /// </returns>
-        public Task<bool> IsConnectedAsync() => Task.FromResult(IsConnected());
+        public static Task<bool> IsConnectedAsync() => Task.FromResult(IsConnected());
 
         /// <summary>
         /// This method perform an infinite loop that checks if the Internet Connection has changed.
@@ -52,7 +52,7 @@ namespace Backend.Utils
         /// <c>IMPORTANT:</c> this method does not run if <see cref="On"/> is set to false.
         /// </summary>
         /// <returns>A Task</returns>
-        public async Task CheckingInternetConnection()
+        public async static Task CheckingInternetConnection()
         {
             if (!On) return;
             bool initialStatusCheck = IsConnected();
@@ -64,7 +64,7 @@ namespace Backend.Utils
                     if (initialStatusCheck != nextStatusCheck)
                     {
                         initialStatusCheck = nextStatusCheck;
-                        InternetStatusChanged?.Invoke(this, new(initialStatusCheck));
+                        lazyInstance.Value.InternetStatusChanged?.Invoke(lazyInstance.Value, new(initialStatusCheck));
                     }
                 });
             }

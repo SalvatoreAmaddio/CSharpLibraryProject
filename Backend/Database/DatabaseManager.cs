@@ -10,20 +10,20 @@ namespace Backend.Database
     {
         private static readonly Lazy<DatabaseManager> lazyInstance = new(() => new DatabaseManager());
         private readonly List<IAbstractDatabase> Databases;
-        public static DatabaseManager Do => lazyInstance.Value;
-
-        /// <summary>
-        /// The number of IAbstractDatabases.
-        /// </summary>
-        /// <value>An Integer.</value>
-        public int Count => Databases.Count;   
-        private DatabaseManager() => Databases = [];
 
         /// <summary>
         /// It adds a database object.
         /// </summary>
         /// <param name="db">An object implementing <see cref="IAbstractDatabase"/></param>
-        public void Add(IAbstractDatabase db) => Databases.Add(db);
+        public static void Add(IAbstractDatabase db) => lazyInstance.Value.Databases.Add(db);
+
+        /// <summary>
+        /// The number of IAbstractDatabases.
+        /// </summary>
+        /// <value>An Integer.</value>
+        public static int Count => lazyInstance.Value.Databases.Count;   
+        private DatabaseManager() => Databases = [];
+
 
         /// <summary>
         /// For each database, it calls concurrently, the <see cref="IAbstractDatabase.RetrieveAsync(string?, List{QueryParameter}?)"/>.
@@ -38,11 +38,11 @@ namespace Backend.Database
         /// </code>
         /// </summary>
         /// <returns>A Task</returns>
-        public async Task FetchData() 
+        public static async Task FetchData() 
         {
             List<Task<List<ISQLModel>>> tasks = [];
 
-            foreach (IAbstractDatabase db in Databases)
+            foreach (IAbstractDatabase db in lazyInstance.Value.Databases)
             {
                 Task<List<ISQLModel>> task = db.RetrieveAsync().ToListAsync().AsTask();
                 tasks.Add(task);
@@ -50,7 +50,7 @@ namespace Backend.Database
 
             await Task.WhenAll(tasks);
 
-            for(int i = 0; i < tasks.Count; i++) this[i].Records = new(tasks[i].Result);
+            for(int i = 0; i < tasks.Count; i++) Get(i).Records = new(tasks[i].Result);
         }
 
         /// <summary>
@@ -64,7 +64,8 @@ namespace Backend.Database
         /// <param name="index">zero-based position.</param>
         /// <returns>An IAbstractDatabase</returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public IAbstractDatabase this[int index] => (index < 0 || index >= Databases.Count) ? throw new IndexOutOfRangeException() : Databases[index];
+        public static IAbstractDatabase Get(int index) => (index < 0 || index >= lazyInstance.Value.Databases.Count) ? throw new IndexOutOfRangeException() : lazyInstance.Value.Databases[index];
+
 
         /// <summary>
         /// Attempts to find a <see cref="IAbstractDatabase"/> object by 
@@ -72,9 +73,9 @@ namespace Backend.Database
         /// </summary>
         /// <param name="name">The name of the <see cref="IAbstractDatabase.Model"/>'s Type Name to find</param>
         /// <returns>An instance of <see cref="IAbstractDatabase"/> object. Returns null if the instance was not found.</returns>
-        public IAbstractDatabase? Find(string name) 
+        public static IAbstractDatabase? Find(string name) 
         { 
-            foreach(IAbstractDatabase db in Databases) 
+            foreach(IAbstractDatabase db in lazyInstance.Value.Databases) 
                 if (db.Model.GetType().Name.Equals(name)) return db;
             return null;
         }
@@ -85,9 +86,9 @@ namespace Backend.Database
         /// </summary>
         /// <typeparam name="M">A type which implements <see cref="ISQLModel"/></typeparam>
         /// <returns>An instance of <see cref="IAbstractDatabase"/> object. Returns null if the instance was not found.</returns>
-        public IAbstractDatabase? Find<M>() where M : ISQLModel, new()
+        public static IAbstractDatabase? Find<M>() where M : ISQLModel, new()
         {
-            foreach (IAbstractDatabase db in Databases) 
+            foreach (IAbstractDatabase db in lazyInstance.Value.Databases) 
             {
                 if (db.Model.GetType().Equals(typeof(M))) return db;
             }

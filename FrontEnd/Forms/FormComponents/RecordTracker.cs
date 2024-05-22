@@ -19,7 +19,7 @@ namespace FrontEnd.Forms.FormComponents
         public RecordTracker()
         {
             OnClickCommand = new TrackerClickCommand(OnClicked);
-            InternetConnection.Do.InternetStatusChanged += OnInternetStatusChanged;
+            InternetConnection.Event.InternetStatusChanged += OnInternetStatusChanged;
         }
 
         private void OnInternetStatusChanged(object? sender, Backend.Events.InternetConnectionStatusArgs e)
@@ -131,7 +131,7 @@ namespace FrontEnd.Forms.FormComponents
 
             if (disposing)
             {
-                InternetConnection.Do.InternetStatusChanged -= OnInternetStatusChanged;
+                InternetConnection.Event.InternetStatusChanged -= OnInternetStatusChanged;
             }
         }
 

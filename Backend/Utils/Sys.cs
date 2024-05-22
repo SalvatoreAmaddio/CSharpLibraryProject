@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-
 namespace Backend.Utils
 {
     public class Sys

@@ -1,5 +1,4 @@
-﻿
-namespace Backend.Events
+﻿namespace Backend.Events
 {
 
     public delegate void InternetConnectionStatusHandler(object? sender, InternetConnectionStatusArgs e);
