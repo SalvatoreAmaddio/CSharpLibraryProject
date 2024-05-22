@@ -184,4 +184,35 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type local:SuccessDialog}">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Icon" Value="{StaticResource padlock}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:SuccessDialog}">
+                    <Border Background="White"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Background="White" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="7*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{StaticResource thumbup}" VerticalAlignment="Stretch" Height="100" Grid.Column="0"/>
+                            <Label Grid.Column="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="15" Padding="10">
+                                <TextBlock TextWrapping="Wrap" Text="{TemplateBinding Text}"/>
+                            </Label>
+                            <Button Grid.Row="2" Grid.ColumnSpan="2" Tag="ok" HorizontalAlignment="Stretch" Content="OK" x:Name="PART_OK" IsTabStop="True" TabIndex="0"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -12,10 +12,7 @@ namespace FrontEnd.Dialogs
     {
         private Button? okButton;
 
-        static BrokenIntegrityDialog()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(BrokenIntegrityDialog), new FrameworkPropertyMetadata(typeof(BrokenIntegrityDialog)));
-        }
+        static BrokenIntegrityDialog() => DefaultStyleKeyProperty.OverrideMetadata(typeof(BrokenIntegrityDialog), new FrameworkPropertyMetadata(typeof(BrokenIntegrityDialog)));
 
         private BrokenIntegrityDialog(string? text = null, string? title = null) : base(text, title)
         {

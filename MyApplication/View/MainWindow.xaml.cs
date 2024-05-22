@@ -25,10 +25,6 @@ namespace MyApplication.View
             new Guide().ShowDialog();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            EmailAppDialog emailAppDialog = new EmailAppDialog();
-            emailAppDialog.ShowDialog();
-        }
+        private void MenuItem_Click(object sender, RoutedEventArgs e) => new EmailAppDialog().ShowDialog();
     }
 }

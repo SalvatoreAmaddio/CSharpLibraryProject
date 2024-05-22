@@ -40,8 +40,7 @@ namespace FrontEnd.Dialogs
             if (PART_NewPassword == null) throw new Exception($"Failed to fetch {PART_NewPassword}");
 
             CurrentUser.ChangePassword(PART_NewPassword.Password);
-
-            MessageBox.Show("Password Updated! You will need to login again when you launch the Application.", "Done!");
+            SuccessDialog.Display("User's Password successfully updated! You will need to login again when you launch the Application.");
             Close();
         }
     }
