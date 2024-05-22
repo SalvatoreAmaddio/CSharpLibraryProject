@@ -43,7 +43,11 @@ namespace Backend.Utils
                    objType == typeof(sbyte) || objType == typeof(byte);
         }
 
-        public static void LoadAll() 
+        /// <summary>
+        /// It loads all EmbeddedResource dll.
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public static void LoadAllEmbeddedDll()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             string[] resources = executingAssembly.GetManifestResourceNames();

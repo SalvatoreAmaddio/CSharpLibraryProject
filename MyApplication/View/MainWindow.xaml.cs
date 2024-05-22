@@ -1,6 +1,5 @@
 ﻿using Backend.Utils;
 using FrontEnd.Dialogs;
-using FrontEnd.ExtensionMethods;
 using FrontEnd.Forms;
 using FrontEnd.Reports;
 using FrontEnd.Utils;
@@ -40,7 +39,6 @@ namespace MyApplication.View
             {
                 FileName = "myInvoice"
             };
-            win.AddPage(new MyPage());
             win.AddPage(new MyPage());
             win.SelectedPage = win[0];
             win.Show();

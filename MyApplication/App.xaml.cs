@@ -10,7 +10,7 @@ namespace MyApplication
     {
         public App() 
         {
-            Sys.LoadAll();
+            Sys.LoadAllEmbeddedDll();
             DatabaseManager.Do.Add(new SQLiteDatabase(new Employee()));
             DatabaseManager.Do.Add(new SQLiteDatabase(new Gender()));
             DatabaseManager.Do.Add(new SQLiteDatabase(new Department()));

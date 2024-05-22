@@ -14,7 +14,6 @@ namespace MyApplication.View
         {
             InitializeComponent();
             reports.Add(new MyPage());
-            reports.Add(new MyPage());
             viewer.ItemsSource = reports;
             viewer.SelectedPage = reports.First();
         }

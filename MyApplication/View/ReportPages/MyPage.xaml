@@ -8,7 +8,6 @@
              x:Name="Page" HeaderRow="40"
              PageNumber="1"
              Padding="10"
-             d:DataContext="{d:DesignInstance Type=m:Employee, IsDesignTimeCreatable=False}" Height="490" Width="475"
              mc:Ignorable="d">
 
     <r:ReportPage.Header>
