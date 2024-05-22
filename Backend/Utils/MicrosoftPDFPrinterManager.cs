@@ -1,8 +1,7 @@
-﻿using Backend.Utils;
-using System.Management;
+﻿using System.Management;
 using System.Runtime.InteropServices;
 
-namespace FrontEnd.Reports
+namespace Backend.Utils
 {
     /// <summary>
     /// This class interacts with PDFDriverHelper.dll which add and removes PDF Printer's ports.
@@ -28,7 +27,7 @@ namespace FrontEnd.Reports
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
         private ManagementScope? managementScope;
-        
+
         //[DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         //public static extern uint CreateDeletePort(int action, string portName);
 
@@ -37,13 +36,13 @@ namespace FrontEnd.Reports
 
         public CreateDeletePortDelegate CreateDeletePort;
 
-        public MicrosoftPDFPrinterManager() 
+        public MicrosoftPDFPrinterManager()
         {
-            try 
+            try
             {
                 CreateDeletePort = Sys.LoadedDLL.First(s => s.Name.Contains("PrinterPortManager.dll")).LoadFunction<CreateDeletePortDelegate>("CreateDeletePort");
             }
-            catch 
+            catch
             {
                 throw new Exception($"Have you called Sys.LoadAll()?");
             }
@@ -108,4 +107,5 @@ namespace FrontEnd.Reports
         }
 
     }
+
 }
