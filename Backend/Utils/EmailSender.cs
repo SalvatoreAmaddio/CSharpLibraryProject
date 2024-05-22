@@ -50,15 +50,24 @@ namespace Backend.Utils
         /// </summary>
         public int Port { get; set; } = 587;
 
-        public EmailSender() 
-        { 
-            
+        public EmailSender() { }
+
+        public EmailSender(string host, string senderEmail, string senderName, string subject)
+        {
+            this.Host = host;
+            this.SenderEmail = senderEmail;
+            this.SenderName = senderName;
+            this.Subject = subject;
+        }
+        private Task<MimeEntity> BuildBodyAsync() 
+        {
+            return Task.FromResult(BuildBody());
         }
 
         /// <summary>
         /// Prepare the body of the email, attachments included.
         /// </summary>
-        private void BuildBody() 
+        private MimeEntity BuildBody() 
         {
             BodyBuilder bodyBuilder = new()
             {
@@ -68,7 +77,7 @@ namespace Backend.Utils
             foreach(string attachmentPath in Attachments)
                 bodyBuilder.Attachments.Add(attachmentPath);
 
-            Message.Body = bodyBuilder.ToMessageBody();
+            return bodyBuilder.ToMessageBody();
         }
 
         /// <summary>
@@ -84,6 +93,60 @@ namespace Backend.Utils
         /// <param name="receiverName">the name associated to the email address of the receiver</param>
         public void AddReceiver(string receiverAddress, string receiverName) => Message.To.Add(new MailboxAddress(receiverName, receiverAddress));
 
+
+        /// <summary>
+        /// Add a CC.
+        /// </summary>
+        /// <param name="ccAddress">the email address of the CC</param>
+        /// <param name="ccName">the name associated to the email address of the CC</param>
+        public void AddCC(string ccAddress, string ccName) => Message.Cc.Add(new MailboxAddress(ccName, ccAddress));        
+
+        /// <summary>
+        /// Send the email Asynchronously.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task SendAsync() 
+        {
+            if (Message.To.Count == 0) throw new Exception("No Receiver was added");
+            if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new Exception("No Sender information");
+            if (string.IsNullOrEmpty(Host)) throw new Exception("No Host provided");
+
+            Message.From.Add(new MailboxAddress(SenderName, SenderEmail));
+            Message.Subject = Subject;
+
+            Task<MimeEntity> bodyTask = BuildBodyAsync();
+            using (var client = new SmtpClient())
+            {
+                try
+                {
+                    Task connectTask = client.ConnectAsync(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
+
+                    await Task.WhenAll(bodyTask, connectTask);
+
+                    Task authenticateTask = new(() => { });
+                    if (AuthenticationRequired)
+                    {
+                        SysCredentailTargets.EmailApp = SenderEmail;
+                        Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp) ?? throw new Exception("Failed to retrieve credentials for authentication.");
+                        Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
+                        authenticateTask = client.AuthenticateAsync(SenderEmail, encrypter.Decrypt());
+                    }
+
+                    await authenticateTask;
+
+                    Message.Body = bodyTask.Result;
+
+                    await client.SendAsync(Message);
+                    await client.DisconnectAsync(true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to send email: {ex.Message}");
+                }
+            }
+        }
+
         /// <summary>
         /// Send the email.
         /// </summary>
@@ -97,7 +160,7 @@ namespace Backend.Utils
             Message.From.Add(new MailboxAddress(SenderName, SenderEmail));
             Message.Subject = Subject;
 
-            BuildBody();
+            Message.Body = BuildBody();
 
             using (var client = new SmtpClient())
             {

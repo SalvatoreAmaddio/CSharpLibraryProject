@@ -26,5 +26,14 @@ namespace MyApplication.View
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) => new EmailAppDialog().ShowDialog();
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            EmailSender em = new("smtp.gmail.com", "salvatoreamaddio94@gmail.com", "Salvo","Prova");
+            em.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
+            em.Body = "Ciao!";
+            await em.SendAsync();
+            MessageBox.Show("Done!");
+        }
     }
 }
