@@ -33,7 +33,7 @@ namespace FrontEnd.Reports
 
         public delegate uint CreateDeletePortDelegate(int action, string portName);
 
-        public CreateDeletePortDelegate? CreateDeletePort;
+        public CreateDeletePortDelegate CreateDeletePort;
 
         public MicrosoftPDFPrinterManager() 
         {

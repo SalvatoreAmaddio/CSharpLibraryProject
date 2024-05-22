@@ -54,6 +54,13 @@ namespace Backend.Utils
             }
         } 
 
+        /// <summary>
+        /// Returns a function from the Assembly as the type of delegate specified by the Generic D.
+        /// </summary>
+        /// <typeparam name="D">The type of Delegate</typeparam>
+        /// <param name="functionName">The name of the function to load</param>
+        /// <returns>A delegate</returns>
+        /// <exception cref="Exception"></exception>
         public D LoadFunction<D>(string functionName) 
         {
             IntPtr hModule = LoadLibrary(Path);
@@ -63,7 +70,7 @@ namespace Backend.Utils
             if (pFunc == IntPtr.Zero)
             {
                 FreeLibrary(hModule);
-                throw new Exception("Failed to load function from dll");
+                throw new Exception($"Failed to load {functionName} from {Name}");
             }
             D? delegateFunction = Marshal.GetDelegateForFunctionPointer<D>(pFunc);
             FreeLibrary(hModule);
