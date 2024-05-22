@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows;
 using FrontEnd.Utils;
+using FrontEnd.Properties;
 
 namespace FrontEnd.Dialogs
 {
@@ -36,7 +37,7 @@ namespace FrontEnd.Dialogs
             if (PART_Save != null)
                 PART_Save.Click += OnSaveClicked;
 
-            SysCredentailTargets.EmailApp = Properties.Settings.Default.EmailUserName;
+            SysCredentailTargets.EmailApp = FrontEndSettings.Default.EmailUserName;
             credential = CredentialManager.Get(SysCredentailTargets.EmailApp);
             if (credential != null)
             {
@@ -59,9 +60,8 @@ namespace FrontEnd.Dialogs
             Encrypter encrypter = new(PART_Password.Password);
             CredentialManager.Replace(new(SysCredentailTargets.EmailApp, Username, encrypter.Encrypt()));
             encrypter.ReplaceStoredKeyIV(SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);           
-            Properties.Settings.Default.EmailUserName = Username;
-            Properties.Settings.Default.Save();
-
+            FrontEndSettings.Default.EmailUserName = Username;
+            FrontEndSettings.Default.Save();
             MessageBox.Show("Saved!");
             Close();
         }
