@@ -11,14 +11,14 @@
              mc:Ignorable="d">
 
     <r:ReportPage.Header>
-        <Border>
-            <Label Content="{Binding FirstName}"/>
+        <Border Background="Red">
+            <Label x:Name="FirstName"/>
         </Border>
     </r:ReportPage.Header>
 
     <r:ReportPage.Body>
         <Grid>
-            <Label Content="{Binding LastName}"/>
+            <Label x:Name="LastName"/>
         </Grid>
     </r:ReportPage.Body>
 

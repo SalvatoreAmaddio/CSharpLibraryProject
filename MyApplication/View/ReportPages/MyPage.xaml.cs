@@ -13,7 +13,9 @@ namespace MyApplication.View.ReportPages
                 FirstName = "Salvatore",
                 LastName = "Amaddio"
             };
-            DataContext = employee;
+
+            FirstName.Content = employee.FirstName;
+            LastName.Content = employee.LastName;
         }
     }
 }

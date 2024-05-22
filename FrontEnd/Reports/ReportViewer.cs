@@ -10,6 +10,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace FrontEnd.Reports
 {
@@ -170,6 +172,7 @@ namespace FrontEnd.Reports
 
             return Task.FromResult(doc.Pages.Select(s => s.Child));
         }
+
 
         /// <summary>
         /// It checks if the Printing process has terminated before changing the Printer's port.
