@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <None Remove="images\send.png" />
+    <None Remove="PrinterPortManager.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,8 +85,10 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!--
+	  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy &quot;$(ProjectDir)PrinterPortManager.dll&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;" />
   </Target>
+	-->
 
 </Project>

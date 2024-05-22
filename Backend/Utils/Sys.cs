@@ -43,16 +43,47 @@ namespace Backend.Utils
                    objType == typeof(sbyte) || objType == typeof(byte);
         }
 
+        public static void LoadAll() 
+        {
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            string[] resources = executingAssembly.GetManifestResourceNames();
+
+            foreach (string resourceName in resources) 
+            {
+                if (IsDLL(resourceName)) 
+                {
+                    using (Stream? stream = executingAssembly.GetManifestResourceStream(resourceName))
+                    {
+                        if (stream == null) throw new Exception($"Resource {resourceName} not found.");
+
+                        string tempFile = Path.Combine(Path.GetTempPath(), resourceName);
+                        using (FileStream fs = new(tempFile, FileMode.Create, FileAccess.Write))
+                        {
+                            stream.CopyTo(fs);
+                        }
+
+                        if (!NativeLibrary.TryLoad(tempFile, out IntPtr handle)) throw new Exception($"Failed to load DLL: {tempFile}");
+
+                        LoadedAssembly assembly = new(tempFile, resourceName, IntPtr.Size == 8 ? "x64" : "x86");
+                        assembly.Load();
+                        LoadedDLL.Add(assembly);
+                    }
+                }     
+            }
+        }
+
+        private static bool IsDLL(string resource) => resource.EndsWith("dll");
+
         /// <summary>
         /// It loads a EmbeddedResource dll 
         /// </summary>
         /// <param name="dllName">The name of the dll</param>
         /// <exception cref="Exception">Resource not found Exception</exception>
-        public static void LoadEmbeddedDll(string dllName)
+        public static void LoadEmbeddedDll(string dllName, string nameSpace = "Backend.Database")
         {
             string architecture = IntPtr.Size == 8 ? "bit64" : "x86";
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            string resourceName = $"Backend.Database.{architecture}.{dllName}.dll";
+            string resourceName = $"{nameSpace}.{architecture}.{dllName}.dll";
 
             using (Stream? stream = executingAssembly.GetManifestResourceStream(resourceName))
             {
@@ -71,42 +102,6 @@ namespace Backend.Utils
                 LoadedDLL.Add(assembly);
             }
         }
-
-    }
-    
-    /// <summary>
-    /// Represent an object holding a reference to an external Assembly.
-    /// </summary>
-    /// <param name="path">The path were the assembly is located.</param>
-    public class LoadedAssembly(string path, string name, string architecture)
-    {
-        /// <summary>
-        /// Gets the Loaded Assembly's Architecture.
-        /// </summary>
-        public string Architecture { get; } = architecture;
-
-        /// <summary>
-        /// Gets the name of the DLL.
-        /// </summary>
-        public string Name { get; } = name;
-
-        /// <summary>
-        /// Gets the path of the DLL.
-        /// </summary>
-        public string Path { get; } = path;
-
-        /// <summary>
-        /// Gets the actual loaded Assembly
-        /// </summary>
-        /// <returns>An Assembly</returns>
-        public Assembly? Assembly { get; private set; } 
-
-        /// <summary>
-        /// Load the assembly.
-        /// </summary>
-        public void Load() => Assembly = Assembly.LoadFile(Path);
-
-        public override string? ToString() => $"{Name}.dll - Architecture: {Architecture}";
 
     }
 }

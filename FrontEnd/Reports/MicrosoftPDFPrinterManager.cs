@@ -1,5 +1,5 @@
-﻿using System.Management;
-using System.Runtime.InteropServices;
+﻿using Backend.Utils;
+using System.Management;
 
 namespace FrontEnd.Reports
 {
@@ -18,17 +18,34 @@ namespace FrontEnd.Reports
         internal enum PortAction
         {
             ADD = 0,
-            REMOVE = 1,
+            REMOVE = 1
         }
+
         public string NewPortName { get; set; } = string.Empty;
         public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
 
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";
         private ManagementScope? managementScope;
+        
+        //[DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        //public static extern uint CreateDeletePort(int action, string portName);
 
-        [DllImport("PrinterPortManager.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern uint CreateDeletePort(int action, string portName);
+        public delegate uint CreateDeletePortDelegate(int action, string portName);
+
+        public CreateDeletePortDelegate? CreateDeletePort;
+
+        public MicrosoftPDFPrinterManager() 
+        {
+            try 
+            {
+                CreateDeletePort = Sys.LoadedDLL.First(s => s.Name.Contains("PrinterPortManager.dll")).LoadFunction<CreateDeletePortDelegate>("CreateDeletePort");
+            }
+            catch 
+            {
+                throw new Exception($"Have you called Sys.LoadAll()?");
+            }
+        }
 
         /// <summary>
         /// Initiates the <see cref="ManagementScope"/>'s connection. 
@@ -75,7 +92,6 @@ namespace FrontEnd.Reports
             CreateDeletePort((int)PortAction.ADD,FilePath);
             SetDefaultPort();
         }
-
 
         /// <summary>
         /// Sets the default Printer's Port.

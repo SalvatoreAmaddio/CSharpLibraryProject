@@ -26,7 +26,7 @@ namespace Backend.Database
         /// <exception cref="LoadedAssemblyFailure"></exception>
         private DbConnection? Connector() 
         {
-            Assembly? assembly = Sys.LoadedDLL.FirstOrDefault(s => s.Name.Equals("System.Data.SQLite"))?.Assembly;
+            Assembly? assembly = Sys.LoadedDLL.FirstOrDefault(s => s.Name.Contains("System.Data.SQLite"))?.Assembly;
             if (assembly == null) return null;
             IDbConnection? connection = (IDbConnection?)assembly.CreateInstance("System.Data.SQLite.SQLiteConnection") ?? throw new LoadedAssemblyFailure();
             connection.ConnectionString = ConnectionString();

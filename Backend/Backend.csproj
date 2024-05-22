@@ -22,11 +22,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="PrinterPortManager.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Database\bit64\System.Data.SQLite.dll" />
+    <EmbeddedResource Include="PrinterPortManager.dll" />
   </ItemGroup>
 
   <ItemGroup>
