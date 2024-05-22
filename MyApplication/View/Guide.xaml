@@ -108,7 +108,7 @@
                             <ListItem>
                                 <Paragraph FontSize="15" IsEnabled="True">
                                     <Bold>Step 5:</Bold> Once the 2-Step Verification is activated, click on the following link:
-                                    <Hyperlink Cursor="Hand" NavigateUri="https://myaccount.google.com/apppasswords" RequestNavigate="Hyperlink_RequestNavigate">App passwords</Hyperlink>
+                                    <Hyperlink Cursor="Hand" NavigateUri="https://myaccount.google.com/apppasswords" RequestNavigate="OnLinkClicked">App passwords</Hyperlink>
                                 </Paragraph>
                             </ListItem>
                             <ListItem Margin="0,10,0,0">

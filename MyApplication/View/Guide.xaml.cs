@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace MyApplication.View
 {
@@ -13,7 +14,7 @@ namespace MyApplication.View
             InitializeComponent();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void OnLinkClicked(object sender, RequestNavigateEventArgs e)
         {
             ProcessStartInfo info = new(e.Uri.AbsoluteUri);
             info.UseShellExecute = true;
