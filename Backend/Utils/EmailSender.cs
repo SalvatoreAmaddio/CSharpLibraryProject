@@ -1,5 +1,6 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
+using Backend.Exceptions;
 
 namespace Backend.Utils
 {
@@ -8,7 +9,7 @@ namespace Backend.Utils
     /// </summary>
     public class EmailSender
     {
-        private MimeMessage Message {get; set;} = new MimeMessage();
+        private MimeMessage Message { get; set; } = new MimeMessage();
 
         /// <summary>
         /// Gets and Sets the email of the sender.
@@ -99,50 +100,53 @@ namespace Backend.Utils
         /// </summary>
         /// <param name="ccAddress">the email address of the CC</param>
         /// <param name="ccName">the name associated to the email address of the CC</param>
-        public void AddCC(string ccAddress, string ccName) => Message.Cc.Add(new MailboxAddress(ccName, ccAddress));        
+        public void AddCC(string ccAddress, string ccName) => Message.Cc.Add(new MailboxAddress(ccName, ccAddress));
 
         /// <summary>
         /// Send the email Asynchronously.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task SendAsync() 
+        /// <returns>A string which tells the Server Response.</returns>
+        /// <exception cref="InvalidReceiver"></exception>
+        /// <exception cref="InvalidSender"></exception>
+        /// <exception cref="InvalidHost"></exception>
+        /// <exception cref="CredentialFailure"></exception>
+        public async Task<string> SendAsync() 
         {
-            if (Message.To.Count == 0) throw new Exception("No Receiver was added");
-            if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new Exception("No Sender information");
-            if (string.IsNullOrEmpty(Host)) throw new Exception("No Host provided");
+            if (Message.To.Count == 0) throw new InvalidReceiver();
+            if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new InvalidSender();
+            if (string.IsNullOrEmpty(Host)) throw new InvalidHost();
 
             Message.From.Add(new MailboxAddress(SenderName, SenderEmail));
             Message.Subject = Subject;
 
-            Task<MimeEntity> bodyTask = BuildBodyAsync();
+            Task<MimeEntity> goAndBuildBody = BuildBodyAsync();
+
             using (var client = new SmtpClient())
             {
                 try
                 {
-                    Task connectTask = client.ConnectAsync(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
+                    Task goAndConnect = client.ConnectAsync(Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
 
-                    await Task.WhenAll(bodyTask, connectTask);
+                    await Task.WhenAll(goAndBuildBody, goAndConnect);
 
-                    Task authenticateTask = new(() => { });
                     if (AuthenticationRequired)
                     {
                         SysCredentailTargets.EmailApp = SenderEmail;
-                        Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp) ?? throw new Exception("Failed to retrieve credentials for authentication.");
+                        Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp) ?? throw new CredentialFailure("Failed to retrieve credentials for authentication");
                         Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
-                        authenticateTask = client.AuthenticateAsync(SenderEmail, encrypter.Decrypt());
+                        await client.AuthenticateAsync(SenderEmail, encrypter.Decrypt());
                     }
 
-                    await authenticateTask;
+                    Message.Body = goAndBuildBody.Result;
 
-                    Message.Body = bodyTask.Result;
-
-                    await client.SendAsync(Message);
+                    string serverResponse = await client.SendAsync(Message);
                     await client.DisconnectAsync(true);
+                    return serverResponse;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Failed to send email: {ex.Message}");
+                    return "500";
                 }
             }
         }
@@ -150,12 +154,16 @@ namespace Backend.Utils
         /// <summary>
         /// Send the email.
         /// </summary>
-        /// <exception cref="Exception">Sender and Receiver not set</exception>
-        public void Send() 
+        /// <returns>A string which tells the Server Response.</returns>
+        /// <exception cref="InvalidReceiver"></exception>
+        /// <exception cref="InvalidSender"></exception>
+        /// <exception cref="InvalidHost"></exception>
+        /// <exception cref="CredentialFailure"></exception>
+        public string Send() 
         {
-            if (Message.To.Count == 0) throw new Exception("No Receiver was added");
-            if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new Exception("No Sender information");
-            if (string.IsNullOrEmpty(Host)) throw new Exception("No Host provided");
+            if (Message.To.Count == 0) throw new InvalidReceiver();
+            if (string.IsNullOrEmpty(SenderEmail) || string.IsNullOrEmpty(SenderName)) throw new InvalidSender();
+            if (string.IsNullOrEmpty(Host)) throw new InvalidHost();
 
             Message.From.Add(new MailboxAddress(SenderName, SenderEmail));
             Message.Subject = Subject;
@@ -172,17 +180,19 @@ namespace Backend.Utils
                     {
                         SysCredentailTargets.EmailApp = SenderEmail;
                         Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp);
-                        if (credential == null) return;
+                        if (credential == null) throw new CredentialFailure("Failed to retrieve credentials for authentication");
                         Encrypter encrypter = new(credential.Password, SysCredentailTargets.EmailAppEncrypterKey, SysCredentailTargets.EmailAppEncrypterIV);
                         client.Authenticate(SenderEmail, encrypter.Decrypt());
                     }
 
-                    client.Send(Message);
+                    string serverResponse = client.Send(Message);
                     client.Disconnect(true);
+                    return serverResponse;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Failed to send email: {ex.Message}");
+                    return "505";
                 }
             }
         }
