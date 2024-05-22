@@ -4,15 +4,9 @@ using System.Windows.Navigation;
 
 namespace MyApplication.View
 {
-    /// <summary>
-    /// Interaction logic for Guide.xaml
-    /// </summary>
     public partial class Guide : Window
     {
-        public Guide()
-        {
-            InitializeComponent();
-        }
+        public Guide() => InitializeComponent();
 
         private void OnLinkClicked(object sender, RequestNavigateEventArgs e)
         {

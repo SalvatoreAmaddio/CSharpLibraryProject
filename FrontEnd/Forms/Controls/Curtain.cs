@@ -173,8 +173,10 @@ namespace FrontEnd.Forms
         /// </summary>
         private void OnHyperlinkClicked(object sender, RequestNavigateEventArgs e)
         {
-            ProcessStartInfo info = new(e.Uri.AbsoluteUri);
-            info.UseShellExecute = true;
+            ProcessStartInfo info = new(e.Uri.AbsoluteUri)
+            {
+                UseShellExecute = true
+            };
             Process.Start(info);
             e.Handled = true;
         }
