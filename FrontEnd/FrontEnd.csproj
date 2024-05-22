@@ -21,18 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\emailsetting.png" />
-    <None Remove="images\excel.png" />
-    <None Remove="images\padlock.png" />
-    <None Remove="images\questionmark.png" />
-    <None Remove="images\redlight.png" />
-    <None Remove="images\report.png" />
-    <None Remove="images\requery.png" />
-    <None Remove="images\stopIcon.png" />
-    <None Remove="images\thumbup.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 

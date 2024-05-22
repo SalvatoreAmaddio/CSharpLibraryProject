@@ -27,26 +27,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\party.png" />
-    <None Remove="Images\step1.png" />
-    <None Remove="Images\step2.png" />
-    <None Remove="Images\step3.png" />
-    <None Remove="Images\step4.png" />
-    <None Remove="Images\step6.png" />
-    <None Remove="Images\step7.png" />
-    <None Remove="Images\step8.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Data\mydb.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="logo.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\party.png" />
-    <Resource Include="Images\step8.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +51,8 @@
     <Resource Include="Images\step4.png" />
     <Resource Include="Images\step6.png" />
     <Resource Include="Images\step7.png" />
+	<Resource Include="Images\step8.png" />
+	<Resource Include="Images\party.png" />
   </ItemGroup>
 
   <ItemGroup>
