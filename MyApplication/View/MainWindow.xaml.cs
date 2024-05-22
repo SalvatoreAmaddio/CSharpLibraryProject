@@ -20,20 +20,16 @@ namespace MyApplication.View
         private void OnLogoutClicked(object sender, RoutedEventArgs e) => Helper.Logout(new LoginForm());
         private void OnChangePasswordClicked(object sender, RoutedEventArgs e) => new ChangeUserPasswordDialog().ShowDialog();
 
-        private void OnWalkthroughClicked(object sender, RoutedEventArgs e)
-        {
-            new Guide().ShowDialog();
-        }
+        private void OnWalkthroughClicked(object sender, RoutedEventArgs e) => new Guide().ShowDialog();
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e) => new EmailAppDialog().ShowDialog();
+        private void OnChangeEmailPasswordClicked(object sender, RoutedEventArgs e) => new EmailAppDialog().ShowDialog();
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            EmailSender em = new("smtp.gmail.com", "salvatoreamaddio94@gmail.com", "Salvo","Prova");
-            em.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
-            em.Body = "Ciao!";
-            await em.SendAsync();
-            MessageBox.Show("Done!");
+            EmailSender emailSender = new("smtp.gmail.com", "salvatoreamaddio94@gmail.com", "Salvo","Test");
+            emailSender.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
+            emailSender.Body = "Ciao!";
+            await emailSender.SendAsync();
         }
     }
 }

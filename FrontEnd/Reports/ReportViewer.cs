@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Controller;
+using FrontEnd.Dialogs;
 using System.Collections;
 using System.Diagnostics;
 using System.Printing;
@@ -115,6 +116,17 @@ namespace FrontEnd.Reports
         }
         #endregion
 
+        #region SendCommand
+        public static readonly DependencyProperty SendCommandProperty =
+         DependencyProperty.Register(nameof(SendCommand), typeof(ICommand), typeof(ReportViewer), new PropertyMetadata());
+        public ICommand SendCommand
+        {
+            get => (ICommand)GetValue(SendCommandProperty);
+            set => SetValue(SendCommandProperty, value);
+        }
+        #endregion
+
+
         /// <summary>
         /// The actual method that send the PDF document to the Printer.
         /// </summary>
@@ -178,12 +190,13 @@ namespace FrontEnd.Reports
         {
             if (string.IsNullOrEmpty(FileName)) 
             {
-                MessageBox.Show("Please, specify a file name","Something is missing");
+                BrokenIntegrityDialog.Throw("Please, specify a file name");
                 return;
             }
 
             IsLoading = true;
             await Task.Delay(1000);
+
             PrintQueue? pdfPrinter = 
                  new LocalPrintServer()
                 .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
@@ -191,11 +204,12 @@ namespace FrontEnd.Reports
 
             if (pdfPrinter == null) 
             {
-                MessageBox.Show("I could not find a PDF Printer in your computer", "Something is missing");
+                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
                 return;
             }
 
             PDFPrinterManager.SetPort();
+
             await Dispatcher.BeginInvoke(async () => 
             {
                 ItemsSource = ConvertToReportPages(await PrintAsync(pdfPrinter));

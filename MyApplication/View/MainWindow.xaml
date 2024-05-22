@@ -12,7 +12,6 @@
     <Grid Background="{StaticResource DefaultWhite}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -25,13 +24,12 @@
             </MenuItem>
             <MenuItem Header="Email Settings" VerticalAlignment="Center">
                 <MenuItem Header="Walthrough" Click="OnWalkthroughClicked"/>
-                <MenuItem Header="Change Password" Click="MenuItem_Click"/>
+                <MenuItem Header="Change Password" Click="OnChangeEmailPasswordClicked"/>
             </MenuItem>
         </Menu>
 
         <fr:Curtain x:Name="Curtain"/>
-        <Button Content="SEND" Click="Button_Click"/>
-        <TabControl x:Name="MainTab" Grid.Row="2">
+        <TabControl x:Name="MainTab" Grid.Row="1">
             <TabItem Header="Employees">
                 <Frame>
                     <Frame.Content>
@@ -60,6 +58,14 @@
                 <Frame>
                     <Frame.Content>
                         <local:GenderListPage/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
+
+            <TabItem Header="ReportViewer">
+                <Frame>
+                    <Frame.Content>
+                        <local:Report/>
                     </Frame.Content>
                 </Frame>
             </TabItem>

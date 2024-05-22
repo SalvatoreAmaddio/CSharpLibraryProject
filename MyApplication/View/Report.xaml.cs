@@ -1,4 +1,5 @@
-﻿using FrontEnd.Reports;
+﻿using FrontEnd.Controller;
+using FrontEnd.Reports;
 using MyApplication.View.ReportPages;
 using System.Windows;
 using System.Windows.Controls;

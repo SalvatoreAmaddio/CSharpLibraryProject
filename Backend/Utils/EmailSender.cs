@@ -5,7 +5,15 @@ using Backend.Exceptions;
 namespace Backend.Utils
 {
     /// <summary>
-    /// This class provide a way of sending emails.
+    /// This class provide a way of sending emails.<para/>
+    /// How to use:
+    /// <code>
+    /// //Send an email trhough a gmail account:
+    /// EmailSender es = new("smtp.gmail.com", "myEmail@gmail.com", "My Name","Test");
+    /// es.AddReceiver("myFriend@gmail.com", "My Friend Name");
+    /// es.Body = "Ciao!";
+    /// es.Send();
+    /// </code>
     /// </summary>
     public class EmailSender
     {

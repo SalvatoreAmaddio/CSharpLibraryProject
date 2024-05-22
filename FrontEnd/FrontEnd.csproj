@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\send.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 
@@ -59,6 +63,7 @@
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
 	<Resource Include="images\redlight.png" />
+	<Resource Include="images\send.png" />
 	<Resource Include="images\stopIcon.png" />
 	<Resource Include="images\thumbup.png" />
 	<Resource Include="Themes\Controls.xaml" />

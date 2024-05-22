@@ -3,6 +3,10 @@
                     xmlns:fr="clr-namespace:FrontEnd.Forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Images.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style TargetType="{x:Type report:ReportViewer}">
         <Setter Property="Template">
             <Setter.Value>
@@ -24,6 +28,9 @@
                                     <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" />
                                 </ToolBar.Background>
                                 <report:PDFButton Width="30" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding PrintCommand}"/>
+                                <Button Width="30" ToolTip="Send by email" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding SendCommand}">
+                                    <Image Source="{StaticResource send}"/>
+                                </Button>
                                 <Separator Width="10" Background="Transparent"/>
                                 <fr:Text x:Name="text_fileName" Placeholder="File name..." Text="{Binding Path=FileName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" VerticalAlignment="Center"/>
                                 <Separator Width="10" Background="Transparent"/>
