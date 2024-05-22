@@ -18,5 +18,5 @@
     <BitmapImage x:Key="report" UriSource="pack://application:,,,/FrontEnd;component/Images/report.png"/>
     <BitmapImage x:Key="emailsetting" UriSource="pack://application:,,,/FrontEnd;component/Images/emailsetting.png"/>
     <BitmapImage x:Key="stopIcon" UriSource="pack://application:,,,/FrontEnd;component/Images/stopIcon.png"/>
-
+    <BitmapImage x:Key="thumbup" UriSource="pack://application:,,,/FrontEnd;component/Images/thumbup.png"/>
 </ResourceDictionary>
