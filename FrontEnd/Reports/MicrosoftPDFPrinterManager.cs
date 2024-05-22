@@ -1,8 +1,5 @@
 ﻿using Backend.Utils;
-using System.ComponentModel.Composition.Primitives;
 using System.Management;
-using System.Management.Automation;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace FrontEnd.Reports
