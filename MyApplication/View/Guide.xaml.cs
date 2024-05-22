@@ -13,7 +13,7 @@ namespace MyApplication.View
             InitializeComponent();
         }
 
-        private void OnLinkClicked(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             ProcessStartInfo info = new(e.Uri.AbsoluteUri);
             info.UseShellExecute = true;
