@@ -126,7 +126,6 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-
         /// <summary>
         /// The actual method that send the PDF document to the Printer.
         /// </summary>

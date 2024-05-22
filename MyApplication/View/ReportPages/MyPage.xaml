@@ -3,23 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MyApplication.View.ReportPages"
              xmlns:r="clr-namespace:FrontEnd.Reports;assembly=FrontEnd"
+             xmlns:m="clr-namespace:MyApplication.Model"
              x:Name="Page" HeaderRow="40"
              PageNumber="1"
              Padding="10"
+             d:DataContext="{d:DesignInstance Type=m:Employee, IsDesignTimeCreatable=False}" Height="490" Width="475"
              mc:Ignorable="d">
 
     <r:ReportPage.Header>
         <Border>
-            <Label Content="Header"/>
+            <Label Content="{Binding FirstName}"/>
         </Border>
     </r:ReportPage.Header>
+
     <r:ReportPage.Body>
         <Grid>
-            <Label Content="Ciao Salvo"/>
+            <Label Content="{Binding LastName}"/>
         </Grid>
     </r:ReportPage.Body>
+
     <r:ReportPage.Footer>
         <Border>
             <Label Content="Page 1"/>

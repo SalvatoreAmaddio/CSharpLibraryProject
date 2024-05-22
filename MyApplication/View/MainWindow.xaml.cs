@@ -2,7 +2,9 @@
 using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Forms;
+using FrontEnd.Reports;
 using FrontEnd.Utils;
+using MyApplication.View.ReportPages;
 using System.Windows;
 
 namespace MyApplication.View
@@ -30,6 +32,18 @@ namespace MyApplication.View
             emailSender.AddReceiver("olasunkanmi7173@gmail.com", "Ola");
             emailSender.Body = "Ciao!";
             await emailSender.SendAsync();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ReportViewerWindow win = new()
+            {
+                FileName = "myInvoice"
+            };
+            win.AddPage(new MyPage());
+            win.AddPage(new MyPage());
+            win.SelectedPage = win[0];
+            win.Show();
         }
     }
 }

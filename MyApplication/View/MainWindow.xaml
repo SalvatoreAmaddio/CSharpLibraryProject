@@ -28,7 +28,10 @@
             </MenuItem>
         </Menu>
 
+        <Button Content="OPEN" Click="Button_Click_1"/>
+        
         <fr:Curtain x:Name="Curtain"/>
+        
         <TabControl x:Name="MainTab" Grid.Row="1">
             <TabItem Header="Employees">
                 <Frame>
@@ -58,14 +61,6 @@
                 <Frame>
                     <Frame.Content>
                         <local:GenderListPage/>
-                    </Frame.Content>
-                </Frame>
-            </TabItem>
-
-            <TabItem Header="ReportViewer">
-                <Frame>
-                    <Frame.Content>
-                        <local:Report/>
                     </Frame.Content>
                 </Frame>
             </TabItem>

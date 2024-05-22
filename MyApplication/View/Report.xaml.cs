@@ -1,7 +1,5 @@
-﻿using FrontEnd.Controller;
-using FrontEnd.Reports;
+﻿using FrontEnd.Reports;
 using MyApplication.View.ReportPages;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace MyApplication.View

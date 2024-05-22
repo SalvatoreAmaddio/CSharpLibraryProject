@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Reports;
+using MyApplication.Model;
 
 namespace MyApplication.View.ReportPages
 {
@@ -7,6 +8,12 @@ namespace MyApplication.View.ReportPages
         public MyPage()
         {
             InitializeComponent();
+            Employee employee = new() 
+            { 
+                FirstName = "Salvatore",
+                LastName = "Amaddio"
+            };
+            DataContext = employee;
         }
     }
 }
