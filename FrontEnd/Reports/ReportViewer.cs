@@ -153,6 +153,7 @@ namespace FrontEnd.Reports
                     Height = page.PageHeight
                 };
 
+                page.Padding = page.Padding;
                 page.Measure(new Size(fixedPage.Width, fixedPage.Height));
                 page.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
                 page.UpdateLayout();

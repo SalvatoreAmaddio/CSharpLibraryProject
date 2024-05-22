@@ -14,8 +14,6 @@ namespace MyApplication.View.ReportPages
                 LastName = "Amaddio"
             };
 
-            FirstName.Content = employee.FirstName;
-            LastName.Content = employee.LastName;
         }
     }
 }
