@@ -6,7 +6,7 @@ namespace FrontEnd.ExtensionMethods
     {
         /// <summary>
         /// Extension method for Window objects.
-        /// This method closes the Window calling the method and opens a new one.
+        /// This method closes the current Window to open a new one.
         /// </summary>
         /// <param name="win"></param>
         /// <param name="newWin">The new window to open.</param>
