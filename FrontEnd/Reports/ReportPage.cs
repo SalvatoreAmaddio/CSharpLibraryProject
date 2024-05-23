@@ -72,13 +72,13 @@ namespace FrontEnd.Reports
         /// <param name="page">Another Report Page</param>
         public void CopyFrom(ReportPage page)
         {
+            PaddingPage = page.PaddingPage;
             PageNumber = page.PageNumber;
             HeaderRow = page.HeaderRow;
             FooterRow = page.FooterRow;
             Header = page.Header;
             Body = page.Body;
             Footer = page.Footer;
-            PaddingPage = page.PaddingPage;
         }
 
         /// <summary>
@@ -89,6 +89,7 @@ namespace FrontEnd.Reports
         {
             ReportPage page = new();
             page.PageNumber = PageNumber;
+            page.PaddingPage = PaddingPage;
             page.HeaderRow = HeaderRow;
             page.FooterRow = FooterRow;
             page.Header = Header;
