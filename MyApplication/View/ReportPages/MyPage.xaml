@@ -7,7 +7,6 @@
              x:Name="Page" 
              HeaderRow="200" 
              FooterRow="100"
-             Padding="20"
              mc:Ignorable="d">
 
     <r:ReportPage.Resources>
@@ -54,7 +53,7 @@
     </r:ReportPage.Resources>
     
     <r:ReportPage.Header>
-        <Border Style="{StaticResource SectionSeparator}">
+        <Border Padding="20,20,20,0" Style="{StaticResource SectionSeparator}">
             <Grid>
                 <Grid.Resources>
                     <Style TargetType="Label">
@@ -79,138 +78,140 @@
     </r:ReportPage.Header>
 
     <r:ReportPage.Body>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="255"/>
-                <RowDefinition Height="55"/>
-                <RowDefinition Height="55"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Border Padding="20,20,20,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="255"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Border x:Name="EmployeeInfo" Grid.Row="0" Style="{StaticResource SectionSeparator}">
-                <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="7*"/>
-                </Grid.ColumnDefinitions>
+                <Border x:Name="EmployeeInfo" Grid.Row="0" Style="{StaticResource SectionSeparator}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="7*"/>
+                        </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-                    <Label Content="EMPLOYEE INFORMATION:" Background="{StaticResource HappyBlue}" Foreground="White" FontSize="20"/>
-                    <Label Content="Salvatore Amaddio"  FontSize="18"/>
-                    <Label Content="salvatoreamaddio94@gmail.com"  FontSize="18"/>
-                    <Label Content="Job Title: Manager"  FontSize="18"/>
-                    <Label Content="Department: IT"  FontSize="18"/>
-                </StackPanel>
+                        <StackPanel Grid.Column="0">
+                            <Label Content="EMPLOYEE INFORMATION:" Background="{StaticResource HappyBlue}" Foreground="White" FontSize="20"/>
+                            <Label Content="Salvatore Amaddio"  FontSize="18"/>
+                            <Label Content="salvatoreamaddio94@gmail.com"  FontSize="18"/>
+                            <Label Content="Job Title: Manager"  FontSize="18"/>
+                            <Label Content="Department: IT"  FontSize="18"/>
+                        </StackPanel>
 
-                <Grid Grid.Column="1" Margin="100,0,5,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="100"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1" Margin="100,0,5,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="100"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="0" Content="PAY DATE"/>
-                    <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="1" Content="PAY TYPE"/>
-                    <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="2" Content="PAYROLL NUM."/>
-                    <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="3" Content="TAX CODE"/>
-                    
-                    <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="0" Content="PAY DATE"/>
-                    <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="1" Content="PAY TYPE"/>
-                    <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="2" Content="PAYROLL NUM."/>
-                    <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="3" Content="TAX CODE"/>
+                            <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="0" Content="PAY DATE"/>
+                            <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="1" Content="PAY TYPE"/>
+                            <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="2" Content="PAYROLL NUM."/>
+                            <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="3" Content="TAX CODE"/>
 
-                    <Label FontSize="20" FontWeight="Bold" Grid.Row="2" VerticalAlignment="Bottom" Content="Payment Method: Bank." Grid.ColumnSpan="4"/>
-                </Grid>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="0" Content="PAY DATE"/>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="1" Content="PAY TYPE"/>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="2" Content="PAYROLL NUM."/>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="3" Content="TAX CODE"/>
+
+                            <Label FontSize="20" FontWeight="Bold" Grid.Row="2" VerticalAlignment="Bottom" Content="Payment Method: Bank." Grid.ColumnSpan="4"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource SectionSeparator}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="0" Content="EARNINGS"/>
+                        <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
+
+                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="Salary"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£1,200"/>
+
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="2" Style="{StaticResource SectionSeparator}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="0" Content="DEDUCTIONS"/>
+                        <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="PAYE Tax"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£250"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="0" Content="National Insurance"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="1" Content="£55"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="0" Content="Student Loan Repayment"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="1" Content="£0"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="0" Content="Pension"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="1" Content="£50"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="0" Content="Union Fee"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="1" Content="£5"/>
+
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="3" Style="{StaticResource SectionSeparator}">
+                    <Grid Background="{StaticResource DefaultGrey}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="TOTAL DEDUCTIONS:"/>
+                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="4" Style="{StaticResource SectionSeparator}">
+                    <Grid Background="{StaticResource DefaultGrey}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="NET PAY:"/>
+                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
+                    </Grid>
+                </Border>
             </Grid>
-            </Border>
-
-            <Border Grid.Row="1" Style="{StaticResource SectionSeparator}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="0" Content="EARNINGS"/>
-                    <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
-
-                    <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="Salary"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£1,200"/>
-
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="2" Style="{StaticResource SectionSeparator}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="0" Content="DEDUCTIONS"/>
-                    <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="PAYE Tax"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£250"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="0" Content="National Insurance"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="1" Content="£55"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="0" Content="Student Loan Repayment"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="1" Content="£0"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="0" Content="Pension"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="1" Content="£50"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="0" Content="Union Fee"/>
-                    <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="1" Content="£5"/>
-
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="3" Style="{StaticResource SectionSeparator}">
-                <Grid Background="{StaticResource DefaultGrey}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="TOTAL DEDUCTIONS:"/>
-                    <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="4" Style="{StaticResource SectionSeparator}">
-                <Grid Background="{StaticResource DefaultGrey}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="NET PAY:"/>
-                    <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
-                </Grid>
-            </Border>
-        </Grid>
+        </Border>
     </r:ReportPage.Body>
 
     <r:ReportPage.Footer>
-        <Border>
+        <Border Padding="20,0,20,20">
             <Grid VerticalAlignment="Stretch">
                 <Label HorizontalContentAlignment="Center" FontWeight="SemiBold" FontSize="20" Content="If you have any question about this payslip, please contact HR"/>
                 <Label Content="Page 1" VerticalAlignment="Bottom" Foreground="Gray" FontSize="15"/>

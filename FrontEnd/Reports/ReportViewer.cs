@@ -150,10 +150,9 @@ namespace FrontEnd.Reports
                 FixedPage fixedPage = new()
                 {
                     Width = page.PageWidth,
-                    Height = page.PageHeight
+                    Height = page.PageHeight,
                 };
 
-                page.Padding = page.Padding;
                 page.Measure(new Size(fixedPage.Width, fixedPage.Height));
                 page.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
                 page.UpdateLayout();
@@ -162,7 +161,7 @@ namespace FrontEnd.Reports
                 FixedPage.SetTop(page, 0);
 
                 fixedPage.Children.Add(page.Copy());
-
+                
                 PageContent pageContent = new();
                 ((IAddChild)pageContent).AddChild(fixedPage);
 
