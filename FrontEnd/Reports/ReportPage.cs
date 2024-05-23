@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FrontEnd.Forms;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -15,6 +16,38 @@ namespace FrontEnd.Reports
         private double? HeaderHeight { get; set; }
         private double? FooterHeight { get; set; }
         public bool ContentOverflown { get; private set; }
+
+        public static readonly DependencyProperty PaddingPageProperty = DependencyProperty.Register(nameof(PaddingPage), typeof(Thickness), typeof(ReportPage), new PropertyMetadata(OnPaddingPagePropertyPage));
+
+        public static readonly DependencyProperty PaddingHeaderBodyProperty = DependencyProperty.Register(nameof(PaddingHeaderBody), typeof(Thickness), typeof(ReportPage), new PropertyMetadata());
+
+        public static readonly DependencyProperty PaddingFooterProperty = DependencyProperty.Register(nameof(PaddingFooter), typeof(Thickness), typeof(ReportPage), new PropertyMetadata());
+        public Thickness PaddingHeaderBody
+        {
+            get => (Thickness)GetValue(PaddingHeaderBodyProperty);
+            private set => SetValue(PaddingHeaderBodyProperty, value);
+        }
+
+        public Thickness PaddingFooter
+        {
+            get => (Thickness)GetValue(PaddingFooterProperty);
+            private set => SetValue(PaddingFooterProperty, value);
+        }
+        public Thickness PaddingPage 
+        { 
+            get => (Thickness)GetValue(PaddingPageProperty); 
+            set 
+            {
+                SetValue(PaddingPageProperty, value);
+            } 
+        }
+        private static void OnPaddingPagePropertyPage(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ReportPage page = (ReportPage)d;
+            Thickness value = (Thickness)e.NewValue;
+            page.PaddingHeaderBody = new(value.Left, value.Top, value.Right, 0);
+            page.PaddingFooter = new(value.Left, 0, value.Right, value.Bottom);
+        }
 
         public ReportPage()
         {
@@ -45,6 +78,7 @@ namespace FrontEnd.Reports
             Header = page.Header;
             Body = page.Body;
             Footer = page.Footer;
+            PaddingPage = page.PaddingPage;
         }
 
         /// <summary>

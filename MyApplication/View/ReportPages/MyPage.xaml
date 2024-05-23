@@ -7,6 +7,7 @@
              x:Name="Page" 
              HeaderRow="200" 
              FooterRow="100"
+             PaddingPage="20"
              mc:Ignorable="d">
 
     <r:ReportPage.Resources>
@@ -53,7 +54,7 @@
     </r:ReportPage.Resources>
     
     <r:ReportPage.Header>
-        <Border Padding="20,20,20,0" Style="{StaticResource SectionSeparator}">
+        <Border Style="{StaticResource SectionSeparator}">
             <Grid>
                 <Grid.Resources>
                     <Style TargetType="Label">
@@ -78,7 +79,7 @@
     </r:ReportPage.Header>
 
     <r:ReportPage.Body>
-        <Border Padding="20,20,20,0">
+        <Border>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="200"/>
@@ -211,7 +212,7 @@
     </r:ReportPage.Body>
 
     <r:ReportPage.Footer>
-        <Border Padding="20,0,20,20">
+        <Border>
             <Grid VerticalAlignment="Stretch">
                 <Label HorizontalContentAlignment="Center" FontWeight="SemiBold" FontSize="20" Content="If you have any question about this payslip, please contact HR"/>
                 <Label Content="Page 1" VerticalAlignment="Bottom" Foreground="Gray" FontSize="15"/>
