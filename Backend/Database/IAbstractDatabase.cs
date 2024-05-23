@@ -11,12 +11,6 @@ namespace Backend.Database
     public interface IAbstractDatabase
     {
         /// <summary>
-        /// Gets and Sets the Version of the Database.
-        /// </summary>
-        /// <value>A string telling which version of the database is used.</value>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets and Sets the name of the Database to connect to..
         /// </summary>
         /// <value>A string telling which name of the database.</value>
@@ -54,7 +48,7 @@ namespace Backend.Database
         /// see also the <seealso cref="ConnectionString"/>
         /// </summary>
         /// <returns>A <see cref="DbConnection"/> object</returns>
-        public Task<DbConnection> ConnectAsync();
+        public Task<DbConnection> CreateConnectionObjectAsync();
 
         /// <summary>
         /// It creates a DBConnection object that handles the connection to the database.
@@ -66,7 +60,7 @@ namespace Backend.Database
         /// see also the <seealso cref="ConnectionString"/>
         /// </summary>
         /// <returns>A <see cref="DbConnection"/> object</returns>
-        public DbConnection Connect();
+        public DbConnection CreateConnectionObject();
 
         /// <summary>
         /// This method select the data from the database.

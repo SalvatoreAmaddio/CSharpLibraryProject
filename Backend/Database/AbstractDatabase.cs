@@ -10,13 +10,12 @@ namespace Backend.Database
     /// </summary>
     public abstract class AbstractDatabase(ISQLModel Model) : IAbstractDatabase
     {
-        public virtual string Version { get; set; } = string.Empty;
         public virtual string DatabaseName { get; set; } = string.Empty;
         public ISQLModel Model { get; set; } = Model;
         public RecordSource? Records { get; set; }
         public abstract string ConnectionString();
-        public abstract DbConnection Connect();
-        public Task<DbConnection> ConnectAsync() => Task.FromResult(Connect());
+        public abstract DbConnection CreateConnectionObject();
+        public Task<DbConnection> CreateConnectionObjectAsync() => Task.FromResult(CreateConnectionObject());
         private void SetCommand(DbCommand cmd, string sql, List<QueryParameter>? parameters)
         {
             if (Model == null) throw new NoModelException();
@@ -30,6 +29,48 @@ namespace Backend.Database
             SetParameters(cmd, parameters);
         }
 
+        /// <summary>
+        /// Use this method to check if the connection can be made.
+        /// <para><c>IMPORTANT:</c></para> the connection closes as soon as the method terminates.
+        /// </summary>
+        /// <returns>true if the connection was made.</returns>
+        public bool AttemptConnection()
+        {
+            using (DbConnection connection = CreateConnectionObject())
+            {
+                try
+                {
+                    connection.Open();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Use this method to check if the connection can be made.
+        /// <para><c>IMPORTANT:</c></para> the connection closes as soon as the method terminates.
+        /// </summary>
+        /// <returns>true if the connection was made.</returns>
+        public async Task<bool> AttemptConnectionAsync()
+        {
+            using (DbConnection connection = await CreateConnectionObjectAsync())
+            {
+                try 
+                {
+                    await connection.OpenAsync();
+                    return true;
+                }
+                catch 
+                {
+                    return false;
+                }
+            }
+        }
+
         public async IAsyncEnumerable<ISQLModel> RetrieveAsync(string? sql = null, List<QueryParameter>? parameters = null)
         {
             if (Model == null) throw new NoModelException();
@@ -38,7 +79,7 @@ namespace Backend.Database
                 sql = Model.SelectQry;
 
             sql += ";";
-            using (var connection = await ConnectAsync())
+            using (DbConnection connection = await CreateConnectionObjectAsync())
             {
                 await connection.OpenAsync();
                 using (DbCommand cmd = connection.CreateCommand())
@@ -60,16 +101,16 @@ namespace Backend.Database
             if (string.IsNullOrEmpty(sql))
                 sql = Model.SelectQry;
             sql += ";";
-            using (var connection = Connect())
+            using (DbConnection connection = CreateConnectionObject())
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                using (DbTransaction transaction = connection.BeginTransaction())
                 {
-                    using (var cmd = connection.CreateCommand())
+                    using (DbCommand cmd = connection.CreateCommand())
                     {
                         cmd.Transaction = transaction;
                         SetCommand(cmd, sql, parameters);
-                        using (var reader = cmd.ExecuteReader())
+                        using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                                 yield return Model.Read(reader);
@@ -104,12 +145,12 @@ namespace Backend.Database
                 }
             }
 
-            using (var connection = Connect())
+            using (var connection = CreateConnectionObject())
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                using (DbTransaction transaction = connection.BeginTransaction())
                 {
-                    using (var cmd = connection.CreateCommand())
+                    using (DbCommand cmd = connection.CreateCommand())
                     {
                         cmd.Transaction = transaction;
                         SetCommand(cmd, sql!, parameters);
@@ -141,7 +182,7 @@ namespace Backend.Database
         public object? AggregateQuery(string sql, List<QueryParameter>? parameters = null)
         {
             object? value = null;
-            using (DbConnection connection = Connect())
+            using (DbConnection connection = CreateConnectionObject())
             {
                 connection.Open();
                 using (DbTransaction transaction = connection.BeginTransaction())
@@ -168,7 +209,7 @@ namespace Backend.Database
         }
         private static long? RetrieveLastInsertedID(DbConnection connection, DbTransaction transaction, string sql)
         {
-            using (var cmd = connection.CreateCommand())
+            using (DbCommand cmd = connection.CreateCommand())
             {
                 cmd.CommandText = sql;
                 cmd.Transaction = transaction;
@@ -180,7 +221,7 @@ namespace Backend.Database
         {
             if (parameters == null) return;
 
-            foreach (var parameter in parameters)
+            foreach (QueryParameter parameter in parameters)
             {
                 DbParameter param = cmd.CreateParameter();
                 param.ParameterName = $"@{parameter.Placeholder}";

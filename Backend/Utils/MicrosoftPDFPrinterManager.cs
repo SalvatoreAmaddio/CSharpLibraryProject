@@ -95,9 +95,15 @@ namespace Backend.Utils
 
         /// <summary>
         /// Sets the default Printer's Port.
+        /// <para>Exceptions:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><see cref="Exception"/>: Thrown if the Printer was not found.</description>
+        /// </item>
+        /// </list>
         /// </summary>
         /// <param name="useOriginal">true if the default port should be PORTPROMPT:</param>
-        /// <exception cref="Exception">Throw an exception if the Printer was not found.</exception>
+        /// <exception cref="Exception">Throws an exception if the Printer was not found.</exception>
         private void SetDefaultPort(bool useOriginal = false)
         {
             ManagementObject? printer = GetPrinter() ?? throw new Exception("Failed to load Printer.");
