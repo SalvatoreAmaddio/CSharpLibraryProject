@@ -218,15 +218,10 @@ namespace FrontEnd.Reports
                         
             if (!prep.Result.Done) goto EndExec;
 
-            await Application.Current.Dispatcher.InvokeAsync(() => 
-            {
-                foreach (var i in copied.Result.Result)
-                {
-                    prep.Result.doc.Pages.Add(i);
-                }
+            foreach (var i in copied.Result.Result)
+                prep.Result.doc.Pages.Add(i);
 
-                prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
-            });
+            prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
 
             await PrintingCompleted(prep.Result.pdfPrinter);
 
