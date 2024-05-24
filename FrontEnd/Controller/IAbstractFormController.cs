@@ -1,6 +1,7 @@
 ﻿using Backend.Controller;
 using FrontEnd.Model;
 using FrontEnd.Notifier;
+using FrontEnd.Source;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -68,5 +69,7 @@ namespace FrontEnd.Controller
         /// Gets and Sets the Command to requery the database table.
         /// </summary>
         public ICommand RequeryCMD { get; set; }
+
+        public RecordSource<M> AsRecordSource();
     }
 }

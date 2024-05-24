@@ -11,7 +11,7 @@ namespace Backend.Controller
         protected bool _allowNewRecord = true;
         public IAbstractDatabase Db { get; protected set; } = null!;
         public abstract int DatabaseIndex { get; }
-        public RecordSource Source { get; protected set; }
+        public IRecordSource Source { get; protected set; }
         protected INavigator Navigator => Source.Navigate();
         public AbstractSQLModelController()
         {
@@ -24,9 +24,11 @@ namespace Backend.Controller
                 Console.WriteLine(e.Message);
             }
 
-            Source = new RecordSource(Db, this);
+            Source = InitSource();
             GoFirst();
         }
+
+        protected virtual IRecordSource InitSource() => new RecordSource(Db, this);
 
         public virtual bool AllowNewRecord 
         { 
@@ -40,7 +42,7 @@ namespace Backend.Controller
 
         public virtual ISQLModel? CurrentModel { get; set; }
         public virtual string Records { get; protected set; } = string.Empty;
-        
+        public ICollection<ISQLModel> SourceAsCollection() => (ICollection<ISQLModel>)Source;
         protected virtual bool CanMove() 
         {
             if (CurrentModel != null)
@@ -51,68 +53,78 @@ namespace Backend.Controller
             return true;
         }
 
-        public virtual void GoNext()
+        public virtual bool GoNext()
         {
-            if (!CanMove()) return;
+            if (!CanMove()) return false;
             bool moved = Navigator.MoveNext();
-            if (!moved) return;
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoPrevious()
-        {
-            if (!CanMove()) return;
-            Navigator.MovePrevious();
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoLast()
-        {
-            if (!CanMove()) return;
-            Navigator.MoveLast();
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoFirst()
-        {
-            if (!CanMove()) return;
-            Navigator.MoveFirst();
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoNew()
-        {
-            if (!CanMove()) return;
-            if (!AllowNewRecord) return;
-            if (Navigator.IsNewRecord) return;
-            Navigator.MoveNew();
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoAt(int index)
-        {
-            if (!CanMove()) return;
-            Navigator.MoveAt(index);
-            CurrentModel = Navigator.Current;
-            Records = Source.RecordPositionDisplayer();
-        }
-
-        public virtual void GoAt(ISQLModel? record)
-        {
-            if (!CanMove()) return;
-            if (record == null) CurrentModel = null;
-            else if (record.IsNewRecord()) GoNew();
-            else
+            if (!moved) 
             {
-                Navigator.MoveAt(record);
-                CurrentModel = Navigator.Current;
-                Records = Source.RecordPositionDisplayer();
+                return Navigator.EOF ? GoNew() : false;                
             }
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
+        }
+
+        public virtual bool GoPrevious()
+        {
+            if (!CanMove()) return false;
+            bool moved = Navigator.MovePrevious();
+            if (!moved) return false;
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
+        }
+
+        public virtual bool GoLast()
+        {
+            if (!CanMove()) return false;
+            bool moved = Navigator.MoveLast();
+            if (!moved) return false;
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
+        }
+
+        public virtual bool GoFirst()
+        {
+            if (!CanMove()) return false;
+            bool moved = Navigator.MoveFirst();
+            if (!moved) return false;
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
+        }
+
+        public virtual bool GoNew()
+        {
+            if (!CanMove()) return false;
+            bool moved = Navigator.MoveNew();
+            if (!moved) return false;
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return moved;   
+        }
+
+        public virtual bool GoAt(int index)
+        {
+            if (!CanMove()) return false;
+            bool moved = Navigator.MoveAt(index);
+            if (!moved) return false;
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
+        }
+
+        public virtual bool GoAt(ISQLModel? record)
+        {
+            if (!CanMove()) return false;
+            if (record == null) return false;
+            if (record.IsNewRecord()) return GoNew();
+            Navigator.MoveAt(record);
+            CurrentModel = Navigator.Current;
+            Records = Source.RecordPositionDisplayer();
+            return true;
         }
 
         public void DeleteRecord(string? sql = null, List<QueryParameter>? parameters = null)
@@ -122,7 +134,7 @@ namespace Backend.Controller
             Db.Crud(CRUD.DELETE, sql, parameters);
             if (Db.Model.IsNewRecord()) //this occurs in ListView objects when you add a new record but then decided to delete it.
             {
-                Source.Remove(Db.Model); //remove the record from the Source, thereof from the ListView
+                SourceAsCollection().Remove(Db.Model); //remove the record from the Source, thereof from the ListView
                 if (Navigator.BOF && !Navigator.NoRecords) GoFirst(); //The record is deleted, handle the direction that the Navigator object should point at.
                 else GoPrevious(); //if we still have records move back.
             }

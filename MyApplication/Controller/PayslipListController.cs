@@ -30,7 +30,7 @@ namespace MyApplication.Controller
             QueryBuiler.Clear();
             QueryBuiler.AddParameter("employeeID", ParentRecord?.GetTablePK()?.GetValue());
             var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-            Source.ReplaceRecords(results);
+            AsRecordSource().ReplaceRange(results);
             GoFirst();
         }
 
@@ -44,7 +44,7 @@ namespace MyApplication.Controller
             throw new NotImplementedException();
         }
 
-        public override Task SearchRecordAsync()
+        public override Task<IEnumerable<Payslip>> SearchRecordAsync()
         {
             throw new NotImplementedException();
         }

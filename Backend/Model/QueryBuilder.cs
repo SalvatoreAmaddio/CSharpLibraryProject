@@ -26,7 +26,7 @@ namespace Backend.Model
             model.SelectQry = $"SELECT * FROM {tableName}";
             model.UpdateQry = BuildUpdateQuery();
             model.InsertQry = BuildInsertQuery();
-            model.DeleteQry = $"DELETE FROM {tableName} WHERE {pk.Name}=@{pk.Name};";
+            model.DeleteQry = $"DELETE FROM {tableName} WHERE {pk?.Name}=@{pk?.Name};";
         }
 
         private string BuildUpdateQuery()
@@ -43,7 +43,7 @@ namespace Backend.Model
             sb.Remove(sb.Length - 1, 1);
             sb.Remove(sb.Length - 1, 1);
 
-            sb.Append($" WHERE {pk.Name} = @{pk.Name};");
+            sb.Append($" WHERE {pk?.Name} = @{pk?.Name};");
             return sb.ToString();
         }
 

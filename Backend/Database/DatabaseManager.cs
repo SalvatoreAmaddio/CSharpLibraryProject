@@ -50,7 +50,7 @@ namespace Backend.Database
 
             await Task.WhenAll(tasks);
 
-            for(int i = 0; i < tasks.Count; i++) Get(i).Records = new(tasks[i].Result);
+            for(int i = 0; i < tasks.Count; i++) Get(i).ReplaceRecords(tasks[i].Result);
         }
 
         /// <summary>

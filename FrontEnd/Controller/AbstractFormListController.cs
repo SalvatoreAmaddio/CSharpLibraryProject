@@ -1,8 +1,8 @@
 ﻿using Backend.Database;
 using Backend.Exceptions;
 using Backend.Model;
-using Backend.Source;
 using FrontEnd.Model;
+using FrontEnd.Source;
 using System.Windows.Input;
 
 namespace FrontEnd.Controller
@@ -30,9 +30,9 @@ namespace FrontEnd.Controller
             OpenCMD = new CMD<M>(Open);
             OpenNewCMD = new CMD(OpenNew);
             QueryBuiler = new(SearchQry);
-            Source.RunFilter += OnSourceRunFilter;
+            AsRecordSource().RunFilter += OnSourceRunFilter;
         }
-        public abstract Task SearchRecordAsync();
+        public abstract Task<IEnumerable<M>> SearchRecordAsync();
         public abstract void OnOptionFilter();
 
         /// <summary>
@@ -54,69 +54,78 @@ namespace FrontEnd.Controller
         public void CleanSource()
         {
             if (OpenWindowOnNew) return;
-            List<ISQLModel> toRemove = Source.Where(s => s.IsNewRecord()).ToList(); //get only the records which are new in the collection.
+            List<M> toRemove = AsRecordSource().Where(s => s.IsNewRecord()).ToList(); //get only the records which are new in the collection.
 
-            foreach (var item in toRemove) 
-                Source.Remove(item); //get rid of them.
+            foreach (var item in toRemove)
+                AsRecordSource().Remove(item); //get rid of them.
         }
 
-        public override void GoNew()
+        public override bool GoNew()
         {
             if (OpenWindowOnNew) 
             {
                 base.GoNew(); //tell the Navigator to add a new record.
                 OpenNew(); //open a new window displaying the new record.
-                return;
+                return true;
             }
-            if (!CanMove()) return; //Cannot move to a new record because the current record break integrity rules.
-            if (Source.Any(s => s.IsNewRecord())) return; //If there is already a new record exit the method.
-            Source.Add(new M()); //add a new record to the collection.
+            if (!CanMove()) return false; //Cannot move to a new record because the current record break integrity rules.
+            if (AsRecordSource().Any(s => s.IsNewRecord())) return false; //If there is already a new record exit the method.
+            AsRecordSource().Add(new M()); //add a new record to the collection.
             Navigator.MoveLast(); //Therefore, you can now move to the last record which is indeed a new record.
             CurrentModel = Navigator.Current; //set the CurrentModel property.
             InvokeOnNewRecordEvent(); //if you are using SubForms, Invoke the the OnNewRecordEvent().
             Records = "New Record"; //update RecordTracker's record displayer.
+            return true;
         }
-        public override void GoPrevious()
+        public override bool GoPrevious()
         {
-            if (!CanMove()) return;
+            if (!CanMove()) return false;
             CleanSource();            
-            base.GoPrevious();
+            return base.GoPrevious();
         }
-        public override void GoLast()
+        public override bool GoLast()
         {
-            if (!CanMove()) return;
+            if (!CanMove()) return false;
             CleanSource();
-            base.GoLast();
+            return base.GoLast();
         }
-        public override void GoFirst()
+        public override bool GoFirst()
         {
-            if (!CanMove()) return;
+            if (!CanMove()) return false;
             CleanSource();
-            base.GoFirst();
+            return base.GoFirst();
         }
 
-        public override void GoAt(ISQLModel? record)
+        public override bool GoAt(ISQLModel? record)
         {
-            if (!CanMove()) return;
-            if (record == null) CurrentModel = null;
-            else if (record.IsNewRecord() && OpenWindowOnNew) GoNew();
-            else if (record.IsNewRecord() && !OpenWindowOnNew) Navigator.MoveNew();
+            if (!CanMove()) return false;
+            if (record == null) 
+            {
+                CurrentModel = null;
+                return false;
+            }
+            else if (record.IsNewRecord() && OpenWindowOnNew) return GoNew();
+            else if (record.IsNewRecord() && !OpenWindowOnNew) return Navigator.MoveNew();
             else
             {
                 CleanSource();
                 Navigator.MoveAt(record);
                 CurrentModel = Navigator.Current;
                 Records = Source.RecordPositionDisplayer();
+                return true;    
             }
         }
 
         /// <summary>
-        /// Wrap up method for the <see cref="RecordSource.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
+        /// Wrap up method for the <see cref="RecordSource{M}.CreateFromAsyncList(IAsyncEnumerable{ISQLModel})"/>
         /// </summary>
         /// <param name="qry">The query to be used, can be null</param>
         /// <param name="parameters">A list of parameters to be used, can be null</param>
         /// <returns>A RecordSource</returns>
-        public Task<RecordSource> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) => RecordSource.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters));
+        public Task<RecordSource<M>> CreateFromAsyncList(string? qry = null, List<QueryParameter>? parameters = null) 
+        {
+            return RecordSource<M>.CreateFromAsyncList(Db.RetrieveAsync(qry, parameters).Cast<M>());
+        } 
 
         public override bool AlterRecord(string? sql = null, List<QueryParameter>? parameters = null)
         {
@@ -128,8 +137,8 @@ namespace FrontEnd.Controller
 
             if (crud == CRUD.INSERT) 
             {   //INSERT must follow a slighlty different logic to avoid unexpected behaviour between the RecordSource and the Lista object.
-                temp = (AbstractModel)Source[Source.Count - 1];
-                Source.RemoveAt(Source.Count - 1);
+                temp = AsRecordSource()[Source.Count - 1];
+                AsRecordSource().RemoveAt(Source.Count - 1);
                 ExecuteCRUD(ref temp, crud, sql, parameters);
             } 
             else ExecuteCRUD(ref temp, crud, sql, parameters);

@@ -30,7 +30,13 @@ namespace Backend.Database
         /// 
         /// </summary>
         /// <value>A Recordsource object</value>
-        public RecordSource? Records { get; set; }
+        public MasterSource Records { get; }
+
+        /// <summary>
+        /// Relace the Records in the <see cref="MasterSource"/>
+        /// </summary>
+        /// <param name="newRecords"></param>
+        public void ReplaceRecords(IEnumerable<ISQLModel> newRecords);
 
         /// <summary>
         /// This method should return a string representing the connection string to the Database.

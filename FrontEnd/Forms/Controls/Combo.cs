@@ -5,6 +5,7 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using FrontEnd.Source;
 
 namespace FrontEnd.Forms
 {
@@ -109,7 +110,7 @@ namespace FrontEnd.Forms
         {
             base.OnItemsSourceChanged(oldValue, newValue);
 
-            if (newValue != null && newValue is RecordSource source)
+            if (newValue != null && newValue is IUISource source)
                 source.AddUIControlReference(this);
         }
 

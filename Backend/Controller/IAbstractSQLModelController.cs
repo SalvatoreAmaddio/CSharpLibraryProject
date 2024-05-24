@@ -39,7 +39,7 @@ namespace Backend.Controller
         /// A recordsource object that old the collection of records.
         /// </summary>
         /// <value>A RecordSource</value>
-        public RecordSource Source { get; }
+        public IRecordSource Source { get; }
 
         /// <summary>
         /// Gets and Sets whether or no a new Record can be added. Default value is true.
@@ -51,45 +51,45 @@ namespace Backend.Controller
         /// It tells the RecordSource's Enumerator to go to the next available record.
         /// see <see cref="RecordSource"/>
         /// </summary>
-        public void GoNext();
+        public bool GoNext();
 
         /// <summary>
         /// It tells the RecordSource's Enumerator to go to the previous available record.
         /// see <see cref="RecordSource"/>
         /// </summary>
-        public void GoPrevious();
+        public bool GoPrevious();
 
         /// <summary>
         /// It tells the RecordSource's Enumerator to go to the last record.
         /// see <see cref="RecordSource"/>
         /// </summary>
-        public void GoLast();
+        public bool GoLast();
 
         /// <summary>
         /// It tells the RecordSource's Enumerator to go to the first record.
         /// see <see cref="RecordSource"/>
         /// </summary>
-        public void GoFirst();
+        public bool GoFirst();
 
         /// <summary>
         /// It tells the RecordSource's Enumerator to go to a given record based on its zero-based position.
         /// see <see cref="RecordSource"/>
         /// </summary>
         /// <param name="index">the zero-based index of the Record to go to.</param>
-        public void GoAt(int index);
+        public bool GoAt(int index);
 
         /// <summary>
         /// It finds the given record and tells the RecordSource's Enumerator to go to its zero-based position.
         /// see <see cref="RecordSource"/>
         /// </summary>
         /// <param name="record">the record to move to.</param>
-        public void GoAt(ISQLModel? record);
+        public bool GoAt(ISQLModel? record);
 
         /// <summary>
         /// It tells the RecordSource's Enumerator that a new record will be added.
         /// see <see cref="RecordSource"/>
         /// </summary>
-        public void GoNew();
+        public bool GoNew();
 
         /// <summary>
         /// It performs a Insert or Update Statement based on the <see cref="CurrentModel"/>'s <see cref="INotifier.IsDirty"/> property and the <see cref="ISQLModel.IsNewRecord"/> method.
@@ -113,5 +113,7 @@ namespace Backend.Controller
         /// </summary>
         /// <exception cref="NoModelException">Thrown if the <see cref="Model"/> is null.</exception>
         public void DeleteRecord(string? sql = null, List<QueryParameter>? parameters = null);
+
+        public ICollection<ISQLModel> SourceAsCollection();
     }
 }

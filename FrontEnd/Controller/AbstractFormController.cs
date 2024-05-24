@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows;
+using FrontEnd.Source;
 
 namespace FrontEnd.Controller
 {
@@ -34,7 +35,6 @@ namespace FrontEnd.Controller
                     _window.Closing += OnWindowClosing;
             }
         }
-
         public AbstractModel? ParentRecord { get; private set; }
         public override ISQLModel? CurrentModel
         {
@@ -45,15 +45,12 @@ namespace FrontEnd.Controller
                 RaisePropertyChanged(nameof(CurrentRecord));
             }
         }
-
         public M? CurrentRecord
         {
             get => (M?)CurrentModel;
             set => CurrentModel = value;
         }
-
         public override string Records { get => _records; protected set => UpdateProperty(ref value, ref _records); }
-
         public override bool AllowNewRecord
         {
             get => _allowNewRecord;
@@ -63,7 +60,6 @@ namespace FrontEnd.Controller
                 base.AllowNewRecord = value;
             }
         }
-
         public bool IsLoading { get => _isloading; set => UpdateProperty(ref value, ref _isloading); }
         public string Search { get => _search; set => UpdateProperty(ref value, ref _search); }
         public ICommand UpdateCMD { get; set; }
@@ -81,6 +77,10 @@ namespace FrontEnd.Controller
             DeleteCMD = new CMD<M>(Delete);
             RequeryCMD = new CMDAsync(Requery);
         }
+
+        public RecordSource<M> AsRecordSource()=>(RecordSource<M>)Source;
+        protected override IRecordSource InitSource() => new RecordSource<M>(Db,this);
+
 
         /// <summary>
         /// It checks if the <see cref="CurrentRecord"/>'s property meets the conditions to be updated. This method is called whenever the <see cref="Navigator"/> moves.
@@ -103,16 +103,15 @@ namespace FrontEnd.Controller
         protected virtual async Task Requery()
         {
             IsLoading = true; //notify the GUI that there is a process going on.
-            RecordSource? results = null;
+            IEnumerable<M>? results = null;
             await Task.Run(async () => //retrieve the records. Do not freeze the GUI.
             {
-                results = await RecordSource.CreateFromAsyncList(Db.RetrieveAsync());
-
+                results = await RecordSource<M>.CreateFromAsyncList(Db.RetrieveAsync().Cast<M>());
             });
 
             if (results == null) throw new Exception("Source is null"); //Something has gone wrong.
-            Db.Records?.ReplaceRange(results); //Replace the Master RecordSource's records with the newly fetched ones.
-            Source.ReplaceRange(results); //Update also its child source for this controller.
+            Db.ReplaceRecords(results.ToList<ISQLModel>()); //Replace the Master RecordSource's records with the newly fetched ones.
+            AsRecordSource().ReplaceRange(results); //Update also its child source for this controller.
             IsLoading = false; //Notify the GUI the process has terminated
         }
 
@@ -143,12 +142,15 @@ namespace FrontEnd.Controller
             DeleteRecord();
         }
 
-        public override void GoNew()
+        public override bool GoNew()
         {
-            if (!CanMove() || !Navigator.MoveNew()) return;
-            CurrentRecord = new M();
+            if (!CanMove()) return false;
+            bool moved = Navigator.MoveNew();
+            if (!moved) return false;
+            CurrentModel = new M();
             InvokeOnNewRecordEvent();
             Records = Source.RecordPositionDisplayer();
+            return moved;
         }
 
         protected void InvokeOnNewRecordEvent() => NewRecordEvent?.Invoke(this, EventArgs.Empty);
@@ -192,7 +194,7 @@ namespace FrontEnd.Controller
 
         public void OnWindowClosing(object? sender, CancelEventArgs e)
         {
-            bool dirty = Source.Any(s => ((M)s).IsDirty);
+            bool dirty = AsRecordSource().Any(s => ((M)s).IsDirty);
             e.Cancel = dirty; // if the record is not dirty, there is nothing to check, close the window.
 
             if (dirty) //the record has been changed, check its integrity before closing.

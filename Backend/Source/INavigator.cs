@@ -8,7 +8,13 @@ namespace Backend.Source
     /// For instance, this enumerator can move up and down the IEnumerable.
     /// This interface is meant for dealing with IEnumerable&lt;<see cref="ISQLModel"/>&gt; only.
     /// </summary>
-    public interface INavigator : IEnumerator<ISQLModel?>
+    public interface INavigator : IEnumerator<ISQLModel>, INav
+    { }
+    
+    /// <summary>
+    /// This interface defines a set of methods and properties that each RecordSource's Navigator must implement.
+    /// </summary>
+    public interface INav
     {
         /// <summary>
         /// Tells if there are no records at all. 

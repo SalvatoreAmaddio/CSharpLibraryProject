@@ -12,7 +12,14 @@ namespace Backend.Database
     {
         public virtual string DatabaseName { get; set; } = string.Empty;
         public ISQLModel Model { get; set; } = Model;
-        public RecordSource? Records { get; set; }
+        public MasterSource Records { get; protected set; } = [];
+
+        public void ReplaceRecords(IEnumerable<ISQLModel> newRecords) 
+        {
+            Records.Clear();
+            Records.AddRange(newRecords);
+        }
+
         public abstract string ConnectionString();
         public abstract DbConnection CreateConnectionObject();
         public Task<DbConnection> CreateConnectionObjectAsync() => Task.FromResult(CreateConnectionObject());

@@ -2,6 +2,8 @@
 using Backend.Model;
 using Backend.Source;
 using FrontEnd.Controller;
+using FrontEnd.Model;
+using FrontEnd.Source;
 using MvvmHelpers;
 using System.Text;
 
@@ -24,7 +26,7 @@ namespace FrontEnd.FilterSource
 
         public IParentSource? ParentSource { get; set; }
 
-        public SourceOption(RecordSource source, string displayProperty) : base(source.Select(s => new FilterOption(s, displayProperty)))
+        public SourceOption(IRecordSource source, string displayProperty) : base(source.Cast<AbstractModel>().Select(s => new FilterOption(s, displayProperty)))
         {
             _displayProperty = displayProperty;
             source.ParentSource?.AddChild(this);

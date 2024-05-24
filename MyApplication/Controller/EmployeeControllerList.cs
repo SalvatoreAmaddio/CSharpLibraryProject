@@ -3,20 +3,16 @@ using FrontEnd.FilterSource;
 using MyApplication.Model;
 using MyApplication.View;
 using FrontEnd.Events;
-using Backend.Source;
+using FrontEnd.Source;
 using Backend.Database;
 
 namespace MyApplication.Controller
 {
     public class EmployeeControllerList : AbstractFormListController<Employee>
     {
-        static EmployeeControllerList() 
-        { 
-        
-        }
-        public RecordSource Genders { get; private set; } = new(DatabaseManager.Find<Gender>());
-        public RecordSource Departments { get; private set; } = new(DatabaseManager.Find<Department>());
-        public RecordSource Titles { get; private set; } = new(DatabaseManager.Find<JobTitle>());
+        public RecordSource<Gender> Genders { get; private set; } = new(DatabaseManager.Find<Gender>()!);
+        public RecordSource<Department> Departments { get; private set; } = new(DatabaseManager.Find<Department>()!);
+        public RecordSource<JobTitle> Titles { get; private set; } = new(DatabaseManager.Find<JobTitle>()!);
         public SourceOption TitleOptions { get; private set; }
         public SourceOption GenderOptions { get; private set; }
         public SourceOption DepartmentOptions { get; private set; }
@@ -33,16 +29,16 @@ namespace MyApplication.Controller
         private async void OnAfterUpdate(object? sender, AfterUpdateArgs e)
         {
             if (!e.Is(nameof(Search))) return;
-            await SearchRecordAsync();
+            var results = await Task.Run(SearchRecordAsync);
+            AsRecordSource().ReplaceRange(results);
+            GoFirst();
         }
 
-        public override async Task SearchRecordAsync()
+        public override async Task<IEnumerable<Employee>> SearchRecordAsync()
         {
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-            var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-            Source.ReplaceRecords(results);
-            GoFirst();
+            return await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
         }
 
         public override async void OnOptionFilter()

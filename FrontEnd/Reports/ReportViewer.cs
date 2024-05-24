@@ -10,8 +10,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Xml.Linq;
 
 namespace FrontEnd.Reports
 {
@@ -198,6 +196,7 @@ namespace FrontEnd.Reports
             }
 
             IsLoading = true;
+
             await Task.Delay(1000);
 
             PrintQueue? pdfPrinter = 
@@ -212,8 +211,8 @@ namespace FrontEnd.Reports
             }
 
             PDFPrinterManager.SetPort();
-
-            await Dispatcher.BeginInvoke(async () => 
+            
+            await Dispatcher.BeginInvoke( async () => 
             {
                 ItemsSource = ConvertToReportPages(await PrintAsync(pdfPrinter));
             });

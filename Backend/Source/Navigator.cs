@@ -38,29 +38,14 @@ namespace Backend.Source
             AllowNewRecord = allowNewRecord;
         }
 
-        /// <summary>
-        /// Gets the record in the array at the current position within the array.
-        /// </summary>
-        /// <value>The element in the collection at the current position of the enumerator. 
-        /// <para>Returns null if the current position is poiting to a New Record</para></value>
-        public ISQLModel? Current
+        public ISQLModel Current
         {
             get 
             {
-                try
-                {
-                    return _records[Index];
-                }
-                catch (Exception ex) when (ex is IndexOutOfRangeException || ex is ArgumentOutOfRangeException)
-                {
-                    if (IsEmpty || IsNewRecord)
-                        return null;
-                    else
-                    {
-                        MoveFirst();
+               if (Index >= 0 && Index < _records.Length)
                         return _records[Index];
-                    }
-                }
+                
+                throw new InvalidOperationException($"Invalid state: New Record: {IsNewRecord}; IsEmpty: {IsEmpty}; Index: {Index}");
             }
         }
 
@@ -71,7 +56,6 @@ namespace Backend.Source
         }
         public bool MoveNext()
         {
-            if (EOF) return MoveNew();
             Index = IsEmpty ? -1 : ++Index;
             return Index <= LastIndex;
         }

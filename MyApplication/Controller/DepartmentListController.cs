@@ -19,15 +19,16 @@ namespace MyApplication.Controller
         private async void OnAfterUpdate(object? sender, AfterUpdateArgs e)
         {
             if (!e.Is(nameof(Search))) return;
-            await SearchRecordAsync();
+            var results = await SearchRecordAsync();
+            AsRecordSource().ReplaceRange(results);
+            GoFirst();
+
         }
 
-        public override async Task SearchRecordAsync()
+        public override async Task<IEnumerable<Department>> SearchRecordAsync()
         {
             QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-            var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-            Source.ReplaceRecords(results);
-            GoFirst();
+            return await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
         }
 
         public override void OnOptionFilter()

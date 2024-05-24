@@ -10,25 +10,6 @@ namespace FrontEnd.Controller
     /// </summary>
     public interface IAbstractFormListController : IAbstractFormController
     {
-        /// <summary>
-        /// Override this method to implement your filter logic. 
-        /// For Example:
-        /// <code>
-        /// //overide SearchQry Property.
-        /// public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
-        /// ...
-        /// public override async Task SearchRecordAsync() 
-        /// {
-        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
-        ///     var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
-        ///     Source.ReplaceRange(results);
-        ///     GoFirst();
-        /// }
-        /// </code>
-        /// </summary>
-        /// <returns>A Taks</returns>
-        public Task SearchRecordAsync();
 
         /// <summary>
         /// This method is called by the <see cref="Forms.HeaderFilter"/> object when an option is selected or unselected.
@@ -98,6 +79,26 @@ namespace FrontEnd.Controller
         /// Gets and Sets the string parameter used in a search textbox to filter the RecordSource.
         /// </summary>
         public string Search { get; set; }
+
+        /// <summary>
+        /// Override this method to implement your filter logic. 
+        /// For Example:
+        /// <code>
+        /// //overide SearchQry Property.
+        /// public override string SearchQry { get; set; } = $"SELECT * FROM {nameof(Employee)} WHERE (LOWER(FirstName) LIKE @name OR LOWER(LastName) LIKE @name)";
+        /// ...
+        /// public override async Task SearchRecordAsync() 
+        /// {
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     QueryBuiler.AddParameter("name", Search.ToLower() + "%");
+        ///     var results = await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
+        ///     Source.ReplaceRange(results);
+        ///     GoFirst();
+        /// }
+        /// </code>
+        /// </summary>
+        /// <returns>A Taks</returns>
+        public Task<IEnumerable<M>> SearchRecordAsync();
     }
 
 }
