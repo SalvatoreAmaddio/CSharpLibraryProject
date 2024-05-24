@@ -53,7 +53,7 @@ namespace MyApplication.Controller
             ReportViewer? reportViewer = (ReportViewer?)sender;
             if (reportViewer == null) throw new Exception("ReportViewer is null");
 
-            DialogResult result=ConfirmDialog.Ask("Do you want to send this Payslip by email?");
+            DialogResult result = ConfirmDialog.Ask("Do you want to send this Payslip by email?");
             
             if (result == DialogResult.No) return;
             reportViewer.IsLoading = true;
