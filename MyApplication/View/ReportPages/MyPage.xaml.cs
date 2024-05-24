@@ -4,8 +4,9 @@ using MyApplication.Model;
 
 namespace MyApplication.View.ReportPages
 {
-    public partial class MyPage : ReportPage
+    public partial class MyPage : ReportPage, IClonablePage
     {
+        private Employee Employee;
         public MyPage()
         {
             InitializeComponent();
@@ -13,6 +14,7 @@ namespace MyApplication.View.ReportPages
 
         public MyPage(Employee employee) : this()
         {
+            Employee = employee;
             FirstName.Content = $"{employee.FirstName} {employee.LastName}";
             Email.Content = employee.Email;
             JobTitle.Content = $"Job Title: {DatabaseManager.Find<JobTitle>().Records.FirstOrDefault(s => s.Equals(employee.JobTitle))}";
@@ -21,6 +23,11 @@ namespace MyApplication.View.ReportPages
             EmployeeID.Content = employee?.EmployeeID;
             Salary.Content = $"£{employee?.Payslip?.Salary.ToString("N2")}";
             NetPay.Content = $"£{employee?.Payslip?.SubtractDeductions().ToString("N2")}";
+        }
+
+        public ReportPage CloneMe()
+        {
+            return new MyPage(Employee);
         }
     }
 }

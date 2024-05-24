@@ -146,8 +146,19 @@ namespace FrontEnd.Reports
         /// </summary>
         /// <param name="pdfPrinter"></param>
         /// <returns>A Task</returns>
-        private Task<IEnumerable<FixedPage>> PrintAsync(PrintQueue pdfPrinter) 
+        private async Task<bool> PrintAsync() 
         {
+             PrintQueue? pdfPrinter =
+             new LocalPrintServer()
+            .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
+            .FirstOrDefault(pq => pq.Name.Contains("PDF"));
+
+            if (pdfPrinter == null)
+            {
+                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
+                return false;
+            }
+
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
@@ -172,7 +183,7 @@ namespace FrontEnd.Reports
                 FixedPage.SetLeft(page, 0);
                 FixedPage.SetTop(page, 0);
 
-                fixedPage.Children.Add(page.Copy());
+                fixedPage.Children.Add(((IClonablePage)page).CloneMe());
                 
                 PageContent pageContent = new();
                 ((IAddChild)pageContent).AddChild(fixedPage);
@@ -181,8 +192,8 @@ namespace FrontEnd.Reports
             }
 
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
-
-            return Task.FromResult(doc.Pages.Select(s => s.Child));
+            await PrintingCompleted(pdfPrinter);
+            return true;
         }
 
 
@@ -213,25 +224,9 @@ namespace FrontEnd.Reports
 
             await Task.Delay(1000);
 
-            PrintQueue? pdfPrinter = 
-                 new LocalPrintServer()
-                .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
-                .FirstOrDefault(pq => pq.Name.Contains("PDF"));
-
-            if (pdfPrinter == null) 
-            {
-                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
-                return;
-            }
-
             PDFPrinterManager.SetPort();
-            
-            await Dispatcher.BeginInvoke( async () => 
-            {
-                ItemsSource = ConvertToReportPages(await PrintAsync(pdfPrinter));
-            });
 
-            await PrintingCompleted(pdfPrinter);
+            await Application.Current.Dispatcher.InvokeAsync(()=>PrintAsync());
 
             PDFPrinterManager.ResetPort();
 
@@ -256,23 +251,6 @@ namespace FrontEnd.Reports
             {
                 MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
             }
-        }
-
-        /// <summary>
-        /// It extracts and disconnects the <see cref="ReportPage"/> from its <see cref="FixedPage"/>.
-        /// </summary>
-        /// <param name="fixedPages"></param>
-        /// <returns>A list of orphan ReportPages</returns>
-        private static List<ReportPage> ConvertToReportPages(IEnumerable<FixedPage> fixedPages)
-        {
-            List<ReportPage> pages = [];
-            foreach(FixedPage fixedPage in fixedPages) 
-            {
-                ReportPage reportPage = (ReportPage)fixedPage.Children[0];
-                fixedPage.Children.Clear(); //disconnect from FixedPage
-                pages.Add(reportPage);
-            }
-            return pages;
         }
     }
 }
