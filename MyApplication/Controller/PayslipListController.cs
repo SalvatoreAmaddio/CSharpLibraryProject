@@ -54,7 +54,8 @@ namespace MyApplication.Controller
             if (reportViewer == null) throw new Exception("ReportViewer is null");
 
             DialogResult result=ConfirmDialog.Ask("Do you want to send this Payslip by email?");
-
+            
+            if (result == DialogResult.No) return;
             reportViewer.IsLoading = true;
             
             bool openFile = reportViewer.OpenFile;
