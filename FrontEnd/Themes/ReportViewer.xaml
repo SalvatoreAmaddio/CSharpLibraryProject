@@ -28,7 +28,7 @@
                                     <SolidColorBrush Color="{x:Static SystemColors.MenuColor}" />
                                 </ToolBar.Background>
                                 <report:PDFButton Width="30" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding PrintCommand}"/>
-                                <Button Width="30" ToolTip="Send by email" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding SendCommand}">
+                                <Button Width="30" ToolTip="Send by email" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" Command="{TemplateBinding SendCommand}" x:Name="PART_SendButton">
                                     <Image Source="{StaticResource send}"/>
                                 </Button>
                                 <Separator Width="10" Background="Transparent"/>

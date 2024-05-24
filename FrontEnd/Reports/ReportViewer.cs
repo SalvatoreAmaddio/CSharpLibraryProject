@@ -1,6 +1,7 @@
 ﻿using Backend.Utils;
 using FrontEnd.Controller;
 using FrontEnd.Dialogs;
+using FrontEnd.Events;
 using System.Collections;
 using System.Diagnostics;
 using System.Printing;
@@ -21,7 +22,9 @@ namespace FrontEnd.Reports
     public class ReportViewer : Control
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
+        Button? PART_SendButton;
 
+        public event SendEmailEventHandler? SendEmail;
         public ReportViewer()
         {
             PrintCommand = new CMD(PrintFixDocs);
@@ -31,6 +34,17 @@ namespace FrontEnd.Reports
             };
             SetBinding(FileNameProperty, binding);
         }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            PART_SendButton = (Button?)GetTemplateChild(nameof(PART_SendButton));
+            if (PART_SendButton!=null)
+                PART_SendButton.Click += PART_SendButton_Click;
+        }
+
+        private void PART_SendButton_Click(object sender, RoutedEventArgs e) => SendEmail?.Invoke(this,e);
+
 
         /// <summary>
         /// A PDFPrinterManager that manages the PDF Printer's port.

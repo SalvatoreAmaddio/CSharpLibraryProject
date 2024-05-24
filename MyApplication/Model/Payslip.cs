@@ -43,6 +43,10 @@ namespace MyApplication.Model
             return true;
         }
 
+        public double SubtractDeductions()
+        {
+            return Salary - 250 - 55 - 0 - 50 - 5;
+        }
         public override ISQLModel Read(DbDataReader reader) => new Payslip(reader);
 
     }

@@ -48,6 +48,7 @@ namespace MyApplication.Model
         [Field]
         public string Email { get => _email; set => UpdateProperty(ref value, ref _email); }
 
+        public Payslip? Payslip { get; set; }
         public Employee(DbDataReader reader)
         {
             _employeeid = reader.GetInt64(0);

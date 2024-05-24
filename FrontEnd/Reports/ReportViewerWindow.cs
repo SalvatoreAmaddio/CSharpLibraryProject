@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FrontEnd.Events;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FrontEnd.Reports
@@ -12,6 +13,13 @@ namespace FrontEnd.Reports
         private readonly List<ReportPage> Pages = [];
 
         private readonly ReportViewer ReportViewer = new();
+
+
+        public event SendEmailEventHandler? SendEmail 
+        {
+            add { ReportViewer.SendEmail += value; }
+            remove { ReportViewer.SendEmail -= value; }
+        }
 
         public bool OpenFile
         {

@@ -54,7 +54,8 @@ namespace FrontEnd.Forms
         {
             if (e.NewValue is not IAbstractFormController controller) return;
             SetBinding(CommandParameterProperty, CreateBinding("CurrentRecord", controller));
-            SetBinding(CommandProperty, CreateBinding(CommandName, controller));
+            if (!string.IsNullOrEmpty(CommandName))
+                SetBinding(CommandProperty, CreateBinding(CommandName, controller));
         }
 
         private static Binding CreateBinding(string property, object source) => new(property) { Source = source };
@@ -104,5 +105,12 @@ namespace FrontEnd.Forms
             Background = Brushes.Transparent;
             BorderThickness = new(0);
         }
+    }
+
+    public class ReportButton : AbstractButton
+    {
+        protected override string ToolTipText => "Open Report";
+        protected override string CommandName => string.Empty;
+        protected override string ImgKey => "report";
     }
 }

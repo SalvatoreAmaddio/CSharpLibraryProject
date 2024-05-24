@@ -37,20 +37,21 @@
                     </fr:FormList.Header>
                     <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
                         <fr:Lista.Header>
-                            <Grid fr:Definition.ColumnDefinitions="100,100,50,50">
+                            <Grid fr:Definition.ColumnDefinitions="100,100,50,50,50">
                                 <Label Content="Date" Grid.Column="1"/>
                                 <Label Content="Salary" Grid.Column="2"/>
-                                <Label Content="COMMANDS" Grid.Column="3" Grid.ColumnSpan="2"/>
+                                <Label Content="COMMANDS" Grid.Column="3" Grid.ColumnSpan="3"/>
                             </Grid>
                         </fr:Lista.Header>
                         <fr:Lista.ItemTemplate>
                             <DataTemplate>
                                 <fr:FormRow>
-                                    <Grid fr:Definition.ColumnDefinitions="100,100,50,50">
+                                    <Grid fr:Definition.ColumnDefinitions="100,100,50,50,50">
                                         <DatePicker SelectedDate="{Binding DOP}"/>
                                         <fr:Text Text="{Binding Salary,StringFormat=N2}" Grid.Column="1"/>
                                         <fr:SaveButton Height="30" Grid.Column="2" IsWithinList="True"/>
                                         <fr:DeleteButton Height="30" Grid.Column="3" IsWithinList="True"/>
+                                        <fr:ReportButton Grid.Column="4" Height="30" IsWithinList="True" Command="{Binding OpenReportCMD}"/>
                                     </Grid>
                                 </fr:FormRow>
                             </DataTemplate>

@@ -33,7 +33,7 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Background" Value="{StaticResource DefaultGrey}"/>
             <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value=".5"/>
         </Style>
 
         <Style TargetType="Label" x:Key="Earning">
@@ -42,7 +42,7 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Background" Value="{StaticResource DefaultWhite}"/>
             <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value=".5"/>
         </Style>
 
         <Style TargetType="Label" x:Key="S2">
@@ -99,10 +99,10 @@
 
                         <StackPanel Grid.Column="0">
                             <Label Content="EMPLOYEE INFORMATION:" Background="{StaticResource HappyBlue}" Foreground="White" FontSize="20"/>
-                            <Label Content="Salvatore Amaddio"  FontSize="18"/>
-                            <Label Content="salvatoreamaddio94@gmail.com"  FontSize="18"/>
-                            <Label Content="Job Title: Manager"  FontSize="18"/>
-                            <Label Content="Department: IT"  FontSize="18"/>
+                            <Label x:Name="FirstName" Content="Salvatore Amaddio"  FontSize="18"/>
+                            <Label x:Name="Email" Content="salvatoreamaddio94@gmail.com"  FontSize="18"/>
+                            <Label x:Name="JobTitle" Content="Job Title: Manager"  FontSize="18"/>
+                            <Label x:Name="Department" Content="Department: IT"  FontSize="18"/>
                         </StackPanel>
 
                         <Grid Grid.Column="1" Margin="100,0,5,0">
@@ -123,10 +123,10 @@
                             <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="2" Content="PAYROLL NUM."/>
                             <Label Style="{StaticResource HeaderStyle1}" Grid.Row="0" Grid.Column="3" Content="TAX CODE"/>
 
-                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="0" Content="PAY DATE"/>
-                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="1" Content="PAY TYPE"/>
-                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="2" Content="PAYROLL NUM."/>
-                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="3" Content="TAX CODE"/>
+                            <Label x:Name="PayDate" Style="{StaticResource S2}" Grid.Row="1" Grid.Column="0" Content="PAY DATE"/>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="1" Content="Monthly"/>
+                            <Label x:Name="EmployeeID" Style="{StaticResource S2}" Grid.Row="1" Grid.Column="2" Content="PAYROLL NUM."/>
+                            <Label Style="{StaticResource S2}" Grid.Row="1" Grid.Column="3" Content="1250L"/>
 
                             <Label FontSize="20" FontWeight="Bold" Grid.Row="2" VerticalAlignment="Bottom" Content="Payment Method: Bank." Grid.ColumnSpan="4"/>
                         </Grid>
@@ -148,7 +148,7 @@
                         <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
 
                         <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="Salary"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£1,200"/>
+                        <Label x:Name="Salary" Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£1,200"/>
 
                     </Grid>
                 </Border>
@@ -171,15 +171,15 @@
                         <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="0" Content="DEDUCTIONS"/>
                         <Label Style="{StaticResource EarningHeader}" Grid.Row="0" Grid.Column="1" Content="AMOUNT"/>
                         <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="0" Content="PAYE Tax"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£250"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="1" Grid.Column="1" Content="£250.00"/>
                         <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="0" Content="National Insurance"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="1" Content="£55"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="2" Grid.Column="1" Content="£55.00"/>
                         <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="0" Content="Student Loan Repayment"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="1" Content="£0"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="3" Grid.Column="1" Content="£0.00"/>
                         <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="0" Content="Pension"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="1" Content="£50"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="4" Grid.Column="1" Content="£50.00"/>
                         <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="0" Content="Union Fee"/>
-                        <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="1" Content="£5"/>
+                        <Label Style="{StaticResource Earning}" Grid.Row="5" Grid.Column="1" Content="£5.00"/>
 
                     </Grid>
                 </Border>
@@ -192,7 +192,7 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="TOTAL DEDUCTIONS:"/>
-                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
+                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£360.00"/>
                     </Grid>
                 </Border>
 
@@ -204,7 +204,7 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="1" Content="NET PAY:"/>
-                        <Label Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
+                        <Label x:Name="NetPay" Style="{StaticResource EarningHeader}" BorderThickness="0" Grid.Column="2" Content="£1000"/>
                     </Grid>
                 </Border>
             </Grid>
