@@ -141,35 +141,41 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        /// <summary>
-        /// The actual method that send the PDF document to the Printer.
-        /// </summary>
-        /// <param name="pdfPrinter"></param>
-        /// <returns>A Task</returns>
-        private async Task<bool> PrintAsync() 
+        private Task<TaskRes> Task1(double PageWidth, double PageHeight) 
         {
-             PrintQueue? pdfPrinter =
-             new LocalPrintServer()
-            .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
-            .FirstOrDefault(pq => pq.Name.Contains("PDF"));
+            TaskRes res = new();
+            PDFPrinterManager.SetPort();
+            PrintQueue? pdfPrinter =
+            new LocalPrintServer()
+           .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
+           .FirstOrDefault(pq => pq.Name.Contains("PDF"));
 
             if (pdfPrinter == null)
             {
                 BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
-                return false;
+                PDFPrinterManager.ResetPort();
+                return Task.FromResult(res);
             }
-
+            
             PrintDialog printDialog = new()
             {
                 PrintQueue = pdfPrinter
             };
-
-            ReportPage first_page = ItemsSource.First();
+            res.pdfPrinter = pdfPrinter;
+            res.printDialog = printDialog;   
+            res.Done = true;
             FixedDocument doc = new();
-            doc.DocumentPaginator.PageSize = new Size(first_page.PageWidth, first_page.PageHeight);
-           
-            foreach (ReportPage page in ItemsSource)
+            doc.DocumentPaginator.PageSize = new Size(PageWidth, PageHeight);
+            res.doc = doc;
+            return Task.FromResult(res);
+        }
+
+        public Task<IEnumerable<PageContent>> CopySource() 
+        {
+            List<PageContent> pages = [];
+            foreach (IClonablePage clone in ItemsSource.Cast<IClonablePage>())
             {
+                ReportPage page = clone.CloneMe();
                 FixedPage fixedPage = new()
                 {
                     Width = page.PageWidth,
@@ -182,20 +188,14 @@ namespace FrontEnd.Reports
 
                 FixedPage.SetLeft(page, 0);
                 FixedPage.SetTop(page, 0);
+                fixedPage.Children.Add(page);
 
-                fixedPage.Children.Add(((IClonablePage)page).CloneMe());
-                
                 PageContent pageContent = new();
                 ((IAddChild)pageContent).AddChild(fixedPage);
-
-                doc.Pages.Add(pageContent);
+                pages.Add(pageContent);
             }
-
-            printDialog.PrintDocument(doc.DocumentPaginator, "Printing");
-            await PrintingCompleted(pdfPrinter);
-            return true;
+            return Task.FromResult<IEnumerable<PageContent>>(pages);
         }
-
 
         /// <summary>
         /// It checks if the Printing process has terminated before changing the Printer's port.
@@ -223,16 +223,32 @@ namespace FrontEnd.Reports
             IsLoading = true;
 
             await Task.Delay(1000);
+            ReportPage first_page = ItemsSource.First();
+            double width = first_page.PageWidth;
+            double height = first_page.PageHeight;
+            
+            var prep = Task1(width, height);
+            var copied =  Application.Current.Dispatcher.InvokeAsync(CopySource);
 
-            PDFPrinterManager.SetPort();
+            await Task.WhenAll(prep, copied.Task);
+                        
+            if (!prep.Result.Done) goto EndExec;
 
-            await Application.Current.Dispatcher.InvokeAsync(()=>PrintAsync());
+            foreach (var i in copied.Result.Result)
+            {
+                prep.Result.doc.Pages.Add(i);
+            }
+
+            prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
+
+            await PrintingCompleted(prep.Result.pdfPrinter);
 
             PDFPrinterManager.ResetPort();
 
             if (OpenFile)
                 await Task.Run(()=>Open(PDFPrinterManager.FilePath));
             
+            EndExec:
             await Task.Delay(1000);
             IsLoading = false;
         }
@@ -252,5 +268,14 @@ namespace FrontEnd.Reports
                 MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
             }
         }
+    }
+
+
+    public class TaskRes() 
+    {
+        public bool Done { get; set; } = false;
+        public PrintQueue pdfPrinter { get; set; }
+        public FixedDocument doc { get; set; }
+        public PrintDialog printDialog { get; set; }
     }
 }
