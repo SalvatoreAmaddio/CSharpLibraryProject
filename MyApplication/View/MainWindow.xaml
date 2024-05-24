@@ -28,7 +28,6 @@
             </MenuItem>
         </Menu>
 
-        <Button Content="VIEW" Click="Button_Click"/>
         <fr:Curtain x:Name="Curtain"/>
         
         <TabControl x:Name="MainTab" Grid.Row="1">
