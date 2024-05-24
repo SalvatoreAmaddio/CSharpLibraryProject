@@ -27,7 +27,7 @@ namespace FrontEnd.Reports
         public event SendEmailEventHandler? SendEmail;
         public ReportViewer()
         {
-            PrintCommand = new CMD(PrintFixDocs);
+            PrintCommand = new CMDAsync(PrintFixDocs);
             Binding binding = new("PDFPrinterManager.NewPortName")
             {
                 Source = this
@@ -212,7 +212,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Starts the printing process.
         /// </summary>
-        private async void PrintFixDocs()
+        private async Task PrintFixDocs()
         {
             if (string.IsNullOrEmpty(FileName)) 
             {
@@ -234,12 +234,15 @@ namespace FrontEnd.Reports
                         
             if (!prep.Result.Done) goto EndExec;
 
-            foreach (var i in copied.Result.Result)
+            await Application.Current.Dispatcher.InvokeAsync(() => 
             {
-                prep.Result.doc.Pages.Add(i);
-            }
+                foreach (var i in copied.Result.Result)
+                {
+                    prep.Result.doc.Pages.Add(i);
+                }
 
-            prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
+                prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
+            });
 
             await PrintingCompleted(prep.Result.pdfPrinter);
 

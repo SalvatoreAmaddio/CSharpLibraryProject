@@ -4,17 +4,21 @@ using System.Windows.Input;
 
 namespace FrontEnd.Controller
 {
-    public class CMDAsync(Func<Task> execute) : ICommand
+    public class CMDAsync(Func<Task> execute, bool onTaskRun = false) : ICommand
     {
         public event EventHandler? CanExecuteChanged;
         private readonly Func<Task> task = execute;
-
+        private readonly bool onTaskRun = onTaskRun;
         public bool CanExecute(object? parameter)
         {
             return InternetConnection.IsConnected();
         }
 
-        public async void Execute(object? parameter) => await task.Invoke();
+        public async void Execute(object? parameter) 
+        {
+            if (onTaskRun) await Task.Run(task);
+            else await task.Invoke();
+        } 
 
     }
     /// <summary>
