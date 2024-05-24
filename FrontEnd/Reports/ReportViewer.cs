@@ -141,44 +141,10 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        private Task<TaskRes> Task1(double PageWidth, double PageHeight) 
+        private IEnumerable<PageContent> CopySource(IEnumerable<ReportPage> clonedPages) 
         {
-            TaskRes res = new();
-            PDFPrinterManager.SetPort();
-            PrintQueue? pdfPrinter =
-            new LocalPrintServer()
-           .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
-           .FirstOrDefault(pq => pq.Name.Contains("PDF"));
-
-            if (pdfPrinter == null)
-            {
-                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
-                PDFPrinterManager.ResetPort();
-                return Task.FromResult(res);
-            }
-            
-            PrintDialog printDialog = new()
-            {
-                PrintQueue = pdfPrinter
-            };
-            res.pdfPrinter = pdfPrinter;
-            res.printDialog = printDialog;   
-            res.Done = true;
-            FixedDocument doc = new();
-            doc.DocumentPaginator.PageSize = new Size(PageWidth, PageHeight);
-            res.doc = doc;
-            return Task.FromResult(res);
-        }
-
-        private Task<IEnumerable<PageContent>> CopySource() 
-        {
-            List<PageContent> pages = [];
-            foreach (IClonablePage clone in ItemsSource.Cast<IClonablePage>())
-            {
-                ReportPage page = clone.CloneMe();
-                pages.Add(page.AsPageContent());
-            }
-            return Task.FromResult<IEnumerable<PageContent>>(pages);
+            foreach (ReportPage page in clonedPages)
+                yield return page.AsPageContent();
         }
 
         /// <summary>
@@ -186,11 +152,18 @@ namespace FrontEnd.Reports
         /// </summary>
         /// <param name="printQueue"></param>
         /// <returns>A Task</returns>
-        private static Task PrintingCompleted(PrintQueue printQueue) 
+        private Task PrintingCompleted(PrintQueue pdfPrinter) 
         {
-            while (printQueue.NumberOfJobs > 0)
-                printQueue.Refresh();                
+            while (pdfPrinter.NumberOfJobs > 0)
+                pdfPrinter.Refresh();                
             return Task.CompletedTask;
+        }
+
+        private PrintQueue? GetPDFPrinter()
+        {
+           return new LocalPrintServer()
+               .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
+               .FirstOrDefault(pq => pq.Name.Contains("PDF"));
         }
 
         /// <summary>
@@ -210,27 +183,38 @@ namespace FrontEnd.Reports
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
-            
-            var prep = Task1(width, height);
-            var copied =  Application.Current.Dispatcher.InvokeAsync(CopySource);
+            IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
+            PrintQueue? pdfPrinter = new LocalPrintServer()
+               .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
+               .FirstOrDefault(pq => pq.Name.Contains("PDF"));
 
-            await Task.WhenAll(prep, copied.Task);
-                        
-            if (!prep.Result.Done) goto EndExec;
+            PrintDialog printDialog = new();
 
-            foreach (var i in copied.Result.Result)
-                prep.Result.doc.Pages.Add(i);
+            if (pdfPrinter == null)
+            {
+                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
+                PDFPrinterManager.ResetPort();
+                return;
+            }
 
-            prep.Result.printDialog.PrintDocument(prep.Result.doc.DocumentPaginator, "Printing Doc");
+            PDFPrinterManager.SetPort();
+            FixedDocument doc = new();
+            doc.DocumentPaginator.PageSize = new Size(width, height);
+            var copied = CopySource(clonedPages);
 
-            await PrintingCompleted(prep.Result.pdfPrinter);
+            foreach (var i in copied)
+                doc.Pages.Add(i);
+
+            printDialog.PrintQueue = pdfPrinter;
+            printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
+
+            await PrintingCompleted(pdfPrinter);
 
             PDFPrinterManager.ResetPort();
 
             if (OpenFile)
                 await Task.Run(()=>Open(PDFPrinterManager.FilePath));
             
-            EndExec:
             await Task.Delay(1000);
             IsLoading = false;
         }
@@ -250,14 +234,5 @@ namespace FrontEnd.Reports
                 MessageBox.Show($"Could not open the PDF file. Error: {ex.Message}");
             }
         }
-    }
-
-
-    public class TaskRes() 
-    {
-        public bool Done { get; set; } = false;
-        public PrintQueue pdfPrinter { get; set; }
-        public FixedDocument doc { get; set; }
-        public PrintDialog printDialog { get; set; }
     }
 }
