@@ -206,6 +206,7 @@ namespace FrontEnd.Reports
                 doc.Pages.Add(i);
 
             printDialog.PrintQueue = pdfPrinter;
+
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
 
             await PrintingCompleted(pdfPrinter);
