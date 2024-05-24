@@ -176,23 +176,7 @@ namespace FrontEnd.Reports
             foreach (IClonablePage clone in ItemsSource.Cast<IClonablePage>())
             {
                 ReportPage page = clone.CloneMe();
-                FixedPage fixedPage = new()
-                {
-                    Width = page.PageWidth,
-                    Height = page.PageHeight,
-                };
-
-                page.Measure(new Size(fixedPage.Width, fixedPage.Height));
-                page.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
-                page.UpdateLayout();
-
-                FixedPage.SetLeft(page, 0);
-                FixedPage.SetTop(page, 0);
-                fixedPage.Children.Add(page);
-
-                PageContent pageContent = new();
-                ((IAddChild)pageContent).AddChild(fixedPage);
-                pages.Add(pageContent);
+                pages.Add(page.AsPageContent());
             }
             return Task.FromResult<IEnumerable<PageContent>>(pages);
         }

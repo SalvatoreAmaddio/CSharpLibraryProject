@@ -1,6 +1,8 @@
 ﻿using FrontEnd.Forms;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace FrontEnd.Reports
@@ -64,38 +66,6 @@ namespace FrontEnd.Reports
             FooterHeight = grid?.RowDefinitions[2]?.ActualHeight;
             Total = HeaderHeight + MainHeight + FooterHeight;
             ContentOverflown = Total > PageHeight;
-        }
-
-        /// <summary>
-        /// Copy the content from another ReportPage.
-        /// </summary>
-        /// <param name="page">Another Report Page</param>
-        public void CopyFrom(ReportPage page)
-        {
-            PaddingPage = page.PaddingPage;
-            PageNumber = page.PageNumber;
-            HeaderRow = page.HeaderRow;
-            FooterRow = page.FooterRow;
-            Header = page.Header;
-            Body = page.Body;
-            Footer = page.Footer;
-        }
-
-        /// <summary>
-        /// Creates a new ReportPage with the same content as this one.
-        /// </summary>
-        /// <returns>A new ReportPage</returns>
-        public ReportPage Copy() 
-        {
-            ReportPage page = new();
-            page.PageNumber = PageNumber;
-            page.PaddingPage = PaddingPage;
-            page.HeaderRow = HeaderRow;
-            page.FooterRow = FooterRow;
-            page.Header = Header;
-            page.Body = Body;
-            page.Footer = Footer;
-            return page;
         }
 
         public override void OnApplyTemplate()
@@ -233,5 +203,29 @@ namespace FrontEnd.Reports
             PageHeight = (297 / 25.4) * 96 * dpiY; // Convert mm to inches, then to device-independent pixels
         }
 
+        /// <summary>
+        /// Put this ReportPage into a <see cref="PageContent"/> object.
+        /// </summary>
+        /// <returns>A PageContent</returns>
+        public PageContent AsPageContent()
+        {
+            FixedPage fixedPage = new()
+            {
+                Width = this.PageWidth,
+                Height = this.PageHeight,
+            };
+
+            this.Measure(new Size(fixedPage.Width, fixedPage.Height));
+            this.Arrange(new Rect(new Point(), fixedPage.DesiredSize));
+            this.UpdateLayout();
+
+            FixedPage.SetLeft(this, 0);
+            FixedPage.SetTop(this, 0);
+            fixedPage.Children.Add(this);
+
+            PageContent pageContent = new();
+            ((IAddChild)pageContent).AddChild(fixedPage);
+            return pageContent;
+        }
     }
 }
