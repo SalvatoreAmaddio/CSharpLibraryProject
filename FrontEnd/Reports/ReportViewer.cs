@@ -170,7 +170,7 @@ namespace FrontEnd.Reports
             return Task.FromResult(res);
         }
 
-        public Task<IEnumerable<PageContent>> CopySource() 
+        private Task<IEnumerable<PageContent>> CopySource() 
         {
             List<PageContent> pages = [];
             foreach (IClonablePage clone in ItemsSource.Cast<IClonablePage>())
