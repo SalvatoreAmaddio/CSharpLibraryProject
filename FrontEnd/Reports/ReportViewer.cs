@@ -43,7 +43,7 @@ namespace FrontEnd.Reports
             await PrintFixDocs();
             IsLoading = true;
             await Task.Delay(1000);
-            EmailSender?.AddAttachment(PDFPrinterManager.FilePath);
+            EmailSender.AddAttachment(PDFPrinterManager.FilePath);
             await Task.Run(EmailSender.SendAsync);
             IsLoading = false;
             OpenFile = openFile;
