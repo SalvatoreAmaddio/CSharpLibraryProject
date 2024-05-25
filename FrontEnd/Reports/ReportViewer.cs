@@ -4,6 +4,7 @@ using FrontEnd.Dialogs;
 using FrontEnd.Events;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
 using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,6 +48,7 @@ namespace FrontEnd.Reports
             await Task.Run(EmailSender.SendAsync);
             IsLoading = false;
             OpenFile = openFile;
+            await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
             SuccessDialog.Display("Email Sent");
         }
 
