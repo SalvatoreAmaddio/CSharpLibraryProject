@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Markup;
 
 namespace FrontEnd.Reports
 {
@@ -24,6 +23,7 @@ namespace FrontEnd.Reports
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         Button? PART_SendButton;
 
+        public EmailSender? EmailSender {get;set;}
         public event SendEmailEventHandler? SendEmail;
         public ReportViewer()
         {
@@ -35,15 +35,28 @@ namespace FrontEnd.Reports
             SetBinding(FileNameProperty, binding);
         }
 
+        private async void OnSendEmailClicked(object? sender, EventArgs e)
+        {
+            if (EmailSender == null) return;
+            bool openFile = OpenFile;
+            OpenFile = false;
+            await PrintFixDocs();
+            IsLoading = true;
+            await Task.Delay(1000);
+            EmailSender?.AddAttachment(PDFPrinterManager.FilePath);
+            await Task.Run(EmailSender.SendAsync);
+            IsLoading = false;
+            OpenFile = openFile;
+            SuccessDialog.Display("Email Sent");
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
             PART_SendButton = (Button?)GetTemplateChild(nameof(PART_SendButton));
             if (PART_SendButton!=null)
-                PART_SendButton.Click += PART_SendButton_Click;
+                PART_SendButton.Click += OnSendEmailClicked;
         }
-
-        private void PART_SendButton_Click(object sender, RoutedEventArgs e) => SendEmail?.Invoke(this,e);
 
 
         /// <summary>
@@ -169,7 +182,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Starts the printing process.
         /// </summary>
-        public async Task PrintFixDocs()
+        private async Task PrintFixDocs()
         {
             if (string.IsNullOrEmpty(FileName)) 
             {
@@ -184,9 +197,7 @@ namespace FrontEnd.Reports
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
             IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
-            PrintQueue? pdfPrinter = new LocalPrintServer()
-               .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
-               .FirstOrDefault(pq => pq.Name.Contains("PDF"));
+            PrintQueue? pdfPrinter = GetPDFPrinter();
 
             PrintDialog printDialog = new();
 

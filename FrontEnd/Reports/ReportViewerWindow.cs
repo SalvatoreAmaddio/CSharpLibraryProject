@@ -1,4 +1,4 @@
-﻿using FrontEnd.Events;
+﻿using Backend.Utils;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,11 +14,10 @@ namespace FrontEnd.Reports
 
         private readonly ReportViewer ReportViewer = new();
 
-
-        public event SendEmailEventHandler? SendEmail 
+        public EmailSender? EmailSender
         {
-            add { ReportViewer.SendEmail += value; }
-            remove { ReportViewer.SendEmail -= value; }
+            get => ReportViewer.EmailSender;
+            set => ReportViewer.EmailSender = value;
         }
 
         public bool OpenFile

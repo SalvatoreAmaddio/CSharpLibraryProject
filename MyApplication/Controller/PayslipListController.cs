@@ -36,42 +36,18 @@ namespace MyApplication.Controller
                 year = payslip?.DOP.Value.ToString("yyyy");
             }
             employee.Payslip = payslip;
+            EmailSender emailSender = new("smtp.gmail.com", FrontEndSettings.Default.EmailUserName, "The Company", "Payslip");
+            emailSender.AddReceiver(employee.Email, employee.FirstName);
+            emailSender.Body = $"Dear {employee.FirstName},\n Please find attached your payslip.\nRegards,\nThe Company.";
+
             ReportViewerWindow win = new()
             {
-                FileName = $"{employee.FirstName}_{employee.LastName}_Payslip_{month}_{year}"
+                FileName = $"{employee.FirstName}_{employee.LastName}_Payslip_{month}_{year}",
+                EmailSender = emailSender,
             };
-            win.SendEmail += Win_SendEmail;
             win.AddPage(new MyPage(employee));
             win.SelectedPage = win[0];
             win.Show();
-        }
-
-        private async void Win_SendEmail(object? sender, EventArgs e)
-        {
-            Employee? employee = (Employee?)ParentRecord;
-            if (employee == null) throw new Exception("Parent Record cannot be null.");
-            ReportViewer? reportViewer = (ReportViewer?)sender;
-            if (reportViewer == null) throw new Exception("ReportViewer is null");
-
-            DialogResult result = ConfirmDialog.Ask("Do you want to send this Payslip by email?");
-            
-            if (result == DialogResult.No) return;
-            Task t1 = reportViewer.PrintFixDocs();
-            bool openFile = reportViewer.OpenFile;
-            reportViewer.OpenFile = false;
-           
-            EmailSender emailSender = new ("smtp.gmail.com", FrontEndSettings.Default.EmailUserName, "The Company", "Payslip");
-            emailSender.AddReceiver(employee.Email, employee.FirstName);
-            emailSender.Body = $"Dear {employee.FirstName},\n Please find attached your payslip.\nRegards,\nThe Company.";
-            await t1;
-            emailSender.AddAttachment(reportViewer.PDFPrinterManager.FilePath);
-            await Task.Run(emailSender.SendAsync);
-
-            reportViewer.IsLoading = false;
-            reportViewer.OpenFile = openFile;
-
-            SuccessDialog.Display("Email Sent");
-            //delele file
         }
 
 
