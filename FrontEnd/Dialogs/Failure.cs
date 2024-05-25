@@ -8,13 +8,13 @@ namespace FrontEnd.Dialogs
     /// This dialog is usually called when the user attempt to save a record without meeting Record's Integrity criteria. <para/>
     /// This dialog is used in: <see cref="Model.AbstractModel.AllowUpdate()"/> 
     /// </summary>
-    public class BrokenIntegrityDialog : AbstractDialog
+    public class Failure : AbstractDialog
     {
         private Button? okButton;
 
-        static BrokenIntegrityDialog() => DefaultStyleKeyProperty.OverrideMetadata(typeof(BrokenIntegrityDialog), new FrameworkPropertyMetadata(typeof(BrokenIntegrityDialog)));
+        static Failure() => DefaultStyleKeyProperty.OverrideMetadata(typeof(Failure), new FrameworkPropertyMetadata(typeof(Failure)));
 
-        private BrokenIntegrityDialog(string? text = null, string? title = null) : base(text, title)
+        private Failure(string? text = null, string? title = null) : base(text, title)
         {
         }
 
@@ -43,7 +43,7 @@ namespace FrontEnd.Dialogs
             }
         }
 
-        public static DialogResult Throw(string? text = null, string? title = "Something is missing") => _ask(new BrokenIntegrityDialog(text, title));
+        public static DialogResult Throw(string? text = null, string? title = "Something is missing") => _ask(new Failure(text, title));
 
     }
 }

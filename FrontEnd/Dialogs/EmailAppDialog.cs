@@ -51,7 +51,7 @@ namespace FrontEnd.Dialogs
             if (PART_Password == null) throw new Exception($"Failed to fetch {nameof(PART_Password)}");
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(PART_Password.Password))
             {
-                BrokenIntegrityDialog.Throw("Username and/or Password have not been provided.");
+                Failure.Throw("Username and/or Password have not been provided.");
                 return;
             }
 

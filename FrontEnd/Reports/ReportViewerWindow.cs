@@ -16,7 +16,6 @@ namespace FrontEnd.Reports
 
         public EmailSender? EmailSender
         {
-            get => ReportViewer.EmailSender;
             set => ReportViewer.EmailSender = value;
         }
 
@@ -26,11 +25,6 @@ namespace FrontEnd.Reports
             set => ReportViewer.OpenFile = value;
         }
 
-        public ICommand SendCommand 
-        {
-            get => ReportViewer.SendCommand;
-            set => ReportViewer.SendCommand = value;
-        }
         public ReportPage SelectedPage
         {
             get => ReportViewer.SelectedPage;

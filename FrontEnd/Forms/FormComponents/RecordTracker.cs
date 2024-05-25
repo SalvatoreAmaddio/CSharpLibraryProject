@@ -1,6 +1,7 @@
 ﻿using Backend.Utils;
 using FrontEnd.Controller;
 using FrontEnd.Model;
+using FrontEnd.Reports;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -68,6 +69,17 @@ namespace FrontEnd.Forms.FormComponents
         }
 
         public static readonly DependencyProperty NoInternetVisibilityProperty = DependencyProperty.Register(nameof(NoInternetVisibility), typeof(Visibility), typeof(RecordTracker), new PropertyMetadata(Visibility.Hidden));
+        #endregion
+
+        #region Message
+        public static readonly DependencyProperty MessageProperty =
+         DependencyProperty.Register(nameof(Message), typeof(string), typeof(RecordTracker), new PropertyMetadata(string.Empty));
+
+        public string Message
+        {
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
+        }
         #endregion
 
         protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

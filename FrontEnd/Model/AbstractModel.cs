@@ -82,7 +82,7 @@ namespace FrontEnd.Model
             bool result = base.AllowUpdate();
 
             if (!result)
-                BrokenIntegrityDialog.Throw($"Please fill all mandatory fields:\n{GetEmptyMandatoryFields()}");
+                Failure.Throw($"Please fill all mandatory fields:\n{GetEmptyMandatoryFields()}");
 
             return result;
         }

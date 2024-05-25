@@ -159,6 +159,13 @@ namespace Backend.Utils
             }
         }
 
+        public bool CredentialCheck() 
+        {
+            SysCredentailTargets.EmailApp = SenderEmail;
+            Credential? credential = CredentialManager.Get(SysCredentailTargets.EmailApp);
+            return credential != null;
+        }
+
         /// <summary>
         /// Send the email.
         /// </summary>

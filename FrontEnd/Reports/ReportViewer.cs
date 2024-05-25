@@ -1,7 +1,7 @@
-﻿using Backend.Utils;
+﻿using Backend.Exceptions;
+using Backend.Utils;
 using FrontEnd.Controller;
 using FrontEnd.Dialogs;
-using FrontEnd.Events;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
@@ -23,8 +23,12 @@ namespace FrontEnd.Reports
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         Button? PART_SendButton;
-        public EmailSender? EmailSender {get;set;}
-        public event SendEmailEventHandler? SendEmail;
+
+        /// <summary>
+        /// Sets the <see cref="EmailSender"/> that will be used by the <see cref="OnSendEmailClicked(object?, EventArgs)"/>
+        /// </summary>
+        public EmailSender? EmailSender { private get; set;}
+
         public ReportViewer()
         {
             PrintCommand = new CMDAsync(PrintFixDocs);
@@ -38,22 +42,42 @@ namespace FrontEnd.Reports
         private async void OnSendEmailClicked(object? sender, EventArgs e)
         {
             if (EmailSender == null) return;
+            if (!EmailSender.CredentialCheck()) 
+            {
+                Failure.Throw("I could not find any email settings.");
+                return;
+            }
             DialogResult result = ConfirmDialog.Ask("Do you want to send this document by email?");
             if (result == DialogResult.No) return;
             bool openFile = OpenFile;
             OpenFile = false;
-            Task t = PrintFixDocs();
-            IsLoading = true;
+            Task<bool> t = PrintFixDocs();
+            
             Message = "Preparing document...";
             await Task.Delay(100);
+
             EmailSender.AddAttachment(PDFPrinterManager.FilePath);
-            await t;
+            bool hasPrinted = await t;
+            if (!hasPrinted) return;
+            IsLoading = true;
+            await Task.Delay(100);
+
             Message = "Sending...";
-            await Task.Run(EmailSender.SendAsync);
-            IsLoading = false;
-            OpenFile = openFile;
+            try
+            {
+                await Task.Run(EmailSender.SendAsync);
+            }
+            catch (Exception ex)
+            {
+                Failure.Throw("The system failed to send the email. Possible reasons could be:\n- Wrong email settings,\nPoor internet connection.");
+            }
+            finally 
+            {
+                IsLoading = false;
+                OpenFile = openFile;
+                await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
+            }
             Message = "Almost Ready...";
-            await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
             SuccessDialog.Display("Email Sent");
             Message = "";
         }
@@ -163,16 +187,6 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        #region SendCommand
-        public static readonly DependencyProperty SendCommandProperty =
-         DependencyProperty.Register(nameof(SendCommand), typeof(ICommand), typeof(ReportViewer), new PropertyMetadata());
-        public ICommand SendCommand
-        {
-            get => (ICommand)GetValue(SendCommandProperty);
-            set => SetValue(SendCommandProperty, value);
-        }
-        #endregion
-
         private IEnumerable<PageContent> CopySource(IEnumerable<ReportPage> clonedPages)
         {
             foreach (ReportPage page in clonedPages)
@@ -182,7 +196,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// It checks if the Printing process has terminated before changing the Printer's port.
         /// </summary>
-        /// <param name="printQueue"></param>
+        /// <param name="pdfPrinter"></param>
         /// <returns>A Task</returns>
         private Task PrintingCompleted(PrintQueue pdfPrinter) 
         {
@@ -201,12 +215,12 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Starts the printing process.
         /// </summary>
-        private async Task PrintFixDocs()
+        private async Task<bool> PrintFixDocs()
         {
             if (string.IsNullOrEmpty(FileName)) 
             {
-                BrokenIntegrityDialog.Throw("Please, specify a file name");
-                return;
+                Failure.Throw("Please, specify a file name");
+                return false;
             }
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
@@ -214,9 +228,8 @@ namespace FrontEnd.Reports
             PrintQueue? pdfPrinter = GetPDFPrinter();
             if (pdfPrinter == null)
             {
-                BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
-                PDFPrinterManager.ResetPort();
-                return;
+                Failure.Throw("I could not find a PDF Printer in your computer");
+                return false;
             }
 
             PrintDialog printDialog = new()
@@ -252,7 +265,7 @@ namespace FrontEnd.Reports
 
             Message = "";
             IsLoading = false;
-
+            return true;
         }
 
         private async Task RunUI(IEnumerable<PageContent> copied, FixedDocument doc, PrintDialog printDialog, PrintQueue pdfPrinter) 

@@ -2,7 +2,6 @@
 
 namespace FrontEnd.Events
 {
-    public delegate void SendEmailEventHandler(object? sender, EventArgs e);
     public delegate void NewRecordEventHandler(object? sender, EventArgs e);
     public delegate void ParentRecordChangedEventHandler(object? sender, ParentRecordChangedArgs e);
     public delegate void AfterUpdateEventHandler(object? sender, AfterUpdateArgs e);
