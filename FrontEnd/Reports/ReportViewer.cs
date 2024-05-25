@@ -216,7 +216,7 @@ namespace FrontEnd.Reports
 
             await Task.Run(PDFPrinterManager.SetPort);
 
-            var copied = await Task.Run(() => CopySource(clonedPages));
+            IEnumerable<PageContent> copied = await Task.Run(() => CopySource(clonedPages));
 
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
