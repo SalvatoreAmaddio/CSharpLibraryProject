@@ -221,24 +221,32 @@ namespace FrontEnd.Reports
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
 
-            await Application.Current.Dispatcher.BeginInvoke(() =>
+            var x = await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 foreach (var i in copied)
                 {
                     doc.Pages.Add(i);
                 }
-            });
-            printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
-            await PrintingCompleted(pdfPrinter);
+                printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
+                return true;
+            }).Task;
 
+
+            await PrintingCompleted(pdfPrinter);
             await Task.Run(PDFPrinterManager.ResetPort);
 
             if (OpenFile)
-                await Task.Run(()=>Open(PDFPrinterManager.FilePath));
-            
+                await Task.Run(() => Open(PDFPrinterManager.FilePath));
+
             IsLoading = false;
+
         }
+
+        private void done(object? sender, EventArgs e) 
+        { 
         
+        }
+
         /// <summary>
         /// Open the file after it has been printed.
         /// </summary>
