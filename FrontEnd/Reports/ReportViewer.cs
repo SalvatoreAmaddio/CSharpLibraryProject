@@ -39,6 +39,8 @@ namespace FrontEnd.Reports
         private async void OnSendEmailClicked(object? sender, EventArgs e)
         {
             if (EmailSender == null) return;
+            DialogResult result = ConfirmDialog.Ask("Do you want to send this document by email?");
+            if (result == DialogResult.No) return;
             bool openFile = OpenFile;
             OpenFile = false;
             await PrintFixDocs();
