@@ -47,6 +47,17 @@ namespace FrontEnd.Reports
         }
         #endregion
 
+        #region Message
+        public static readonly DependencyProperty MessageProperty =
+         DependencyProperty.Register(nameof(Message), typeof(string), typeof(PageTracker), new PropertyMetadata(string.Empty));
+
+        public string Message
+        {
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
+        }
+        #endregion
+
         static PageTracker()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PageTracker), new FrameworkPropertyMetadata(typeof(PageTracker)));

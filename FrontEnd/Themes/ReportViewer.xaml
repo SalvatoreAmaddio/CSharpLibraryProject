@@ -46,8 +46,7 @@
                         </ScrollViewer>
                         <ProgressBar IsIndeterminate="{TemplateBinding IsLoading}" Grid.Row="2"/>
                         <Grid Grid.Row="3">
-                            <report:PageTracker ItemsSource="{TemplateBinding ItemsSource}" SelectedPage="{Binding Path = SelectedPage, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
-                            <Label x:Name="Message" Content="" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <report:PageTracker ItemsSource="{TemplateBinding ItemsSource}" SelectedPage="{Binding Path = SelectedPage, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Message="{TemplateBinding Message}"/>
                         </Grid>
                     </Grid>
                 </ControlTemplate>

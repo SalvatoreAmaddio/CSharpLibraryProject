@@ -23,6 +23,8 @@
                         <Label Content="{TemplateBinding Records}" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="White"/>
                         <Button Content="▶" ToolTip="Next Record" CommandParameter="3"/>
                         <Button Content="▶▶" ToolTip="Last Record" CommandParameter="4"/>
+                        <Separator Width="10" Background="Transparent"/>
+                        <Label x:Name="PART_Message" Content="{TemplateBinding Message}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

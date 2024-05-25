@@ -23,8 +23,6 @@ namespace FrontEnd.Reports
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         Button? PART_SendButton;
-
-        private Label? Message;
         public EmailSender? EmailSender {get;set;}
         public event SendEmailEventHandler? SendEmail;
         public ReportViewer()
@@ -46,18 +44,18 @@ namespace FrontEnd.Reports
             OpenFile = false;
             Task t = PrintFixDocs();
             IsLoading = true;
-            Message.Content = "Preparing document...";
+            Message = "Preparing document...";
             await Task.Delay(100);
             EmailSender.AddAttachment(PDFPrinterManager.FilePath);
             await t;
-            Message.Content = "Sending...";
+            Message = "Sending...";
             await Task.Run(EmailSender.SendAsync);
             IsLoading = false;
             OpenFile = openFile;
-            Message.Content = "Almost Ready...";
+            Message = "Almost Ready...";
             await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
             SuccessDialog.Display("Email Sent");
-            Message.Content = "";
+            Message = "";
         }
 
         public override void OnApplyTemplate()
@@ -66,8 +64,6 @@ namespace FrontEnd.Reports
             PART_SendButton = (Button?)GetTemplateChild(nameof(PART_SendButton));
             if (PART_SendButton!=null)
                 PART_SendButton.Click += OnSendEmailClicked;
-
-            Message = (Label?)GetTemplateChild(nameof(Message));
         }
 
 
@@ -88,6 +84,17 @@ namespace FrontEnd.Reports
 
         public static readonly DependencyProperty OpenFileProperty =
             DependencyProperty.Register(nameof(OpenFile), typeof(bool), typeof(ReportViewer), new PropertyMetadata(false));
+        #endregion
+
+        #region Message
+        public static readonly DependencyProperty MessageProperty =
+         DependencyProperty.Register(nameof(Message), typeof(string), typeof(ReportViewer), new PropertyMetadata(string.Empty));
+
+        public string Message
+        {
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
+        }
         #endregion
 
         #region IsLoading
@@ -229,7 +236,7 @@ namespace FrontEnd.Reports
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
 
-            Message.Content = "Printing...";
+            Message = "Printing...";
             await Task.Delay(100);
             await Application.Current.Dispatcher.InvokeAsync(async() =>
             {
@@ -239,11 +246,11 @@ namespace FrontEnd.Reports
 
             if (OpenFile) 
             {
-                Message.Content = "Opening...";
+                Message = "Opening...";
                 await Task.Run(() => Open(PDFPrinterManager.FilePath));
             }
 
-            Message.Content = "";
+            Message = "";
             IsLoading = false;
 
         }
@@ -255,9 +262,9 @@ namespace FrontEnd.Reports
                 doc.Pages.Add(i);
             }
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
-            Message.Content = "Saving...";
+            Message = "Saving...";
             await PrintingCompleted(pdfPrinter);
-            Message.Content = "Almost Ready...";
+            Message = "Almost Ready...";
             await Task.Run(PDFPrinterManager.ResetPort);
         }
 
