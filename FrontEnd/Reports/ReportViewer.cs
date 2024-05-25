@@ -242,10 +242,6 @@ namespace FrontEnd.Reports
 
         }
 
-        private void done(object? sender, EventArgs e) 
-        { 
-        
-        }
 
         /// <summary>
         /// Open the file after it has been printed.
