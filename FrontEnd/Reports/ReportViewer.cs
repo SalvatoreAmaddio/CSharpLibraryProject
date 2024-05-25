@@ -210,7 +210,7 @@ namespace FrontEnd.Reports
             };
 
             IsLoading = true;
-            await Task.Delay(500);
+            await Task.Delay(100);
 
             IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
 
