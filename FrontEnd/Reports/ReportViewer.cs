@@ -24,6 +24,7 @@ namespace FrontEnd.Reports
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         Button? PART_SendButton;
 
+        private Label? Message;
         public EmailSender? EmailSender {get;set;}
         public event SendEmailEventHandler? SendEmail;
         public ReportViewer()
@@ -43,15 +44,20 @@ namespace FrontEnd.Reports
             if (result == DialogResult.No) return;
             bool openFile = OpenFile;
             OpenFile = false;
-            await PrintFixDocs();
+            Task t = PrintFixDocs();
             IsLoading = true;
+            Message.Content = "Preparing document...";
             await Task.Delay(100);
             EmailSender.AddAttachment(PDFPrinterManager.FilePath);
+            await t;
+            Message.Content = "Sending...";
             await Task.Run(EmailSender.SendAsync);
             IsLoading = false;
             OpenFile = openFile;
+            Message.Content = "Almost Ready...";
             await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
             SuccessDialog.Display("Email Sent");
+            Message.Content = "";
         }
 
         public override void OnApplyTemplate()
@@ -60,6 +66,8 @@ namespace FrontEnd.Reports
             PART_SendButton = (Button?)GetTemplateChild(nameof(PART_SendButton));
             if (PART_SendButton!=null)
                 PART_SendButton.Click += OnSendEmailClicked;
+
+            Message = (Label?)GetTemplateChild(nameof(Message));
         }
 
 
@@ -158,7 +166,7 @@ namespace FrontEnd.Reports
         }
         #endregion
 
-        private IEnumerable<PageContent> CopySource(IEnumerable<ReportPage> clonedPages) 
+        private IEnumerable<PageContent> CopySource(IEnumerable<ReportPage> clonedPages)
         {
             foreach (ReportPage page in clonedPages)
                 yield return page.AsPageContent();
@@ -221,27 +229,37 @@ namespace FrontEnd.Reports
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
 
-            var x = await Application.Current.Dispatcher.InvokeAsync(() =>
+            Message.Content = "Printing...";
+            await Task.Delay(100);
+            await Application.Current.Dispatcher.InvokeAsync(async() =>
             {
-                foreach (var i in copied)
-                {
-                    doc.Pages.Add(i);
-                }
-                printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
-                return true;
-            }).Task;
+               await RunUI(copied, doc,printDialog,pdfPrinter);
+            });
 
 
-            await PrintingCompleted(pdfPrinter);
-            await Task.Run(PDFPrinterManager.ResetPort);
-
-            if (OpenFile)
+            if (OpenFile) 
+            {
+                Message.Content = "Opening...";
                 await Task.Run(() => Open(PDFPrinterManager.FilePath));
+            }
 
+            Message.Content = "";
             IsLoading = false;
 
         }
 
+        private async Task RunUI(IEnumerable<PageContent> copied, FixedDocument doc, PrintDialog printDialog, PrintQueue pdfPrinter) 
+        {
+            foreach (var i in copied)
+            {
+                doc.Pages.Add(i);
+            }
+            printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
+            Message.Content = "Saving...";
+            await PrintingCompleted(pdfPrinter);
+            Message.Content = "Almost Ready...";
+            await Task.Run(PDFPrinterManager.ResetPort);
+        }
 
         /// <summary>
         /// Open the file after it has been printed.
