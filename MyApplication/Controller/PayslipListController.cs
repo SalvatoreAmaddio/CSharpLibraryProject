@@ -29,7 +29,7 @@ namespace MyApplication.Controller
             if (employee == null) throw new Exception("Parent Record cannot be null.");
             if (payslip == null) throw new Exception("Payslip cannot be null.");
             string? month = null;
-            string? year = null;    
+            string? year = null;
             if (payslip.DOP.HasValue) 
             {
                 month = payslip?.DOP.Value.ToString("MMM");
