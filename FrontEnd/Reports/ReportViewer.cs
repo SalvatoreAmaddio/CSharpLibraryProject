@@ -70,6 +70,7 @@ namespace FrontEnd.Reports
             catch (Exception ex)
             {
                 Failure.Throw("The system failed to send the email. Possible reasons could be:\n- Wrong email settings,\nPoor internet connection.");
+                Message = "Email Task Failed.";
             }
             finally 
             {
