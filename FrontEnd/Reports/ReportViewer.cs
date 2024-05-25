@@ -217,14 +217,17 @@ namespace FrontEnd.Reports
             await Task.Run(PDFPrinterManager.SetPort);
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
-            var copied = CopySource(clonedPages);
 
-            foreach (var i in copied)
-                doc.Pages.Add(i);
+            var copied = await Task.Run(() => CopySource(clonedPages));
 
-
+            await Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                foreach (var i in copied)
+                {
+                    doc.Pages.Add(i);
+                }
+            });
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
-
             await PrintingCompleted(pdfPrinter);
 
             await Task.Run(PDFPrinterManager.ResetPort);
