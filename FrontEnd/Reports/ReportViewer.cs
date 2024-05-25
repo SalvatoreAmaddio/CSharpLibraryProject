@@ -45,7 +45,7 @@ namespace FrontEnd.Reports
             OpenFile = false;
             await PrintFixDocs();
             IsLoading = true;
-            await Task.Delay(1000);
+            await Task.Delay(100);
             EmailSender.AddAttachment(PDFPrinterManager.FilePath);
             await Task.Run(EmailSender.SendAsync);
             IsLoading = false;
@@ -193,18 +193,10 @@ namespace FrontEnd.Reports
                 BrokenIntegrityDialog.Throw("Please, specify a file name");
                 return;
             }
-
-            IsLoading = true;
-
-            await Task.Delay(1000);
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
-            IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
             PrintQueue? pdfPrinter = GetPDFPrinter();
-
-            PrintDialog printDialog = new();
-
             if (pdfPrinter == null)
             {
                 BrokenIntegrityDialog.Throw("I could not find a PDF Printer in your computer");
@@ -212,7 +204,17 @@ namespace FrontEnd.Reports
                 return;
             }
 
-            PDFPrinterManager.SetPort();
+            PrintDialog printDialog = new()
+            {
+                PrintQueue = pdfPrinter
+            };
+
+            IsLoading = true;
+            await Task.Delay(500);
+
+            IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
+
+            await Task.Run(PDFPrinterManager.SetPort);
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
             var copied = CopySource(clonedPages);
@@ -220,18 +222,16 @@ namespace FrontEnd.Reports
             foreach (var i in copied)
                 doc.Pages.Add(i);
 
-            printDialog.PrintQueue = pdfPrinter;
 
             printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
 
             await PrintingCompleted(pdfPrinter);
 
-            PDFPrinterManager.ResetPort();
+            await Task.Run(PDFPrinterManager.ResetPort);
 
             if (OpenFile)
                 await Task.Run(()=>Open(PDFPrinterManager.FilePath));
             
-            await Task.Delay(1000);
             IsLoading = false;
         }
         
