@@ -169,7 +169,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Starts the printing process.
         /// </summary>
-        private async Task PrintFixDocs()
+        public async Task PrintFixDocs()
         {
             if (string.IsNullOrEmpty(FileName)) 
             {

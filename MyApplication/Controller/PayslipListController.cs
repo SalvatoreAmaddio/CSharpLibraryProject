@@ -57,16 +57,16 @@ namespace MyApplication.Controller
             
             if (result == DialogResult.No) return;
             reportViewer.IsLoading = true;
-            
+            Task t1 = reportViewer.PrintFixDocs();
             bool openFile = reportViewer.OpenFile;
             reportViewer.OpenFile = false;
-            reportViewer.PrintCommand.Execute(null);
-            
+           
             EmailSender emailSender = new ("smtp.gmail.com", FrontEndSettings.Default.EmailUserName, "The Company", "Payslip");
             emailSender.AddReceiver(employee.Email, employee.FirstName);
-            emailSender.AddAttachment(reportViewer.PDFPrinterManager.FilePath);
             emailSender.Body = $"Dear {employee.FirstName},\n Please find attached your payslip.\nRegards,\nThe Company.";
-            await emailSender.SendAsync();
+            await t1;
+            emailSender.AddAttachment(reportViewer.PDFPrinterManager.FilePath);
+            await Task.Run(emailSender.SendAsync);
 
             reportViewer.IsLoading = false;
             reportViewer.OpenFile = openFile;
