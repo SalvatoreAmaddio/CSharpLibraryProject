@@ -56,7 +56,6 @@ namespace MyApplication.Controller
             DialogResult result = ConfirmDialog.Ask("Do you want to send this Payslip by email?");
             
             if (result == DialogResult.No) return;
-            reportViewer.IsLoading = true;
             Task t1 = reportViewer.PrintFixDocs();
             bool openFile = reportViewer.OpenFile;
             reportViewer.OpenFile = false;
