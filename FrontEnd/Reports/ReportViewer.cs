@@ -215,10 +215,11 @@ namespace FrontEnd.Reports
             IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
 
             await Task.Run(PDFPrinterManager.SetPort);
-            FixedDocument doc = new();
-            doc.DocumentPaginator.PageSize = new Size(width, height);
 
             var copied = await Task.Run(() => CopySource(clonedPages));
+
+            FixedDocument doc = new();
+            doc.DocumentPaginator.PageSize = new Size(width, height);
 
             await Application.Current.Dispatcher.BeginInvoke(() =>
             {
