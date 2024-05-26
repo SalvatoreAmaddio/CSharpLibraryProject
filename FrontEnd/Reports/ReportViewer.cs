@@ -246,6 +246,11 @@ namespace FrontEnd.Reports
                 yield return page.AsPageContent();
         }
 
+        /// <summary>
+        /// This method create a new string containing the <see cref="DirName"/> and <see cref="FileName"/> properties.
+        /// This is for threading purposes to avoid threading errors.
+        /// </summary>
+        /// <returns>A string</returns>
         private string CopyFilePath() 
         {
             StringBuilder sb = new();
@@ -285,13 +290,10 @@ namespace FrontEnd.Reports
                 await Task.Run(()=>File.Delete(filePath));
             }
 
-            PDFPrinter pdfPrinter = new(FileName,DirName);
-
             IsLoading = true;
             await Task.Delay(100);
 
             IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
-
             IEnumerable<PageContent> copied = await Task.Run(() => CopySource(clonedPages));
 
             Message = "Printing...";
@@ -299,11 +301,11 @@ namespace FrontEnd.Reports
 
             return await Application.Current.Dispatcher.InvokeAsync(async() =>
             {
-               return await RunUI(copied, pdfPrinter);
+               return await PrintTask(copied);
             }).Result;
         }
 
-        private async Task<bool> RunUI(IEnumerable<PageContent> copied, PDFPrinter pdfPrinter) 
+        private async Task<bool> PrintTask(IEnumerable<PageContent> copied) 
         {
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
@@ -315,21 +317,28 @@ namespace FrontEnd.Reports
             foreach (var i in copied)
                 doc.Pages.Add(i);
 
-            await Task.Run(pdfPrinter.PrinterPortManager.SetPort);
-            Message = "Saving...";
+            PDFPrinter pdfPrinter = new(FileName, DirName);
 
+            await Task.Run(pdfPrinter.PrinterPortManager.SetPort);
+
+            Message = "Saving...";
+            await Task.Delay(100);
             pdfPrinter.Print(doc.DocumentPaginator);
 
             Message = "Almost Ready...";
+            await Task.Delay(100);
             await Task.Run(pdfPrinter.PrinterPortManager.ResetPort);
+
+            Message = "Printed!";
+            await Task.Delay(100);
 
             if (OpenFile)
             {
                 Message = "Opening...";
                 string filePath = CopyFilePath();
                 await Task.Run(() => Open(filePath));
+                Message = string.Empty;
             }
-            Message = "";
             IsLoading = false;
             return true;
         }
