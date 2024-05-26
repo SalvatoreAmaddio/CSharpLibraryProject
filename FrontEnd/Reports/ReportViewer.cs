@@ -347,7 +347,7 @@ namespace FrontEnd.Reports
         /// Open the file after it has been printed.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        public static void Open(string filePath)
+        private static void Open(string filePath)
         {
             try
             {
