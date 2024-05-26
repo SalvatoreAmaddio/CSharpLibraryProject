@@ -262,7 +262,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// Starts the printing process.
         /// </summary>
-        private async Task<bool> PrintFixDocs()
+        protected virtual async Task<bool> PrintFixDocs()
         {
             if (!PDFPrinter.IsInstalled())
             {
@@ -305,7 +305,7 @@ namespace FrontEnd.Reports
             }).Result;
         }
 
-        private async Task<bool> PrintTask(IEnumerable<PageContent> copied) 
+        protected virtual async Task<bool> PrintTask(IEnumerable<PageContent> copied) 
         {
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
