@@ -77,7 +77,11 @@ namespace FrontEnd.Reports
             }
 
             bool hasPrinted = await printingTask;
-            if (!hasPrinted) return;
+            if (!hasPrinted) 
+            {
+                Message = "Email Task Failed.";
+                return;
+            }
 
             IsLoading = true;
             await Task.Delay(100);
@@ -294,10 +298,12 @@ namespace FrontEnd.Reports
                 if (result.Equals(DialogResult.No)) return false;
                 await Task.Run(()=>File.Delete(PDFPrinterManager.FilePath));
             }
+
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
             PrintQueue? pdfPrinter = GetPDFPrinter();
+
             if (pdfPrinter == null)
             {
                 Failure.Throw("I could not find a PDF Printer in your computer");
