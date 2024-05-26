@@ -14,7 +14,7 @@
     <fr:FormList>
         <fr:FormList.Header>
             <StackPanel Margin="10,0,10,0" VerticalAlignment="Center">
-                <fr:Text Placeholder="Search title..."  Text="{Binding Search}" VerticalAlignment="Center"/>
+                <fr:Text Placeholder="Search gender..."  Text="{Binding Search}" VerticalAlignment="Center"/>
             </StackPanel>
         </fr:FormList.Header>
         <fr:Lista ItemsSource="{Binding Source}" SelectedItem="{Binding CurrentRecord}">
