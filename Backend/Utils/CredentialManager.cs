@@ -146,6 +146,7 @@ namespace Backend.Utils
 
     /// <summary>
     /// Instantiates an object holding Credential's information.
+    /// Credential objects are used in: <see cref="EmailSender"/>, <see cref="CurrentUser"/>
     /// </summary>
     /// <param name="target">The Credential Unique Identifier</param>
     /// <param name="username">The Name of the information to store.</param>
