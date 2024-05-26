@@ -288,6 +288,12 @@ namespace FrontEnd.Reports
                 return false;
             }
 
+            if (!File.Exists(FileName)) 
+            {
+                DialogResult result = UnsavedDialog.Ask($"A file named {FileName} already exist int {DirName}. Do you want to replace it?");
+                if (result.Equals(DialogResult.No)) return false;
+                await Task.Run(()=>File.Delete(PDFPrinterManager.FilePath));
+            }
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
