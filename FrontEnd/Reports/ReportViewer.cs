@@ -25,6 +25,8 @@ namespace FrontEnd.Reports
         Button? PART_SendButton;
         Button? PART_ChooseDir;
 
+        private string FilePath => DirName + $"\\{FileName}.pdf";
+
         /// <summary>
         /// Sets the <see cref="EmailSender"/> that will be used by the <see cref="OnSendEmailClicked(object?, EventArgs)"/>
         /// </summary>
@@ -33,16 +35,6 @@ namespace FrontEnd.Reports
         public ReportViewer()
         {
             PrintCommand = new CMDAsync(PrintFixDocs);
-
-            SetBinding(FileNameProperty, new Binding("PDFPrinterManager.NewPortName")
-            {
-                Source = this
-            });
-
-            SetBinding(DirNameProperty, new Binding("PDFPrinterManager.DirectoryPath")
-            {
-                Source = this
-            });
 
             if (string.IsNullOrEmpty(FrontEndSettings.Default.ReportDefaultDirectory))
                 FrontEndSettings.Default.ReportDefaultDirectory = Sys.Desktop;
@@ -70,7 +62,7 @@ namespace FrontEnd.Reports
             Message = "Preparing document...";
             await Task.Delay(100);
 
-            if (!File.Exists(PDFPrinterManager.FilePath)) 
+            if (!File.Exists(FilePath)) 
             {
                 Failure.Throw("I could not find the file to attach.");
                 return;
@@ -86,7 +78,7 @@ namespace FrontEnd.Reports
             IsLoading = true;
             await Task.Delay(100);
 
-            EmailSender.AddAttachment(PDFPrinterManager.FilePath);
+            EmailSender.AddAttachment(FilePath);
 
             Message = "Sending...";
 
@@ -104,7 +96,7 @@ namespace FrontEnd.Reports
             {
                 IsLoading = false;
                 OpenFile = openFile;
-                await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
+                await Task.Run(() => File.Delete(FilePath));
             }
 
             Message = "Almost Ready...";
@@ -130,12 +122,6 @@ namespace FrontEnd.Reports
             bool result = folderDialog.ShowDialog();
             DirName = (result) ? folderDialog.SelectedPath : Sys.Desktop;
         }
-
-
-        /// <summary>
-        /// A PDFPrinterManager that manages the PDF Printer's port.
-        /// </summary>
-        public MicrosoftPDFPrinterManager PDFPrinterManager { get; } = new();
 
         #region OpenFile
         /// <summary>
@@ -292,35 +278,30 @@ namespace FrontEnd.Reports
                 return false;
             }
 
-            if (!File.Exists(FileName)) 
+            if (File.Exists(FilePath)) 
             {
                 DialogResult result = UnsavedDialog.Ask($"A file named {FileName} already exist int {DirName}. Do you want to replace it?");
                 if (result.Equals(DialogResult.No)) return false;
-                await Task.Run(()=>File.Delete(PDFPrinterManager.FilePath));
+                string filePath = DirName + $"\\{FileName}.pdf";
+                await Task.Run(()=>File.Delete(filePath));
             }
 
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
-            PrintQueue? pdfPrinter = GetPDFPrinter();
 
-            if (pdfPrinter == null)
+            if (!PDFPrinter.IsInstalled()) 
             {
                 Failure.Throw("I could not find a PDF Printer in your computer");
                 return false;
             }
 
-            PrintDialog printDialog = new()
-            {
-                PrintQueue = pdfPrinter
-            };
+            PDFPrinter pdfPrinter = new(FileName,DirName);
 
             IsLoading = true;
             await Task.Delay(100);
 
             IEnumerable<ReportPage> clonedPages = ItemsSource.Cast<IClonablePage>().Select(s=>s.CloneMe());
-
-            await Task.Run(PDFPrinterManager.SetPort);
 
             IEnumerable<PageContent> copied = await Task.Run(() => CopySource(clonedPages));
 
@@ -331,14 +312,14 @@ namespace FrontEnd.Reports
             await Task.Delay(100);
             await Application.Current.Dispatcher.InvokeAsync(async() =>
             {
-               await RunUI(copied, doc,printDialog,pdfPrinter);
+               await RunUI(copied, doc, pdfPrinter);
             });
 
 
             if (OpenFile) 
             {
                 Message = "Opening...";
-                await Task.Run(() => Open(PDFPrinterManager.FilePath));
+                await Task.Run(() => Open(FilePath));
             }
 
             Message = "";
@@ -346,17 +327,17 @@ namespace FrontEnd.Reports
             return true;
         }
 
-        private async Task RunUI(IEnumerable<PageContent> copied, FixedDocument doc, PrintDialog printDialog, PrintQueue pdfPrinter) 
+        private async Task RunUI(IEnumerable<PageContent> copied, FixedDocument doc, PDFPrinter pdfPrinter) 
         {
             foreach (var i in copied)
             {
                 doc.Pages.Add(i);
             }
-            printDialog.PrintDocument(doc.DocumentPaginator, "Printing Doc");
+            await Task.Run(pdfPrinter.PrinterPortManager.SetPort);
+            pdfPrinter.Print(doc.DocumentPaginator);
             Message = "Saving...";
-            await PrintingCompleted(pdfPrinter);
             Message = "Almost Ready...";
-            await Task.Run(PDFPrinterManager.ResetPort);
+            await Task.Run(pdfPrinter.PrinterPortManager.ResetPort);
         }
 
         /// <summary>
