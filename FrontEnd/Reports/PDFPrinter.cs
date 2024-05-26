@@ -11,13 +11,20 @@ namespace FrontEnd.Reports
         private PrintQueue Queue { get; set; }
 
         /// <summary>
-        /// A PDFPrinterManager that manages the PDF Printer's port.
+        /// Gets the PrinterPortManager that manages the PDF Printer's port.
         /// </summary>
         public PrinterPortManager PrinterPortManager { get; } = new();
 
         public PDFPrinter() 
         {
-            Queue = GetPDFPrinter();        
+            try 
+            {
+                Queue = GetPDFPrinter();
+            }
+            catch 
+            {
+                throw new Exception("No PDF Printer was found in this computer.");
+            }
         }
 
         public static bool IsInstalled() 
@@ -41,17 +48,6 @@ namespace FrontEnd.Reports
             xpsDocumentWriter.Write(documentPaginator, printTicket);
             while (Queue.NumberOfJobs > 0)
                 Queue.Refresh();
-        }
-
-        public Task PrintAsync(DocumentPaginator documentPaginator)
-        {
-            PrintTicket printTicket = Queue.DefaultPrintTicket;
-            XpsDocumentWriter xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(Queue);
-            xpsDocumentWriter.WriteAsync(documentPaginator, printTicket);
-            while (Queue.NumberOfJobs > 0)
-                Queue.Refresh();
-
-            return Task.CompletedTask;
         }
 
         private static PrintQueue GetPDFPrinter() =>

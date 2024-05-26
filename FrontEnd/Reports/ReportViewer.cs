@@ -309,18 +309,24 @@ namespace FrontEnd.Reports
 
         private async Task<bool> RunUI(IEnumerable<PageContent> copied, PDFPrinter pdfPrinter, double width, double height) 
         {
+            ReportPage first_page = ItemsSource.First();
+            double width1 = first_page.PageWidth;
+            double height1 = first_page.PageHeight;
+
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
 
             foreach (var i in copied)
-            {
                 doc.Pages.Add(i);
-            }
+
             await Task.Run(pdfPrinter.PrinterPortManager.SetPort);
             Message = "Saving...";
+
             pdfPrinter.Print(doc.DocumentPaginator);
+
             Message = "Almost Ready...";
             await Task.Run(pdfPrinter.PrinterPortManager.ResetPort);
+
             if (OpenFile)
             {
                 Message = "Opening...";
