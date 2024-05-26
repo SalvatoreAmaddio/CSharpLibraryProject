@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Backend.Utils
 {
+    /// <summary>
+    /// This class holds a reference to default Credential Targets used within this Framework.
+    /// </summary>
     public static class SysCredentailTargets
     {
 
@@ -19,13 +22,11 @@ namespace Backend.Utils
         public static readonly string UserLogin = $"{Sys.AppName}_USER_LOGIN_CREDENTIAL";
         public static readonly string UserLoginEncrypterKey = $"{UserLogin}_Encrypter_Key";
         public static readonly string UserLoginEncrypterIV = $"{UserLogin}_Encrypter_IV";
-
     }
 
     /// <summary>
-    /// This class stores sensitive information in the Windows Credential Manager System. 
-    /// The information is stored in the local computer.
-    /// This class use the Win32 API.
+    /// This class uses the Win32 API to store sensitive information in the Windows Credential Manager System. 
+    /// The information gets encapsulated in a <see cref="Credential"/> object which is stored in the local computer.
     /// </summary>
     public static class CredentialManager
     {
