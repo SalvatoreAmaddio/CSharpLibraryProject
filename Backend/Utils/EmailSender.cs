@@ -90,10 +90,15 @@ namespace Backend.Utils
         }
 
         /// <summary>
-        /// Add a new file's path to the Attachment list.
+        /// Add a new file's path to the Attachment list. If the path does not exist, it will throw an Exception.
         /// </summary>
         /// <param name="path">the Attachment's file path</param>
-        public void AddAttachment(string path) => Attachments.Add(path);        
+        /// <exception cref="Exception"></exception>
+        public void AddAttachment(string path)
+        {
+            if (!File.Exists(path)) throw new Exception("The path provided does not exist.");
+            Attachments.Add(path);
+        }
 
         /// <summary>
         /// Add a receiver.

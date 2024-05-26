@@ -53,7 +53,7 @@ namespace FrontEnd.Reports
 
         private async void OnSendEmailClicked(object? sender, EventArgs e)
         {
-            if (EmailSender == null) return;
+            if (EmailSender == null) throw new Exception($"{EmailSender} is null");
             if (!EmailSender.CredentialCheck()) 
             {
                 Failure.Throw("I could not find any email settings.");
@@ -61,25 +61,35 @@ namespace FrontEnd.Reports
             }
             DialogResult result = ConfirmDialog.Ask("Do you want to send this document by email?");
             if (result == DialogResult.No) return;
+
             bool openFile = OpenFile;
             OpenFile = false;
-            Task<bool> t = PrintFixDocs();
+
+            Task<bool> printingTask = PrintFixDocs();
             
             Message = "Preparing document...";
             await Task.Delay(100);
 
-            EmailSender.AddAttachment(PDFPrinterManager.FilePath);
-            bool hasPrinted = await t;
+            if (!File.Exists(PDFPrinterManager.FilePath)) 
+            {
+                Failure.Throw("I could not find the file to attach.");
+                return;
+            }
+
+            bool hasPrinted = await printingTask;
             if (!hasPrinted) return;
+
             IsLoading = true;
             await Task.Delay(100);
+
+            EmailSender.AddAttachment(PDFPrinterManager.FilePath);
 
             Message = "Sending...";
             try
             {
                 await Task.Run(EmailSender.SendAsync);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Failure.Throw("The system failed to send the email. Possible reasons could be:\n- Wrong email settings,\nPoor internet connection.");
                 Message = "Email Task Failed.";
@@ -90,6 +100,7 @@ namespace FrontEnd.Reports
                 OpenFile = openFile;
                 await Task.Run(() => File.Delete(PDFPrinterManager.FilePath));
             }
+
             Message = "Almost Ready...";
             SuccessDialog.Display("Email Sent");
             Message = "";
