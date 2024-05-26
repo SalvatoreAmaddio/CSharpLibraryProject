@@ -182,6 +182,7 @@ namespace FrontEnd.Reports
             ReportViewer reportViewer = (ReportViewer)d;
             reportViewer.DirName = (string.IsNullOrEmpty(str))? Sys.Desktop : str;
             FrontEndSettings.Default.ReportDefaultDirectory = reportViewer.DirName;
+            FrontEndSettings.Default.Save();
         }
 
         /// <summary>
@@ -268,6 +269,12 @@ namespace FrontEnd.Reports
                 Failure.Throw("Please, specify a file name");
                 return false;
             }
+            if (!Directory.Exists(DirName))
+            {
+                Failure.Throw("The directory that you have specified does not exist.");
+                return false;
+            }
+
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
