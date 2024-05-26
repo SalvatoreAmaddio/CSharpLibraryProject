@@ -285,10 +285,6 @@ namespace FrontEnd.Reports
                 await Task.Run(()=>File.Delete(filePath));
             }
 
-            ReportPage first_page = ItemsSource.First();
-            double width = first_page.PageWidth;
-            double height = first_page.PageHeight;
-
             PDFPrinter pdfPrinter = new(FileName,DirName);
 
             IsLoading = true;
@@ -303,15 +299,15 @@ namespace FrontEnd.Reports
 
             return await Application.Current.Dispatcher.InvokeAsync(async() =>
             {
-               return await RunUI(copied, pdfPrinter,width,height);
+               return await RunUI(copied, pdfPrinter);
             }).Result;
         }
 
-        private async Task<bool> RunUI(IEnumerable<PageContent> copied, PDFPrinter pdfPrinter, double width, double height) 
+        private async Task<bool> RunUI(IEnumerable<PageContent> copied, PDFPrinter pdfPrinter) 
         {
             ReportPage first_page = ItemsSource.First();
-            double width1 = first_page.PageWidth;
-            double height1 = first_page.PageHeight;
+            double width = first_page.PageWidth;
+            double height = first_page.PageHeight;
 
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
