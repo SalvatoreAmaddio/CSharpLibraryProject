@@ -159,11 +159,13 @@ namespace FrontEnd.Reports
         protected virtual async void OnSendEmailClicked(object? sender, EventArgs e)
         {
             if (EmailSender == null) throw new Exception($"{EmailSender} is null");
+
             if (!EmailSender.CredentialCheck()) 
             {
                 Failure.Throw("I could not find any email settings.");
                 return;
             }
+
             DialogResult result = ConfirmDialog.Ask("Do you want to send this document by email?");
             if (result == DialogResult.No) return;
 
@@ -185,6 +187,7 @@ namespace FrontEnd.Reports
             if (!File.Exists(FilePath))
             {
                 Failure.Throw("I could not find the file to attach.");
+                Message = "Email Task Failed.";
                 return;
             }
 
