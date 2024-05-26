@@ -8,7 +8,7 @@ namespace Backend.Utils
         /// <summary>
         /// Gets the Desktop's Path.
         /// </summary>
-        public string Desktop => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        public static string Desktop => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         /// <summary>
         /// Gets the Application's Assembly.

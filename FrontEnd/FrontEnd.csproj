@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\root_directory.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Themes\controls.xaml" />
   </ItemGroup>
 
@@ -55,6 +59,7 @@
     <Resource Include="images\questionmark.png" />
     <Resource Include="images\report.png" />
     <Resource Include="images\requery.png" />
+    <Resource Include="images\root_directory.png" />
     <Resource Include="images\save.png" />
 	<Resource Include="images\close.png" />
 	<Resource Include="images\redlight.png" />

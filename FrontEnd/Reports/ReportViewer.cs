@@ -1,6 +1,7 @@
 ﻿using Backend.Utils;
 using FrontEnd.Controller;
 using FrontEnd.Dialogs;
+using FrontEnd.Properties;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
@@ -22,6 +23,7 @@ namespace FrontEnd.Reports
     {
         static ReportViewer() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportViewer), new FrameworkPropertyMetadata(typeof(ReportViewer)));
         Button? PART_SendButton;
+        Button? PART_ChooseDir;
 
         /// <summary>
         /// Sets the <see cref="EmailSender"/> that will be used by the <see cref="OnSendEmailClicked(object?, EventArgs)"/>
@@ -31,11 +33,22 @@ namespace FrontEnd.Reports
         public ReportViewer()
         {
             PrintCommand = new CMDAsync(PrintFixDocs);
-            Binding binding = new("PDFPrinterManager.NewPortName")
+
+            SetBinding(FileNameProperty, new Binding("PDFPrinterManager.NewPortName")
             {
                 Source = this
-            };
-            SetBinding(FileNameProperty, binding);
+            });
+
+            SetBinding(DirNameProperty, new Binding("PDFPrinterManager.DirectoryPath")
+            {
+                Source = this
+            });
+
+            if (string.IsNullOrEmpty(FrontEndSettings.Default.ReportDefaultDirectory))
+                FrontEndSettings.Default.ReportDefaultDirectory = Sys.Desktop;
+
+            DirName = FrontEndSettings.Default.ReportDefaultDirectory;
+
         }
 
         private async void OnSendEmailClicked(object? sender, EventArgs e)
@@ -88,6 +101,17 @@ namespace FrontEnd.Reports
             PART_SendButton = (Button?)GetTemplateChild(nameof(PART_SendButton));
             if (PART_SendButton!=null)
                 PART_SendButton.Click += OnSendEmailClicked;
+
+            PART_ChooseDir = (Button?)GetTemplateChild(nameof(PART_ChooseDir));
+            if (PART_ChooseDir!=null)
+                PART_ChooseDir.Click += OnChooseDirClicked;
+        }
+
+        private void OnChooseDirClicked(object sender, RoutedEventArgs e)
+        {
+            FolderDialog folderDialog = new("Select the folder where to save this file.");
+            bool result = folderDialog.ShowDialog();
+            DirName = (result) ? folderDialog.SelectedPath : Sys.Desktop;
         }
 
 
@@ -145,6 +169,28 @@ namespace FrontEnd.Reports
         {
             get => (string)GetValue(FileNameProperty);
             set => SetValue(FileNameProperty, value);
+        }
+        #endregion
+
+        #region DirName
+        public static readonly DependencyProperty DirNameProperty =
+         DependencyProperty.Register(nameof(DirName), typeof(string), typeof(ReportViewer), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnDirNamePropertyChanged));
+
+        private static void OnDirNamePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            string? str = (string?)e.NewValue;
+            ReportViewer reportViewer = (ReportViewer)d;
+            reportViewer.DirName = (string.IsNullOrEmpty(str))? Sys.Desktop : str;
+            FrontEndSettings.Default.ReportDefaultDirectory = reportViewer.DirName;
+        }
+
+        /// <summary>
+        /// Gets and sets the name of the file to be printed.
+        /// </summary>
+        public string DirName
+        {
+            get => (string)GetValue(DirNameProperty);
+            set => SetValue(DirNameProperty, value);
         }
         #endregion
 

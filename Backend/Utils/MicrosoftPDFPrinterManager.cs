@@ -38,7 +38,9 @@ namespace Backend.Utils
         }
 
         public string NewPortName { get; set; } = string.Empty;
-        public string FilePath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{NewPortName}.pdf";
+
+        public string DirectoryPath { get; set; } = string.Empty;
+        public string FilePath => DirectoryPath + $"\\{NewPortName}.pdf";
 
         private readonly string originalPort = "PORTPROMPT:";
         private readonly string printerName = "Microsoft Print To PDF";

@@ -6,7 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/FrontEnd;component/Themes/Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="{x:Type report:ReportViewer}">
         <Setter Property="Template">
             <Setter.Value>
@@ -32,11 +32,16 @@
                                     <Image Source="{StaticResource send}"/>
                                 </Button>
                                 <Separator Width="10" Background="Transparent"/>
-                                <fr:Text x:Name="text_fileName" Placeholder="File name..." Text="{Binding Path=FileName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" VerticalAlignment="Center"/>
+                                <fr:Text x:Name="text_fileName" Placeholder="File name..." Text="{Binding Path=FileName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="200"/>
                                 <Separator Width="10" Background="Transparent"/>
                                 <StackPanel VerticalAlignment="Center">
                                     <CheckBox IsChecked="{Binding Path=OpenFile, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Open File after printing" Width="160" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
+                                <Label Content="Save file in" VerticalAlignment="Center"/>
+                                <fr:Text Placeholder="Directory..." Text="{Binding Path=DirName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="200"/>
+                                <Button x:Name="PART_ChooseDir" ToolTip="Choose Directory">
+                                    <Image Source="{StaticResource root_dir}" Width="30" Height="30"/>
+                                </Button>
                             </ToolBar>
                         </ToolBarTray>
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
