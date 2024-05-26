@@ -164,6 +164,10 @@ namespace Backend.Utils
             }
         }
 
+        /// <summary>
+        /// Check if the EmailApp's <see cref="Credential"/> object associated to this email exist in the local computer.
+        /// </summary>
+        /// <returns>true if found</returns>
         public bool CredentialCheck() 
         {
             SysCredentailTargets.EmailApp = SenderEmail;

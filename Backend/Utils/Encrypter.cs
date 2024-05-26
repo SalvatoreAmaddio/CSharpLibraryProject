@@ -14,7 +14,9 @@ namespace Backend.Utils
         private string Str { get; set; } = str;
 
         /// <summary>
-        /// Initialise a Encrypter object with a string to decrypt or encrypt and the targets who are already stored in the local computer
+        /// Initialise a Encrypter object with a string to decrypt and the targets 
+        /// who are already stored in the local computer.
+        /// If the targets are not found, the constructor will throw an Exception.
         /// </summary>
         /// <param name="str">the string to encrypt or decrypt.</param>
         /// <param name="secret_key_Target">the target of the secret key which is stored in the local computer</param>

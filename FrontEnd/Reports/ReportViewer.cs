@@ -51,7 +51,7 @@ namespace FrontEnd.Reports
 
         }
 
-        private async void OnSendEmailClicked(object? sender, EventArgs e)
+        protected virtual async void OnSendEmailClicked(object? sender, EventArgs e)
         {
             if (EmailSender == null) throw new Exception($"{EmailSender} is null");
             if (!EmailSender.CredentialCheck()) 
