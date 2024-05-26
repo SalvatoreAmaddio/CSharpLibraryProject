@@ -85,6 +85,7 @@ namespace FrontEnd.Reports
             EmailSender.AddAttachment(PDFPrinterManager.FilePath);
 
             Message = "Sending...";
+
             try
             {
                 await Task.Run(EmailSender.SendAsync);
@@ -93,6 +94,7 @@ namespace FrontEnd.Reports
             {
                 Failure.Throw("The system failed to send the email. Possible reasons could be:\n- Wrong email settings,\nPoor internet connection.");
                 Message = "Email Task Failed.";
+                return;
             }
             finally 
             {
