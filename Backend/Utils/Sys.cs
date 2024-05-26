@@ -6,6 +6,11 @@ namespace Backend.Utils
     public class Sys
     {
         /// <summary>
+        /// Gets the Desktop's Path.
+        /// </summary>
+        public string Desktop => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        /// <summary>
         /// Gets the Application's Assembly.
         /// </summary>
         public static Assembly? AppAssembly { get; } = Assembly.GetEntryAssembly();
