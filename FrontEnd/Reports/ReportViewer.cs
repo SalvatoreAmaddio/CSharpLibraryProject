@@ -6,11 +6,13 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Printing;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 
 namespace FrontEnd.Reports
 {
@@ -62,16 +64,16 @@ namespace FrontEnd.Reports
             Message = "Preparing document...";
             await Task.Delay(100);
 
-            if (!File.Exists(FilePath)) 
-            {
-                Failure.Throw("I could not find the file to attach.");
-                return;
-            }
-
             bool hasPrinted = await printingTask;
             if (!hasPrinted) 
             {
                 Message = "Email Task Failed.";
+                return;
+            }
+
+            if (!File.Exists(FilePath))
+            {
+                Failure.Throw("I could not find the file to attach.");
                 return;
             }
 
@@ -96,7 +98,8 @@ namespace FrontEnd.Reports
             {
                 IsLoading = false;
                 OpenFile = openFile;
-                await Task.Run(() => File.Delete(FilePath));
+                string filePath = CopyFilePath();
+                await Task.Run(() => File.Delete(filePath));
             }
 
             Message = "Almost Ready...";
@@ -243,23 +246,12 @@ namespace FrontEnd.Reports
                 yield return page.AsPageContent();
         }
 
-        /// <summary>
-        /// It checks if the Printing process has terminated before changing the Printer's port.
-        /// </summary>
-        /// <param name="pdfPrinter"></param>
-        /// <returns>A Task</returns>
-        private Task PrintingCompleted(PrintQueue pdfPrinter) 
+        private string CopyFilePath() 
         {
-            while (pdfPrinter.NumberOfJobs > 0)
-                pdfPrinter.Refresh();                
-            return Task.CompletedTask;
-        }
-
-        private PrintQueue? GetPDFPrinter()
-        {
-           return new LocalPrintServer()
-               .GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Local, EnumeratedPrintQueueTypes.Connections })
-               .FirstOrDefault(pq => pq.Name.Contains("PDF"));
+            StringBuilder sb = new();
+            sb.Append(DirName);
+            sb.Append($"\\{FileName}.pdf");
+            return sb.ToString();
         }
 
         /// <summary>
@@ -267,11 +259,18 @@ namespace FrontEnd.Reports
         /// </summary>
         private async Task<bool> PrintFixDocs()
         {
+            if (!PDFPrinter.IsInstalled())
+            {
+                Failure.Throw("I could not find a PDF Printer in your computer");
+                return false;
+            }
+
             if (string.IsNullOrEmpty(FileName)) 
             {
                 Failure.Throw("Please, specify a file name");
                 return false;
             }
+
             if (!Directory.Exists(DirName))
             {
                 Failure.Throw("The directory that you have specified does not exist.");
@@ -282,19 +281,13 @@ namespace FrontEnd.Reports
             {
                 DialogResult result = UnsavedDialog.Ask($"A file named {FileName} already exist int {DirName}. Do you want to replace it?");
                 if (result.Equals(DialogResult.No)) return false;
-                string filePath = DirName + $"\\{FileName}.pdf";
+                string filePath = CopyFilePath();
                 await Task.Run(()=>File.Delete(filePath));
             }
 
             ReportPage first_page = ItemsSource.First();
             double width = first_page.PageWidth;
             double height = first_page.PageHeight;
-
-            if (!PDFPrinter.IsInstalled()) 
-            {
-                Failure.Throw("I could not find a PDF Printer in your computer");
-                return false;
-            }
 
             PDFPrinter pdfPrinter = new(FileName,DirName);
 
@@ -305,39 +298,38 @@ namespace FrontEnd.Reports
 
             IEnumerable<PageContent> copied = await Task.Run(() => CopySource(clonedPages));
 
+            Message = "Printing...";
+            await Task.Delay(100);
+
+            return await Application.Current.Dispatcher.InvokeAsync(async() =>
+            {
+               return await RunUI(copied, pdfPrinter,width,height);
+            }).Result;
+        }
+
+        private async Task<bool> RunUI(IEnumerable<PageContent> copied, PDFPrinter pdfPrinter, double width, double height) 
+        {
             FixedDocument doc = new();
             doc.DocumentPaginator.PageSize = new Size(width, height);
 
-            Message = "Printing...";
-            await Task.Delay(100);
-            await Application.Current.Dispatcher.InvokeAsync(async() =>
-            {
-               await RunUI(copied, doc, pdfPrinter);
-            });
-
-
-            if (OpenFile) 
-            {
-                Message = "Opening...";
-                await Task.Run(() => Open(FilePath));
-            }
-
-            Message = "";
-            IsLoading = false;
-            return true;
-        }
-
-        private async Task RunUI(IEnumerable<PageContent> copied, FixedDocument doc, PDFPrinter pdfPrinter) 
-        {
             foreach (var i in copied)
             {
                 doc.Pages.Add(i);
             }
             await Task.Run(pdfPrinter.PrinterPortManager.SetPort);
-            pdfPrinter.Print(doc.DocumentPaginator);
             Message = "Saving...";
+            pdfPrinter.Print(doc.DocumentPaginator);
             Message = "Almost Ready...";
             await Task.Run(pdfPrinter.PrinterPortManager.ResetPort);
+            if (OpenFile)
+            {
+                Message = "Opening...";
+                string filePath = CopyFilePath();
+                await Task.Run(() => Open(filePath));
+            }
+            Message = "";
+            IsLoading = false;
+            return true;
         }
 
         /// <summary>
