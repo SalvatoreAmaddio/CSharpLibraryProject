@@ -4,96 +4,10 @@ using System.Text;
 namespace FrontEnd.Dialogs
 {
     /// <summary>
-    /// This class uses the WIN32 API to instantiate a dialog to select folders.
+    /// This class holds a collection of constant uint. These are flags used by the <see cref="FolderDialog"/> class.
     /// </summary>
-    public class FolderDialog(string title = "Select a folder")
+    public static class FolderDialogFalgs
     {
-        /// <summary>
-        /// Gets and sets the title to be displayed above the tree view control in the dialog box. 
-        /// This property can be used to provide instructions to the user.
-        /// The default value is "Select a folder".
-        /// </summary>
-        public string Title { get; set; } = title;
-
-        private const int MAX_PATH = 260;
-
-        /// <summary>
-        ///  Opens a folder browser dialog.
-        /// </summary>
-        /// <param name="bi"></param>
-        /// <returns>The Dialog displayed</returns>
-        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SHBrowseForFolder(ref BROWSEINFO bi);
-
-        /// <summary>
-        /// Converts the item identifier list to a file system path.
-        /// </summary>
-        /// <param name="pidl"></param>
-        /// <param name="pszPath"></param>
-        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern bool SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
-
-        /// <summary>
-        /// This struct contains parameters for the SHBrowseForFolder function, 
-        /// including the dialog's owner window handle, root folder, 
-        /// display name buffer, dialog title, flags, callback function pointer, and image index.
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        private struct BROWSEINFO
-        {
-            public IntPtr hwndOwner;
-            public IntPtr pidlRoot;
-            public IntPtr pszDisplayName;
-            public string lpszTitle;
-            public uint ulFlags;
-            public IntPtr lpfn;
-            public IntPtr lParam;
-            public int iImage;
-        }
-
-        private IntPtr _handle;
-        public string SelectedPath { get; private set; } = string.Empty;
-
-        /// <summary>
-        /// Creates and initializes a <see cref="BROWSEINFO"/> struct
-        /// which calls <see cref="SHBrowseForFolder"/> to display the dialog.
-        /// If a folder is selected, <see cref="SHGetPathFromIDList"/> retrieves the path, and <see cref="SelectedPath"/> is set.
-        /// <para/>
-        /// By default, the <paramref name="flags"/> argument is set to <see cref="BIF_RETURNONLYFSDIRS"/> | <see cref="BIF_NEWDIALOGSTYLE"/> | <see cref="BIF_NONEWFOLDERBUTTON"/>
-        /// </summary>
-        /// <param name="flags"> A uint value or a combiniation of both.</param>
-        /// <returns>true if a path is selected.</returns>
-        public bool ShowDialog(uint flags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_NONEWFOLDERBUTTON)
-        {
-            var bi = new BROWSEINFO
-            {
-                hwndOwner = IntPtr.Zero, //Handle to the owner window for the dialog box. IntPtr.Zero means that the dialog box has no owner window.
-                pidlRoot = IntPtr.Zero, //Pointer to an item identifier list specifying the location of the root folder from which to start browsing. IntPtr.Zero refers to the desktop.
-                pszDisplayName = Marshal.AllocHGlobal(MAX_PATH), //Address of a buffer to receive the display name of the folder selected by the user.
-                lpszTitle = this.Title, //Pointer to a null-terminated string that is displayed above the tree view control in the dialog box. This string can be used to provide instructions to the user.
-                ulFlags = flags, //Controls the behavior of the dialog box by using flags that can be combined using the bitwise OR operator.
-                lpfn = IntPtr.Zero, //Address of an application-defined function that the dialog box calls when an event occurs.
-                lParam = IntPtr.Zero, //Application-defined value that the dialog box passes to the callback function (lpfn).
-                iImage = 0 // Variable that receives the index of the image associated with the selected folder.
-            };
-
-            _handle = SHBrowseForFolder(ref bi);
-
-            if (_handle != IntPtr.Zero)
-            {
-                StringBuilder path = new(MAX_PATH);
-                if (SHGetPathFromIDList(_handle, path))
-                {
-                    SelectedPath = path.ToString();
-                    Marshal.FreeHGlobal(bi.pszDisplayName);
-                    return true;
-                }
-            }
-
-            Marshal.FreeHGlobal(bi.pszDisplayName);
-            return false;
-        }
-
         /// <summary>
         /// Only return file system directories. 
         /// If the user selects folders that are not part of the file system, the OK button is grayed.
@@ -185,6 +99,98 @@ namespace FrontEnd.Dialogs
         /// Version 6.0. The browse dialog box will display file system junctions.
         /// </summary>
         public const uint BIF_BROWSEFILEJUNCTIONS = 0x00010000;
+    }
+
+    /// <summary>
+    /// This class uses the WIN32 API to instantiate a dialog to select folders.
+    /// </summary>
+    public class FolderDialog(string title = "Select a folder")
+    {
+        /// <summary>
+        /// Gets and sets the title to be displayed above the tree view control in the dialog box. 
+        /// This property can be used to provide instructions to the user.
+        /// The default value is "Select a folder".
+        /// </summary>
+        public string Title { get; set; } = title;
+
+        private const int MAX_PATH = 260;
+
+        /// <summary>
+        ///  Opens a folder browser dialog.
+        /// </summary>
+        /// <param name="bi"></param>
+        /// <returns>The Dialog displayed</returns>
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SHBrowseForFolder(ref BROWSEINFO bi);
+
+        /// <summary>
+        /// Converts the item identifier list to a file system path.
+        /// </summary>
+        /// <param name="pidl"></param>
+        /// <param name="pszPath"></param>
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern bool SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
+
+        /// <summary>
+        /// This struct contains parameters for the SHBrowseForFolder function, 
+        /// including the dialog's owner window handle, root folder, 
+        /// display name buffer, dialog title, flags, callback function pointer, and image index.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct BROWSEINFO
+        {
+            public IntPtr hwndOwner;
+            public IntPtr pidlRoot;
+            public IntPtr pszDisplayName;
+            public string lpszTitle;
+            public uint ulFlags;
+            public IntPtr lpfn;
+            public IntPtr lParam;
+            public int iImage;
+        }
+
+        private IntPtr _handle;
+        public string SelectedPath { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Creates and initializes a <see cref="BROWSEINFO"/> struct
+        /// which calls <see cref="SHBrowseForFolder"/> to display the dialog.
+        /// If a folder is selected, <see cref="SHGetPathFromIDList"/> retrieves the path, and <see cref="SelectedPath"/> is set.
+        /// <para/>
+        /// By default, the <paramref name="flags"/> argument is set to <see cref="FolderDialogFalgs.BIF_RETURNONLYFSDIRS"/> | <see cref="FolderDialogFalgs.BIF_NEWDIALOGSTYLE"/> | <see cref="FolderDialogFalgs.BIF_NONEWFOLDERBUTTON"/>
+        /// </summary>
+        /// <param name="flags"> A uint value or a combiniation of both.</param>
+        /// <returns>true if a path is selected.</returns>
+        public bool ShowDialog(uint flags = FolderDialogFalgs.BIF_RETURNONLYFSDIRS | FolderDialogFalgs.BIF_NEWDIALOGSTYLE | FolderDialogFalgs.BIF_NONEWFOLDERBUTTON)
+        {
+            var bi = new BROWSEINFO
+            {
+                hwndOwner = IntPtr.Zero, //Handle to the owner window for the dialog box. IntPtr.Zero means that the dialog box has no owner window.
+                pidlRoot = IntPtr.Zero, //Pointer to an item identifier list specifying the location of the root folder from which to start browsing. IntPtr.Zero refers to the desktop.
+                pszDisplayName = Marshal.AllocHGlobal(MAX_PATH), //Address of a buffer to receive the display name of the folder selected by the user.
+                lpszTitle = this.Title, //Pointer to a null-terminated string that is displayed above the tree view control in the dialog box. This string can be used to provide instructions to the user.
+                ulFlags = flags, //Controls the behavior of the dialog box by using flags that can be combined using the bitwise OR operator.
+                lpfn = IntPtr.Zero, //Address of an application-defined function that the dialog box calls when an event occurs.
+                lParam = IntPtr.Zero, //Application-defined value that the dialog box passes to the callback function (lpfn).
+                iImage = 0 // Variable that receives the index of the image associated with the selected folder.
+            };
+
+            _handle = SHBrowseForFolder(ref bi);
+
+            if (_handle != IntPtr.Zero)
+            {
+                StringBuilder path = new(MAX_PATH);
+                if (SHGetPathFromIDList(_handle, path))
+                {
+                    SelectedPath = path.ToString();
+                    Marshal.FreeHGlobal(bi.pszDisplayName);
+                    return true;
+                }
+            }
+
+            Marshal.FreeHGlobal(bi.pszDisplayName);
+            return false;
+        }
 
     }
 }
