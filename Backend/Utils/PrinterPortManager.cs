@@ -5,7 +5,7 @@ namespace Backend.Utils
 {
     /// <summary>
     /// This class follows the Singleton pattern to load CreateDeletePort function from the the PrinterPortManager.dll.
-    /// This class works together with <see cref="MicrosoftPDFPrinterPortManager"/>
+    /// This class works together with <see cref="PrinterPortManager"/>
     /// </summary>
     public sealed class CreateDeletePort 
     {
@@ -29,7 +29,7 @@ namespace Backend.Utils
     /// <c>&lt;requestedExecutionLevel level="requireAdministrator" uiAccess="false"/></c>
     /// </summary>
     //<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
-    public class MicrosoftPDFPrinterPortManager
+    public class PrinterPortManager
     {
         internal enum PortAction
         {

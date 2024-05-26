@@ -13,7 +13,7 @@ namespace FrontEnd.Reports
         /// <summary>
         /// A PDFPrinterManager that manages the PDF Printer's port.
         /// </summary>
-        public MicrosoftPDFPrinterPortManager PrinterPortManager { get; } = new();
+        public PrinterPortManager PrinterPortManager { get; } = new();
 
         public PDFPrinter() 
         {
