@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="MimeKit" Version="4.6.0" />
 	<PackageReference Include="MySqlConnector" Version="2.2.7" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
