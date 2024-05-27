@@ -2,16 +2,12 @@
 using Backend.Model;
 using Backend.Office;
 using Backend.Utils;
-using FrontEnd.Controller;
 using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Forms;
-using FrontEnd.Reports;
 using FrontEnd.Utils;
 using MyApplication.Model;
-using MyApplication.View.ReportPages;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace MyApplication.View
 {

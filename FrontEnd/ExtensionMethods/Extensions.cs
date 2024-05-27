@@ -22,7 +22,6 @@ namespace FrontEnd.ExtensionMethods
         /// <summary>
         /// Gets the Generic of the <see cref="CurrentTabController(TabControl)"/>.
         /// </summary>
-        /// <param name="tabControl"></param>
         /// <returns>The Generic's <see cref="Type"/></returns>
         public static Type? GenericController(this TabControl tabControl) 
         {
@@ -43,7 +42,6 @@ namespace FrontEnd.ExtensionMethods
         /// <summary>
         /// Gets the <see cref="IAbstractFormController"/> associated with current <see cref="TabItem"/>.
         /// </summary>
-        /// <param name="tabControl"></param>
         /// <returns>A <see cref="IAbstractFormController"/> object</returns>
         public static IAbstractFormController? CurrentTabController(this TabControl tabControl) 
         {
