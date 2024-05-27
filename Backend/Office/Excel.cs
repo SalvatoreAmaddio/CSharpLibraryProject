@@ -10,7 +10,6 @@ namespace Backend.Office
         Application? xlApp;
         Workbook? wrkbk;
         public Worksheet? Worksheet { get; private set; }
-        public Range? Range { get; private set; }
        
         public void Create() 
         {
@@ -51,7 +50,6 @@ namespace Backend.Office
         public void Close() 
         {
             xlApp?.Quit();
-            Range?.Destroy();
             Worksheet?.Destroy();
             wrkbk?.Destroy();
             Destroy();
