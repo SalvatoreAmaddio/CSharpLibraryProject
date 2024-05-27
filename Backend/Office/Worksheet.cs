@@ -128,10 +128,7 @@ namespace Backend.Office
         /// <param name="cell1"></param>
         /// <param name="cell2"></param>
         /// <returns>A Range</returns>
-        public Range GetRange(string cell1, string cell2)
-        {
-            return new Range(wrksheet, cell1, cell2);
-        }
+        public Range GetRange(string cell1, string cell2) => new Range(wrksheet, cell1, cell2);
 
         public void Destroy() => Marshal.ReleaseComObject(this.wrksheet);
 

@@ -22,10 +22,13 @@ namespace Backend.Office
     {
         XL.Range rng;
 
-        public Range(_Worksheet wrksheet, string cell1, string cell2)
-        {
-            rng = wrksheet.get_Range(cell1, cell2);
-        }
+        /// <summary>
+        /// Instantiates a Range object based on cells' names. For Example:
+        /// <code>
+        ///     Range range = new("A1", "H1"); //gets the Range from A1 to H1.
+        /// </code>
+        /// </summary>
+        public Range(_Worksheet wrksheet, string cell1, string cell2) => rng = wrksheet.get_Range(cell1, cell2);
 
         /// <summary>
         /// Instantiates a Range object based on indexes. For Example:
@@ -75,6 +78,9 @@ namespace Backend.Office
         public void SetBackground(Color color) => rng.Font.Background = ColorTranslator.ToOle(color);
         public void HorizontalAlignment(XlAlign align) => rng.HorizontalAlignment = align;
         public void VerticalAlignment(XlAlign align) => rng.VerticalAlignment = align;
+
+        public void ColumnWidth(double width) => rng.ColumnWidth = width;
+
         public void Destroy() => Marshal.ReleaseComObject(rng);
     }
 }
