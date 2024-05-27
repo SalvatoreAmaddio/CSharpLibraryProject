@@ -15,11 +15,16 @@ namespace Backend.Office
         public void Create() 
         {
             xlApp = new XL.Application();
-            if (xlApp == null)
-                throw new MissingExcelException();
-
+            if (xlApp == null) throw new MissingExcelException();
             wrkbk = new(xlApp);
             Worksheet = wrkbk.ActiveWorksheet;
+        }
+
+        public void Read(string path) 
+        {
+            xlApp = new XL.Application();
+            if (xlApp == null) throw new MissingExcelException();
+            wrkbk = new(xlApp, true, path);
         }
 
         /// <summary>
@@ -55,6 +60,8 @@ namespace Backend.Office
             Worksheet?.Destroy();
             wrkbk?.Destroy();
             Destroy();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         public void Destroy() 

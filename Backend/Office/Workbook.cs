@@ -12,9 +12,14 @@ namespace Backend.Office
         public readonly List<Worksheet> Sheets = [];
         public int Count => Sheets.Count;
 
-        public Workbook(XL.Application xlApp) 
+        public Workbook(XL.Application xlApp, bool read = false, string path = "") 
         {
-            wrkbk = xlApp.Workbooks.Add();
+            if (read)
+                wrkbk = xlApp.Workbooks.Open(path);
+            else 
+                wrkbk = xlApp.Workbooks.Add();
+
+            wrkbk.Activate();
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.ActiveSheet));
             ActiveWorksheet = Sheets[0];
         }
