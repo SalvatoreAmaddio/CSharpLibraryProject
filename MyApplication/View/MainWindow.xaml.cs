@@ -42,6 +42,7 @@ namespace MyApplication.View
             }
             catch (Exception ex)
             {
+                Failure.Throw(ex.Message, "Carefull");
                 return;
             }
             finally 
@@ -65,10 +66,7 @@ namespace MyApplication.View
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() => 
-                {
-                    Failure.Throw(ex.Message,"Carefull");
-                });
+                return Task.FromException(ex);
             }
             finally 
             {
