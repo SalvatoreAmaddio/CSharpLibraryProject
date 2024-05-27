@@ -1,6 +1,8 @@
 ﻿using Backend.Exceptions;
 using Microsoft.Office.Interop.Excel;
+using System;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using XL = Microsoft.Office.Interop.Excel;
 
@@ -96,7 +98,10 @@ namespace Backend.Office
         public void VerticalAlignment(XlAlign align) => rng.VerticalAlignment = align;
 
         public void ColumnWidth(double width) => rng.ColumnWidth = width;
-
+        public void ApplyFilters() 
+        {
+           rng.AutoFilter(1, Missing.Value, XlAutoFilterOperator.xlAnd, Missing.Value, true);
+        } 
 
         /// <summary>
         /// Returns a <see cref="XL.Range"/> to iterate through each cell in Range.
