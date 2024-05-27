@@ -22,6 +22,11 @@ namespace Backend.Office
             this.wrksheet.Name = name;
         }
 
+        /// <summary>
+        /// Prints a header with a default style. By default, the header will be at the first row.
+        /// </summary>
+        /// <param name="headers">the headers</param>
+        /// <param name="row">the row index where the header will be printed at</param>
         public void PrintHeader(string[] headers, int row = 1)
         {
             int column = 1;
