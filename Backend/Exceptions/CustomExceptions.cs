@@ -2,6 +2,7 @@
 
 namespace Backend.Exceptions
 {
+    public class WorksheetException(string message) : COMException(message) { }
     public class WorkbookException(string message) : COMException(message) { }
     public class MissingExcelException() : Exception("Excel is not installed.") { }
 
