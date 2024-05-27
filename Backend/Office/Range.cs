@@ -7,7 +7,7 @@ namespace Backend.Office
 {
     public class Range : IExcelComponent
     {
-        Excel.Range rng;
+        Microsoft.Office.Interop.Excel.Range rng;
 
         public Range(_Worksheet wrksheet, string cell1, string cell2)
         {
@@ -15,6 +15,7 @@ namespace Backend.Office
             rng.Font.FontStyle = System.Drawing.FontStyle.Bold;
         }
 
+        public void Formula(string formula) => rng.Formula = formula;
         public void Bold(bool value) => rng.Font.Bold = value;
         public void Italic(bool value) => rng.Font.Italic = value;
         public void Underline() => rng.Font.Underline = XlUnderlineStyle.xlUnderlineStyleSingle;

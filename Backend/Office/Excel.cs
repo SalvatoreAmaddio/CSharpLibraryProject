@@ -1,42 +1,34 @@
 ﻿using System.Runtime.InteropServices;
-using Excel = Microsoft.Office.Interop.Excel;
+using XL = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
-    public class Ex
+    public class Excel
     {
         Application? xlApp;
         Workbook? wrkbk;
         _Worksheet? wrksheet;
         Range? rng;
-        public Ex() 
-        {
-            
-
-        }
-
+       
         public void Create() 
         {
-            xlApp = new Excel.Application();
+            xlApp = new XL.Application();
             if (xlApp == null)
             {
                 throw new Exception("Excel is not properly installed.");
             }
+
+            wrkbk = new(xlApp);
+            wrksheet = wrkbk.ActiveWorksheet();
         }
 
-        public void AddWorkBook() 
+        public void GetSheet(int index) 
         {
-            if (xlApp == null) throw new Exception($"{xlApp} was not created or Microsoft Excel is not installed in the local computer");
-            wrkbk = xlApp.Workbooks.Add();
-            wrksheet = (_Worksheet)wrkbk.ActiveSheet;
+            wrksheet = wrkbk?.SelectSheet(index);
         }
 
-        public void Save(string filePath) 
-        {
-            if (wrkbk == null) throw new Exception($"{wrkbk} was not created.");
-            wrkbk.SaveAs(filePath);
-        }
+        public void Save(string filePath) => wrkbk?.Save(filePath);
 
         public void SetValue(int row, char col, object value) 
         {
@@ -55,11 +47,11 @@ namespace Backend.Office
         {
             wrkbk?.Close();
             xlApp?.Quit();
-            if (wrkbk == null || xlApp == null || wrksheet == null) return;
+            if (xlApp == null || wrksheet == null) return;
 
             rng?.Destroy();
             Marshal.ReleaseComObject(wrksheet);
-            Marshal.ReleaseComObject(wrkbk);
+            wrkbk?.Destroy();
             Marshal.ReleaseComObject(xlApp);
         }
     }
