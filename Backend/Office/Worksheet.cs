@@ -47,6 +47,7 @@ namespace Backend.Office
         /// <param name="row"></param>
         public void PrintData(IEnumerable<ISQLModel> records, int row = 2)
         {
+            int totalColumns = 0;
             int column = 1;
             foreach (ISQLModel record in records) 
             {
@@ -61,9 +62,14 @@ namespace Backend.Office
                         SetValue(tableField?.GetValue(), row, column);
                     column++;
                 }
+                totalColumns = column;
                 column = 1;
                 row++;
             }
+
+            Range range = GetRange(1, row, totalColumns, records.Count());
+            range.WrapText(false);
+            range.Destroy();
         }
 
         /// <summary>

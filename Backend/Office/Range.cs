@@ -98,10 +98,9 @@ namespace Backend.Office
         public void VerticalAlignment(XlAlign align) => rng.VerticalAlignment = align;
 
         public void ColumnWidth(double width) => rng.ColumnWidth = width;
-        public void ApplyFilters() 
-        {
-           rng.AutoFilter(1, Missing.Value, XlAutoFilterOperator.xlAnd, Missing.Value, true);
-        } 
+        public void ApplyFilters() => rng.AutoFilter(1, Missing.Value, XlAutoFilterOperator.xlAnd, Missing.Value, true);
+        
+        public void WrapText(bool value) => rng.WrapText = value;        
 
         /// <summary>
         /// Returns a <see cref="XL.Range"/> to iterate through each cell in Range.
