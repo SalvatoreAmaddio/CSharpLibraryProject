@@ -23,6 +23,22 @@ namespace Backend.Office
         XL.Range rng;
 
         /// <summary>
+        /// Instantiates a Range object which selects the entire column based on column's letter. For Example:
+        /// <code>
+        ///     Range range = new("A"); //gets the entire column A.
+        /// </code>
+        /// </summary>
+        public Range(_Worksheet wrksheet, string columnLetter) => rng = wrksheet.Columns["A"];
+
+        /// <summary>
+        /// Instantiates a Range object which selects the entire column based on column's index. For Example:
+        /// <code>
+        ///     Range range = new(1); //gets the entire column A.
+        /// </code>
+        /// </summary>
+        public Range(_Worksheet wrksheet, int columnIndex = 1) => rng = wrksheet.Columns[ConvertIndexToColumnLetter(columnIndex)];
+
+        /// <summary>
         /// Instantiates a Range object based on cells' names. For Example:
         /// <code>
         ///     Range range = new("A1", "H1"); //gets the Range from A1 to H1.
@@ -80,6 +96,13 @@ namespace Backend.Office
         public void VerticalAlignment(XlAlign align) => rng.VerticalAlignment = align;
 
         public void ColumnWidth(double width) => rng.ColumnWidth = width;
+
+
+        /// <summary>
+        /// Returns a <see cref="XL.Range"/> to iterate through each cell in Range.
+        /// </summary>
+        /// <returns></returns>
+        public XL.Range Cells() => rng.Cells;
 
         public void Destroy() => Marshal.ReleaseComObject(rng);
     }
