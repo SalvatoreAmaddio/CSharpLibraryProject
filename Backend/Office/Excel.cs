@@ -48,11 +48,6 @@ namespace Backend.Office
         /// <param name="filePath"></param>
         public void Save(string filePath) => wrkbk?.Save(filePath);
         
-        public void SetWorkingRange(string cell1, string cell2) 
-        {
-            Range = Worksheet?.GetRange(cell1,cell2);
-        }
-
         public void Close() 
         {
             xlApp?.Quit();
