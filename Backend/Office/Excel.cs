@@ -47,7 +47,7 @@ namespace Backend.Office
         /// </summary>
         /// <param name="filePath"></param>
         public void Save(string filePath) => wrkbk?.Save(filePath);
-        
+
         public void Close() 
         {
             xlApp?.Quit();
