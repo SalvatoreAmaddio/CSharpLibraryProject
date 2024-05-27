@@ -1,4 +1,5 @@
-﻿using Backend.Model;
+﻿using Backend.Database;
+using Backend.Model;
 using Backend.Source;
 using System.Runtime.InteropServices;
 using XL = Microsoft.Office.Interop.Excel;
@@ -26,19 +27,13 @@ namespace Backend.Office
             {
                 foreach(ITableField tableField in record.GetAllTableFields()) 
                 {
-                    var ft = tableField.FieldType;
-                    var t = tableField.GetType().Name;
                     if (tableField is FKField fk) 
                     {
-                        var x= fk.GetValue();
-                        var f = fk.PK.GetValue();
-                        var tl = fk.Name;
-                        SetValue(x, row, column);
+                        ISQLModel? value = DatabaseManager.Find(fk.ClassName)?.Records.FirstOrDefault(s=>s.Equals(fk?.GetValue()));
+                        SetValue(value, row, column);
                     }
                     else 
-                    {
                         SetValue(tableField?.GetValue(), row, column);
-                    }
                     column++;
                 }
                 column = 1;

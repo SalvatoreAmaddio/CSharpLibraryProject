@@ -31,7 +31,6 @@ namespace Backend.Office
 
         public void Close() 
         {
-            wrkbk?.Close();
             xlApp?.Quit();
 
             Range?.Destroy();

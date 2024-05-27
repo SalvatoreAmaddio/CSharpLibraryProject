@@ -61,7 +61,11 @@ namespace Backend.Model
                 AbstractField? field = prop.GetCustomAttribute<AbstractField>();
                 if (field != null)
                 {
-                    yield return new TableField(field, prop, this);
+                    bool isFK = field.GetType() == typeof(FK);
+                    if (isFK)
+                        yield return new FKField(field, prop, this);
+                    else
+                        yield return new TableField(field, prop, this);
                 }
             }
         }

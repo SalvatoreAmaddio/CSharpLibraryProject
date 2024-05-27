@@ -32,7 +32,18 @@ namespace Backend.Office
                 ActiveWorksheet.SetName(name);
         }
 
-        public void Save(string filePath) => wrkbk.SaveAs(filePath);
+        public void Save(string filePath) 
+        {
+            try 
+            {
+                wrkbk.SaveAs(filePath);
+                wrkbk.Close();
+            }
+            catch (COMException) 
+            {
+                throw new Exception("The file is open");
+            }
+        }
 
         public void Close() => wrkbk?.Close();
 

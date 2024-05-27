@@ -36,26 +36,43 @@ namespace MyApplication.View
             MainTab.CurrentTabController().IsLoading = true;
 
             var x = MainTab?.CurrentTabController()?.Source.Cast<ISQLModel>().ToList();
-            await Task.Run(()=>Ex(x));
-
-            MainTab.CurrentTabController().IsLoading = false;
+            try
+            {
+                await Task.Run(() => WriteExcel(x));
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            finally 
+            {
+                MainTab.CurrentTabController().IsLoading = false;
+            }
             MessageBox.Show("Done!");
         }
 
-        private Task Ex(List<ISQLModel> source) 
+        private Task WriteExcel(List<ISQLModel> source) 
         {
             Excel excel = new();
             excel.Create();
             excel.Worksheet?.SetName("My Page");
-
-            //excel.SetWorkingRange("A1","C1");
-            //excel.Range?.Bold(true);
-            //excel.Range?.HorizontalAlignment(XlAlign.Center);
-
             excel.Worksheet?.PrintData(source, 1);
 
-            excel.Save("C:\\Users\\salva\\Desktop\\prova.xlsx");
-            excel.Close();
+            try
+            {
+                excel.Save("C:\\Users\\salva\\Desktop\\prova.xlsx");
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => 
+                {
+                    Failure.Throw(ex.Message);
+                });
+            }
+            finally 
+            {
+                excel.Close();
+            }
             return Task.CompletedTask;
         }
     }
