@@ -1,7 +1,6 @@
 ﻿using Backend.Model;
 using FrontEnd.Model;
 using System.Data.Common;
-using System.Windows;
 
 namespace MyApplication.Model
 {
