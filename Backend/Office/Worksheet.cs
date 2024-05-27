@@ -6,7 +6,7 @@ namespace Backend.Office
     public class Worksheet : IDestroyable
     {
         XL._Worksheet wrksheet;
-        
+
         public Worksheet(XL._Worksheet wrksheet) 
         {
             this.wrksheet = wrksheet;

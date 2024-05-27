@@ -18,8 +18,12 @@ namespace Backend.Office
             ActiveWorksheet = Sheets[0];
         }
 
-        public Worksheet SelectSheet(int index) => Sheets[index];
-        public void AddNew(string name = "") 
+        public void SelectSheet(int index)
+        {
+            ActiveWorksheet = Sheets[index];
+        }
+
+        public void AddNewSheet(string name = "") 
         {
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count])));
             ActiveWorksheet = Sheets[Sheets.Count-1];
@@ -35,9 +39,8 @@ namespace Backend.Office
         public void Destroy() 
         {
             foreach (Worksheet sheet in Sheets) 
-            { 
                 sheet.Destroy();
-            }
+
             Sheets.Clear();
             Marshal.ReleaseComObject(wrkbk);
         } 

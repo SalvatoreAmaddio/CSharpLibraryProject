@@ -1,5 +1,7 @@
 ﻿namespace Backend.Exceptions
 {
+    public class MissingExcelException() : Exception("Excel is not installed.") { }
+
     public class NoModelException() : Exception("No Model is set") { }
     public class NoNavigatorException() : Exception("No Navigator is set") { }
     public class AssemblyCreateInstanceFailure(string text) : Exception(text) { }
