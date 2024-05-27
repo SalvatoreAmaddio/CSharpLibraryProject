@@ -1,13 +1,25 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Excel = Microsoft.Office.Interop.Excel;
+using XL = Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
+    public enum XlAlign
+    {
+        Center = -4108,
+        CenterAcrossSelection = 7,
+        Distributed = -4117,
+        Fill = 5,
+        General = 1,
+        Justify = -4130,
+        Left = -4131,
+        Right = -4152
+    }
+
     public class Range : IDestroyable
     {
-        Microsoft.Office.Interop.Excel.Range rng;
+        XL.Range rng;
 
         public Range(_Worksheet wrksheet, string cell1, string cell2)
         {
@@ -21,8 +33,8 @@ namespace Backend.Office
         public void Underline() => rng.Font.Underline = XlUnderlineStyle.xlUnderlineStyleSingle;
         public void SetColor(Color color) => rng.Font.Color = ColorTranslator.ToOle(color);
         public void SetBackground(Color color) => rng.Font.Background = ColorTranslator.ToOle(color);
-        public void HorizontalAlignment(XlHAlign align) => rng.HorizontalAlignment = align;
-        public void VerticalAlignment(XlHAlign align) => rng.VerticalAlignment = align;
+        public void HorizontalAlignment(XlAlign align) => rng.HorizontalAlignment = align;
+        public void VerticalAlignment(XlAlign align) => rng.VerticalAlignment = align;
         public void Destroy() => Marshal.ReleaseComObject(rng);
     }
 }

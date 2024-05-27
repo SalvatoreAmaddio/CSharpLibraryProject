@@ -18,13 +18,31 @@
         <Menu VerticalAlignment="Top">
             <fr:OpenCurtain Click="OpenCurtain"/>
             <MenuItem Header="User" VerticalAlignment="Center">
-                <MenuItem Header="Logout" Click="OnLogoutClicked"/>
-                <MenuItem Header="Change Password" Click="OnChangePasswordClicked"/>
-                <MenuItem Header="Info"/>
+                <MenuItem Header="Logout" Click="OnLogoutClicked">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource logout}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Change Password" Click="OnChangePasswordClicked">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource padlock}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Email Settings" VerticalAlignment="Center">
                 <MenuItem Header="Walthrough" Click="OnWalkthroughClicked"/>
-                <MenuItem Header="Change Password" Click="OnChangeEmailPasswordClicked"/>
+                <MenuItem Header="Change Password" Click="OnChangeEmailPasswordClicked">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource emailsetting}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Export" VerticalAlignment="Center">
+                <MenuItem Header="Excel" Click="OnExcelClicked">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource excel}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

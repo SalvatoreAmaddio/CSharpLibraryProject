@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using FrontEnd.Controller;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace FrontEnd.ExtensionMethods
 {
@@ -15,6 +17,13 @@ namespace FrontEnd.ExtensionMethods
             win.Hide();
             newWin?.Show();
             win.Close();
+        }
+
+        public static IAbstractFormController? CurrentTabController(this TabControl tabControl) 
+        {
+            Frame frame = (Frame) tabControl.SelectedContent;
+            Page page = (Page)frame.Content;
+            return page.DataContext as IAbstractFormController;
         }
     }
 }

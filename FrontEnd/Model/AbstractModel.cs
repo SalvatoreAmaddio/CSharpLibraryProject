@@ -3,8 +3,8 @@ using FrontEnd.Dialogs;
 using FrontEnd.Events;
 using FrontEnd.Notifier;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace FrontEnd.Model
 {
@@ -47,9 +47,34 @@ namespace FrontEnd.Model
             }
         }
 
+        /// <summary>
+        /// Gets a List of all properties marked with a <see cref="AbstractField"/> attribute
+        /// </summary>
+        protected List<SimpleTableField> AllFields { get; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public event AfterUpdateEventHandler? AfterUpdate;
         public event BeforeUpdateEventHandler? BeforeUpdate;
+
+        public AbstractModel() : base() 
+        {
+            AllFields = new(_getAllTableFields());
+
+        }
+
+        private IEnumerable<SimpleTableField> _getAllTableFields()
+        {
+            Type type = GetType();
+            PropertyInfo[] props = type.GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                AbstractField? field = prop.GetCustomAttribute<AbstractField>();
+                if (field != null)
+                {
+                    yield return new SimpleTableField(prop.Name, null, prop);
+                }
+            }
+        }
 
         public void RaisePropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 

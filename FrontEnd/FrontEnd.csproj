@@ -21,6 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\logout.png" />
     <None Remove="images\root_directory.png" />
   </ItemGroup>
 
@@ -52,6 +53,7 @@
     <Resource Include="images\excel.png" />
     <Resource Include="images\filter.png" />
     <Resource Include="images\folder.png" />
+    <Resource Include="images\logout.png" />
     <Resource Include="images\nowifi.png" />
     <Resource Include="images\padlock.png" />
     <Resource Include="images\pdf.png" />

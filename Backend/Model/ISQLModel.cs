@@ -9,10 +9,7 @@ namespace Backend.Model
     /// </summary>
     public interface ISQLModel 
     {
-        /// <summary>
-        /// Gets a List of all properties marked with a <see cref="AbstractField"/> attribute
-        /// </summary>
-        public List<SimpleTableField> AllFields { get; }
+        public IEnumerable<ITableField> GetAllTableFields();
 
         /// <summary>
         /// This method allows the creation of an object by reading the DataReader.

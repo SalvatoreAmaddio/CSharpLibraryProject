@@ -16,11 +16,9 @@ namespace Backend.Model
         public string InsertQry { get; set; } = string.Empty;
         public string DeleteQry { get; set; } = string.Empty;
         public string RecordCountQry { get; set; } = string.Empty;        
-        public List<SimpleTableField> AllFields { get; }
         public AbstractSQLModel()
         {
             _ = new QueryBuilder(this);
-            AllFields = new(GetAllTableFields());
         }
 
         public abstract ISQLModel Read(DbDataReader reader);
@@ -54,7 +52,7 @@ namespace Backend.Model
             }
         }
 
-        private IEnumerable<SimpleTableField> GetAllTableFields()
+        public IEnumerable<ITableField> GetAllTableFields()
         {
             Type type = GetType();
             PropertyInfo[] props = type.GetProperties();
@@ -63,7 +61,7 @@ namespace Backend.Model
                 AbstractField? field = prop.GetCustomAttribute<AbstractField>();
                 if (field != null)
                 {
-                    yield return new SimpleTableField(prop.Name, null, prop);
+                    yield return new TableField(field, prop, this);
                 }
             }
         }
