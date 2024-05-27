@@ -67,6 +67,7 @@ namespace Backend.Office
                 row++;
             }
 
+            row = 0;
             Range range = GetRange(1, row, totalColumns, records.Count());
             range.WrapText(false);
             range.Destroy();
