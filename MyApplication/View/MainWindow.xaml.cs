@@ -42,7 +42,7 @@ namespace MyApplication.View
             }
             catch (Exception ex)
             {
-                
+                return;
             }
             finally 
             {
