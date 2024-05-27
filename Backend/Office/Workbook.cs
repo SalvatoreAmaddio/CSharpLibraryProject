@@ -41,6 +41,7 @@ namespace Backend.Office
             }
             catch (COMException) 
             {
+                wrkbk.Close(false); //discard changes.
                 throw new Exception("Cannot save the file because it is open");
             }
         }

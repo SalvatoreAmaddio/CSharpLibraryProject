@@ -42,7 +42,7 @@ namespace MyApplication.View
             }
             catch (Exception ex)
             {
-                Failure.Throw(ex.Message, "Carefull");
+                Failure.Throw(ex.Message, "Carefull!");
                 return;
             }
             finally 
