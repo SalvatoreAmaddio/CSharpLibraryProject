@@ -22,6 +22,25 @@ namespace Backend.Office
             Worksheet = wrkbk.ActiveWorksheet;
         }
 
+        /// <summary>
+        /// This method calls <see cref="Workbook.Close"/>. Since it can throw a <see cref="WorkbookException"/>, wrap this method in a try-catch-finally block.
+        /// For Example:
+        /// <code>
+        /// try 
+        /// {
+        ///     excel.Save("C:\\Users\\salva\\Desktop\\prova.xlsx");
+        /// }
+        /// catch (WorkbookException ex)
+        /// {
+        ///     return Task.FromException(ex); //return the exception.
+        /// }
+        /// finally 
+        /// {
+        ///     excel.Close(); //ensure the clean-up will always occur.
+        /// }
+        /// </code>
+        /// </summary>
+        /// <param name="filePath"></param>
         public void Save(string filePath) => wrkbk?.Save(filePath);
         
         public void SetWorkingRange(string cell1, string cell2) 

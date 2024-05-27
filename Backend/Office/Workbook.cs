@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using Backend.Exceptions;
+using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using XL = Microsoft.Office.Interop.Excel;
 
@@ -32,6 +33,11 @@ namespace Backend.Office
                 ActiveWorksheet.SetName(name);
         }
 
+        /// <summary>
+        /// Saves the workbook.
+        /// </summary>
+        /// <param name="filePath">the file path where to save the workbook</param>
+        /// <exception cref="WorkbookException"></exception>
         public void Save(string filePath) 
         {
             try 
@@ -42,7 +48,7 @@ namespace Backend.Office
             catch (COMException) 
             {
                 wrkbk.Close(false); //discard changes.
-                throw new Exception("Cannot save the file because it is open");
+                throw new WorkbookException("Cannot save the file because it is open");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Backend.Model;
+﻿using Backend.Exceptions;
+using Backend.Model;
 using Backend.Office;
 using Backend.Utils;
 using FrontEnd.Controller;
@@ -40,7 +41,7 @@ namespace MyApplication.View
             {
                 await Task.Run(() => WriteExcel(x));
             }
-            catch (Exception ex)
+            catch (WorkbookException ex)
             {
                 Failure.Throw(ex.Message, "Carefull!");
                 return;
@@ -64,7 +65,7 @@ namespace MyApplication.View
             {
                 excel.Save("C:\\Users\\salva\\Desktop\\prova.xlsx");
             }
-            catch (Exception ex)
+            catch (WorkbookException ex)
             {
                 return Task.FromException(ex);
             }

@@ -1,5 +1,8 @@
-﻿namespace Backend.Exceptions
+﻿using System.Runtime.InteropServices;
+
+namespace Backend.Exceptions
 {
+    public class WorkbookException(string message) : COMException(message) { }
     public class MissingExcelException() : Exception("Excel is not installed.") { }
 
     public class NoModelException() : Exception("No Model is set") { }
