@@ -37,6 +37,7 @@ namespace Backend.Office
             range.VerticalAlignment(XlAlign.Center);
             range.Bold(true);
             range.ApplyFilters();
+            range.ColumnWidth(16);
             range.Destroy();
         }
 
