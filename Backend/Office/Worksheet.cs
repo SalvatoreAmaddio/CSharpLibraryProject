@@ -117,7 +117,7 @@ namespace Backend.Office
         public Range GetRange(int col1 = 1, int row1 = 1, int col2 = 1, int row2 = 1)
         {
             if (row1 <= 0 || col1<= 0  || col2 <= 0 || row2 <= 0) throw new ExcelIndexException();
-            return new Range(wrksheet, col1, row1, col2, row2);
+            return new (wrksheet, col1, row1, col2, row2);
         }
 
         /// <summary>
@@ -129,7 +129,23 @@ namespace Backend.Office
         /// <param name="cell1"></param>
         /// <param name="cell2"></param>
         /// <returns>A Range</returns>
-        public Range GetRange(string cell1, string cell2) => new Range(wrksheet, cell1, cell2);
+        public Range GetRange(string cell1, string cell2) => new(wrksheet, cell1, cell2);
+
+        /// <summary>
+        /// Gets a Range object which selects the entire column based on column's letter. For Example:
+        /// <code>
+        ///     Range range = GetRange("A"); //gets the entire column A.
+        /// </code>
+        /// </summary>
+        public Range GetRange(string columnLetter) => new(wrksheet, columnLetter);
+
+        /// <summary>
+        /// Gets a Range object which selects the entire column based on column's index. For Example:
+        /// <code>
+        ///     Range range = GetRange(1); //gets the entire column A.
+        /// </code>
+        /// </summary>
+        public Range GetRange(int columnIndex) => new(wrksheet, columnIndex);
 
         public void Destroy() => Marshal.ReleaseComObject(this.wrksheet);
 
