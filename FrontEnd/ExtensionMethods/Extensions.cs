@@ -19,6 +19,22 @@ namespace FrontEnd.ExtensionMethods
             win.Close();
         }
 
+        public static Type? GenericController(this TabControl tabControl) 
+        {
+            IAbstractFormController? controller = CurrentTabController(tabControl);
+            Type? type = controller?.GetType().BaseType;
+            if (type == null) return null;
+
+            if (type.IsGenericType)
+            {
+                Type[] genericArguments = type.GetGenericArguments();
+                if (genericArguments.Length > 0)
+                   return genericArguments[0];
+            }
+
+            return null;
+        }
+
         public static IAbstractFormController? CurrentTabController(this TabControl tabControl) 
         {
             Frame frame = (Frame) tabControl.SelectedContent;

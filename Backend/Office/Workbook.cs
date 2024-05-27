@@ -19,10 +19,7 @@ namespace Backend.Office
             ActiveWorksheet = Sheets[0];
         }
 
-        public void SelectSheet(int index)
-        {
-            ActiveWorksheet = Sheets[index];
-        }
+        public void SelectSheet(int index) => ActiveWorksheet = Sheets[index];
 
         public void AddNewSheet(string name = "") 
         {
@@ -40,12 +37,12 @@ namespace Backend.Office
         /// <exception cref="WorkbookException"></exception>
         public void Save(string filePath) 
         {
-            try 
+            try
             {
                 wrkbk.SaveAs(filePath);
                 wrkbk.Close();
             }
-            catch (COMException) 
+            catch (COMException)
             {
                 wrkbk.Close(false); //discard changes.
                 throw new WorkbookException("Cannot save the file because it is open");

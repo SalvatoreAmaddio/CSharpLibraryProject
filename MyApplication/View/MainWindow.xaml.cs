@@ -36,10 +36,13 @@ namespace MyApplication.View
         {
             MainTab.CurrentTabController().IsLoading = true;
 
-            var x = MainTab?.CurrentTabController()?.Source.Cast<ISQLModel>().ToList();
+            Type? type = MainTab.GenericController();
+            string? sheetName = type?.Name;
+
+            List<ISQLModel>? data = MainTab?.CurrentTabController()?.Source.Cast<ISQLModel>()?.ToList();
             try
             {
-                await Task.Run(() => WriteExcel(x));
+                await Task.Run(() => WriteExcel(data, sheetName));
             }
             catch (WorkbookException ex)
             {
@@ -54,19 +57,38 @@ namespace MyApplication.View
             MessageBox.Show("Done!");
         }
 
-        private Task WriteExcel(List<ISQLModel> source) 
+        private Task WriteExcel(List<ISQLModel>? source, string? sheetName) 
         {
+            if (source == null || string.IsNullOrEmpty(sheetName)) throw new Exception("Something went wrong here!");
+
             Excel excel = new();
             excel.Create();
-            excel.Worksheet?.SetName("My Page");
+            excel.Worksheet?.SetName(sheetName);
 
-            string[] headers = {"EmployeeID", "First Name", "Last Name", "DOB", "Gender", "Department", "Job Title", "Email" };
+            string[] headers = [];
+
+            switch (sheetName) 
+            {
+                case nameof(Employee):
+                    headers = ["EmployeeID", "First Name", "Last Name", "DOB", "Gender", "Department", "Job Title", "Email"];
+                 break;
+                case nameof(Gender):
+                    headers = ["GenderID", "Gender"];
+                break;
+                case nameof(JobTitle):
+                    headers = ["TitleID", "Title"];
+                break;
+                case nameof(Department):
+                    headers = ["DepartmentID", "Department Name"];
+                break;
+            }
+
             excel.Worksheet?.PrintHeader(headers);
             excel.Worksheet?.PrintData(source);
 
             try
             {
-                excel.Save("C:\\Users\\salva\\Desktop\\prova.xlsx");
+                excel.Save($"{Sys.Desktop}\\{sheetName}.xlsx");
             }
             catch (WorkbookException ex)
             {
