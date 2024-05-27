@@ -47,6 +47,8 @@ namespace Backend.Office
         /// <param name="row"></param>
         public void PrintData(IEnumerable<ISQLModel> records, int row = 2)
         {
+            if (row <= 0) throw new ExcelIndexException();
+            int initialRow = row;
             int totalColumns = 0;
             int column = 1;
             foreach (ISQLModel record in records) 
@@ -67,8 +69,7 @@ namespace Backend.Office
                 row++;
             }
 
-            row = 0;
-            Range range = GetRange(1, row, totalColumns, records.Count());
+            Range range = GetRange(1, initialRow, totalColumns, row);
             range.WrapText(false);
             range.Destroy();
         }
