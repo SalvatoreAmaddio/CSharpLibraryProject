@@ -67,6 +67,6 @@ namespace MyApplication.Model
 
         public override ISQLModel Read(DbDataReader reader) => new Employee(reader);
 
-        public override string? ToString() => FirstName;
+        public override string? ToString() => $"{FirstName} {LastName}";
     }
 }
