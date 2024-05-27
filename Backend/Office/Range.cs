@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using Backend.Exceptions;
+using Microsoft.Office.Interop.Excel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using XL = Microsoft.Office.Interop.Excel;
@@ -33,8 +34,15 @@ namespace Backend.Office
             rng = wrksheet.get_Range(cell1, cell2);
         }
 
+        /// <summary>
+        /// Converts the number provided to the corrisponding Column's Letter. For instance, 1 will return "A" and so on.
+        /// </summary>
+        /// <param name="columnNumber"></param>
+        /// <returns>A string representing the Column Letter.</returns>
+        /// <exception cref="ExcelIndexException"></exception>
         public static string ConvertIndexToColumnLabel(int columnNumber)
         {
+            if (columnNumber <=0) throw new ExcelIndexException();
             int dividend = columnNumber;
             string columnName = string.Empty;
             int modulo;

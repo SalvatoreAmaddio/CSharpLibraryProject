@@ -76,10 +76,10 @@ namespace Backend.Office
         /// <param name="value">the value to print</param>
         /// <param name="row"></param>
         /// <param name="col"></param>
-        /// <exception cref="WorksheetException"></exception>
+        /// <exception cref="ExcelIndexException"></exception>
         public void SetValue(object? value, int row = 1, int col = 1)
         {
-            if (row <= 0 || col <= 0) throw new WorksheetException("In Excel, indexes starts from 1.");
+            if (row <= 0 || col <= 0) throw new ExcelIndexException();
             this.wrksheet.Cells[row, col] = (value == null) ? string.Empty : value;
         }
 
@@ -94,10 +94,10 @@ namespace Backend.Office
         /// <param name="value">the value to print</param>
         /// <param name="row">the row index</param>
         /// <param name="col">the column label</param>
-        /// <exception cref="WorksheetException"></exception>
+        /// <exception cref="ExcelIndexException"></exception>
         public void SetValue(object? value, int row=1, string col="A")
         {
-            if (row <= 0) throw new WorksheetException("In Excel, indexes starts from 1.");
+            if (row <= 0) throw new ExcelIndexException();
             this.wrksheet.Cells[row, col] = (value == null) ? string.Empty : value;
         }
 
@@ -112,10 +112,10 @@ namespace Backend.Office
         /// <param name="col2"></param>
         /// <param name="row2"></param>
         /// <returns>A Range</returns>
-        /// <exception cref="WorksheetException"></exception>
+        /// <exception cref="ExcelIndexException"></exception>
         public Range GetRange(int col1 = 1, int row1 = 1, int col2 = 1, int row2 = 1)
         {
-            if (row1 <= 0 || col1<= 0  || col2 <= 0 || row2 <= 0) throw new WorksheetException("In Excel, indexes starts from 1.");
+            if (row1 <= 0 || col1<= 0  || col2 <= 0 || row2 <= 0) throw new ExcelIndexException();
             return new Range(wrksheet, col1, row1, col2, row2);
         }
 
