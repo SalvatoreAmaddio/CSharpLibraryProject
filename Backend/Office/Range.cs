@@ -5,7 +5,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
-    public class Range : IExcelComponent
+    public class Range : IDestroyable
     {
         Microsoft.Office.Interop.Excel.Range rng;
 

@@ -4,26 +4,42 @@ using XL = Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
-    public class Workbook : IExcelComponent
+    public class Workbook : IDestroyable
     {
         XL.Workbook wrkbk;
-        public int Count => wrkbk.Worksheets.Count;
+        public Worksheet ActiveWorksheet { get; private set; }
+        public readonly List<Worksheet> Sheets = [];
+        public int Count => Sheets.Count;
 
-        public Workbook(XL.Application xlApp) => wrkbk = xlApp.Workbooks.Add();
+        public Workbook(XL.Application xlApp) 
+        {
+            wrkbk = xlApp.Workbooks.Add();
+            Sheets.Add(new Worksheet((_Worksheet)wrkbk.ActiveSheet));
+            ActiveWorksheet = Sheets[0];
+        }
 
-        public _Worksheet SelectSheet(int index) => (_Worksheet)wrkbk.Worksheets[index];
+        public Worksheet SelectSheet(int index) => Sheets[index];
         public void AddNew(string name = "") 
         {
-            wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count]);
+            Sheets.Add(new Worksheet((_Worksheet)wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count])));
+            ActiveWorksheet = Sheets[Sheets.Count-1];
+
             if (!string.IsNullOrEmpty(name)) 
-                ActiveWorksheet().Name = name;
+                ActiveWorksheet.SetName(name);
         }
 
         public void Save(string filePath) => wrkbk.SaveAs(filePath);
-        public _Worksheet ActiveWorksheet() => (_Worksheet)wrkbk.ActiveSheet;
 
-        public void Close() => wrkbk?.Close(); 
+        public void Close() => wrkbk?.Close();
 
-        public void Destroy() => Marshal.ReleaseComObject(wrkbk);
+        public void Destroy() 
+        {
+            foreach (Worksheet sheet in Sheets) 
+            { 
+                sheet.Destroy();
+            }
+            Sheets.Clear();
+            Marshal.ReleaseComObject(wrkbk);
+        } 
     }
 }

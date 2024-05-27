@@ -1,6 +1,6 @@
 ﻿namespace Backend.Office
 {
-    public interface IExcelComponent
+    public interface IDestroyable
     {
         void Destroy();
     }
