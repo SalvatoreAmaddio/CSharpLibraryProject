@@ -24,7 +24,29 @@ namespace Backend.Office
         public Range(_Worksheet wrksheet, string cell1, string cell2)
         {
             rng = wrksheet.get_Range(cell1, cell2);
-            rng.Font.FontStyle = System.Drawing.FontStyle.Bold;
+        }
+
+        public Range(_Worksheet wrksheet, int col1 = 1, int row1=1, int col2 = 1, int row2=1)
+        {
+            string cell1 = ConvertIndexToColumnLabel(col1) + row1.ToString();
+            string cell2 = ConvertIndexToColumnLabel(col2) + row2.ToString();
+            rng = wrksheet.get_Range(cell1, cell2);
+        }
+
+        public static string ConvertIndexToColumnLabel(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = string.Empty;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo) + columnName;
+                dividend = (dividend - modulo) / 26;
+            }
+
+            return columnName;
         }
 
         public void Formula(string formula) => rng.Formula = formula;

@@ -59,7 +59,10 @@ namespace MyApplication.View
             Excel excel = new();
             excel.Create();
             excel.Worksheet?.SetName("My Page");
-            excel.Worksheet?.PrintData(source, 1);
+
+            string[] headers = {"EmployeeID", "First Name", "Last Name", "DOB", "Gender", "Department", "Job Title", "Email" };
+            excel.Worksheet?.PrintHeader(headers);
+            excel.Worksheet?.PrintData(source);
 
             try
             {
