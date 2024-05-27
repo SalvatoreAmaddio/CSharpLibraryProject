@@ -66,16 +66,16 @@ namespace MyApplication.View
             switch (sheetName) 
             {
                 case nameof(Employee):
-                    headers = ["EmployeeID", "First Name", "Last Name", "DOB", "Gender", "Department", "Job Title", "Email"];
+                    headers = ["Employee ID", "First Name", "Last Name", "DOB", "Gender", "Department", "Job Title", "Email"];
                  break;
                 case nameof(Gender):
-                    headers = ["GenderID", "Gender"];
+                    headers = ["Gender ID", "Gender"];
                 break;
                 case nameof(JobTitle):
-                    headers = ["TitleID", "Title"];
+                    headers = ["Title ID", "Title"];
                 break;
                 case nameof(Department):
-                    headers = ["DepartmentID", "Department Name"];
+                    headers = ["Department ID", "Department Name"];
                 break;
             }
 
