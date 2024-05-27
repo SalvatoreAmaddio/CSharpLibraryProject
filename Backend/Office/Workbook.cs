@@ -41,7 +41,7 @@ namespace Backend.Office
             }
             catch (COMException) 
             {
-                throw new Exception("The file is open");
+                throw new Exception("Cannot save the file because it is open");
             }
         }
 

@@ -32,7 +32,6 @@ namespace Backend.Office
         public void Close() 
         {
             xlApp?.Quit();
-
             Range?.Destroy();
             Worksheet?.Destroy();
             wrkbk?.Destroy();

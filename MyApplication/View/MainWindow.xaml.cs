@@ -48,6 +48,7 @@ namespace MyApplication.View
             {
                 MainTab.CurrentTabController().IsLoading = false;
             }
+
             MessageBox.Show("Done!");
         }
 
@@ -66,7 +67,7 @@ namespace MyApplication.View
             {
                 Application.Current.Dispatcher.Invoke(() => 
                 {
-                    Failure.Throw(ex.Message);
+                    Failure.Throw(ex.Message,"Carefull");
                 });
             }
             finally 
