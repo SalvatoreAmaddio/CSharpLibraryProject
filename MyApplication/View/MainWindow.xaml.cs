@@ -5,7 +5,6 @@ using Backend.Office;
 using Backend.Utils;
 using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
-using Backend.ExtensionMethods;
 using FrontEnd.Forms;
 using FrontEnd.Utils;
 using MyApplication.Model;
@@ -113,13 +112,15 @@ namespace MyApplication.View
 
             foreach (IAbstractDatabase db in DatabaseManager.All)
             {
-                string sheetName = db.GenericDatabase().Name;
-                excel.WorkBook?.AddNewSheet(sheetName);
-                string[] headers = [];
-                excel.Worksheet?.PrintHeader(headers);
-                excel.Worksheet?.PrintData(db.Records,2,true);
+                if (db.Records.Count == 0) continue;
+                string sheetName = db.ModelType.Name;
+                excel?.Worksheet?.SetName(sheetName);
+                //string[] headers = [];
+                //excel.Worksheet?.PrintHeader(headers);
+                excel?.Worksheet?.PrintData(db.Records, true);
+                excel?.WorkBook?.AddNewSheet();
             }
-
+            excel?.Worksheet?.Delete();
             try
             {
                 excel.Save($"{Sys.Desktop}\\database.xlsx");

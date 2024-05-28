@@ -10,6 +10,8 @@ namespace Backend.Database
     /// </summary>
     public interface IAbstractDatabase
     {
+        public Type ModelType { get; }
+
         /// <summary>
         /// Gets and Sets the name of the Database to connect to..
         /// </summary>

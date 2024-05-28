@@ -47,8 +47,9 @@ namespace Backend.Office
         /// <param name="records"></param>
         /// <param name="row"></param>
         /// <param name="use_pk_for_fk">set it to true if ForeignKey's objects' PK should be printed</param>
-        public void PrintData(IEnumerable<ISQLModel> records, int row = 2, bool use_pk_for_fk = false)
+        public void PrintData(IEnumerable<ISQLModel> records, bool use_pk_for_fk = false, int row = 2)
         {
+            if (records.Count() == 0) return;
             if (row <= 0) throw new ExcelIndexException();
             int initialRow = row;
             int totalColumns = 0;
@@ -79,6 +80,11 @@ namespace Backend.Office
             Range range = GetRange(1, initialRow, totalColumns, row);
             range.WrapText(false);
             range.Destroy();
+        }
+
+        public void Delete() 
+        { 
+            wrksheet.Delete();
         }
 
         /// <summary>

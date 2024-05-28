@@ -29,7 +29,7 @@ namespace Backend.Office
         }
 
         public void SelectSheet(int index) => ActiveWorksheet = Sheets[index];
-        
+
         public void AddNewSheet(string name = "") 
         {
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count])));

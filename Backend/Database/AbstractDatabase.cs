@@ -12,6 +12,8 @@ namespace Backend.Database
     {
         public virtual string DatabaseName { get; set; } = string.Empty;
         public ISQLModel Model { get; set; } = Model;
+
+        public Type ModelType => Model.GetType();
         public MasterSource Records { get; protected set; } = [];
 
         public void ReplaceRecords(IEnumerable<ISQLModel> newRecords) 
