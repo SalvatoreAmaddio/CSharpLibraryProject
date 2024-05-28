@@ -150,7 +150,5 @@ namespace MyApplication.View
             }
             return Task.CompletedTask;
         }
-
-
     }
 }
