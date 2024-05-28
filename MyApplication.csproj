@@ -27,21 +27,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\loading_logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Data\mydb.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="appLogo.ico" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DesktopBusinessAppSharpBuilder\FrontEnd.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DesktopBusinessAppSharpBuilder" Version="1.0.1" />
+	</ItemGroup>
+<!--  
+    <ItemGroup>
+        <ProjectReference Include="..\DesktopBusinessAppSharpBuilder\FrontEnd.csproj" />
+    </ItemGroup>
+-->
 
-  <ItemGroup>
+<ItemGroup>
     <Resource Include="Images\loading_logo.png" />
     <Resource Include="Images\step1.png" />
     <Resource Include="Images\step2.png" />
