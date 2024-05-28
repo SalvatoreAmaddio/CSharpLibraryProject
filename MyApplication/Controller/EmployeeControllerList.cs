@@ -41,13 +41,13 @@ namespace MyApplication.Controller
             return await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
         }
 
-        public override async void OnOptionFilter()
+        public override void OnOptionFilter()
         {
             QueryBuiler.Clear();
             QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));
             QueryBuiler.AddCondition(TitleOptions.Conditions(QueryBuiler));
             QueryBuiler.AddCondition(DepartmentOptions.Conditions(QueryBuiler));
-            await SearchRecordAsync();
+            OnAfterUpdate(this, new(null, null, nameof(Search)));
         }
 
         protected override void Open(Employee? model)
