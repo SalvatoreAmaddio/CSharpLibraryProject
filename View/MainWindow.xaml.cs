@@ -126,11 +126,11 @@ namespace MyApplication.View
 
             foreach (IAbstractDatabase db in DatabaseManager.All)
             {
-                if (db.Records.Count == 0) continue;
+                if (db.MasterSource.Count == 0) continue;
                 string sheetName = db.ModelType.Name;
                 excel?.Worksheet?.SetName(sheetName);
                 excel?.Worksheet?.PrintHeader(db.Model.GetEntityFields());
-                excel?.Worksheet?.PrintData(db.Records, true);
+                excel?.Worksheet?.PrintData(db.MasterSource, true);
                 excel?.WorkBook?.AddNewSheet();
             }
 
