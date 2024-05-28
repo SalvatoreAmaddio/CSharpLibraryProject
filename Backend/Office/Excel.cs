@@ -8,22 +8,21 @@ namespace Backend.Office
     public class Excel : IDestroyable
     {
         Application? xlApp;
-        Workbook? wrkbk;
-        public Worksheet? Worksheet { get; private set; }
+        public Workbook? WorkBook { get; private set; }
+        public Worksheet? Worksheet { get => WorkBook?.ActiveWorksheet; }
        
         public void Create() 
         {
             xlApp = new XL.Application();
             if (xlApp == null) throw new MissingExcelException();
-            wrkbk = new(xlApp);
-            Worksheet = wrkbk.ActiveWorksheet;
+            WorkBook = new(xlApp);
         }
 
         public void Read(string path) 
         {
             xlApp = new XL.Application();
             if (xlApp == null) throw new MissingExcelException();
-            wrkbk = new(xlApp, true, path);
+            WorkBook = new(xlApp, path);
         }
 
         /// <summary>
@@ -45,13 +44,13 @@ namespace Backend.Office
         /// </code>
         /// </summary>
         /// <param name="filePath"></param>
-        public void Save(string filePath) => wrkbk?.Save(filePath);
+        public void Save(string filePath) => WorkBook?.Save(filePath);
 
         public void Close() 
         {
             xlApp?.Quit();
             Worksheet?.Destroy();
-            wrkbk?.Destroy();
+            WorkBook?.Destroy();
             Destroy();
             GC.Collect();
             GC.WaitForPendingFinalizers();

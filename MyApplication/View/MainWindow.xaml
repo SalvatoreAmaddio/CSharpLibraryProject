@@ -43,6 +43,11 @@
                         <Image Source="{StaticResource excel}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="All Database" Click="OnExportDBClicked">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource excel}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

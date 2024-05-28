@@ -11,6 +11,8 @@ namespace Backend.Database
         private static readonly Lazy<DatabaseManager> lazyInstance = new(() => new DatabaseManager());
         private readonly List<IAbstractDatabase> Databases;
 
+        public static List<IAbstractDatabase> All { get => lazyInstance.Value.Databases; }
+
         /// <summary>
         /// It adds a database object.
         /// </summary>

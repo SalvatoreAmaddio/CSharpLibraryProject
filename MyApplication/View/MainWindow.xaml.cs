@@ -1,9 +1,11 @@
-﻿using Backend.Exceptions;
+﻿using Backend.Database;
+using Backend.Exceptions;
 using Backend.Model;
 using Backend.Office;
 using Backend.Utils;
 using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
+using Backend.ExtensionMethods;
 using FrontEnd.Forms;
 using FrontEnd.Utils;
 using MyApplication.Model;
@@ -96,5 +98,43 @@ namespace MyApplication.View
             }
             return Task.CompletedTask;
         }
+
+        private async void OnExportDBClicked(object sender, RoutedEventArgs e)
+        {
+            MainTab.CurrentTabController().IsLoading = true;
+            await Task.Run(CreateExcel);
+            MainTab.CurrentTabController().IsLoading = false;
+        }
+
+        public Task CreateExcel() 
+        {
+            Excel excel = new();
+            excel.Create();
+
+            foreach (IAbstractDatabase db in DatabaseManager.All)
+            {
+                string sheetName = db.GenericDatabase().Name;
+                excel.WorkBook?.AddNewSheet(sheetName);
+                string[] headers = [];
+                excel.Worksheet?.PrintHeader(headers);
+                excel.Worksheet?.PrintData(db.Records,2,true);
+            }
+
+            try
+            {
+                excel.Save($"{Sys.Desktop}\\database.xlsx");
+            }
+            catch (WorkbookException ex)
+            {
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                excel.Close();
+            }
+            return Task.CompletedTask;
+        }
+
+
     }
 }

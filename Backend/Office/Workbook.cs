@@ -12,20 +12,24 @@ namespace Backend.Office
         public readonly List<Worksheet> Sheets = [];
         public int Count => Sheets.Count;
 
-        public Workbook(XL.Application xlApp, bool read = false, string path = "") 
+        public Workbook(XL.Application xlApp)
         {
-            if (read)
-                wrkbk = xlApp.Workbooks.Open(path);
-            else 
-                wrkbk = xlApp.Workbooks.Add();
+            wrkbk = xlApp.Workbooks.Add();
+            wrkbk.Activate();
+            Sheets.Add(new Worksheet((_Worksheet)wrkbk.ActiveSheet));
+            ActiveWorksheet = Sheets[0];
+        }
 
+        public Workbook(XL.Application xlApp, string path = "")
+        {
+            wrkbk = xlApp.Workbooks.Open(path);
             wrkbk.Activate();
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.ActiveSheet));
             ActiveWorksheet = Sheets[0];
         }
 
         public void SelectSheet(int index) => ActiveWorksheet = Sheets[index];
-
+        
         public void AddNewSheet(string name = "") 
         {
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count])));
