@@ -5,12 +5,19 @@ using Backend.Exceptions;
 
 namespace Backend.Office
 {
+    /// <summary>
+    /// This class allows to easily access and manage the COM object for dealing with Excel Files.
+    /// </summary>
     public class Excel : IDestroyable
     {
         Application? xlApp;
         public Workbook? WorkBook { get; private set; }
         public Worksheet? Worksheet { get => WorkBook?.ActiveWorksheet; }
        
+        /// <summary>
+        /// Create a new Excel File.
+        /// </summary>
+        /// <exception cref="MissingExcelException"></exception>
         public void Create() 
         {
             xlApp = new XL.Application();
@@ -18,6 +25,11 @@ namespace Backend.Office
             WorkBook = new(xlApp);
         }
 
+        /// <summary>
+        /// Read an existing excel file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <exception cref="MissingExcelException"></exception>
         public void Read(string path) 
         {
             xlApp = new XL.Application();
@@ -46,6 +58,9 @@ namespace Backend.Office
         /// <param name="filePath"></param>
         public void Save(string filePath) => WorkBook?.Save(filePath);
 
+        /// <summary>
+        /// Close the Excel file and performs clean-up operations.
+        /// </summary>
         public void Close() 
         {
             xlApp?.Quit();
