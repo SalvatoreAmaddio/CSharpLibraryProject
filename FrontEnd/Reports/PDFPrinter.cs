@@ -1,4 +1,5 @@
-﻿using Backend.Utils;
+﻿using Backend.Exceptions;
+using Backend.Utils;
 using System.Printing;
 using System.Windows.Documents;
 using System.Windows.Xps;
@@ -22,7 +23,7 @@ namespace FrontEnd.Reports
         /// this constructor will throw an exception. <para/>
         /// You can call <see cref="IsInstalled"/> to check if a PDF Printer is installed.
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="PDFPrinterNotFoundException"></exception>
         public PDFPrinter()
         {
             try 
@@ -31,7 +32,7 @@ namespace FrontEnd.Reports
             }
             catch 
             {
-                throw new Exception("No PDF Printer was found in this computer.");
+                throw new PDFPrinterNotFoundException();
             }
         }
 

@@ -2,10 +2,11 @@
 
 namespace Backend.Exceptions
 {
+    public class PrinterNotFoundException(string printerName) : Exception($"No {printerName} was found in this computer.");
+    public class PDFPrinterNotFoundException() : PrinterNotFoundException("PDF Printer");
     public class ExcelIndexException() : Exception("Indexes in Excel starts from 1") { };
     public class WorkbookException(string message) : COMException(message) { }
     public class MissingExcelException() : Exception("Excel is not installed.") { }
-
     public class NoModelException() : Exception("No Model is set") { }
     public class NoNavigatorException() : Exception("No Navigator is set") { }
     public class AssemblyCreateInstanceFailure(string text) : Exception(text) { }
