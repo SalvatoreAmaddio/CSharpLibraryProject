@@ -11,7 +11,15 @@ namespace Backend.Office
     public class Excel : IDestroyable
     {
         Application? xlApp;
+
+        /// <summary>
+        /// Gets the Excel's Workbook.
+        /// </summary>
         public Workbook? WorkBook { get; private set; }
+
+        /// <summary>
+        /// Get's the current active Worksheet.
+        /// </summary>
         public Worksheet? Worksheet { get => WorkBook?.ActiveWorksheet; }
        
         /// <summary>

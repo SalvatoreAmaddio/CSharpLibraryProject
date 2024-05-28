@@ -6,6 +6,9 @@ using XL = Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
+    /// <summary>
+    /// This class allows to easily access and manage the COM object for dealing with Excel's Worksheets.
+    /// </summary>
     public class Worksheet : IDestroyable
     {
         XL._Worksheet wrksheet;
@@ -18,10 +21,12 @@ namespace Backend.Office
         /// <param name="name"></param>
         public void SetName(string name) => this.wrksheet.Name = name;
 
-        public void PrintHeader(IEnumerable<string> headers, int row = 1) 
-        {
-            PrintHeader(headers.ToArray(),row);
-        }
+        /// <summary>
+        /// Prints a header with a default style. By default, the header will be at the first row.
+        /// </summary>
+        /// <param name="headers">the headers</param>
+        /// <param name="row">the row index where the header will be printed at</param>
+        public void PrintHeader(IEnumerable<string> headers, int row = 1) => PrintHeader(headers.ToArray(),row);
 
         /// <summary>
         /// Prints a header with a default style. By default, the header will be at the first row.
@@ -87,6 +92,9 @@ namespace Backend.Office
             range.Destroy();
         }
 
+        /// <summary>
+        /// Delete the worksheet.
+        /// </summary>
         public void Delete() => wrksheet.Delete();
 
         /// <summary>

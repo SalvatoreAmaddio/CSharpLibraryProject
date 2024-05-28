@@ -5,13 +5,32 @@ using XL = Microsoft.Office.Interop.Excel;
 
 namespace Backend.Office
 {
+    /// <summary>
+    /// This class allows to easily access and manage the COM object for dealing with Excel's Workbooks.
+    /// </summary>
     public class Workbook : IDestroyable
     {
         XL.Workbook wrkbk;
+
+        /// <summary>
+        /// Gets the currently active worksheet.
+        /// </summary>
         public Worksheet ActiveWorksheet { get; private set; }
+        
+        /// <summary>
+        /// Collections of all Worksheets in the Workbook.
+        /// </summary>
         public readonly List<Worksheet> Sheets = [];
+
+        /// <summary>
+        /// Gets the total number of Worksheets in this Workbook.
+        /// </summary>
         public int Count => Sheets.Count;
 
+        /// <summary>
+        /// Istantiates a new Workbook with a new <see cref="Worksheet"/>.
+        /// </summary>
+        /// <param name="xlApp"></param>
         public Workbook(XL.Application xlApp)
         {
             wrkbk = xlApp.Workbooks.Add();
@@ -20,6 +39,11 @@ namespace Backend.Office
             ActiveWorksheet = Sheets[0];
         }
 
+        /// <summary>
+        /// Istantiates the Workbook and selects the first <see cref="Worksheet"/> to be read.
+        /// </summary>
+        /// <param name="xlApp"></param>
+        /// <param name="path"></param>
         public Workbook(XL.Application xlApp, string path = "")
         {
             wrkbk = xlApp.Workbooks.Open(path);
@@ -28,8 +52,16 @@ namespace Backend.Office
             ActiveWorksheet = Sheets[0];
         }
 
+        /// <summary>
+        /// Selects the <see cref="ActiveWorksheet"/>
+        /// </summary>
+        /// <param name="index"></param>
         public void SelectSheet(int index) => ActiveWorksheet = Sheets[index];
 
+        /// <summary>
+        /// Add a new <see cref="Worksheet"/> to this Workbook.
+        /// </summary>
+        /// <param name="name"></param>
         public void AddNewSheet(string name = "") 
         {
             Sheets.Add(new Worksheet((_Worksheet)wrkbk.Worksheets.Add(After: wrkbk.Sheets[Count])));
@@ -49,7 +81,7 @@ namespace Backend.Office
             try
             {
                 wrkbk.SaveAs(filePath);
-                wrkbk.Close();
+                Close();
             }
             catch (COMException)
             {
@@ -58,6 +90,9 @@ namespace Backend.Office
             }
         }
 
+        /// <summary>
+        /// Closes the Workbook. This method is called by <see cref="Save(string)"/>
+        /// </summary>
         public void Close() => wrkbk?.Close();
 
         public void Destroy() 
