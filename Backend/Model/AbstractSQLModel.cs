@@ -52,7 +52,7 @@ namespace Backend.Model
             }
         }
 
-        public IEnumerable<string> GetAllTableFieldsAsString() 
+        public IEnumerable<string> GetEntityFields() 
         {
             Type type = GetType();
             PropertyInfo[] props = type.GetProperties();
