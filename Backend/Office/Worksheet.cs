@@ -46,7 +46,8 @@ namespace Backend.Office
         /// </summary>
         /// <param name="records"></param>
         /// <param name="row"></param>
-        public void PrintData(IEnumerable<ISQLModel> records, int row = 2)
+        /// <param name="use_pk_for_fk">set it to true if ForeignKey's objects' PK should be printed</param>
+        public void PrintData(IEnumerable<ISQLModel> records, int row = 2, bool use_pk_for_fk = false)
         {
             if (row <= 0) throw new ExcelIndexException();
             int initialRow = row;
@@ -58,7 +59,12 @@ namespace Backend.Office
                 {
                     if (tableField is FKField fk) 
                     {
-                        ISQLModel? value = DatabaseManager.Find(fk.ClassName)?.Records.FirstOrDefault(s=>s.Equals(fk?.GetValue()));
+                        object? value;
+                        if (!use_pk_for_fk)
+                            value = DatabaseManager.Find(fk.ClassName)?.Records.FirstOrDefault(s => s.Equals(fk?.GetValue()));
+                        else
+                            value = fk.PK.GetValue();
+
                         SetValue(value, row, column);
                     }
                     else 
