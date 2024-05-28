@@ -9,7 +9,6 @@ using System.Windows;
 
 [assembly: ComVisible(true)]
 [assembly: Guid("6b71aa34-c7f4-4c57-bbd0-300aaea571bd")]
-[assembly: AssemblyDescription("FrontEnd DesktopBusinessAppSharpBuilder")]
 [assembly: AssemblyCopyright($"Copyright © Salvatore Amaddio R. 2024")]
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, // where theme specific resource dictionaries are located
