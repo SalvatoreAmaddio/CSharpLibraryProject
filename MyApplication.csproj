@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DesktopBusinessAppSharpBuilder" Version="1.0.0" />
+    <ProjectReference Include="..\DesktopBusinessAppSharpBuilder\FrontEnd.csproj" />
   </ItemGroup>
 
   <ItemGroup>
