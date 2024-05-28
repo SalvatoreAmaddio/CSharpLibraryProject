@@ -11,6 +11,6 @@
         Title="Welcome" Height="450" Width="450">
 
     <fr:LoadingMask MainWindow="LoginForm">
-        <Label/>
+        <Image Stretch="Fill" Source="{StaticResource loading_logo}"/>
     </fr:LoadingMask>
 </Window>

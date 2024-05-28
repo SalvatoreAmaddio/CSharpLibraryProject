@@ -10,7 +10,7 @@
     <PackageIcon>logo.png</PackageIcon>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <StartupObject>MyApplication.App</StartupObject>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>appLogo.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <Title>MyApplication</Title>
     <Authors>Salvatore Amaddio</Authors>
@@ -27,10 +27,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\loading_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Data\mydb.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="logo.ico" />
+    <Content Include="appLogo.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\loading_logo.png" />
     <Resource Include="Images\step1.png" />
     <Resource Include="Images\step2.png" />
     <Resource Include="Images\step3.png" />
