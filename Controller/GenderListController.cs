@@ -23,7 +23,7 @@ namespace MyApplication.Controller
             GoFirst();
         }
 
-        public override void OnOptionFilter()
+        public override void OnOptionFilter(FilterEventArgs e)
         {
         }
 

@@ -1,6 +1,7 @@
 ﻿using Backend.Utils;
 using FrontEnd.Controller;
 using FrontEnd.Dialogs;
+using FrontEnd.Events;
 using FrontEnd.Properties;
 using FrontEnd.Reports;
 using MyApplication.Model;
@@ -70,7 +71,7 @@ namespace MyApplication.Controller
             GoFirst();
         }
 
-        public override void OnOptionFilter()
+        public override void OnOptionFilter(FilterEventArgs e)
         {
 
         }

@@ -31,7 +31,15 @@ namespace MyApplication.Controller
             if (!e.Is(nameof(Search))) return;
             var results = await Task.Run(SearchRecordAsync);
             AsRecordSource().ReplaceRange(results);
-            GoFirst();
+
+            if (sender is FilterEventArgs filter) 
+            { 
+               filter.AdjustIndex();
+            }
+            else 
+            {
+                GoFirst();
+            }
         }
 
         public override async Task<IEnumerable<Employee>> SearchRecordAsync()
@@ -41,13 +49,13 @@ namespace MyApplication.Controller
             return await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
         }
 
-        public override void OnOptionFilter()
+        public override void OnOptionFilter(FilterEventArgs e)
         {
             QueryBuiler.Clear();
             QueryBuiler.AddCondition(GenderOptions.Conditions(QueryBuiler));
             QueryBuiler.AddCondition(TitleOptions.Conditions(QueryBuiler));
             QueryBuiler.AddCondition(DepartmentOptions.Conditions(QueryBuiler));
-            OnAfterUpdate(this, new(null, null, nameof(Search)));
+            OnAfterUpdate(e, new(null, null, nameof(Search)));
         }
 
         protected override void Open(Employee? model)

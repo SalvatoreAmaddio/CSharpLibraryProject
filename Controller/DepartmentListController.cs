@@ -31,7 +31,7 @@ namespace MyApplication.Controller
             return await CreateFromAsyncList(QueryBuiler.Query, QueryBuiler.Params);
         }
 
-        public override void OnOptionFilter()
+        public override void OnOptionFilter(FilterEventArgs e)
         {
         }
 
