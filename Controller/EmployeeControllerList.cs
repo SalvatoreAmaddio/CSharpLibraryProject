@@ -32,14 +32,8 @@ namespace MyApplication.Controller
             var results = await Task.Run(SearchRecordAsync);
             AsRecordSource().ReplaceRange(results);
 
-            if (sender is FilterEventArgs filter) 
-            { 
-               filter.AdjustIndex();
-            }
-            else 
-            {
+            if (sender is not FilterEventArgs filterEvtArgs) 
                 GoFirst();
-            }
         }
 
         public override async Task<IEnumerable<Employee>> SearchRecordAsync()
