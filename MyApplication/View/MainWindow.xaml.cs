@@ -51,7 +51,7 @@ namespace MyApplication.View
                 MainTab.CurrentTabController().IsLoading = false;
             }
 
-            MessageBox.Show("Done!");
+            SuccessDialog.Display("Report Successfully Exported!");
         }
 
         private Task WriteExcel(List<ISQLModel>? source, string? sheetName) 
@@ -101,11 +101,25 @@ namespace MyApplication.View
         private async void OnExportDBClicked(object sender, RoutedEventArgs e)
         {
             MainTab.CurrentTabController().IsLoading = true;
-            await Task.Run(CreateExcel);
-            MainTab.CurrentTabController().IsLoading = false;
+
+            try
+            {
+                await Task.Run(ExportDBData);
+            }
+            catch (WorkbookException ex)
+            {
+                Failure.Throw(ex.Message, "Carefull!");
+                return;
+            }
+            finally
+            {
+                MainTab.CurrentTabController().IsLoading = false;
+            }
+
+            SuccessDialog.Display("Report Successfully Exported!");
         }
 
-        public Task CreateExcel() 
+        public Task ExportDBData() 
         {
             Excel excel = new();
             excel.Create();
@@ -119,10 +133,12 @@ namespace MyApplication.View
                 excel?.Worksheet?.PrintData(db.Records, true);
                 excel?.WorkBook?.AddNewSheet();
             }
+
             excel?.Worksheet?.Delete();
+
             try
             {
-                excel.Save($"{Sys.Desktop}\\database.xlsx");
+                excel?.Save($"{Sys.Desktop}\\database.xlsx");
             }
             catch (WorkbookException ex)
             {
@@ -130,7 +146,7 @@ namespace MyApplication.View
             }
             finally
             {
-                excel.Close();
+                excel?.Close();
             }
             return Task.CompletedTask;
         }
