@@ -52,6 +52,22 @@ namespace Backend.Model
             }
         }
 
+        public IEnumerable<string> GetAllTableFieldsAsString() 
+        {
+            Type type = GetType();
+            PropertyInfo[] props = type.GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                AbstractField? field = prop.GetCustomAttribute<AbstractField>();
+                if (field != null)
+                {
+                    bool isFK = field.GetType() == typeof(FK);
+                    ITableField tableField = (isFK) ? new FKField(field, prop, this) : new TableField(field, prop, this);
+                    yield return tableField.Name;
+                }
+            }
+        }
+
         public IEnumerable<ITableField> GetAllTableFields()
         {
             Type type = GetType();

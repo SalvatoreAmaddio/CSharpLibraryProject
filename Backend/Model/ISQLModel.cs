@@ -9,6 +9,7 @@ namespace Backend.Model
     /// </summary>
     public interface ISQLModel 
     {
+        public IEnumerable<string> GetAllTableFieldsAsString();
         public IEnumerable<ITableField> GetAllTableFields();
 
         /// <summary>

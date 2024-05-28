@@ -115,8 +115,7 @@ namespace MyApplication.View
                 if (db.Records.Count == 0) continue;
                 string sheetName = db.ModelType.Name;
                 excel?.Worksheet?.SetName(sheetName);
-                //string[] headers = [];
-                //excel.Worksheet?.PrintHeader(headers);
+                excel?.Worksheet?.PrintHeader(db.Model.GetAllTableFieldsAsString());
                 excel?.Worksheet?.PrintData(db.Records, true);
                 excel?.WorkBook?.AddNewSheet();
             }

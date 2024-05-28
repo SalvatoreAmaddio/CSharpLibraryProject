@@ -18,6 +18,11 @@ namespace Backend.Office
         /// <param name="name"></param>
         public void SetName(string name) => this.wrksheet.Name = name;
 
+        public void PrintHeader(IEnumerable<string> headers, int row = 1) 
+        {
+            PrintHeader(headers.ToArray(),row);
+        }
+
         /// <summary>
         /// Prints a header with a default style. By default, the header will be at the first row.
         /// </summary>
@@ -82,10 +87,7 @@ namespace Backend.Office
             range.Destroy();
         }
 
-        public void Delete() 
-        { 
-            wrksheet.Delete();
-        }
+        public void Delete() => wrksheet.Delete();
 
         /// <summary>
         /// Sets the value of a given cell. The cell is represented by the row and column index. 
