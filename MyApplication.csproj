@@ -34,14 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DesktopBusinessAppSharpBuilder" Version="1.0.1" />
+ <!--   <PackageReference Include="DesktopBusinessAppSharpBuilder" Version="1.0.1" />-->
   </ItemGroup>
 
-<!--  
     <ItemGroup>
         <ProjectReference Include="..\DesktopBusinessAppSharpBuilder\FrontEnd.csproj" />
     </ItemGroup>
--->
 
 <ItemGroup>
     <Resource Include="Images\loading_logo.png" />

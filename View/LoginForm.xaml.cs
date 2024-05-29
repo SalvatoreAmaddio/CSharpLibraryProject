@@ -1,6 +1,8 @@
 ﻿using Backend.Utils;
+using FrontEnd.Dialogs;
 using FrontEnd.ExtensionMethods;
 using FrontEnd.Model;
+using FrontEnd.Properties;
 using System.Windows;
 
 namespace MyApplication.View
@@ -16,6 +18,12 @@ namespace MyApplication.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (FrontEndSettings.Default.FirstTimeLogin)
+            {
+                new WelcomeWindow().ShowDialog();
+                return;
+            }
+
             if (CurrentUser.ReadCredential()) 
             {
                 string? decryptedPassword = CurrentUser.FetchUserPassword(true);
@@ -36,7 +44,7 @@ namespace MyApplication.View
 
             if (rememberme.IsChecked.HasValue && rememberme.IsChecked.Value) 
                 CurrentUser.RememberMe = (bool)rememberme.IsChecked;
-           
+            
             string? decryptedPassword = CurrentUser.FetchUserPassword(true);
             bool hasLoggedIn = CurrentUser.Login(decryptedPassword);
             if (hasLoggedIn)
