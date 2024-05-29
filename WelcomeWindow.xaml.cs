@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace MyApplication
 {
-    /// <summary>
-    /// Interaction logic for WelcomeWindow.xaml
-    /// </summary>
     public partial class WelcomeWindow : Window
     {
         public WelcomeWindow()
@@ -15,7 +12,7 @@ namespace MyApplication
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void OnGetMeInClicked(object sender, RoutedEventArgs e)
         {
             string username = user.Text;
             string password = pswd.Password;
@@ -23,19 +20,19 @@ namespace MyApplication
 
             if (string.IsNullOrEmpty(username)) 
             {
-                Failure.Throw("Please provide a username");
+                Failure.Allert("Please provide a username");
                 return;
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                Failure.Throw("Please provide a password");
+                Failure.Allert("Please provide a password");
                 return;
             }
 
             if (!password.Equals(confirm_password)) 
             {
-                Failure.Throw("Passwords do not match");
+                Failure.Allert("Passwords do not match");
                 return;
             }
 

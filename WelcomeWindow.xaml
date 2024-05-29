@@ -45,7 +45,7 @@
             </i:Interaction.Behaviors>
         </PasswordBox>
 
-        <Button Content="GET ME IN" Grid.Row="8" Click="Button_Click"/>
+        <Button Content="GET ME IN" Grid.Row="8" Click="OnGetMeInClicked"/>
 
         <Label Grid.Row="10" FontStyle="Italic" FontSize="10" VerticalAlignment="Center" Content="This information will be safely stored in your local computer."/>
     </Grid>

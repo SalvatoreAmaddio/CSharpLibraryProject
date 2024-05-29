@@ -43,7 +43,7 @@ namespace MyApplication.View
             }
             catch (WorkbookException ex)
             {
-                Failure.Throw(ex.Message, "Carefull!");
+                Failure.Allert(ex.Message, "Carefull!");
                 return;
             }
             finally 
@@ -108,7 +108,7 @@ namespace MyApplication.View
             }
             catch (WorkbookException ex)
             {
-                Failure.Throw(ex.Message, "Carefull!");
+                Failure.Allert(ex.Message, "Carefull!");
                 return;
             }
             finally
