@@ -58,7 +58,7 @@ namespace MyApplication
                 Password = password
             };
 
-            CurrentUser.SaveNewUser(new_user);
+            Sys.SaveNewUser(new_user);
             SuccessDialog.Display("Amazing! Please login with your new credentials.");
             Sys.UpdateFirstTimeLogin(false);
             Close();
