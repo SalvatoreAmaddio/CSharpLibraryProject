@@ -16,6 +16,7 @@ namespace MyApplication.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            Sys.OnNoUsers();
             if (Sys.FirstTimeLogin)
             {
                 new WelcomeWindow().ShowDialog();
