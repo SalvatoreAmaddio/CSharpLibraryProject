@@ -37,7 +37,7 @@ namespace MyApplication.Controller
                 year = payslip?.DOP.Value.ToString("yyyy");
             }
             employee.Payslip = payslip;
-            EmailSender emailSender = new("smtp.gmail.com", FrontEndSettings.Default.EmailUserName, "The Company", "Payslip");
+            EmailSender emailSender = new("smtp.gmail.com", Sys.EmailUserName, "The Company", "Payslip");
             emailSender.AddReceiver(employee.Email, employee.FirstName);
             emailSender.Body = $"Dear {employee.FirstName},\n Please find attached your payslip.\nRegards,\nThe Company.";
 
