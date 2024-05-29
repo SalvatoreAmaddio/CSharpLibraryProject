@@ -18,7 +18,8 @@ namespace MyApplication.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (FrontEndSettings.Default.FirstTimeLogin)
+            Sys.OnNoUsers(); 
+            if (Sys.FirstTimeLogin)
             {
                 new WelcomeWindow().ShowDialog();
                 return;

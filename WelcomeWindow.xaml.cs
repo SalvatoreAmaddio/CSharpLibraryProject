@@ -60,8 +60,7 @@ namespace MyApplication
 
             CurrentUser.SaveNewUser(new_user);
             SuccessDialog.Display("Amazing! Please login with your new credentials.");
-            FrontEndSettings.Default.FirstTimeLogin = false;
-            FrontEndSettings.Default.Save();
+            Sys.UpdateFirstTimeLogin(false);
             Close();
         }
     }
