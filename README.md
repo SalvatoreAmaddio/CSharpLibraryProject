@@ -1,7 +1,10 @@
 # MyApplicationDemo
 
+Simple Demo Application that manage Employee's Payslips. Payslips can be viewed in a ReportViewer control, printed as PDF, sent by email to employees.
+Also, data can be extracted and saved into Excel files.
+
 ## Description
-This is a demo desktop app that demonstrates the use of the DesktopBusinessAppSharpBuilder Framework.
+This is demo demonstrates the use of the DesktopBusinessAppSharpBuilder Framework.
 
 The SQLite database has a table named User which is empty.
 
