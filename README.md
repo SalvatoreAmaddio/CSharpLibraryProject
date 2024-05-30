@@ -3,6 +3,8 @@
 Simple Demo Application that manage Employee's Payslips. Payslips can be viewed in a ReportViewer control, printed as PDF, sent by email to employees.
 Also, data can be extracted and saved into Excel files.
 
+Payslip's calculation was simplified for demonstration purposes. 
+
 ## Description
 This is demo demonstrates the use of the DesktopBusinessAppSharpBuilder Framework.
 
