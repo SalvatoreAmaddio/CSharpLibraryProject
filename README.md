@@ -6,7 +6,7 @@ Also, data can be extracted and saved into Excel files.
 Payslip's calculation was simplified for demonstration purposes. 
 
 ## Description
-This is demo demonstrates the use of the DesktopBusinessAppSharpBuilder Framework.
+This is demo demonstrates the use of the [DesktopBusinessAppSharpBuilder Framework](https://github.com/SalvatoreAmaddio/DesktopBusinessAppSharpBuilder).
 
 The SQLite database has a table named User which is empty.
 
