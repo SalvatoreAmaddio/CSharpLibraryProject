@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/SalvatoreAmaddio/DesktopBusinessAppSharpBuilder/master/logo.png" width="300" height="100" />
+  <img src="https://raw.githubusercontent.com/SalvatoreAmaddio/DesktopBusinessAppSharpBuilder/master/logo.png" width="300" height="300" />
 </div>
 
 # MyApplicationDemo
