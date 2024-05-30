@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/SalvatoreAmaddio/DesktopBusinessAppSharpBuilder/master/logo.png" width="300" height="100" />
+</div>
+
 # MyApplicationDemo
 
 Simple Demo Application that manage Employee's Payslips. Payslips can be viewed in a ReportViewer control, printed as PDF, sent by email to employees.
